@@ -341,6 +341,12 @@ public class mod_Minechem extends BaseMod {
 		ModLoader.SetInGameHook(this, true, true);
 	}
 	
+	/**
+	 * Add a recipe for the Electrolysis Kit.
+	 * @param input - three of these itemstacks will be needed to generate output.
+	 * @param output1 - the molecule put in output 1.
+	 * @param output2 - the molecule put in output 2.
+	 */
 	public void addElectrolysisRecipe(ItemStack input, Molecule output1, Molecule output2)
 	{
 		if(input == null)
