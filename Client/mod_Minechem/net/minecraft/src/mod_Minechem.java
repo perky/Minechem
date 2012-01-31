@@ -29,6 +29,7 @@ public class mod_Minechem extends BaseMod {
 	@MLProp public static int blockIDMinechem = 236;
 	@MLProp public static int itemIDTestTube = 3001;
 	@MLProp public static int itemIDEmptyTestTube = 3000;
+	@MLProp public static int itemIDTableOfElements = 3002;
 	@MLProp public static boolean requireIC2Power = false;
 	public static Item itemTesttubeEmpty;
 	public static Item itemTesttube;
@@ -36,6 +37,7 @@ public class mod_Minechem extends BaseMod {
 	public static Item leadTorso;
 	public static Item leadLeggings;
 	public static Item leadBoots;
+	public static Item tableOfElements;
 	public static Block blockMinechem;
 	public static Map<ItemStack, Molecule[]> electrolysisRecipes;
 	private static File fileChemicalDictionary = new File(Minecraft.getMinecraftDir(), "/minechem/Chemical Dictionary.txt");
@@ -51,6 +53,7 @@ public class mod_Minechem extends BaseMod {
 		leadBoots = new ItemArmor(2164, EnumArmorMaterial.DIAMOND, ModLoader.AddArmor("leadboots"), 3);
 		blockMinechem = new BlockMinechem(blockIDMinechem).setBlockName("blockminechem");
 		itemTesttubeEmpty.iconIndex = ModLoader.addOverride("/gui/items.png", "/minechem/testtube_empty.png");
+		tableOfElements = new ItemTableOfElements(itemIDTableOfElements);
 		leadBoots.setItemName("leadboots");
 		leadLeggings.setItemName("leadleggings");
 		leadTorso.setItemName("leadTorso");
@@ -65,6 +68,7 @@ public class mod_Minechem extends BaseMod {
 		
 		ModLoader.AddName(itemTesttubeEmpty, "Empty Test Tube");
 		ModLoader.AddName(itemTesttube, "Test Tube");
+		ModLoader.AddName(tableOfElements, "Table of Elements");
 		ModLoader.AddName(leadBoots, "Lead Boots");
 		ModLoader.AddName(leadLeggings, "Lead Leggings");
 		ModLoader.AddName(leadTorso, "Lead Chestplate");
@@ -159,6 +163,13 @@ public class mod_Minechem extends BaseMod {
 			"# #",
 			"   ",
 			Character.valueOf('#'), Molecule.elementByFormula("Pb", 1).stack
+		});
+		ModLoader.AddRecipe(new ItemStack(tableOfElements, 1), new Object[]{
+			"PPP",
+			"III",
+			"PPP",
+			Character.valueOf('P'), Item.paper,
+			Character.valueOf('I'), itemTesttubeEmpty
 		});
 		
 		electrolysisRecipes = new HashMap<ItemStack, Molecule[]>();
