@@ -5,12 +5,15 @@ import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.World;
+import net.minecraft.src.mod_Minechem;
+import net.minecraft.src.forge.ITextureProvider;
 
-public class ItemTableOfElements extends Item {
+public class ItemTableOfElements extends Item implements ITextureProvider {
 
 	public ItemTableOfElements(int i) {
 		super(i);
 		setItemName("tableOfElements");
+		setIconCoord(1, 0);
 	}
 
 	@Override
@@ -22,6 +25,11 @@ public class ItemTableOfElements extends Item {
 		
 		return itemstack;
 		
+	}
+
+	@Override
+	public String getTextureFile() {
+		return mod_Minechem.minechemItemsTexture;
 	}
 
 }

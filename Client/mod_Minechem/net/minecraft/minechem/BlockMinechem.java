@@ -144,7 +144,7 @@ public class BlockMinechem extends BlockContainer implements ITextureProvider {
 
 	@Override
 	public String getTextureFile() {
-		return "/minechem/blocktextures.png";
+		return mod_Minechem.minechemBlocksTexture;
 	}
 
 }

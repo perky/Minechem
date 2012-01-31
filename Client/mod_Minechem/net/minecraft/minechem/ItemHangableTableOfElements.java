@@ -7,12 +7,15 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.World;
+import net.minecraft.src.mod_Minechem;
+import net.minecraft.src.forge.ITextureProvider;
 
-public class ItemHangableTableOfElements extends Item {
+public class ItemHangableTableOfElements extends Item implements ITextureProvider {
 
 	public ItemHangableTableOfElements(int i) {
 		super(i);
 		setItemName("hangableTableOfElements");
+		setIconCoord(2, 0);
 	}
 	
 	public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int i, int j, int k, int l)
@@ -57,6 +60,11 @@ public class ItemHangableTableOfElements extends Item {
 	@Override
 	public void addInformation(ItemStack itemstack, List list) {
 		list.add("5 x 9");
+	}
+
+	@Override
+	public String getTextureFile() {
+		return mod_Minechem.minechemItemsTexture;
 	}
 	
 	

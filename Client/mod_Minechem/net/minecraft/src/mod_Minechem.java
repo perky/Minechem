@@ -45,6 +45,8 @@ public class mod_Minechem extends BaseMod {
 	private static File fileChemicalDictionary = new File(Minecraft.getMinecraftDir(), "/minechem/Chemical Dictionary.txt");
 	private static Properties chemicalDictionary;
 	private static Random random;
+	@MLProp public static String minechemBlocksTexture = "/minechem/blocktextures.png";
+	public static String minechemItemsTexture = "/minechem/items.png";
 	
 	public static void initItemsAndBlocks() {
 		itemTesttubeEmpty = new ItemEmptyTestTube(itemIDEmptyTestTube).setItemName("blah");
@@ -66,7 +68,8 @@ public class mod_Minechem extends BaseMod {
 	public mod_Minechem() {
 		random = new Random();
 		initItemsAndBlocks();
-		MinecraftForgeClient.preloadTexture("/minechem/blocktextures.png");
+		MinecraftForgeClient.preloadTexture(minechemBlocksTexture);
+		MinecraftForgeClient.preloadTexture(minechemItemsTexture);
 		ModLoader.RegisterBlock(blockMinechem);
 		
 		ModLoader.AddName(itemTesttubeEmpty, "Empty Test Tube");
