@@ -3,6 +3,7 @@ package net.minecraft.minechem;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
+import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 
 public class ContainerBonder extends Container {
@@ -37,6 +38,16 @@ public class ContainerBonder extends Container {
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
 		return tileBonder.isUseableByPlayer(entityplayer);
+	}
+	
+	@Override
+	public ItemStack slotClick(int i, int j, boolean flag,
+			EntityPlayer entityplayer) {
+		
+		if(flag)
+			return null;
+		
+		return super.slotClick(i, j, flag, entityplayer);
 	}
 
 }
