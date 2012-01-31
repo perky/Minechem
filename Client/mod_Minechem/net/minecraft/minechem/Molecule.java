@@ -15,6 +15,7 @@ public class Molecule {
 	public int elementId;
 	public String name;
 	public String elementName;
+	public boolean isCompound;
 	
 	public static Molecule elementByFormula(String formula, int atoms) {
 		String[][] elements = ItemTestTube.elements;
@@ -69,6 +70,7 @@ public class Molecule {
 		this.elementId = elementId;
 		this.stack = new ItemStack(mod_Minechem.itemTesttube, 1, elementId);
 		this.atoms = atoms;
+		this.isCompound = false;
 		if(atoms != -1)
 		{
 			int atomicNumber = this.stack.getItemDamage();
@@ -83,6 +85,7 @@ public class Molecule {
 				//decayTime = (int)Math.log( 35 - ((atomicNumber + 0.99) - 85) ) * ItemTestTube.halfLifeTicks;
 			
 			this.name = name + number;
+			this.elementName = name;
 			NBTTagCompound tagCompound = new NBTTagCompound();
 			tagCompound.setString("chemicalname", this.name);
 			tagCompound.setInteger("atoms", atoms);
@@ -95,7 +98,10 @@ public class Molecule {
 		this.elementId = elementId;
 		this.atoms = atoms;
 		this.stack = new ItemStack(mod_Minechem.itemTesttube, 1, elementId);
-		
+		if(elementId == 0)
+			this.isCompound = true;
+		else
+			this.isCompound = false;
 		NBTTagCompound tagCompound = new NBTTagCompound();
 		try {
 			tagCompound.setString("fullChemicalName", mod_Minechem.findChemicalName(chemicalname));
@@ -127,6 +133,7 @@ public class Molecule {
 		}
 		
 		this.elementName = this.name.replaceAll("[0-9]", "");
+		this.isCompound = false;
 	}
 	
 	public void setAtoms(int amount) {
@@ -135,6 +142,10 @@ public class Molecule {
 		if(tagCompound != null)
 		{
 			tagCompound.setInteger("atoms", atoms);
+			if(!isCompound) {
+				name = elementName + atoms;
+				tagCompound.setString("chemicalname", name);
+			}
 			this.stack.setTagCompound(tagCompound);
 		}
 	}

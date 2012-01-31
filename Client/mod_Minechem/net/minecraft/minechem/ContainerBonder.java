@@ -16,7 +16,7 @@ public class ContainerBonder extends Container {
 		addSlot(new SlotMinechemEmptyTube(this, inventoryplayer.player, tileBonder, 0, 36, 36));
 		
 		for(int i = 1; i < 5; i++) {
-			addSlot(new SlotMinechemElementTube(this, inventoryplayer.player, tileBonder, i, 69+((i-1)*18), 36));
+			addSlot(new Slot(tileBonder, i, 69+((i-1)*18), 36));
 		}
 		
 		// Player inventory.

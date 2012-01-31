@@ -1,6 +1,10 @@
 package net.minecraft.minechem;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.mod_Minechem;
 import net.minecraft.src.buildcraft.api.Orientations;
@@ -50,56 +54,62 @@ public class TileEntityBonder extends TileEntityMinechemMachine implements IEner
 	
 	public void bondingComplete()
 	{
-		String chemicalname = "";
-		int atoms = 0;
-		int lastatoms = 0;
-		int lastElementId = -1;
-		boolean isCompound = false;
-		String lastname = null;
+		String bondFormula = "";
+		Molecule lastMolecule = null;
 		
 		for(int i = 1; i < inventoryStack.length; i++) {
 			ItemStack itemstack = inventoryStack[i];
-			if(isElementTube(itemstack))
-			{
-				Molecule molecule = new Molecule( itemstack );
-				if(lastElementId != -1) {
-					if(lastElementId == molecule.elementId) {
-						lastatoms += molecule.atoms;
-					} else {
-						String satoms = Integer.toString(lastatoms);
-						if(lastatoms == 1)
-							satoms = "";
-						chemicalname += lastname + satoms;
-						lastatoms = molecule.atoms;
-						lastname = molecule.elementName;
-						isCompound = true;
+			if(isTube(itemstack)) {
+				NBTTagCompound tagCompound = itemstack.getTagCompound();
+				if(tagCompound == null)
+					continue;
+				
+				String formula = tagCompound.getString("chemicalname");
+				
+				if(isElementTube(itemstack)) {
+					int atoms = 1;
+					Matcher matcher = Pattern.compile("([A-Z][a-z]*)([0-9]*)").matcher(formula);
+					if(matcher.find()) {
+						String element = matcher.group(1);
+						if( !matcher.group(2).equals("") )
+							atoms = Integer.valueOf(matcher.group(2));
+						Molecule m = Molecule.elementByFormula(element, atoms);
+						
+						if(lastMolecule != null) {
+							if(lastMolecule.elementId == m.elementId)
+								m.setAtoms( m.atoms + lastMolecule.atoms );
+							else
+								bondFormula += lastMolecule.name;
+						}
+						
+						lastMolecule = m;
 					}
 				} else {
-					lastname = molecule.elementName;
-					lastatoms = molecule.atoms;
-					lastElementId = molecule.elementId;
+					if(lastMolecule != null)
+						bondFormula += lastMolecule.name;
+					lastMolecule = null;
+					bondFormula += formula;
 				}
 				
-				atoms += molecule.atoms;
-				inventoryStack[i] = new ItemStack(mod_Minechem.itemTesttubeEmpty, 1);
+				inventoryStack[i] = new ItemStack(mod_Minechem.itemTesttubeEmpty);
 			}
 		}
 		
-		if(lastElementId != -1) {
-			String satoms = Integer.toString(lastatoms);
-			if(lastatoms == 1)
-				satoms = "";
-			chemicalname += lastname + satoms;
-			Molecule molecule1;
-			if(isCompound)
-				molecule1 = new Molecule(0, atoms, chemicalname);
-			else
-				molecule1 = new Molecule(lastElementId, atoms);
-			inventoryStack[0] = molecule1.stack;
+		if(lastMolecule != null) {
+			bondFormula += lastMolecule.name;
 		}
 		
-		for(int i = 0; i < getSizeInventory(); i++) {
-			dumpSlotToChest(i);
+		
+		if(!bondFormula.equals("")) {
+			Molecule m = Molecule.moleculeOrElementByFormula(bondFormula);
+			if(m != null) {
+				inventoryStack[0] = m.stack;
+			}
+		}
+		
+		dumpSlotToChest(0);
+		for(int i = 1; i < getSizeInventory(); i++) {
+			dumpEmptyTubeSlotToChest(i);
 		}
 	}
 	
@@ -108,7 +118,7 @@ public class TileEntityBonder extends TileEntityMinechemMachine implements IEner
 		int tubeCount = 0;
 		for(int i = 1; i < inventoryStack.length; i++) {
 			ItemStack itemstack = inventoryStack[i];
-			if(isElementTube(itemstack))
+			if(isTube(itemstack))
 			{
 				tubeCount++;
 			}

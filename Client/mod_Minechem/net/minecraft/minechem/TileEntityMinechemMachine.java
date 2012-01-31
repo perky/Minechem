@@ -146,6 +146,23 @@ public class TileEntityMinechemMachine extends TileEntity implements IInventory,
 		}
 	}
 	
+	protected void dumpEmptyTubeSlotToChest(int slotnumber) {
+		if(!isEmptyTube( inventoryStack[slotnumber] ))
+			return;
+		
+		BlockMinechem blockMinechem = (BlockMinechem)getBlockType();
+		TileEntityChest chest = blockMinechem.findAdjacentChest( worldObj, xCoord, yCoord, zCoord );
+		
+		if(chest != null) {
+			for(int i = 0; i < chest.getSizeInventory(); i++) {
+				ItemStack stack = chest.getStackInSlot(i);
+				if(stack == null) {
+					chest.setInventorySlotContents(i, decrStackSize(slotnumber, 1));
+				}
+			}
+		}
+	}
+	
 	protected void dumpSlotToChest(int slotnumber) {
 		BlockMinechem blockMinechem = (BlockMinechem)getBlockType();
 		TileEntityChest chest = blockMinechem.findAdjacentChest( worldObj, xCoord, yCoord, zCoord );
