@@ -197,20 +197,24 @@ public class mod_Minechem extends BaseMod {
 				new Molecule(1, 2)
 		);
 		addElectrolysisRecipe(new ItemStack(Item.ingotIron, 1),
-				new Molecule(26, 16),
-				new Molecule(26, 16)
+				new Molecule(26, 4),
+				new Molecule(26, 4)
 		);
 		addElectrolysisRecipe(new ItemStack(Item.ingotGold, 1),
-				new Molecule(79, 32),
-				new Molecule(79, 32)
+				new Molecule(79, 8),
+				new Molecule(79, 8)
 		);
 		addElectrolysisRecipe(new ItemStack(Block.oreIron, 1),
 				Molecule.elementByFormula("Fe", 4),
 				Molecule.elementByFormula("Fe", 4)
 		);
+		addElectrolysisRecipe(new ItemStack(Block.oreGold, 1),
+				Molecule.elementByFormula("Au", 8),
+				Molecule.elementByFormula("Au", 8)
+		);
 		addElectrolysisRecipe(new ItemStack(Item.diamond, 1),
-				new Molecule(6, 64),
-				new Molecule(6, 64)
+				new Molecule(6, 16),
+				new Molecule(6, 16)
 		);
 		addElectrolysisRecipe(new ItemStack(Item.coal, 1),
 				new Molecule(6, 1),
@@ -222,7 +226,7 @@ public class mod_Minechem extends BaseMod {
 		);
 		addElectrolysisRecipe(new ItemStack(Item.gunpowder, 1),
 				new Molecule(16, 1),
-				new Molecule(0, 5, "KNO3")
+				Molecule.moleculeByFormula("KNO3")
 		);
 		addElectrolysisRecipe(new ItemStack(Item.sugar, 1),
 				new Molecule(0, 21, "C2H8O11"),
@@ -240,9 +244,9 @@ public class mod_Minechem extends BaseMod {
 				new Molecule(14, 1),
 				new Molecule(8, 2)
 		);
-		addElectrolysisRecipe(new ItemStack(Item.flint, 1),	
-				new Molecule(0, 3, "SiO2"),
-				new Molecule(0, 3, "SiO2")
+		addElectrolysisRecipe(new ItemStack(Item.flint, 1),
+				Molecule.moleculeByFormula("SiO2"),
+				Molecule.moleculeByFormula("SiO2")
 		);
 		addElectrolysisRecipe(new ItemStack(Item.silk, 1),	
 				new Molecule(6, 1),
@@ -281,11 +285,6 @@ public class mod_Minechem extends BaseMod {
 					Molecule.moleculeByFormula("C3H8"), 
 					Molecule.moleculeByFormula("C3H8")
 			);
-			
-			MinechemCraftingRecipe.addRecipe(fuelCan.copy(),
-					Molecule.moleculeByFormula("C3H8"),
-					Molecule.moleculeByFormula("C3H8")
-			);
 		}
 		
 		MinecraftForge.registerOreHandler(new IOreHandler() {
@@ -319,49 +318,8 @@ public class mod_Minechem extends BaseMod {
 				if(oreClass.equals("itemDropUranium")) {
 					addElectrolysisRecipe(ore.copy(), new Molecule(92, 4), new Molecule(92, 4));
 				}
-				if(oreClass.equals("ingotTin")) {
-					MinechemCraftingRecipe.addRecipe(ore.copy(), 
-							Molecule.elementByFormula("Sn", 1),
-							Molecule.elementByFormula("Sn", 1)
-					);
-				}
-				if(oreClass.equals("ingotCopper")) {
-					MinechemCraftingRecipe.addRecipe(ore.copy(), 
-							Molecule.elementByFormula("Cu", 1),
-							Molecule.elementByFormula("Cu", 1)
-					);
-				}
-				if(oreClass.equals("ingotSilver")) {
-					MinechemCraftingRecipe.addRecipe(ore.copy(), 
-							Molecule.elementByFormula("Ag", 1),
-							Molecule.elementByFormula("Ag", 1)
-					);
-				}
-				if(oreClass.equals("ingotUranium")) {
-					MinechemCraftingRecipe.addRecipe(ore.copy(), 
-							Molecule.elementByFormula("U", 2),
-							Molecule.elementByFormula("U", 2)
-					);
-				}
 			}
 		});
-
-		MinechemCraftingRecipe.addRecipe(new ItemStack(Item.ingotIron, 2),
-				Molecule.elementByFormula("Fe", 8),
-				Molecule.elementByFormula("Fe", 8)
-		);
-		MinechemCraftingRecipe.addRecipe(new ItemStack(Item.ingotGold, 2), 
-				Molecule.elementByFormula("Au", 16),
-				Molecule.elementByFormula("Au", 16)
-		);
-		MinechemCraftingRecipe.addRecipe(new ItemStack(Item.diamond, 1), 
-				Molecule.elementByFormula("C", 32),
-				Molecule.elementByFormula("C", 32)
-		);
-		MinechemCraftingRecipe.addRecipe(new ItemStack(Block.tnt, 2),
-				Molecule.moleculeByFormula("C7H5N3O6"),
-				Molecule.moleculeByFormula("C7H5N3O6")
-		);
 		
 		ModLoader.SetInGameHook(this, true, true);
 	}
@@ -385,6 +343,11 @@ public class mod_Minechem extends BaseMod {
 		outputs[0] = output1;
 		outputs[1] = output2;
 		electrolysisRecipes.put(input, outputs);
+		
+		// Also create reversable recipe.
+		ItemStack out = input.copy();
+		out.stackSize = 3;
+		MinechemCraftingRecipe.addRecipe(out, output1, output2);
 	}
 	
 	public void addElectrolysisRandomRecipe(ItemStack input, ItemStack[] outputs, int[] randoms)
