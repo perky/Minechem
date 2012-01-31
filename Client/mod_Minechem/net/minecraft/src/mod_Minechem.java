@@ -239,6 +239,14 @@ public class mod_Minechem extends BaseMod {
 				new Molecule(91, 1),
 				new Molecule(6, 1)
 		);
+		addElectrolysisRecipe(new ItemStack(Item.appleRed, 1),	
+				Molecule.moleculeByFormula("C6H8O7"),
+				Molecule.moleculeByFormula("C6H8O7")
+		);
+		addElectrolysisRecipe(new ItemStack(Item.appleGold, 1),	
+				Molecule.moleculeByFormula("C6H8O7"),
+				Molecule.elementByFormula("Au", 84)
+		);
 		
 		// Add ore dictionary for electrolysis.
 		
