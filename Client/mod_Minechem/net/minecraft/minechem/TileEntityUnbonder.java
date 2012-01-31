@@ -61,6 +61,9 @@ public class TileEntityUnbonder extends TileEntityMinechemMachine implements IEn
 			}
 		}
 		
+		if(isSingleElementTube(inventoryStack[0]))
+			return false;
+		
 		int tubeCount = 0;
 		for(int i =1; i < inventoryStack.length; i++) {
 			if(isEmptyTube(inventoryStack[i]))
@@ -78,17 +81,23 @@ public class TileEntityUnbonder extends TileEntityMinechemMachine implements IEn
 		
 		ItemStack itemstack = inventoryStack[0];
 		NBTTagCompound tagCompound = itemstack.getTagCompound();
+		boolean leftOverExists = false;
+		String leftOver = "";
 		if(itemstack.getItemDamage() == 0) {
 			if(tagCompound != null) {
 				String formula = tagCompound.getString("chemicalname");
 				Pattern pattern = Pattern.compile("([A-Z][a-z]*)([0-9]*)");
 				Matcher matcher = pattern.matcher(formula);
+				String unbonded = "";
 				int count = 0;
 				while(matcher.find()) {
 					if(count < tubeCount) {
 						String element = matcher.group(1);
 						String atomsStr = matcher.group(2);
-						int atoms = Integer.valueOf(atomsStr);
+						unbonded += matcher.group(0);
+						int atoms = 1;
+						if(!atomsStr.equals(""))
+							atoms = Integer.valueOf(atomsStr);
 						System.out.println(element + ":" + atoms);
 						Molecule outputMolecule = Molecule.elementByFormula(element, atoms);
 						
@@ -101,6 +110,13 @@ public class TileEntityUnbonder extends TileEntityMinechemMachine implements IEn
 							}
 						}
 					} else {
+						leftOver = formula.replaceFirst(unbonded, "");
+						leftOverExists = true;
+						Molecule m = Molecule.moleculeOrElementByFormula(leftOver);
+						if(m != null)
+							inventoryStack[0] = m.stack;
+						else
+							inventoryStack[0] = new ItemStack(mod_Minechem.itemTesttubeEmpty, 1);
 						break;
 					}
 					count++;
@@ -109,18 +125,37 @@ public class TileEntityUnbonder extends TileEntityMinechemMachine implements IEn
 		} else {
 			if(tagCompound != null){
 				int atoms = tagCompound.getInteger("atoms");
-				int atomDiv = atoms / tubeCount;
 				int element = itemstack.getItemDamage();
-				if(atomDiv > 0) {
+				if(tubeCount >= atoms) {
+					int count = 0;
 					for(int i =1; i < inventoryStack.length; i++) {
-						if(isEmptyTube(inventoryStack[i]))
-							inventoryStack[i] = new Molecule(element, atomDiv).stack;
+						if(count >= atoms) break;
+						if(isEmptyTube(inventoryStack[i])) {
+							inventoryStack[i] = new Molecule(element, 1).stack;
+							count++;
+						}
+					}
+				} else {
+					int atomDiv = atoms / tubeCount;
+					int atomRemainder = atoms % tubeCount;
+					if(atomDiv > 0) {
+						for(int i =1; i < inventoryStack.length; i++) {
+							if(isEmptyTube(inventoryStack[i]))
+								inventoryStack[i] = new Molecule(element, atomDiv).stack;
+						}
+					}
+					
+					if(atomRemainder > 0) {
+						leftOverExists = true;
+						Molecule m = new Molecule(element, atomRemainder);
+						inventoryStack[0] = m.stack;
 					}
 				}
 			}
 		}
 		
-		inventoryStack[0] = new ItemStack(mod_Minechem.itemTesttubeEmpty, 1);
+		if(!leftOverExists)
+			inventoryStack[0] = new ItemStack(mod_Minechem.itemTesttubeEmpty, 1);
 		
 		for(int i = 0; i < getSizeInventory(); i++) {
 			takeEmptyTubeFromChest(i);

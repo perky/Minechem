@@ -265,7 +265,7 @@ public class mod_Minechem extends BaseMod {
 				Molecule.moleculeByFormula("C7H5N3O6")
 		);
 		addElectrolysisRecipe(new ItemStack(Item.slimeBall, 1),	
-				new Molecule(91, 1),
+				new Molecule(92, 1),
 				new Molecule(6, 1)
 		);
 		addElectrolysisRecipe(new ItemStack(Item.appleRed, 1),	

@@ -31,6 +31,36 @@ public class Molecule {
 		return new Molecule(0, 1, formula);
 	}
 	
+	public static Molecule moleculeOrElementByFormula(String formula) {
+		Pattern pattern = Pattern.compile("([A-Z][a-z]*)([0-9]*)");
+		Matcher matcher = pattern.matcher(formula);
+		if(isFormulaCompound(formula)) {
+			return moleculeByFormula(formula);
+		} else {
+			while(matcher.find()) {
+				String chemicalName = matcher.group(1);
+				String atomsStr = matcher.group(2);
+				int atoms = 1;
+				if(!atomsStr.equals(""))
+					atoms = Integer.valueOf(atomsStr);
+				return elementByFormula(chemicalName, atoms);
+			}
+		}
+		
+		return null;
+	}
+	
+	public static boolean isFormulaCompound(String formula) {
+		Pattern pattern = Pattern.compile("([A-Z][a-z]*)([0-9]*)");
+		Matcher matcher = pattern.matcher(formula);
+		int count = 0;
+		while(matcher.find()) {
+			count++;
+		}
+		
+		return count > 1 ? true : false;
+	}
+	
 	public boolean isCompound() {
 		return stack.getItemDamage() == 0 ? true : false;
 	}
