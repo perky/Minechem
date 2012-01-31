@@ -21,7 +21,7 @@ import net.minecraft.src.mod_Minechem;
 public class ItemTestTube extends Item {
 	
 	public static int dmgIdStart = 200000;
-	public static int halfLifeTicks = 100;
+	public static int halfLifeTicks = 50;
 	private static int elementIcon = ModLoader.addOverride("/gui/items.png", "/minechem/testtube_full.png");
 	private static int moleculeIcon = ModLoader.addOverride("/gui/items.png", "/minechem/testtube_molecule.png");
 

@@ -412,7 +412,7 @@ public class mod_Minechem extends BaseMod {
 
 	@Override
 	public String getVersion() {
-		return "0.2";
+		return "1.0";
 	}
 
 	@Override
