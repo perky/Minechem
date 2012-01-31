@@ -33,7 +33,7 @@ public class GuiElectrolysis extends GuiContainer {
         int j1 = tileElectrolysis.getTimer();
         if(j1 > 0)
         {
-            int k1 = (int)(19F * (1.0F - (float)j1 / 600F));
+            int k1 = (int)(19F * (1.0F - (float)j1 / (float)tileElectrolysis.timerDuration));
             if(k1 > 0)
             {
                 drawTexturedModalRect(l + 111, i1 + 31 + 19 - k1, 197, 19-k1, 7, k1);
