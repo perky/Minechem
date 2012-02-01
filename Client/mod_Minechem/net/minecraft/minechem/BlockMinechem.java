@@ -1,9 +1,13 @@
 package net.minecraft.minechem;
 
+import java.util.ArrayList;
+
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockContainer;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IBlockAccess;
+import net.minecraft.src.Item;
+import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.TileEntity;
@@ -42,6 +46,14 @@ public class BlockMinechem extends BlockContainer implements ITextureProvider {
 				ModLoader.OpenGUI(entityplayer, new GuiFission(entityplayer, tileentity));
 			if(md == 5)
 				ModLoader.OpenGUI(entityplayer, new GuiMinechemCrafting(entityplayer, tileentity));
+			if(md == ItemMinechem.thermite 
+					&& entityplayer.getCurrentEquippedItem() != null
+					&& entityplayer.getCurrentEquippedItem().itemID == Item.flintAndSteel.shiftedIndex)
+			{
+				TileEntityThermite thermite = (TileEntityThermite)world.getBlockTileEntity(i, j, k);
+				thermite.setActive(true);
+				return false;
+			}
 		}
 		
 		return true;
@@ -93,8 +105,12 @@ public class BlockMinechem extends BlockContainer implements ITextureProvider {
 	
 	@Override
 	public boolean isPoweringTo(IBlockAccess iblockaccess, int i, int j, int k, int l) {
-		TileEntityMinechemMachine minechemMachine = (TileEntityMinechemMachine)iblockaccess.getBlockTileEntity(i, j, k);
-		return minechemMachine.isPowering;
+		TileEntity tileEntity = iblockaccess.getBlockTileEntity(i, j, k);
+		if(tileEntity instanceof TileEntityMinechemMachine) {
+			TileEntityMinechemMachine minechemMachine = (TileEntityMinechemMachine)tileEntity;
+			return minechemMachine.isPowering;
+		}
+		return false;
 	}
 
 
@@ -138,6 +154,9 @@ public class BlockMinechem extends BlockContainer implements ITextureProvider {
 				EnergyNet.getForWorld(world).addTileEntity(tileEntity);
 			return tileEntity;
 		}
+		if(md == ItemMinechem.thermite) {
+			return new TileEntityThermite();
+		}
 		
 		return null;
 	}
@@ -146,5 +165,18 @@ public class BlockMinechem extends BlockContainer implements ITextureProvider {
 	public String getTextureFile() {
 		return mod_Minechem.minechemBlocksTexture;
 	}
+
+	@Override
+	public void addCreativeItems(ArrayList itemList) {
+		itemList.add(new ItemStack(this, 1, ItemMinechem.electrolysis));
+		itemList.add(new ItemStack(this, 1, ItemMinechem.bonder));
+		itemList.add(new ItemStack(this, 1, ItemMinechem.unbonder));
+		itemList.add(new ItemStack(this, 1, ItemMinechem.fission));
+		itemList.add(new ItemStack(this, 1, ItemMinechem.fusion));
+		itemList.add(new ItemStack(this, 1, ItemMinechem.crafting));
+		itemList.add(new ItemStack(this, 1, ItemMinechem.thermite));
+	}
+	
+	
 
 }
