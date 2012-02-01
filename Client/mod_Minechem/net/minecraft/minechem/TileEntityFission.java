@@ -45,18 +45,19 @@ public class TileEntityFission extends TileEntityMinechemMachine implements IEne
 	
 	public boolean canFissure()
 	{
-		return isSingleElementTube(inventoryStack[0]) && isEmptyTube(inventoryStack[1]) && isEmptyTube(inventoryStack[2]);
+		return isElementTube(inventoryStack[0]) && isEmptyTube(inventoryStack[1]) && isEmptyTube(inventoryStack[2]);
 	}
 	
 	public void fissionComplete()
 	{
 		ItemStack input = inventoryStack[0];
+		Molecule mInput = Molecule.moleculeByItemStack(input);
 		int element = input.getItemDamage();
 		int elementDiv = element / 2;
 		if(inventoryStack[1] != null && elementDiv > 0)
-			inventoryStack[1] = new Molecule(elementDiv, 1).stack;
+			inventoryStack[1] = new Molecule(elementDiv, mInput.atoms).stack;
 		if(inventoryStack[2] != null && elementDiv > 0)
-			inventoryStack[2] = new Molecule(elementDiv, 1).stack;
+			inventoryStack[2] = new Molecule(elementDiv, mInput.atoms).stack;
 		
 		inventoryStack[0] = new ItemStack(mod_Minechem.itemTesttubeEmpty, 1);
 		dumpSlotToChest(0);

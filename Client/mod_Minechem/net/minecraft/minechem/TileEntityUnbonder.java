@@ -13,7 +13,7 @@ import net.minecraft.src.ic2.api.IEnergySink;
 
 public class TileEntityUnbonder extends TileEntityMinechemMachine implements IEnergySink {
 	
-	public static int timerDuration = 300;
+	public static int timerDuration = 120;
 	private boolean isProcessComplete;
 	private boolean isRunning;
 	private boolean hasEnoughPower;
@@ -98,7 +98,6 @@ public class TileEntityUnbonder extends TileEntityMinechemMachine implements IEn
 						int atoms = 1;
 						if(!atomsStr.equals(""))
 							atoms = Integer.valueOf(atomsStr);
-						System.out.println(element + ":" + atoms);
 						Molecule outputMolecule = Molecule.elementByFormula(element, atoms);
 						
 						if(outputMolecule != null && outputMolecule.stack != null) {

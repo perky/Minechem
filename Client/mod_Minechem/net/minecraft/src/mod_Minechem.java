@@ -26,11 +26,12 @@ import net.minecraft.src.ic2.api.*;
 
 public class mod_Minechem extends BaseMod {
 
-	@MLProp public static int blockIDMinechem = 236;
+	@MLProp public static int blockIDMinechem = 253;
 	@MLProp public static int itemIDTestTube = 3001;
 	@MLProp public static int itemIDEmptyTestTube = 3000;
 	@MLProp public static int itemIDTableOfElements = 3002;
 	@MLProp public static int itemIDHangableTableOfElements = 3003;
+	@MLProp public static int itemIDChemistryBook = 3004;
 	@MLProp public static boolean requireIC2Power = false;
 	public static Item itemTesttubeEmpty;
 	public static Item itemTesttube;
@@ -40,6 +41,7 @@ public class mod_Minechem extends BaseMod {
 	public static Item leadBoots;
 	public static Item tableOfElements;
 	public static Item hangableTableOfElements;
+	public static Item chemistryBook;
 	public static Block blockMinechem;
 	public static Map<ItemStack, Molecule[]> electrolysisRecipes;
 	private static File fileChemicalDictionary = new File(Minecraft.getMinecraftDir(), "/minechem/Chemical Dictionary.txt");
@@ -59,6 +61,7 @@ public class mod_Minechem extends BaseMod {
 		itemTesttubeEmpty.iconIndex = ModLoader.addOverride("/gui/items.png", "/minechem/testtube_empty.png");
 		tableOfElements = new ItemTableOfElements(itemIDTableOfElements);
 		hangableTableOfElements = new ItemHangableTableOfElements(itemIDHangableTableOfElements);
+		chemistryBook = new ItemChemistryBook(itemIDChemistryBook);
 		leadBoots.setItemName("leadboots");
 		leadLeggings.setItemName("leadleggings");
 		leadTorso.setItemName("leadTorso");
@@ -77,6 +80,7 @@ public class mod_Minechem extends BaseMod {
 		ModLoader.AddName(itemTesttube, "Test Tube");
 		ModLoader.AddName(tableOfElements, "Table of Elements");
 		ModLoader.AddName(hangableTableOfElements, "Hangable Table of Elements");
+		ModLoader.AddName(chemistryBook, "Chemistry Book");
 		ModLoader.AddName(leadBoots, "Lead Boots");
 		ModLoader.AddName(leadLeggings, "Lead Leggings");
 		ModLoader.AddName(leadTorso, "Lead Chestplate");
@@ -110,7 +114,7 @@ public class mod_Minechem extends BaseMod {
 			"#R#",
 			"#D#",
 			Character.valueOf('D'), Item.diamond,
-			Character.valueOf('R'), Molecule.elementByFormula("Fr", 1).stack,
+			Character.valueOf('R'), Molecule.elementByFormula("Th", 1).stack,
 			Character.valueOf('#'), Item.ingotIron
 		});
 		ModLoader.AddRecipe(new ItemStack(blockMinechem, 1, ItemMinechem.bonder), new Object[]{
@@ -186,6 +190,14 @@ public class mod_Minechem extends BaseMod {
 			Character.valueOf('S'), Item.stick,
 			Character.valueOf('T'), tableOfElements
 		});
+		ModLoader.AddRecipe(new ItemStack(chemistryBook, 1), new Object[]{
+			"STS",
+			"SBS",
+			"SSS",
+			Character.valueOf('S'), Item.silk,
+			Character.valueOf('T'), tableOfElements,
+			Character.valueOf('B'), Item.book
+		});
 		
 		electrolysisRecipes = new HashMap<ItemStack, Molecule[]>();
 		
@@ -198,12 +210,12 @@ public class mod_Minechem extends BaseMod {
 				new Molecule(1, 2)
 		);
 		addElectrolysisRecipe(new ItemStack(Item.ingotIron, 1),
-				new Molecule(26, 4),
-				new Molecule(26, 4)
+				new Molecule(26, 5),
+				new Molecule(26, 5)
 		);
 		addElectrolysisRecipe(new ItemStack(Item.ingotGold, 1),
-				new Molecule(79, 8),
-				new Molecule(79, 8)
+				new Molecule(79, 9),
+				new Molecule(79, 9)
 		);
 		addElectrolysisRecipe(new ItemStack(Block.oreIron, 1),
 				Molecule.elementByFormula("Fe", 4),
@@ -214,8 +226,8 @@ public class mod_Minechem extends BaseMod {
 				Molecule.elementByFormula("Au", 8)
 		);
 		addElectrolysisRecipe(new ItemStack(Item.diamond, 1),
-				new Molecule(6, 16),
-				new Molecule(6, 16)
+				new Molecule(6, 64),
+				new Molecule(6, 64)
 		);
 		addElectrolysisRecipe(new ItemStack(Item.coal, 1),
 				new Molecule(6, 1),
@@ -275,11 +287,22 @@ public class mod_Minechem extends BaseMod {
 		);
 		addElectrolysisRecipe(new ItemStack(Item.appleGold, 1),	
 				Molecule.moleculeByFormula("C6H8O7"),
-				Molecule.elementByFormula("Au", 84)
+				Molecule.elementByFormula("Au", 42)
 		);
 		addElectrolysisRecipe(new ItemStack(blockMinechem, 1, ItemMinechem.thermite),
 				Molecule.moleculeByFormula("Fe2O3"),
 				Molecule.moleculeByFormula("Fe2O3")
+		);
+		
+		addElectrolysisRecipe(new ItemStack(Item.bone, 1),	
+				Molecule.elementByFormula("Ca", 16),
+				Molecule.elementByFormula("Fe", 2)
+		);
+		
+		//Lapis
+		addElectrolysisRecipe(new ItemStack(Item.dyePowder, 1, 4),	
+				Molecule.moleculeByFormula("Na4Ca4Al6Si6O24S2"),
+				Molecule.moleculeByFormula("Na2Ca6Al6Si6O24S2")
 		);
 		
 		// Add ore dictionary for electrolysis.
@@ -417,7 +440,7 @@ public class mod_Minechem extends BaseMod {
 
 	@Override
 	public String getVersion() {
-		return "1.0";
+		return "1.2";
 	}
 
 	@Override

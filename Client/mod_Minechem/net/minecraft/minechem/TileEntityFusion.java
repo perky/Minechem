@@ -69,7 +69,11 @@ public class TileEntityFusion extends TileEntityMinechemMachine implements IEner
 		int c = a + b;
 		if(c <= 109)
 		{
-			inventoryStack[2] = new ItemStack(mod_Minechem.itemTesttube, 1, c);
+			int atomsA = Molecule.moleculeByItemStack(inventoryStack[0]).atoms;
+			int atomsB = Molecule.moleculeByItemStack(inventoryStack[1]).atoms;
+			int atomsC = Math.min(atomsA, atomsB);
+			Molecule m = new Molecule(c, atomsC);
+			inventoryStack[2] = m.stack;
 		}
 		inventoryStack[0] = new ItemStack(mod_Minechem.itemTesttubeEmpty, 1);
 		inventoryStack[1] = new ItemStack(mod_Minechem.itemTesttubeEmpty, 1);

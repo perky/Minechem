@@ -13,7 +13,7 @@ import net.minecraft.src.ic2.api.IEnergySink;
 
 public class TileEntityBonder extends TileEntityMinechemMachine implements IEnergySink {
 
-	public static int timerDuration = 300;
+	public static int timerDuration = 120;
 	private boolean isProcessComplete;
 	private boolean isRunning;
 	private boolean hasEnoughPower;
