@@ -43,7 +43,43 @@ public class TileEntityMinechemCrafting extends TileEntityMinechemMachine implem
 	}
 	
 	public boolean canCraft() {
-		return isTube(inventoryStack[0]) && isTube(inventoryStack[1]);
+		boolean foundIn1 = false;
+		boolean foundIn2 = false;
+		if(isTube(inventoryStack[0]) && isTube(inventoryStack[1])) {
+			Molecule in1 = Molecule.moleculeByItemStack( inventoryStack[0] );
+			Molecule in2 = Molecule.moleculeByItemStack( inventoryStack[1] );
+			for(int i = 0; i < MinechemCraftingRecipe.recipes.size(); i++) {
+				MinechemCraftingRecipe recipe = MinechemCraftingRecipe.recipes.get(i);
+				foundIn1 = false;
+				foundIn2 = false;
+				
+				if(in1.name.equals( recipe.input1.name )) {
+					foundIn1 = true;
+				}
+				
+				if(in2.name.equals( recipe.input2.name )) {
+					foundIn2 = true;
+				}
+				
+				if(!foundIn1) {
+					if(in1.name.equals( recipe.input2.name )) {
+						foundIn1 = true;
+					}
+				}
+				
+				if(!foundIn2) {
+					if(in2.name.equals( recipe.input1.name )) {
+						foundIn2 = true;
+					}
+				}
+				
+				if(foundIn1 && foundIn2) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	public void craftingComplete() {
@@ -52,9 +88,13 @@ public class TileEntityMinechemCrafting extends TileEntityMinechemMachine implem
 		Molecule[] recipeIns = new Molecule[2];
 		Molecule in1 = Molecule.moleculeByItemStack( inventoryStack[0] );
 		Molecule in2 = Molecule.moleculeByItemStack( inventoryStack[1] );
+		if(in1 == null || in2 == null)
+			return;
 		MinechemCraftingRecipe foundRecipe = null;
 		for(int i = 0; i < MinechemCraftingRecipe.recipes.size(); i++) {
 			MinechemCraftingRecipe recipe = MinechemCraftingRecipe.recipes.get(i);
+			foundIn1 = false;
+			foundIn2 = false;
 			
 			if(in1.name.equals( recipe.input1.name )) {
 				foundIn1 = true;
@@ -66,11 +106,14 @@ public class TileEntityMinechemCrafting extends TileEntityMinechemMachine implem
 				recipeIns[1] = recipe.input2;
 			}
 			
-			if(!foundIn1 && !foundIn2) {
+			if(!foundIn1) {
 				if(in1.name.equals( recipe.input2.name )) {
 					foundIn1 = true;
 					recipeIns[0] = recipe.input2;
 				}
+			}
+			
+			if(!foundIn2) {
 				if(in2.name.equals( recipe.input1.name )) {
 					foundIn2 = true;
 					recipeIns[1] = recipe.input1;

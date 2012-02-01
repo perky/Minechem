@@ -42,6 +42,7 @@ public class ContainerElectrolysis extends Container {
 		return tileElectrolysis.isUseableByPlayer(entityplayer);
 	}
 	
+	
 	@Override
 	public ItemStack slotClick(int i, int j, boolean flag,
 			EntityPlayer entityplayer) {

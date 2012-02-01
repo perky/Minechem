@@ -73,6 +73,8 @@ public class BlockMinechem extends BlockContainer implements ITextureProvider {
         	return i == 1 ? 7 : 3;
         case ItemMinechem.crafting:
         	return i == 1 ? 6 : 5;
+        case ItemMinechem.thermite:
+        	return 8;
         default:
         	return i == 1 ? 7 : 0;
         }
