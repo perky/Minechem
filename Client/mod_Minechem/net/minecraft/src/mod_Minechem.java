@@ -237,8 +237,8 @@ public class mod_Minechem extends BaseMod {
 				new Molecule(15, 1)
 		);
 		addElectrolysisRecipe(new ItemStack(Item.redstone, 1),
-				new Molecule(29, 1),
-				new Molecule(47, 1)
+				Molecule.moleculeByFormula("Cu2O"),
+				Molecule.moleculeByFormula("Cu2O")
 		);
 		addElectrolysisRecipe(new ItemStack(Item.clay, 1),
 				new Molecule(14, 1),

@@ -518,6 +518,7 @@ CuFe2S3 = copper iron sulfide
 CuI = copper(I) iodide
 CuIO3 = copper(I) iodate
 CuMoO4 = copper(II) orthomolybdate
+Cu2O = copper(I) oxide
 CuO = copper(II) oxide
 CuS = copper(II) sulfide
 CuSCN = copper(I) thiocyanate

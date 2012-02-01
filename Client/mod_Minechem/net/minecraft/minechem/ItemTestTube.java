@@ -126,16 +126,16 @@ public class ItemTestTube extends Item {
 	}
 	
 	public String convertNumbersToSuperscript(String formula) {
-		formula = formula.replaceAll("0", "\u2070");
-		formula = formula.replaceAll("1", "\u00B9");
-		formula = formula.replaceAll("2", "\u00B2");
-		formula = formula.replaceAll("3", "\u00B3");
-		formula = formula.replaceAll("4", "\u2074");
-		formula = formula.replaceAll("5", "\u2075");
-		formula = formula.replaceAll("6", "\u2076");
-		formula = formula.replaceAll("7", "\u2077");
-		formula = formula.replaceAll("8", "\u2078");
-		formula = formula.replaceAll("9", "\u2079");
+		formula = formula.replaceAll("0", "\u2080");
+		formula = formula.replaceAll("1", "\u2081");
+		formula = formula.replaceAll("2", "\u2082");
+		formula = formula.replaceAll("3", "\u2083");
+		formula = formula.replaceAll("4", "\u2084");
+		formula = formula.replaceAll("5", "\u2085");
+		formula = formula.replaceAll("6", "\u2086");
+		formula = formula.replaceAll("7", "\u2087");
+		formula = formula.replaceAll("8", "\u2088");
+		formula = formula.replaceAll("9", "\u2089");
 		return formula;
 	}
 	
