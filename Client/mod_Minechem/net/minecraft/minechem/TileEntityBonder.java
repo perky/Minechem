@@ -18,10 +18,12 @@ public class TileEntityBonder extends TileEntityMinechemMachine implements IEner
 	private boolean isRunning;
 	private boolean hasEnoughPower;
 	public static int IC2PowerPerTick = 4;
+	public String currentBondFormula;
 	
 	public TileEntityBonder() {
 		inventoryStack = new ItemStack[5];
 		isProcessComplete = false;
+		currentBondFormula = "";
 	}
 	
 	public void updateEntity()
@@ -52,8 +54,38 @@ public class TileEntityBonder extends TileEntityMinechemMachine implements IEner
 		}
 	}
 	
+	@Override
+	public void onInventoryChanged() {
+		super.onInventoryChanged();
+		String formula = getBondFormula();
+		String fullName = Util.getFullChemicalName(formula);
+		currentBondFormula = Util.convertNumbersToSuperscript( formula ) + "  " + fullName;
+	}
+
 	public void bondingComplete()
 	{
+		String bondFormula = getBondFormula();
+		
+		for(int i = 1; i < inventoryStack.length; i++) {
+			ItemStack itemstack = inventoryStack[i];
+			if(isTube(itemstack))
+				inventoryStack[i] = new ItemStack(mod_Minechem.itemTesttubeEmpty);
+		}
+		
+		if(!bondFormula.equals("")) {
+			Molecule m = Molecule.moleculeOrElementByFormula(bondFormula);
+			if(m != null) {
+				inventoryStack[0] = m.stack;
+			}
+		}
+		
+		dumpSlotToChest(0);
+		for(int i = 1; i < getSizeInventory(); i++) {
+			dumpEmptyTubeSlotToChest(i);
+		}
+	}
+	
+	public String getBondFormula() {
 		String bondFormula = "";
 		Molecule lastMolecule = null;
 		
@@ -90,8 +122,6 @@ public class TileEntityBonder extends TileEntityMinechemMachine implements IEner
 					lastMolecule = null;
 					bondFormula += formula;
 				}
-				
-				inventoryStack[i] = new ItemStack(mod_Minechem.itemTesttubeEmpty);
 			}
 		}
 		
@@ -99,18 +129,7 @@ public class TileEntityBonder extends TileEntityMinechemMachine implements IEner
 			bondFormula += lastMolecule.name;
 		}
 		
-		
-		if(!bondFormula.equals("")) {
-			Molecule m = Molecule.moleculeOrElementByFormula(bondFormula);
-			if(m != null) {
-				inventoryStack[0] = m.stack;
-			}
-		}
-		
-		dumpSlotToChest(0);
-		for(int i = 1; i < getSizeInventory(); i++) {
-			dumpEmptyTubeSlotToChest(i);
-		}
+		return bondFormula;
 	}
 	
 	public boolean canBond()

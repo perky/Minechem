@@ -9,20 +9,21 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiBonder extends GuiContainer {
 
-	private TileEntityMinechemMachine tileFusion;
+	private TileEntityMinechemMachine tileMachine;
 	
 	public GuiBonder(EntityPlayer entityplayer, TileEntity tileentityfusion)
 	{
 		super(new ContainerBonder(entityplayer.inventory, (TileEntityBonder)tileentityfusion));
-		tileFusion = (TileEntityMinechemMachine)tileentityfusion;
+		tileMachine = (TileEntityMinechemMachine)tileentityfusion;
 	}
 	
 	protected void drawGuiContainerForegroundLayer()
     {
         fontRenderer.drawString("Bonder", 56, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
+        fontRenderer.drawString(((TileEntityBonder)tileMachine).currentBondFormula, 20, 20, 0x404040);
         if(mod_Minechem.requireIC2Power) {
-        	String s = "Requires " + tileFusion.IC2PowerPerTick + "EU/t";
+        	String s = "Requires " + tileMachine.IC2PowerPerTick + "EU/t";
         	fontRenderer.drawString(s, 80, (ySize - 96) + 2, 0x404040);
         }
     }
@@ -36,7 +37,7 @@ public class GuiBonder extends GuiContainer {
         int i1 = (height - ySize) / 2;
         drawTexturedModalRect(l, i1, 0, 0, xSize, ySize);
         
-        int time = tileFusion.timer;
+        int time = tileMachine.timer;
         if(time > 0)
         {
         	int k1 = time % 2;

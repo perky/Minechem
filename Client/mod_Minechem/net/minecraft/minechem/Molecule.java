@@ -117,6 +117,7 @@ public class Molecule {
 		this.elementId = elementId;
 		this.atoms = atoms;
 		this.stack = new ItemStack(mod_Minechem.itemTesttube, 1, elementId);
+		this.name = chemicalname;
 		if(elementId == 0)
 			this.isCompound = true;
 		else
