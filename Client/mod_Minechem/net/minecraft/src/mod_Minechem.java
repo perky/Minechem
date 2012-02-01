@@ -70,6 +70,7 @@ public class mod_Minechem extends BaseMod {
 		initItemsAndBlocks();
 		MinecraftForgeClient.preloadTexture(minechemBlocksTexture);
 		MinecraftForgeClient.preloadTexture(minechemItemsTexture);
+		
 		ModLoader.RegisterBlock(blockMinechem);
 		
 		ModLoader.AddName(itemTesttubeEmpty, "Empty Test Tube");
@@ -87,7 +88,7 @@ public class mod_Minechem extends BaseMod {
 		ModLoader.RegisterTileEntity(net.minecraft.minechem.TileEntityUnbonder.class, "minechem_tileunbonder");
 		ModLoader.RegisterTileEntity(net.minecraft.minechem.TileEntityFission.class, "minechem_tilefission");
 		ModLoader.RegisterTileEntity(net.minecraft.minechem.TileEntityMinechemCrafting.class, "minechem_tilecrafting");
-		
+		ModLoader.RegisterTileEntity(net.minecraft.minechem.TileEntityThermite.class, "minechem_tilethermite");
 		
 		try{
 			loadChemicalDictionary();
@@ -275,6 +276,10 @@ public class mod_Minechem extends BaseMod {
 		addElectrolysisRecipe(new ItemStack(Item.appleGold, 1),	
 				Molecule.moleculeByFormula("C6H8O7"),
 				Molecule.elementByFormula("Au", 84)
+		);
+		addElectrolysisRecipe(new ItemStack(blockMinechem, 1, ItemMinechem.thermite),
+				Molecule.moleculeByFormula("Fe2O3"),
+				Molecule.moleculeByFormula("Fe2O3")
 		);
 		
 		// Add ore dictionary for electrolysis.
