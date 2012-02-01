@@ -301,7 +301,7 @@ public class mod_Minechem extends BaseMod {
 		
 		//Lapis
 		addElectrolysisRecipe(new ItemStack(Item.dyePowder, 1, 4),	
-				Molecule.moleculeByFormula("Na4Ca4Al6Si6O24S2"),
+				Molecule.moleculeByFormula("Na2Ca6Al6Si6O24S2"),
 				Molecule.moleculeByFormula("Na2Ca6Al6Si6O24S2")
 		);
 		
