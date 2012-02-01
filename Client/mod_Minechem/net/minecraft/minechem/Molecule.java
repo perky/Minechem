@@ -51,6 +51,25 @@ public class Molecule {
 		return null;
 	}
 	
+	public static Molecule moleculeByItemStack(ItemStack itemstack) {
+		if(itemstack == null)
+			return null;
+		
+		NBTTagCompound tagCompound = itemstack.getTagCompound();
+		int id = itemstack.getItemDamage();
+		if(tagCompound != null) {
+			String formula = tagCompound.getString("chemicalname");
+			if(id == 0) {
+				return moleculeByFormula(formula);
+			} else {
+				int atoms = tagCompound.getInteger("atoms");
+				return elementByFormula(ItemTestTube.elements[id][0], atoms);
+			}
+		} else {
+			return null;
+		}
+	}
+	
 	public static boolean isFormulaCompound(String formula) {
 		Pattern pattern = Pattern.compile("([A-Z][a-z]*)([0-9]*)");
 		Matcher matcher = pattern.matcher(formula);
@@ -122,6 +141,16 @@ public class Molecule {
 		this.stack = itemstack;
 		this.elementId = itemstack.getItemDamage();
 		NBTTagCompound tagCompound = itemstack.getTagCompound();
+		if(tagCompound != null) {
+			this.name = tagCompound.getString("chemicalname");
+			if(elementId == 0) {
+				isCompound = true;
+			} else {
+				isCompound = false;
+			}
+		} else {
+			
+		}
 		
 		if(tagCompound != null)
 		{

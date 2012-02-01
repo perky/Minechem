@@ -14,8 +14,8 @@ public class ContainerMinechemCrafting extends Container {
 	public ContainerMinechemCrafting(InventoryPlayer inventoryplayer, TileEntity tileentity){
 		this.tileEntity = (TileEntityMinechemMachine)tileentity;
 		
-		addSlot(new SlotMinechemElementTube(this, inventoryplayer.player, tileEntity, 0, 42, 34));
-		addSlot(new SlotMinechemElementTube(this, inventoryplayer.player, tileEntity, 1, 60, 34));
+		addSlot(new Slot(tileEntity, 0, 42, 34));
+		addSlot(new Slot(tileEntity, 1, 60, 34));
 		addSlot(new Slot(tileEntity, 2, 118, 34));
 		
 		// Player inventory.

@@ -50,27 +50,28 @@ public class TileEntityMinechemCrafting extends TileEntityMinechemMachine implem
 		boolean foundIn1 = false;
 		boolean foundIn2 = false;
 		Molecule[] recipeIns = new Molecule[2];
-		Molecule in1 = new Molecule( inventoryStack[0] );
-		Molecule in2 = new Molecule( inventoryStack[1] );
+		Molecule in1 = Molecule.moleculeByItemStack( inventoryStack[0] );
+		Molecule in2 = Molecule.moleculeByItemStack( inventoryStack[1] );
 		MinechemCraftingRecipe foundRecipe = null;
 		for(int i = 0; i < MinechemCraftingRecipe.recipes.size(); i++) {
 			MinechemCraftingRecipe recipe = MinechemCraftingRecipe.recipes.get(i);
-			if(in1.elementId == recipe.input1.elementId && in1.atoms >= recipe.input1.atoms) {
+			
+			if(in1.name.equals( recipe.input1.name )) {
 				foundIn1 = true;
 				recipeIns[0] = recipe.input1;
 			}
 			
-			if(in2.elementId == recipe.input2.elementId && in2.atoms >= recipe.input2.atoms) {
+			if(in2.name.equals( recipe.input2.name )) {
 				foundIn2 = true;
 				recipeIns[1] = recipe.input2;
 			}
 			
 			if(!foundIn1 && !foundIn2) {
-				if(in1.elementId == recipe.input2.elementId && in1.atoms >= recipe.input2.atoms) {
+				if(in1.name.equals( recipe.input2.name )) {
 					foundIn1 = true;
 					recipeIns[0] = recipe.input2;
 				}
-				if(in2.elementId == recipe.input1.elementId && in2.atoms >= recipe.input1.atoms) {
+				if(in2.name.equals( recipe.input1.name )) {
 					foundIn2 = true;
 					recipeIns[1] = recipe.input1;
 				}
@@ -101,18 +102,11 @@ public class TileEntityMinechemCrafting extends TileEntityMinechemMachine implem
 			}
 			
 			if(outputIsValid) {
-				if(in1.isCompound())
-					inventoryStack[0] = new ItemStack(mod_Minechem.itemTesttubeEmpty, 1);
-				else
-					inventoryStack[0] = in1.decrAtoms( recipeIns[0].atoms ).copy();
+				inventoryStack[0] = new ItemStack(mod_Minechem.itemTesttubeEmpty, 1);
+				inventoryStack[1] = new ItemStack(mod_Minechem.itemTesttubeEmpty, 1);
 				
-				if(in2.isCompound())
-					inventoryStack[1] = new ItemStack(mod_Minechem.itemTesttubeEmpty, 1);
-				else
-					inventoryStack[1] = in2.decrAtoms( recipeIns[1].atoms ).copy();
-				
-				dumpSlotToChest(0);
-				dumpSlotToChest(1);
+				dumpEmptyTubeSlotToChest(0);
+				dumpEmptyTubeSlotToChest(1);
 				dumpSlotToChest(2);
 			}
 		}
