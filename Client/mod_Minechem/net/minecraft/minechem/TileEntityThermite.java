@@ -41,7 +41,7 @@ public class TileEntityThermite extends TileEntity {
 	
 	public void setDropCount( int count ) {
 		dropCount = count;
-		if(dropCount > random.nextInt(30) + 12) {
+		if(dropCount > random.nextInt(40) + 30) {
 			worldObj.setBlock(xCoord, yCoord, zCoord, 0);
 		}
 	}

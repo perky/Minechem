@@ -2,6 +2,7 @@ package net.minecraft.minechem;
 
 import java.io.IOException;
 
+import net.minecraft.src.ItemStack;
 import net.minecraft.src.mod_Minechem;
 
 public class Util {
@@ -26,5 +27,17 @@ public class Util {
 		} catch(IOException e) {
 			return "Unknown";
 		}
+	}
+	
+	public static boolean isElementTube(ItemStack itemstack) {
+		return itemstack != null && itemstack.itemID == mod_Minechem.itemTesttube.shiftedIndex && itemstack.getItemDamage() > 0;
+	}
+	
+	public static boolean isTube(ItemStack itemstack) {
+		return itemstack != null && itemstack.itemID == mod_Minechem.itemTesttube.shiftedIndex;
+	}
+
+	public static boolean isEmptyTube(ItemStack itemstack) {
+		return itemstack != null && itemstack.itemID == mod_Minechem.itemTesttubeEmpty.shiftedIndex;
 	}
 }

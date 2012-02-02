@@ -23,7 +23,7 @@ public class GuiMinechemCrafting extends GuiContainer {
         fontRenderer.drawString("Molecular Crafting", 56, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
         if(mod_Minechem.requireIC2Power) {
-        	String s = "Requires " + tileMachine.IC2PowerPerTick + "EU/t";
+        	String s = "Requires 20 EU/t";
         	fontRenderer.drawString(s, 80, (ySize - 96) + 2, 0x404040);
         }
     }

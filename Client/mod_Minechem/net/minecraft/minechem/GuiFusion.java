@@ -9,12 +9,12 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiFusion extends GuiContainer {
 	
-	private TileEntityMinechemMachine tileFusion;
+	private TileEntityMinechemMachine tileMachine;
 	
 	public GuiFusion(EntityPlayer entityplayer, TileEntity tileentityfusion)
 	{
 		super(new ContainerFusion(entityplayer.inventory, (TileEntityFusion)tileentityfusion));
-		tileFusion = (TileEntityMinechemMachine)tileentityfusion;
+		tileMachine = (TileEntityMinechemMachine)tileentityfusion;
 	}
 	
 	protected void drawGuiContainerForegroundLayer()
@@ -22,7 +22,7 @@ public class GuiFusion extends GuiContainer {
         fontRenderer.drawString("Fusion Reactor", 56, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
         if(mod_Minechem.requireIC2Power) {
-        	String s = "Requires " + tileFusion.IC2PowerPerTick + "EU/t";
+        	String s = "Requires 10 EU/t";
         	fontRenderer.drawString(s, 80, (ySize - 96) + 2, 0x404040);
         }
     }
@@ -36,11 +36,11 @@ public class GuiFusion extends GuiContainer {
         int i1 = (height - ySize) / 2;
         drawTexturedModalRect(l, i1, 0, 0, xSize, ySize);
         
-        int j1 = tileFusion.getTimer();
+        int j1 = tileMachine.getTimer();
         if(j1 > 0)
         {
         	int j2 = 0;
-        	int k1 = (int)(54F * (1.0F - (float)j1 / (float)tileFusion.timerDuration));
+        	int k1 = (int)(54F * (1.0F - (float)j1 / (float)tileMachine.timerDuration));
         	if(k1 < 7)
         		j2 = 0;
         	else

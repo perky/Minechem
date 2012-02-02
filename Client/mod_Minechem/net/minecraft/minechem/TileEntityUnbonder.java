@@ -17,10 +17,11 @@ public class TileEntityUnbonder extends TileEntityMinechemMachine implements IEn
 	private boolean isProcessComplete;
 	private boolean isRunning;
 	private boolean hasEnoughPower;
-	public static int IC2PowerPerTick = 5;
+	public int IC2PowerPerTick = 5;
 	private ItemStack incompatableStack;
 	
 	public TileEntityUnbonder() {
+		IC2PowerPerTick = 5;
 		inventoryStack = new ItemStack[5];
 		isProcessComplete = false;
 	}
@@ -157,7 +158,11 @@ public class TileEntityUnbonder extends TileEntityMinechemMachine implements IEn
 			inventoryStack[0] = new ItemStack(mod_Minechem.itemTesttubeEmpty, 1);
 		
 		for(int i = 0; i < getSizeInventory(); i++) {
-			takeEmptyTubeFromChest(i);
+			if( inventoryStack[i] != null 
+					&& (isTube(inventoryStack[i]) || isEmptyTube(inventoryStack[i])) ) 
+			{
+				dumpSlotToChest(i);
+			}
 		}
 	}
 	
@@ -215,7 +220,7 @@ public class TileEntityUnbonder extends TileEntityMinechemMachine implements IEn
 	public int getSizeInventorySide(int side) {
 		return side == 1 ? 1 : 4;
 	}
-	
+
 	@Override
 	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction) {
 		return true;

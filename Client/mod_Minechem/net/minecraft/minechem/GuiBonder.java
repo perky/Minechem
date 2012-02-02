@@ -23,7 +23,7 @@ public class GuiBonder extends GuiContainer {
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
         fontRenderer.drawString(((TileEntityBonder)tileMachine).currentBondFormula, 20, 20, 0x404040);
         if(mod_Minechem.requireIC2Power) {
-        	String s = "Requires " + tileMachine.IC2PowerPerTick + "EU/t";
+        	String s = "Requires 4 EU/t";
         	fontRenderer.drawString(s, 80, (ySize - 96) + 2, 0x404040);
         }
     }

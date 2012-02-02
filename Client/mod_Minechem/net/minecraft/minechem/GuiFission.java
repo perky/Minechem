@@ -22,7 +22,7 @@ public class GuiFission extends GuiContainer {
         fontRenderer.drawString("Fission Reactor", 46, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
         if(mod_Minechem.requireIC2Power) {
-        	String s = "Requires " + tileMinechem.IC2PowerPerTick + "EU/t";
+        	String s = "Requires 8 EU/t";
         	fontRenderer.drawString(s, 80, (ySize - 96) + 2, 0x404040);
         }
     }

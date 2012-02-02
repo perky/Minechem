@@ -17,10 +17,11 @@ public class TileEntityBonder extends TileEntityMinechemMachine implements IEner
 	private boolean isProcessComplete;
 	private boolean isRunning;
 	private boolean hasEnoughPower;
-	public static int IC2PowerPerTick = 4;
+	public int IC2PowerPerTick = 4;
 	public String currentBondFormula;
 	
 	public TileEntityBonder() {
+		IC2PowerPerTick = 4;
 		inventoryStack = new ItemStack[5];
 		isProcessComplete = false;
 		currentBondFormula = "";

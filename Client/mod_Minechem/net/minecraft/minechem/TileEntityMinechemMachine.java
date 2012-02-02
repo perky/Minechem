@@ -19,7 +19,7 @@ public class TileEntityMinechemMachine extends TileEntity implements IInventory,
 	public static int timerDuration = 600;
 	public boolean isPowering;
 	public boolean isUsingIC2Power;
-	public static int IC2PowerPerTick = 0;
+	public int IC2PowerPerTick;
 
 	public TileEntityMinechemMachine() {
 		super();
@@ -57,6 +57,10 @@ public class TileEntityMinechemMachine extends TileEntity implements IInventory,
 
 	public int getTimer() {
 		return timer;
+	}
+	
+	public int getIC2PowerPerTick() {
+		return IC2PowerPerTick;
 	}
 	
 	// 0 = input.
@@ -141,6 +145,7 @@ public class TileEntityMinechemMachine extends TileEntity implements IInventory,
 					if(stack.stackSize == 0) stack = null;
 					chest.setInventorySlotContents(i, stack);
 					setInventorySlotContents(slotnumber, newStack);
+					break;
 				}
 			}
 		}
@@ -233,7 +238,7 @@ public class TileEntityMinechemMachine extends TileEntity implements IInventory,
 
 	@Override
 	public int getInventoryStackLimit() {
-		return 64;
+		return 1;
 	}
 
 	@Override

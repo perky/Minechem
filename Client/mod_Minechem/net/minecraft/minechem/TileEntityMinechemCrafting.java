@@ -3,6 +3,7 @@ package net.minecraft.minechem;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.mod_Minechem;
@@ -15,9 +16,10 @@ public class TileEntityMinechemCrafting extends TileEntityMinechemMachine implem
 	public static int timerDuration = 200;
 	private boolean isRunning;
 	private boolean hasEnoughPower;
-	public static int IC2PowerPerTick = 6;
+	public int IC2PowerPerTick = 20;
 	
 	public TileEntityMinechemCrafting() {
+		IC2PowerPerTick = 20;
 		inventoryStack = new ItemStack[3];
 	}
 	
@@ -45,6 +47,7 @@ public class TileEntityMinechemCrafting extends TileEntityMinechemMachine implem
 	public boolean canCraft() {
 		boolean foundIn1 = false;
 		boolean foundIn2 = false;
+		MinechemCraftingRecipe foundRecipe = null;
 		if(isTube(inventoryStack[0]) && isTube(inventoryStack[1])) {
 			Molecule in1 = Molecule.moleculeByItemStack( inventoryStack[0] );
 			Molecule in2 = Molecule.moleculeByItemStack( inventoryStack[1] );
@@ -74,8 +77,29 @@ public class TileEntityMinechemCrafting extends TileEntityMinechemMachine implem
 				}
 				
 				if(foundIn1 && foundIn2) {
+					foundRecipe = recipe;
+					break;
+				}
+			}
+		}
+		
+		if(foundRecipe != null) {
+			ItemStack output = foundRecipe.output;
+			if(output.itemID == Item.potion.shiftedIndex) {
+				ItemStack bottleStack = new ItemStack(Item.glassBottle, 3);
+				if(inventoryStack[2] != null && inventoryStack[2].isStackEqual(bottleStack)) {
 					return true;
 				}
+			}
+			else if(foundRecipe.output.getItem().hasContainerItem()) 
+			{
+				Item containerItem = foundRecipe.output.getItem().getContainerItem();
+				ItemStack containerStack = new ItemStack(containerItem, 3);
+				if(inventoryStack[2] != null && inventoryStack[2].isItemEqual(containerStack)) {
+					return true;
+				}
+			} else {
+				return true;
 			}
 		}
 		
@@ -131,17 +155,35 @@ public class TileEntityMinechemCrafting extends TileEntityMinechemMachine implem
 			ItemStack output = foundRecipe.output.copy();
 			ItemStack stack = inventoryStack[2];
 			boolean outputIsValid = false;
-			if(stack == null) {
-				setInventorySlotContents(2, output);
-				inventoryStack[2] = output;
-				outputIsValid = true;
-			} else if( stack.itemID == output.itemID 
-					&& stack.getItemDamage() == output.getItemDamage() 
-					&& stack.stackSize + output.stackSize < stack.getMaxStackSize())
+			
+			if(output.itemID == Item.potion.shiftedIndex) {
+				ItemStack bottleStack = new ItemStack(Item.glassBottle, 3);
+				if(inventoryStack[2] != null && inventoryStack[2].isStackEqual(bottleStack)) {
+					setInventorySlotContents(2, output);
+					outputIsValid = true;
+				}
+			}
+			else if(output.getItem().hasContainerItem()) 
 			{
-				stack.stackSize += output.stackSize;
-				setInventorySlotContents(2, stack);
-				outputIsValid = true;
+				Item containerItem = output.getItem().getContainerItem();
+				ItemStack containerStack = new ItemStack(containerItem, 1);
+				if(stack != null && stack.isItemEqual(containerStack)) {
+					setInventorySlotContents(2, output);
+					outputIsValid = true;
+				}
+			} else {
+				if(stack == null) {
+					setInventorySlotContents(2, output);
+					inventoryStack[2] = output;
+					outputIsValid = true;
+				} else if( stack.itemID == output.itemID 
+						&& stack.getItemDamage() == output.getItemDamage() 
+						&& stack.stackSize + output.stackSize < stack.getMaxStackSize())
+				{
+					stack.stackSize += output.stackSize;
+					setInventorySlotContents(2, stack);
+					outputIsValid = true;
+				}
 			}
 			
 			if(outputIsValid) {

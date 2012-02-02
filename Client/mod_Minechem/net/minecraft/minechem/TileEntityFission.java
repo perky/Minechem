@@ -12,9 +12,10 @@ public class TileEntityFission extends TileEntityMinechemMachine implements IEne
 	
 	private boolean isRunning;
 	private boolean hasEnoughPower;
-	public static int IC2PowerPerTick = 8;
+	public int IC2PowerPerTick = 8;
 	
 	public TileEntityFission() {
+		IC2PowerPerTick = 8;
 		inventoryStack = new ItemStack[3];
 	}
 	

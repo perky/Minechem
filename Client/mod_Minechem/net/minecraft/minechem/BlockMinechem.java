@@ -1,6 +1,7 @@
 package net.minecraft.minechem;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockContainer;
@@ -59,6 +60,17 @@ public class BlockMinechem extends BlockContainer implements ITextureProvider {
 		return true;
 	}
 	
+	
+
+	@Override
+	public ArrayList<ItemStack> getBlockDropped(World world, int X, int Y,
+			int Z, int metadata, int fortune) {
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		int id = world.getBlockMetadata(X, Y, Z);
+		ret.add(new ItemStack(mod_Minechem.blockMinechem, 1, id));
+		return ret;
+	}
+
 	public int getBlockTextureFromSideAndMetadata(int i, int j) {
         switch (j) {
         case ItemMinechem.electrolysis:

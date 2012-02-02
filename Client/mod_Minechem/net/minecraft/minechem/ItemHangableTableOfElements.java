@@ -59,7 +59,7 @@ public class ItemHangableTableOfElements extends Item implements ITextureProvide
 
 	@Override
 	public void addInformation(ItemStack itemstack, List list) {
-		list.add("5 x 9");
+		list.add("9 x 5");
 	}
 
 	@Override

@@ -12,9 +12,10 @@ public class TileEntityFusion extends TileEntityMinechemMachine implements IEner
 	
 	private boolean isRunning;
 	private boolean hasEnoughPower;
-	public static int IC2PowerPerTick = 10;
+	public int IC2PowerPerTick = 10;
 	
 	public TileEntityFusion() {
+		IC2PowerPerTick = 10;
 		inventoryStack = new ItemStack[3];
 		isRunning = false;
 		hasEnoughPower = false;
@@ -164,7 +165,7 @@ public class TileEntityFusion extends TileEntityMinechemMachine implements IEner
 			return amount - IC2PowerPerTick;
 		} else {
 			hasEnoughPower = false;
-			return amount;
+			return 0;
 		}
 	}
 

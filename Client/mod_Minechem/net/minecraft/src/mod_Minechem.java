@@ -19,6 +19,8 @@ import java.util.Properties;
 import net.minecraft.client.Minecraft;
 import net.minecraft.minechem.*;
 import net.minecraft.src.forge.ForgeHooks;
+import net.minecraft.src.forge.ForgeHooksClient;
+import net.minecraft.src.forge.ICustomItemRenderer;
 import net.minecraft.src.forge.IOreHandler;
 import net.minecraft.src.forge.MinecraftForge;
 import net.minecraft.src.forge.MinecraftForgeClient;
@@ -44,7 +46,9 @@ public class mod_Minechem extends BaseMod {
 	public static Item chemistryBook;
 	public static Block blockMinechem;
 	public static Map<ItemStack, Molecule[]> electrolysisRecipes;
-	private static File fileChemicalDictionary = new File(Minecraft.getMinecraftDir(), "/minechem/Chemical Dictionary.txt");
+	
+	public static File dirMinechem = new File(Minecraft.getMinecraftDir(), "/minechem/");
+	public static File fileChemicalDictionary = new File(Minecraft.getMinecraftDir(), "/minechem/Chemical Dictionary.txt");
 	private static Properties chemicalDictionary;
 	private static Random random;
 	@MLProp public static String minechemBlocksTexture = "/minechem/blocktextures.png";
@@ -75,6 +79,7 @@ public class mod_Minechem extends BaseMod {
 		MinecraftForgeClient.preloadTexture(minechemItemsTexture);
 		
 		ModLoader.RegisterBlock(blockMinechem);
+		ModLoader.RegisterEntityID(EntityTableOfElements.class, "entityTableOfElements", ModLoader.getUniqueEntityId());
 		
 		ModLoader.AddName(itemTesttubeEmpty, "Empty Test Tube");
 		ModLoader.AddName(itemTesttube, "Test Tube");
@@ -93,6 +98,14 @@ public class mod_Minechem extends BaseMod {
 		ModLoader.RegisterTileEntity(net.minecraft.minechem.TileEntityFission.class, "minechem_tilefission");
 		ModLoader.RegisterTileEntity(net.minecraft.minechem.TileEntityMinechemCrafting.class, "minechem_tilecrafting");
 		ModLoader.RegisterTileEntity(net.minecraft.minechem.TileEntityThermite.class, "minechem_tilethermite");
+		
+		
+		if( !mod_Minechem.dirMinechem.exists() ) {
+			dirMinechem.mkdir();
+		}
+		
+		URLReader urlReader = new URLReader();
+		urlReader.getChemicalDictionary();
 		
 		try{
 			loadChemicalDictionary();
@@ -201,11 +214,12 @@ public class mod_Minechem extends BaseMod {
 		
 		electrolysisRecipes = new HashMap<ItemStack, Molecule[]>();
 		
-		addElectrolysisRecipe(new ItemStack(Item.bucketWater, 1),
+		
+		addElectrolysisRecipe(new ItemStack(Item.potion, 1, 0),
 				new Molecule(8, 2),
 				new Molecule(1, 2)
 		);
-		addElectrolysisRecipe(new ItemStack(Item.potion, 1, 0),
+		addElectrolysisRecipe(new ItemStack(Item.bucketWater, 1),
 				new Molecule(8, 2),
 				new Molecule(1, 2)
 		);
@@ -278,8 +292,8 @@ public class mod_Minechem extends BaseMod {
 				Molecule.moleculeByFormula("C7H5N3O6")
 		);
 		addElectrolysisRecipe(new ItemStack(Item.slimeBall, 1),	
-				new Molecule(92, 1),
-				new Molecule(6, 1)
+				new Molecule(92, 2),
+				new Molecule(6, 16)
 		);
 		addElectrolysisRecipe(new ItemStack(Item.appleRed, 1),	
 				Molecule.moleculeByFormula("C6H8O7"),
@@ -325,9 +339,6 @@ public class mod_Minechem extends BaseMod {
 				if(oreClass.equals("oreCopper")) {
 					addElectrolysisRecipe(ore.copy(), new Molecule(29, 1), new Molecule(29, 1));
 				}
-				if(oreClass.equals("oreUranium")) {
-					addElectrolysisRecipe(ore.copy(), new Molecule(92, 1), new Molecule(92, 1));
-				}
 				if(oreClass.equals("oreSilver")) {
 					addElectrolysisRecipe(ore.copy(), new Molecule(47, 1), new Molecule(47, 1));
 				}
@@ -346,12 +357,26 @@ public class mod_Minechem extends BaseMod {
 				if(oreClass.equals("itemDropUranium")) {
 					addElectrolysisRecipe(ore.copy(), new Molecule(92, 4), new Molecule(92, 4));
 				}
+				if(oreClass.equals("itemRubber")) {
+					addElectrolysisRecipe(ore.copy(), 
+							Molecule.elementByFormula("C", 2),
+							Molecule.moleculeByFormula("ZnO")
+					);
+				}
 			}
 		});
 		
 		ModLoader.SetInGameHook(this, true, true);
+		
+		
+		//MinecraftForgeClient.registerCustomItemRenderer(itemTesttube.shiftedIndex, new RenderTestTube());
 	}
 	
+	@Override
+	public void ModsLoaded() {
+		super.ModsLoaded();
+	}
+
 	@Override
 	public void AddRenderer(Map map) {
 		map.put(EntityTableOfElements.class, new RenderTableOfElements());
@@ -440,7 +465,7 @@ public class mod_Minechem extends BaseMod {
 
 	@Override
 	public String getVersion() {
-		return "1.2";
+		return "1.3";
 	}
 
 	@Override
