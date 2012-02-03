@@ -13,6 +13,7 @@ public class ItemMinechem extends ItemBlock {
 	public static final int fission = 4;
 	public static final int crafting = 5;
 	public static final int thermite = 6;
+	public static final int sorter = 7;
 	private static String[][] names = {
 		{"electrolysis", "Electrolysis Kit"},
 		{"fusion", "Fusion Reactor"},
@@ -20,7 +21,8 @@ public class ItemMinechem extends ItemBlock {
 		{"unbonder", "Un-Bonder"},
 		{"fission", "Fission Reactor"},
 		{"crafting", "Molecular Crafting Table"},
-		{"thermite", "Thermite"}
+		{"thermite", "Thermite"},
+		{"sorter", "Molecule Sorter"}
 	};
 
 	public ItemMinechem(int i, Block block) {

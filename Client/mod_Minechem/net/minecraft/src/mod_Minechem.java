@@ -38,6 +38,7 @@ public class mod_Minechem extends BaseMod {
 	@MLProp public static int itemIDChemistryBook = 3004;
 	@MLProp public static boolean requireIC2Power = false;
 	@MLProp public static boolean autoUpdateChemicalDictionary = true;
+	@MLProp public static boolean checkForMinechemUpdates = true;
 	public static Item itemTesttubeEmpty;
 	public static Item itemTesttube;
 	public static Item leadHelmet;
@@ -57,6 +58,7 @@ public class mod_Minechem extends BaseMod {
 	@MLProp public static String minechemBlocksTexture = "/minechem/blocktextures.png";
 	public static String minechemItemsTexture = "/minechem/items.png";
 	
+	private boolean shouldInformPlayerNewVersionExists;
 	private int tickCount;
 	private int updateDelay;
 	
@@ -104,14 +106,26 @@ public class mod_Minechem extends BaseMod {
 		ModLoader.RegisterTileEntity(net.minecraft.minechem.TileEntityFission.class, "minechem_tilefission");
 		ModLoader.RegisterTileEntity(net.minecraft.minechem.TileEntityMinechemCrafting.class, "minechem_tilecrafting");
 		ModLoader.RegisterTileEntity(net.minecraft.minechem.TileEntityThermite.class, "minechem_tilethermite");
+		ModLoader.RegisterTileEntity(net.minecraft.minechem.TileEntityMinechemSorter.class, "minechem_sorter");
 		
 		if( !mod_Minechem.dirMinechem.exists() ) {
 			dirMinechem.mkdir();
 		}
 		
+		URLReader urlReader = new URLReader();
+		
 		if(autoUpdateChemicalDictionary) {
-			URLReader urlReader = new URLReader();
 			urlReader.getChemicalDictionary();
+		}
+		if(checkForMinechemUpdates) {
+			String latestVersion = urlReader.getLatestReleaseVersion();
+			String currentVersion = getVersion();
+			currentVersion += "\n";
+			if(!currentVersion.equals(latestVersion)) {
+				shouldInformPlayerNewVersionExists = true;
+			} else {
+				shouldInformPlayerNewVersionExists = false;
+			}
 		}
 		
 		try{
@@ -218,15 +232,29 @@ public class mod_Minechem extends BaseMod {
 			Character.valueOf('T'), tableOfElements,
 			Character.valueOf('B'), Item.book
 		});
+		ModLoader.AddRecipe(new ItemStack(blockMinechem, 1, ItemMinechem.sorter), new Object[]{
+			"IRI",
+			"GTY",
+			"IBI",
+			Character.valueOf('I'), Item.ingotIron,
+			Character.valueOf('R'), new ItemStack(Item.dyePowder, 1, 1),
+			Character.valueOf('Y'), new ItemStack(Item.dyePowder, 1, 11),
+			Character.valueOf('B'), new ItemStack(Item.dyePowder, 1, 4),
+			Character.valueOf('G'), new ItemStack(Item.dyePowder, 1, 10),
+		});
 		
 		electrolysisRecipes = new HashMap<ItemStack, ElectrolysisRecipe>();
 		
 		
-		addElectrolysisRecipe(new ItemStack(Item.potion, 1, 0),
+		MinechemCraftingRecipe.addRecipe(new ItemStack(Item.potion, 3, 0),
+				Molecule.moleculeByFormula("H2O"),
+				Molecule.moleculeByFormula("H2O")
+		);
+		addNonReverseElectrolysisRecipe(new ItemStack(Item.potion, 1, 0),
 				new Molecule(8, 2),
 				new Molecule(1, 2)
 		);
-		addElectrolysisRecipe(new ItemStack(Item.bucketWater, 1),
+		addNonReverseElectrolysisRecipe(new ItemStack(Item.bucketWater, 1),
 				new Molecule(8, 2),
 				new Molecule(1, 2)
 		);
@@ -491,6 +519,17 @@ public class mod_Minechem extends BaseMod {
 		MinechemCraftingRecipe.addRecipe(out, output1, output2);
 	}
 	
+	public void addNonReverseElectrolysisRecipe(ItemStack input, Molecule output1, Molecule output2) {
+		if(input == null)
+			return;
+		
+		Molecule outputs[] = new Molecule[2];
+		outputs[0] = output1;
+		outputs[1] = output2;
+		ElectrolysisRecipe recipe = new ElectrolysisRecipe(false, outputs, null);
+		electrolysisRecipes.put(input, recipe);
+	}
+	
 	public void addElectrolysisRandomRecipe(ItemStack input, Molecule[] possibleOutputs, double[] weights)
 	{
 		ElectrolysisRecipe recipe = new ElectrolysisRecipe(true, possibleOutputs, weights);
@@ -527,6 +566,11 @@ public class mod_Minechem extends BaseMod {
 		World world = minecraft.theWorld;
 		EntityPlayer player = minecraft.thePlayer;
 		
+		if(shouldInformPlayerNewVersionExists) {
+			shouldInformPlayerNewVersionExists = false;
+			player.addChatMessage("New MINECHEM update exists! Goto MinecraftForum.net");
+		}
+		
 		int currentTries = 0;
 		int currentBlock = 0;
 		int tries = 50;
@@ -562,7 +606,7 @@ public class mod_Minechem extends BaseMod {
 
 	@Override
 	public String getVersion() {
-		return "1.4.1";
+		return "1.5";
 	}
 
 	@Override

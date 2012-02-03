@@ -47,8 +47,12 @@ public class TileEntityMinechemCrafting extends TileEntityMinechemMachine {
 		if(isTube(inventoryStack[0]) && isTube(inventoryStack[1])) {
 			Molecule in1 = Molecule.moleculeByItemStack( inventoryStack[0] );
 			Molecule in2 = Molecule.moleculeByItemStack( inventoryStack[1] );
+			if(in1 == null || in2 == null)
+				return false;
 			for(int i = 0; i < MinechemCraftingRecipe.recipes.size(); i++) {
 				MinechemCraftingRecipe recipe = MinechemCraftingRecipe.recipes.get(i);
+				if(recipe == null || recipe.input1 == null || recipe.input2 == null)
+					continue;
 				foundIn1 = false;
 				foundIn2 = false;
 				
@@ -60,13 +64,13 @@ public class TileEntityMinechemCrafting extends TileEntityMinechemMachine {
 					foundIn2 = true;
 				}
 				
-				if(!foundIn1) {
+				if(!foundIn2) {
 					if(in1.name.equals( recipe.input2.name )) {
 						foundIn1 = true;
 					}
 				}
 				
-				if(!foundIn2) {
+				if(!foundIn1) {
 					if(in2.name.equals( recipe.input1.name )) {
 						foundIn2 = true;
 					}
@@ -113,6 +117,8 @@ public class TileEntityMinechemCrafting extends TileEntityMinechemMachine {
 		MinechemCraftingRecipe foundRecipe = null;
 		for(int i = 0; i < MinechemCraftingRecipe.recipes.size(); i++) {
 			MinechemCraftingRecipe recipe = MinechemCraftingRecipe.recipes.get(i);
+			if(recipe == null || recipe.input1 == null || recipe.input2 == null)
+				continue;
 			foundIn1 = false;
 			foundIn2 = false;
 			
@@ -126,14 +132,14 @@ public class TileEntityMinechemCrafting extends TileEntityMinechemMachine {
 				recipeIns[1] = recipe.input2;
 			}
 			
-			if(!foundIn1) {
+			if(!foundIn2) {
 				if(in1.name.equals( recipe.input2.name )) {
 					foundIn1 = true;
 					recipeIns[0] = recipe.input2;
 				}
 			}
 			
-			if(!foundIn2) {
+			if(!foundIn1) {
 				if(in2.name.equals( recipe.input1.name )) {
 					foundIn2 = true;
 					recipeIns[1] = recipe.input1;

@@ -47,6 +47,7 @@ public class TileEntityFusion extends TileEntityMinechemMachine {
 			timer = timerDuration;
 		} else {
 			takeEmptyTubeFromChest(2);
+			takeTestTubeFromSorter(0, 2);
 		}
 	}
 	

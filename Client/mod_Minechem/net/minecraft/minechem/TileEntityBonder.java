@@ -48,6 +48,7 @@ public class TileEntityBonder extends TileEntityMinechemMachine {
 			isProcessComplete = false;
 		} else {
 			takeEmptyTubeFromChest(0);
+			takeTestTubeFromSorter(1, getSizeInventory());
 		}
 	}
 	

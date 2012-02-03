@@ -43,6 +43,7 @@ public class TileEntityUnbonder extends TileEntityMinechemMachine {
 			timer = timerDuration;
 			isProcessComplete = false;
 		} else {
+			takeTestTubeFromSorter(0, 1);
 			for(int i = 1; i < getSizeInventory(); i++) {
 				takeEmptyTubeFromChest(i);
 			}

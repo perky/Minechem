@@ -1,5 +1,8 @@
 package net.minecraft.minechem;
 
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
@@ -78,31 +81,30 @@ public class TileEntityMinechemMachine extends TileEntity implements IInventory,
 	}
 	
 	public boolean addItem (ItemStack stack, boolean doAdd, Orientations from){
-		int startpos = 0;
-		int endpos = 1;
-		int inputouput = getInputOrOutputForSide(from.ordinal());
-		boolean didAdd = false;
+		int startpos = getStartInventorySide(from.ordinal());
+		int endpos = startpos + getSizeInventorySide(from.ordinal());
 		
 		for(int i = startpos; i < endpos; i++) {
-			if(doAdd){
-				inventoryStack[i] = stack;
-				didAdd = true;
+			ItemStack stack1 = inventoryStack[i];
+			if(stack1 == null) {
+				if(tryAddingStack(stack, 0, doAdd)) return true;
 			}
 		}
 		
-		return didAdd;
+		return false;
 	}
 	
 	public ItemStack extractItem(boolean doRemove, Orientations from){
-		int start = 0;
-		int end = 1;
+		int startpos = getStartInventorySide(from.ordinal());
+		int endpos = startpos + getSizeInventorySide(from.ordinal());
 		
-		for(int i = start; i < end; i++) {
-			if(inventoryStack[i] != null){
-				ItemStack out = inventoryStack[i];
-				if(doRemove)
-					inventoryStack[i] = null;
-				return inventoryStack[i];
+		for(int i = startpos; i < endpos; i++) {
+			ItemStack out = inventoryStack[i];
+			if(out != null){
+				if(doRemove){
+					return decrStackSize(i, 1);
+				}else
+					return out;
 			}
 		}
 		
@@ -158,6 +160,31 @@ public class TileEntityMinechemMachine extends TileEntity implements IInventory,
 		}
 	}
 	
+	protected void takeTestTubeFromSorter(int slotStart, int slotEnd) {
+		BlockMinechem blockMinechem = (BlockMinechem)getBlockType();
+		List<TileEntityMinechemSorter> sorters = blockMinechem.findAdjacentSorters(worldObj, xCoord, yCoord, zCoord);
+		List<Orientations> sorterOrientations = blockMinechem.findAdjacentSorterOrientations(worldObj, xCoord, yCoord, zCoord);
+		
+		if(sorters.size() != 0) {
+			for(int i = 0; i < sorters.size(); i++) {
+				TileEntityMinechemSorter sorter = sorters.get(i);
+				Orientations sorterOrientation = sorterOrientations.get(i);
+				sorterOrientation = sorterOrientation.reverse();
+				
+				ItemStack possibleStack = sorter.extractItem(false, sorterOrientation);
+				if(possibleStack != null && isTube(possibleStack)) {
+					for(int i1 = slotStart; i1 < slotEnd; i1++) {
+						if(inventoryStack[i1] == null) {
+							ItemStack itemstack = sorter.extractItem(true, sorterOrientation);
+							setInventorySlotContents(i1, itemstack);
+							return;
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	protected void dumpEmptyTubeSlotToChest(int slotnumber) {
 		if(!isEmptyTube( inventoryStack[slotnumber] ))
 			return;
@@ -172,23 +199,46 @@ public class TileEntityMinechemMachine extends TileEntity implements IInventory,
 				if(stack != null && stack.isItemEqual(emptyTube) && stack.stackSize != 64) {
 					stack.stackSize++;
 					decrStackSize(slotnumber, 1);
+					break;
 				}
 				else if(stack == null) {
 					chest.setInventorySlotContents(i, decrStackSize(slotnumber, 1));
+					break;
 				}
 			}
 		}
 	}
 	
 	protected void dumpSlotToChest(int slotnumber) {
-		BlockMinechem blockMinechem = (BlockMinechem)getBlockType();
-		TileEntityChest chest = blockMinechem.findAdjacentChest( worldObj, xCoord, yCoord, zCoord );
+		if(isEmptyTube(inventoryStack[slotnumber])){
+			dumpEmptyTubeSlotToChest(slotnumber);
+			return;
+		}
 		
+		BlockMinechem blockMinechem = (BlockMinechem)getBlockType();
+		List<TileEntityMinechemSorter> sorters = blockMinechem.findAdjacentSorters( worldObj, xCoord, yCoord, zCoord );
+		
+		if(sorters.size() != 0) {
+			
+			for(TileEntityMinechemSorter sorter : sorters) {
+				ItemStack itemToSort = getStackInSlot(slotnumber);
+				List<Integer> possibleDirs = sorter.getPossibleSortDirs(itemToSort);
+				if(possibleDirs.size() != 0) {
+					sorter.setInventorySlotContents(0, decrStackSize(slotnumber, 1));
+					sorter.doSort(possibleDirs);
+					return;
+				}
+			}
+			
+		}
+		
+		TileEntityChest chest = blockMinechem.findAdjacentChest( worldObj, xCoord, yCoord, zCoord );
 		if(chest != null) {
 			for(int i = 0; i < chest.getSizeInventory(); i++) {
 				ItemStack stack = chest.getStackInSlot(i);
 				if(stack == null) {
 					chest.setInventorySlotContents(i, decrStackSize(slotnumber, 1));
+					break;
 				}
 			}
 		}

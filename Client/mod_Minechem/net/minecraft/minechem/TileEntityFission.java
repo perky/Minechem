@@ -37,6 +37,7 @@ public class TileEntityFission extends TileEntityMinechemMachine {
 		} else {
 			takeEmptyTubeFromChest(1);
 			takeEmptyTubeFromChest(2);
+			takeTestTubeFromSorter(0, 1);
 		}
 	}
 	

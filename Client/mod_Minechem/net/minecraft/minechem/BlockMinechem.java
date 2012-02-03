@@ -1,6 +1,9 @@
 package net.minecraft.minechem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.src.Block;
@@ -57,6 +60,11 @@ public class BlockMinechem extends BlockContainer implements ITextureProvider {
 				thermite.setActive(true);
 				return false;
 			}
+			if(md == ItemMinechem.sorter) {
+				TileEntityMinechemSorter sorter = (TileEntityMinechemSorter)world.getBlockTileEntity(i, j, k);
+				GuiMinechemSorter gui = new GuiMinechemSorter(sorter);
+				ModLoader.OpenGUI(entityplayer, gui);
+			}
 		}
 		
 		return true;
@@ -68,6 +76,24 @@ public class BlockMinechem extends BlockContainer implements ITextureProvider {
 	}
 
 	public int getBlockTextureFromSideAndMetadata(int i, int j) {
+		
+		if(j == ItemMinechem.sorter) {
+			switch(i) {
+			case 1:
+				return 14;
+			case 0:
+				return 13;
+			case 5:
+				return 12;
+			case 2:
+				return 11;
+			case 4:
+				return 10;
+			case 3:
+				return 9;
+			}
+		}
+		
         switch (j) {
         case ItemMinechem.electrolysis:
         	return i == 1 ? 7 : 0;
@@ -86,6 +112,56 @@ public class BlockMinechem extends BlockContainer implements ITextureProvider {
         default:
         	return i == 1 ? 7 : 0;
         }
+	}
+	
+	public List<Orientations> findAdjacentSorterOrientations(World world, int i, int j, int k) {
+		List<Orientations> sorters = new ArrayList();
+		TileEntityMinechemSorter sorter;
+		
+		sorter = getAdjacentSorter(world, i+1, j, k);
+		if(sorter != null) sorters.add( Orientations.XPos );
+		
+		sorter = getAdjacentSorter(world, i-1, j, k);
+		if(sorter != null) sorters.add( Orientations.XNeg );
+		
+		sorter = getAdjacentSorter(world, i, j, k+1);
+		if(sorter != null) sorters.add( Orientations.ZPos );
+		
+		sorter = getAdjacentSorter(world, i, j, k-1);
+		if(sorter != null) sorters.add( Orientations.ZNeg );
+		
+		sorter = getAdjacentSorter(world, i, j+1, k);
+		if(sorter != null) sorters.add( Orientations.YPos );
+		
+		sorter = getAdjacentSorter(world, i, j-1, k);
+		if(sorter != null) sorters.add( Orientations.YNeg );
+
+		return sorters;
+	}
+	
+	public List<TileEntityMinechemSorter> findAdjacentSorters(World world, int i, int j, int k) {
+		List<TileEntityMinechemSorter> sorters = new ArrayList();
+		TileEntityMinechemSorter sorter;
+		
+		sorter = getAdjacentSorter(world, i+1, j, k);
+		if(sorter != null) sorters.add( sorter );
+		
+		sorter = getAdjacentSorter(world, i-1, j, k);
+		if(sorter != null) sorters.add( sorter );
+		
+		sorter = getAdjacentSorter(world, i, j, k+1);
+		if(sorter != null) sorters.add( sorter );
+		
+		sorter = getAdjacentSorter(world, i, j, k-1);
+		if(sorter != null) sorters.add( sorter );
+		
+		sorter = getAdjacentSorter(world, i, j+1, k);
+		if(sorter != null) sorters.add( sorter );
+		
+		sorter = getAdjacentSorter(world, i, j-1, k);
+		if(sorter != null) sorters.add( sorter );
+
+		return sorters;
 	}
 	
 	public TileEntityChest findAdjacentChest(World world, int i, int j, int k) {
@@ -108,6 +184,16 @@ public class BlockMinechem extends BlockContainer implements ITextureProvider {
 			TileEntity tileEntity = world.getBlockTileEntity(i, j, k);
 			if(tileEntity != null)
 				return (TileEntityChest)tileEntity;
+		}
+		
+		return null;
+	}
+	
+	public TileEntityMinechemSorter getAdjacentSorter(World world, int i, int j, int k) {
+		if(world.getBlockId(i, j, k) == blockID && world.getBlockMetadata(i, j, k) == ItemMinechem.sorter) {
+			TileEntity tileEntity = world.getBlockTileEntity(i, j, k);
+			if(tileEntity != null)
+				return (TileEntityMinechemSorter)tileEntity;
 		}
 		
 		return null;
@@ -171,6 +257,9 @@ public class BlockMinechem extends BlockContainer implements ITextureProvider {
 		if(md == ItemMinechem.thermite) {
 			return new TileEntityThermite();
 		}
+		if(md == ItemMinechem.sorter) {
+			return new TileEntityMinechemSorter();
+		}
 		
 		return null;
 	}
@@ -189,6 +278,7 @@ public class BlockMinechem extends BlockContainer implements ITextureProvider {
 		itemList.add(new ItemStack(this, 1, ItemMinechem.fusion));
 		itemList.add(new ItemStack(this, 1, ItemMinechem.crafting));
 		itemList.add(new ItemStack(this, 1, ItemMinechem.thermite));
+		itemList.add(new ItemStack(this, 1, ItemMinechem.sorter));
 	}
 	
 	
