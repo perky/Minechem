@@ -8,37 +8,33 @@ import net.minecraft.src.buildcraft.api.Orientations;
 import net.minecraft.src.ic2.api.Direction;
 import net.minecraft.src.ic2.api.IEnergySink;
 
-public class TileEntityFission extends TileEntityMinechemMachine implements IEnergySink {
-	
-	private boolean isRunning;
-	private boolean hasEnoughPower;
-	public int IC2PowerPerTick = 8;
+public class TileEntityFission extends TileEntityMinechemMachine {
 	
 	public TileEntityFission() {
-		IC2PowerPerTick = 8;
+		super();
+		
+		consumeIC2EnergyPerTick = 20;
+		maxIC2Energy = 256;
+		maxIC2EnergyInput = 512;
+		
 		inventoryStack = new ItemStack[3];
 	}
 	
 	public void updateEntity()
 	{
 		if((timer > 0 && !mod_Minechem.requireIC2Power)
-		|| (timer > 0 && mod_Minechem.requireIC2Power && hasEnoughPower)) {
+		|| (timer > 0 && mod_Minechem.requireIC2Power && didConsumePower())) {
 			timer--;
-			isRunning = true;
 			if(timer <= 0 && canFissure()) {
 				fissionComplete();
 				onInventoryChanged();
-				isRunning = false;
 			} else if(!canFissure()) {
 				timer = 0;
 				onInventoryChanged();
-				isRunning = false;
 			}
 		} else if(canFissure()) {
 			timer = timerDuration;
-			isRunning = true;
 		} else {
-			isRunning = false;
 			takeEmptyTubeFromChest(1);
 			takeEmptyTubeFromChest(2);
 		}
@@ -112,35 +108,6 @@ public class TileEntityFission extends TileEntityMinechemMachine implements IEne
 	
 	public int getSizeInventorySide(int side) {
 		return side == 1 ? 1 : 2;
-	}
-
-	@Override
-	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction) {
-		return true;
-	}
-
-	@Override
-	public boolean isAddedToEnergyNet() {
-		return true;
-	}
-
-	@Override
-	public boolean demandsEnergy() {
-		if(mod_Minechem.requireIC2Power)
-			return isRunning;
-		else 
-			return false;
-	}
-
-	@Override
-	public int injectEnergy(Direction directionFrom, int amount) {
-		if( amount >= IC2PowerPerTick ) {
-			hasEnoughPower = true;
-			return amount - IC2PowerPerTick;
-		} else {
-			hasEnoughPower = false;
-			return amount;
-		}
 	}
 	
 }

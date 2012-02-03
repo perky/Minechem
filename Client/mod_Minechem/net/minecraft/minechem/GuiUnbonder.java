@@ -7,24 +7,20 @@ import net.minecraft.src.mod_Minechem;
 
 import org.lwjgl.opengl.GL11;
 
-public class GuiUnbonder extends GuiContainer {
-
-	private TileEntityMinechemMachine tileMinechem;
+public class GuiUnbonder extends GuiMinechemMachine {
 	
 	public GuiUnbonder(EntityPlayer entityplayer, TileEntity tileentity)
 	{
 		super(new ContainerUnbonder(entityplayer.inventory, (TileEntityUnbonder)tileentity));
-		tileMinechem = (TileEntityMinechemMachine)tileentity;
+		tileMachine = (TileEntityMinechemMachine)tileentity;
 	}
 	
+	@Override
 	protected void drawGuiContainerForegroundLayer()
     {
         fontRenderer.drawString("Un-Bonder", 56, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
-        if(mod_Minechem.requireIC2Power) {
-        	String s = "Requires 5 EU/t";
-        	fontRenderer.drawString(s, 80, (ySize - 96) + 2, 0x404040);
-        }
+        drawIC2Information();
     }
 	
 	@Override
@@ -36,7 +32,7 @@ public class GuiUnbonder extends GuiContainer {
         int i1 = (height - ySize) / 2;
         drawTexturedModalRect(l, i1, 0, 0, xSize, ySize);
         
-        int time = tileMinechem.timer;
+        int time = tileMachine.getTimer();
         if(time > 0)
         {
         	int k1 = time % 2;

@@ -8,22 +8,21 @@ import net.minecraft.src.ic2.api.Direction;
 import net.minecraft.src.ic2.api.EnergyNet;
 import net.minecraft.src.ic2.api.IEnergySink;
 
-public class TileEntityFusion extends TileEntityMinechemMachine implements IEnergySink {
-	
-	private boolean isRunning;
-	private boolean hasEnoughPower;
-	public int IC2PowerPerTick = 10;
+public class TileEntityFusion extends TileEntityMinechemMachine {
 	
 	public TileEntityFusion() {
-		IC2PowerPerTick = 10;
+		super();
+		
+		consumeIC2EnergyPerTick = 40;
+		maxIC2Energy = 256;
+		maxIC2EnergyInput = 512;
+		
 		inventoryStack = new ItemStack[3];
-		isRunning = false;
-		hasEnoughPower = false;
 	}
 	
 	public void updateEntity() {
 		if((timer > 0 && !mod_Minechem.requireIC2Power)
-		|| (timer > 0 && mod_Minechem.requireIC2Power && hasEnoughPower))
+		|| (timer > 0 && mod_Minechem.requireIC2Power && didConsumePower()))
 		{
 			if(timer < 450)
 			{
@@ -32,27 +31,21 @@ public class TileEntityFusion extends TileEntityMinechemMachine implements IEner
 				timer--;
 			}
 			
-			isRunning = true;
-			
 			if(timer <= 0)
 			{
 				fusionComplete();
 				onInventoryChanged();
-				isRunning = false;
 			}
 			else if(!canFuse())
 			{
 				timer = 0;
 				onInventoryChanged();
-				isRunning = false;
 			}
 		}
 		else if(canFuse())
 		{
 			timer = timerDuration;
-			isRunning = true;
 		} else {
-			isRunning = false;
 			takeEmptyTubeFromChest(2);
 		}
 	}
@@ -68,10 +61,14 @@ public class TileEntityFusion extends TileEntityMinechemMachine implements IEner
 		int a = inventoryStack[0].getItemDamage();
 		int b = inventoryStack[1].getItemDamage();
 		int c = a + b;
-		if(c <= 109)
+		if(c <= 118)
 		{
-			int atomsA = Molecule.moleculeByItemStack(inventoryStack[0]).atoms;
-			int atomsB = Molecule.moleculeByItemStack(inventoryStack[1]).atoms;
+			Molecule mA = Molecule.moleculeByItemStack(inventoryStack[0]);
+			Molecule mB = Molecule.moleculeByItemStack(inventoryStack[1]);
+			if(mA == null || mB == null)
+				return;
+			int atomsA = mA.atoms;
+			int atomsB = mB.atoms;
 			int atomsC = Math.min(atomsA, atomsB);
 			Molecule m = new Molecule(c, atomsC);
 			inventoryStack[2] = m.stack;
@@ -138,35 +135,6 @@ public class TileEntityFusion extends TileEntityMinechemMachine implements IEner
 	@Override
 	public String getInvName() {
 		return "Fusion Reactor";
-	}
-
-	@Override
-	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction) {
-		return true;
-	}
-
-	@Override
-	public boolean isAddedToEnergyNet() {
-		return true;
-	}
-
-	@Override
-	public boolean demandsEnergy() {
-		if(mod_Minechem.requireIC2Power)
-			return isRunning;
-		else 
-			return false;
-	}
-
-	@Override
-	public int injectEnergy(Direction directionFrom, int amount) {
-		if( amount >= IC2PowerPerTick ) {
-			hasEnoughPower = true;
-			return amount - IC2PowerPerTick;
-		} else {
-			hasEnoughPower = false;
-			return 0;
-		}
 	}
 
 }

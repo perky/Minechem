@@ -27,7 +27,9 @@ import net.minecraft.src.forge.MinecraftForgeClient;
 import net.minecraft.src.ic2.api.*;
 
 public class mod_Minechem extends BaseMod {
-
+	
+	private static boolean debug = false;
+	
 	@MLProp public static int blockIDMinechem = 253;
 	@MLProp public static int itemIDTestTube = 3001;
 	@MLProp public static int itemIDEmptyTestTube = 3000;
@@ -35,6 +37,7 @@ public class mod_Minechem extends BaseMod {
 	@MLProp public static int itemIDHangableTableOfElements = 3003;
 	@MLProp public static int itemIDChemistryBook = 3004;
 	@MLProp public static boolean requireIC2Power = false;
+	@MLProp public static boolean autoUpdateChemicalDictionary = true;
 	public static Item itemTesttubeEmpty;
 	public static Item itemTesttube;
 	public static Item leadHelmet;
@@ -45,7 +48,7 @@ public class mod_Minechem extends BaseMod {
 	public static Item hangableTableOfElements;
 	public static Item chemistryBook;
 	public static Block blockMinechem;
-	public static Map<ItemStack, Molecule[]> electrolysisRecipes;
+	public static Map<ItemStack, ElectrolysisRecipe> electrolysisRecipes;
 	
 	public static File dirMinechem = new File(Minecraft.getMinecraftDir(), "/minechem/");
 	public static File fileChemicalDictionary = new File(Minecraft.getMinecraftDir(), "/minechem/Chemical Dictionary.txt");
@@ -53,6 +56,9 @@ public class mod_Minechem extends BaseMod {
 	private static Random random;
 	@MLProp public static String minechemBlocksTexture = "/minechem/blocktextures.png";
 	public static String minechemItemsTexture = "/minechem/items.png";
+	
+	private int tickCount;
+	private int updateDelay;
 	
 	public static void initItemsAndBlocks() {
 		itemTesttubeEmpty = new ItemEmptyTestTube(itemIDEmptyTestTube).setItemName("blah");
@@ -99,13 +105,14 @@ public class mod_Minechem extends BaseMod {
 		ModLoader.RegisterTileEntity(net.minecraft.minechem.TileEntityMinechemCrafting.class, "minechem_tilecrafting");
 		ModLoader.RegisterTileEntity(net.minecraft.minechem.TileEntityThermite.class, "minechem_tilethermite");
 		
-		
 		if( !mod_Minechem.dirMinechem.exists() ) {
 			dirMinechem.mkdir();
 		}
 		
-		URLReader urlReader = new URLReader();
-		urlReader.getChemicalDictionary();
+		if(autoUpdateChemicalDictionary) {
+			URLReader urlReader = new URLReader();
+			urlReader.getChemicalDictionary();
+		}
 		
 		try{
 			loadChemicalDictionary();
@@ -212,7 +219,7 @@ public class mod_Minechem extends BaseMod {
 			Character.valueOf('B'), Item.book
 		});
 		
-		electrolysisRecipes = new HashMap<ItemStack, Molecule[]>();
+		electrolysisRecipes = new HashMap<ItemStack, ElectrolysisRecipe>();
 		
 		
 		addElectrolysisRecipe(new ItemStack(Item.potion, 1, 0),
@@ -307,16 +314,84 @@ public class mod_Minechem extends BaseMod {
 				Molecule.moleculeByFormula("Fe2O3"),
 				Molecule.moleculeByFormula("Fe2O3")
 		);
-		
 		addElectrolysisRecipe(new ItemStack(Item.bone, 1),	
 				Molecule.elementByFormula("Ca", 16),
 				Molecule.elementByFormula("Fe", 2)
 		);
+		addElectrolysisRecipe(new ItemStack(Block.wood, 1, -1),	
+				Molecule.moleculeByFormula("C6H10O5"),
+				Molecule.moleculeByFormula("C5H10O5")
+		);
+		addElectrolysisRecipe(new ItemStack(Block.wood, 1, -1),	
+				Molecule.moleculeByFormula("C6H10O5"),
+				Molecule.moleculeByFormula("C5H10O5")
+		);
+		addElectrolysisRecipe(new ItemStack(Block.cactus, 1),
+				Molecule.moleculeByFormula("C11H17NO3"),
+				Molecule.moleculeByFormula("H2O")
+		);
+		addElectrolysisRecipe(new ItemStack(Item.record13),
+				Molecule.moleculeByFormula("C2H3"),
+				Molecule.moleculeByFormula("C2H3Cl")
+		);
+		addElectrolysisRecipe(new ItemStack(Item.record11),
+				Molecule.moleculeByFormula("C2H3"),
+				Molecule.moleculeByFormula("C5H10O2S")
+		);
+		addElectrolysisRecipe(new ItemStack(Block.sponge),
+				Molecule.moleculeByFormula("C5H10O2S"),
+				Molecule.moleculeByFormula("C5H10O2S")
+		);
+		
+		addElectrolysisRandomRecipe(new ItemStack(Item.bucketLava), 
+				new Molecule[]{
+					Molecule.moleculeByFormula("SiO2"),
+					Molecule.moleculeByFormula("TiO2"),
+					Molecule.moleculeByFormula("Al2O3"),
+					Molecule.moleculeByFormula("Fe2O3"),
+					Molecule.moleculeByFormula("FeO"),
+					Molecule.moleculeByFormula("MnO"),
+					Molecule.moleculeByFormula("MgO"),
+					Molecule.moleculeByFormula("CaO"),
+					Molecule.moleculeByFormula("Na2O"),
+					Molecule.moleculeByFormula("K2O"),
+					Molecule.moleculeByFormula("P2O5"),
+				},
+				new double[]{ 49.20, 1.84, 15.47, 3.97, 7.13, 0.2, 6.73, 9.47, 2.91, 1.1, 0.35}
+		);
 		
 		//Lapis
-		addElectrolysisRecipe(new ItemStack(Item.dyePowder, 1, 4),	
-				Molecule.moleculeByFormula("Na2Ca6Al6Si6O24S2"),
-				Molecule.moleculeByFormula("Na2Ca6Al6Si6O24S2")
+		addElectrolysisRandomRecipe(new ItemStack(Item.dyePowder, 1, 4), 
+				new Molecule[]{
+					Molecule.elementByFormula("Na", 3),
+					Molecule.elementByFormula("Ca", 6),
+					Molecule.elementByFormula("Al", 3),
+					Molecule.elementByFormula("O", 12),
+					Molecule.elementByFormula("S", 1),
+					Molecule.moleculeByFormula("Na3CaAl3Si3O12S"),
+					Molecule.moleculeByFormula("Na2O"),
+					Molecule.moleculeByFormula("Al2O3"),
+					Molecule.moleculeByFormula("SiO2"),
+				}, 
+				new double[]{13.84, 8.04, 16.24, 38.53, 6.43, 0.5, 1, 1, 1}
+		);
+		MinechemCraftingRecipe.addRecipe(new ItemStack(Item.dyePowder, 1, 4),	
+				Molecule.moleculeByFormula("Na3CaAl3Si3O12S"),
+				Molecule.moleculeByFormula("Na3CaAl3Si3O12S")
+		);
+		
+
+		addElectrolysisRandomRecipe(new ItemStack(Block.obsidian, 1), 
+				new Molecule[]{
+					Molecule.moleculeByFormula("SiO2"),
+					Molecule.moleculeByFormula("MgO"),
+					Molecule.moleculeByFormula("Fe3O4")
+				}, 
+				new double[]{75, 10, 5}
+		);
+		MinechemCraftingRecipe.addRecipe(new ItemStack(Block.obsidian),
+				Molecule.moleculeByFormula("SiO2"),
+				Molecule.moleculeByFormula("Fe3O4")
 		);
 		
 		// Add ore dictionary for electrolysis.
@@ -366,8 +441,19 @@ public class mod_Minechem extends BaseMod {
 			}
 		});
 		
-		ModLoader.SetInGameHook(this, true, true);
+		MinecraftForge.addDungeonLoot(Molecule.elementByFormula("C", 64).stack, 0.2F);
+		MinecraftForge.addDungeonLoot(Molecule.moleculeByFormula("C64C64").stack, 0.007F);
+		MinecraftForge.addDungeonLoot(Molecule.elementByFormula("Pb", 12).stack, 0.4F);
+		MinecraftForge.addDungeonLoot(Molecule.elementByFormula("Au", 128).stack, 0.4F);
+		MinecraftForge.addDungeonLoot(Molecule.elementByFormula("Zr", 1).stack, 0.05F);
+		MinecraftForge.addDungeonLoot(Molecule.moleculeByFormula("C21H30O2").stack, 0.01F);
+		MinecraftForge.addDungeonLoot(new ItemStack(tableOfElements), 0.6F);
+		MinecraftForge.addDungeonLoot(new ItemStack(blockMinechem, 8, ItemMinechem.thermite), 0.2F);
+		MinecraftForge.addDungeonLoot(new ItemStack(itemTesttubeEmpty), 1, 12, 64);
 		
+		tickCount = 0;
+		updateDelay = 4;
+		ModLoader.SetInGameHook(this, true, true);
 		
 		//MinecraftForgeClient.registerCustomItemRenderer(itemTesttube.shiftedIndex, new RenderTestTube());
 	}
@@ -392,10 +478,12 @@ public class mod_Minechem extends BaseMod {
 	{
 		if(input == null)
 			return;
+		
 		Molecule outputs[] = new Molecule[2];
 		outputs[0] = output1;
 		outputs[1] = output2;
-		electrolysisRecipes.put(input, outputs);
+		ElectrolysisRecipe recipe = new ElectrolysisRecipe(false, outputs, null);
+		electrolysisRecipes.put(input, recipe);
 		
 		// Also create reversable recipe.
 		ItemStack out = input.copy();
@@ -403,9 +491,11 @@ public class mod_Minechem extends BaseMod {
 		MinechemCraftingRecipe.addRecipe(out, output1, output2);
 	}
 	
-	public void addElectrolysisRandomRecipe(ItemStack input, ItemStack[] outputs, int[] randoms)
+	public void addElectrolysisRandomRecipe(ItemStack input, Molecule[] possibleOutputs, double[] weights)
 	{
-	}
+		ElectrolysisRecipe recipe = new ElectrolysisRecipe(true, possibleOutputs, weights);
+		electrolysisRecipes.put(input, recipe);
+ 	}
 	
 	public void loadChemicalDictionary() throws FileNotFoundException, IOException
 	{
@@ -427,6 +517,13 @@ public class mod_Minechem extends BaseMod {
 
 	@Override
 	public boolean OnTickInGame(float f, Minecraft minecraft) {
+		tickCount++;
+		if(tickCount >= updateDelay) {
+			tickCount = 0;
+		} else {
+			return true;
+		}
+		
 		World world = minecraft.theWorld;
 		EntityPlayer player = minecraft.thePlayer;
 		
@@ -465,11 +562,12 @@ public class mod_Minechem extends BaseMod {
 
 	@Override
 	public String getVersion() {
-		return "1.3";
+		return "1.4.1";
 	}
 
 	@Override
 	public void load() {
+		
 	}
 
 }

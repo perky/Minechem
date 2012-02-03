@@ -40,4 +40,17 @@ public class Util {
 	public static boolean isEmptyTube(ItemStack itemstack) {
 		return itemstack != null && itemstack.itemID == mod_Minechem.itemTesttubeEmpty.shiftedIndex;
 	}
+	
+	public static boolean itemsEqualWithMeta(ItemStack stack1, ItemStack stack2) {
+		if(stack1 == null || stack2 == null)
+			return false;
+		if(stack1.getItemDamage() == -1 || stack2.getItemDamage() == -1) {
+			if(stack1.itemID == stack2.itemID)
+				return true;
+			else
+				return false;
+		} else {
+			return stack1.isItemEqual(stack2);
+		}
+	}
 }

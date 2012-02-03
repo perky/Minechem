@@ -11,36 +11,32 @@ import net.minecraft.src.buildcraft.api.Orientations;
 import net.minecraft.src.ic2.api.Direction;
 import net.minecraft.src.ic2.api.IEnergySink;
 
-public class TileEntityMinechemCrafting extends TileEntityMinechemMachine implements IEnergySink {
-	
-	public static int timerDuration = 200;
-	private boolean isRunning;
-	private boolean hasEnoughPower;
-	public int IC2PowerPerTick = 20;
+public class TileEntityMinechemCrafting extends TileEntityMinechemMachine {
 	
 	public TileEntityMinechemCrafting() {
-		IC2PowerPerTick = 20;
+		super();
+		timerDuration = 225;
+		maxIC2Energy = 512;
+		maxIC2EnergyInput = 512;
+		consumeIC2EnergyPerTick = 80;
+		
 		inventoryStack = new ItemStack[3];
 	}
 	
 	public void updateEntity() {
 		boolean canCraft = canCraft();
 		if((timer > 0 && !mod_Minechem.requireIC2Power)
-		|| (timer > 0 && mod_Minechem.requireIC2Power && hasEnoughPower)){
+		|| (timer > 0 && mod_Minechem.requireIC2Power && didConsumePower())){
 			timer--;
-			isRunning = true;
 			if(timer <= 0 && canCraft){
 				craftingComplete();
 				onInventoryChanged();
-				isRunning = false;
 			} else if(!canCraft) {
 				timer = 0;
 				onInventoryChanged();
-				isRunning = false;
 			}
 		} else if(canCraft) {
 			timer = timerDuration;
-			isRunning = true;
 		}
 	}
 	
@@ -246,35 +242,6 @@ public class TileEntityMinechemCrafting extends TileEntityMinechemMachine implem
 	@Override
 	public int getSizeInventorySide(int side) {
 		return side == 1 ? 2 : 1;
-	}
-	
-	@Override
-	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction) {
-		return true;
-	}
-
-	@Override
-	public boolean isAddedToEnergyNet() {
-		return true;
-	}
-
-	@Override
-	public boolean demandsEnergy() {
-		if(mod_Minechem.requireIC2Power)
-			return isRunning;
-		else 
-			return false;
-	}
-
-	@Override
-	public int injectEnergy(Direction directionFrom, int amount) {
-		if( amount >= IC2PowerPerTick ) {
-			hasEnoughPower = true;
-			return amount - IC2PowerPerTick;
-		} else {
-			hasEnoughPower = false;
-			return amount;
-		}
 	}
 	
 }

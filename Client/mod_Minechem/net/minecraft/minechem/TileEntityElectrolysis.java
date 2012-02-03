@@ -2,18 +2,25 @@ package net.minecraft.minechem;
 
 import java.util.Map;
 
+import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.TileEntityChest;
 import net.minecraft.src.mod_Minechem;
 import net.minecraft.src.buildcraft.api.Orientations;
 import net.minecraft.src.ic2.api.IEnergySink;
 
-public class TileEntityElectrolysis extends TileEntityMinechemMachine {
+public class TileEntityElectrolysis extends TileEntityMinechemMachine implements IEnergySink {
 	
 	private boolean isProcessComplete;
-	public static int timerDuration = 300;
 	
 	public TileEntityElectrolysis() {
+		super();
+		timerDuration = 300;
+		
+		consumeIC2EnergyPerTick = 1;
+		maxIC2Energy = 50;
+		maxIC2EnergyInput = 32;
+		
 		inventoryStack = new ItemStack[5];
 		isProcessComplete = false;
 	}
@@ -21,9 +28,8 @@ public class TileEntityElectrolysis extends TileEntityMinechemMachine {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if(isPowering)
-			isPowering = false;
-		if(timer > 0)
+		if((timer > 0 && !mod_Minechem.requireIC2Power)
+		|| (timer > 0 && mod_Minechem.requireIC2Power && didConsumePower()))
 		{
 			timer--;
 			if(timer == 0)
@@ -49,18 +55,19 @@ public class TileEntityElectrolysis extends TileEntityMinechemMachine {
 	}
 	
 	private boolean canElectrolyse()
-	{
+	{	
 		int inputExists = 0;
 		int testTubeExists = 0;
 		
-		Map<ItemStack, Molecule[]> recipeList = mod_Minechem.electrolysisRecipes;
-		for (Map.Entry<ItemStack, Molecule[]> entry : recipeList.entrySet())
+
+		for (Map.Entry<ItemStack, ElectrolysisRecipe> entry : mod_Minechem.electrolysisRecipes.entrySet())
 		{
 			inputExists = 0;
+			ItemStack input = entry.getKey();
 			for(int i = 0; i < 3; i++)
 			{
 				ItemStack stack = getStackInSlot(i);
-				if(stack != null && stack.itemID == entry.getKey().itemID)
+				if(Util.itemsEqualWithMeta(stack, input))
 				{
 					inputExists++;
 				}
@@ -86,15 +93,23 @@ public class TileEntityElectrolysis extends TileEntityMinechemMachine {
 		isProcessComplete = true;
 		
 		Molecule[] outputs = new Molecule[2];
-		Map<ItemStack, Molecule[]> recipeList = mod_Minechem.electrolysisRecipes;
 		boolean quitloop = false;
-		for (Map.Entry<ItemStack, Molecule[]> entry : recipeList.entrySet())
+		for (Map.Entry<ItemStack, ElectrolysisRecipe> entry : mod_Minechem.electrolysisRecipes.entrySet())
 		{
+			ItemStack input = entry.getKey();
+			ElectrolysisRecipe recipe = entry.getValue();
 			for(int i = 0; i < 3; i++)
 			{
-				if(inventoryStack[i] != null && inventoryStack[i].itemID == entry.getKey().itemID)
+				if(Util.itemsEqualWithMeta(inventoryStack[i], input))
 				{
-					outputs = entry.getValue();
+					if(recipe.isRandom) {
+						WeightedRandomGenerator randomGenerator = new WeightedRandomGenerator(recipe.weights);
+						outputs[0] = recipe.outputs[randomGenerator.next()];
+						outputs[1] = recipe.outputs[randomGenerator.next()];
+					} else {
+						outputs = recipe.outputs;
+					}
+					
 					quitloop = true;
 					break;
 				}
@@ -113,9 +128,13 @@ public class TileEntityElectrolysis extends TileEntityMinechemMachine {
 			ItemStack is = inventoryStack[i];
 			if(is != null)
 			{
-				if(is.getItem().hasContainerItem())
+				if(is.itemID == Item.potion.shiftedIndex) {
+					inventoryStack[i] = new ItemStack(Item.glassBottle, 1);
+					dumpSlotToChest(i);
+				} else if(is.getItem().hasContainerItem()) {
 					inventoryStack[i] = new ItemStack(is.getItem().getContainerItem(), 1, is.getItemDamage());
-				else
+					dumpSlotToChest(i);
+				} else
 					inventoryStack[i] = null;
 			}
 		}

@@ -41,17 +41,18 @@ public class TileMinechemPipe extends Pipe implements IPipeTransportItemsHook {
 			LinkedList<Orientations> possibleOrientations, Position pos,
 			EntityPassiveItem item) {
 		
+		LinkedList<Orientations> defaultOrientations = (LinkedList<Orientations>)possibleOrientations.clone();
+		
 		ItemStack itemstack = item.item;
 		if(Util.isTube(itemstack)) {
 			Molecule m = Molecule.moleculeByItemStack(itemstack);
-			int match = ((PipeLogicMinechem)logic).findFormulaMatch( m.name );
-			if(match != -1) {
-				Orientations requestedDir = Orientations.dirs()[match];
-				if( possibleOrientations.contains(requestedDir) ) {
-					possibleOrientations.clear();
-					possibleOrientations.add(requestedDir);
-				}
+			if( m.name != null ) {
+				possibleOrientations = ((PipeLogicMinechem)logic).filterPossibleMovementsWithFormula( m.name, possibleOrientations );
 			}
+		}
+		
+		if(possibleOrientations.size() == 0) {
+			return defaultOrientations;
 		}
 
 		return possibleOrientations;

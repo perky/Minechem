@@ -23,6 +23,8 @@ public class BlockMinechem extends BlockContainer implements ITextureProvider {
 
 	public BlockMinechem(int i) {
 		super(i, Material.iron);
+		setHardness( Block.blockSteel.getHardness() );
+		setResistance( 10F );
 	}
 	
 	@Override
@@ -59,16 +61,10 @@ public class BlockMinechem extends BlockContainer implements ITextureProvider {
 		
 		return true;
 	}
-	
-	
 
 	@Override
-	public ArrayList<ItemStack> getBlockDropped(World world, int X, int Y,
-			int Z, int metadata, int fortune) {
-		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		int id = world.getBlockMetadata(X, Y, Z);
-		ret.add(new ItemStack(mod_Minechem.blockMinechem, 1, id));
-		return ret;
+	protected int damageDropped(int i) {
+		return i;
 	}
 
 	public int getBlockTextureFromSideAndMetadata(int i, int j) {
@@ -136,8 +132,12 @@ public class BlockMinechem extends BlockContainer implements ITextureProvider {
 	@Override
 	public TileEntity getBlockEntity(int md) {
 		World world = ModLoader.getMinecraftInstance().theWorld;
-		if(md == 0)
-			return new TileEntityElectrolysis();
+		if(md == 0) {
+			TileEntity tileEntity = new TileEntityElectrolysis();
+			if(mod_Minechem.requireIC2Power)
+				EnergyNet.getForWorld(world).addTileEntity(tileEntity);
+			return tileEntity;
+		}
 		if(md == 1) {
 			TileEntity tileEntity = new TileEntityFusion();
 			if(mod_Minechem.requireIC2Power)

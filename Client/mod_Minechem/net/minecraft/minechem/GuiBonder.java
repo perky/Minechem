@@ -7,10 +7,8 @@ import net.minecraft.src.mod_Minechem;
 
 import org.lwjgl.opengl.GL11;
 
-public class GuiBonder extends GuiContainer {
+public class GuiBonder extends GuiMinechemMachine {
 
-	private TileEntityMinechemMachine tileMachine;
-	
 	public GuiBonder(EntityPlayer entityplayer, TileEntity tileentityfusion)
 	{
 		super(new ContainerBonder(entityplayer.inventory, (TileEntityBonder)tileentityfusion));
@@ -22,10 +20,7 @@ public class GuiBonder extends GuiContainer {
         fontRenderer.drawString("Bonder", 56, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
         fontRenderer.drawString(((TileEntityBonder)tileMachine).currentBondFormula, 20, 20, 0x404040);
-        if(mod_Minechem.requireIC2Power) {
-        	String s = "Requires 4 EU/t";
-        	fontRenderer.drawString(s, 80, (ySize - 96) + 2, 0x404040);
-        }
+        drawIC2Information();
     }
 	
 	@Override

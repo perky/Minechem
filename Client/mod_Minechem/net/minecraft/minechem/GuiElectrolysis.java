@@ -6,20 +6,19 @@ import net.minecraft.src.TileEntity;
 
 import org.lwjgl.opengl.GL11;
 
-public class GuiElectrolysis extends GuiContainer {
-	
-	private TileEntityElectrolysis tileElectrolysis;
+public class GuiElectrolysis extends GuiMinechemMachine {
 	
 	public GuiElectrolysis(EntityPlayer entityplayer, TileEntity tileentityelectrolysis)
 	{
 		super(new ContainerElectrolysis(entityplayer.inventory, (TileEntityElectrolysis)tileentityelectrolysis));
-		tileElectrolysis = (TileEntityElectrolysis)tileentityelectrolysis;
+		tileMachine = (TileEntityMinechemMachine)tileentityelectrolysis;
 	}
 	
 	protected void drawGuiContainerForegroundLayer()
     {
         fontRenderer.drawString("Electrolysis", 56, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
+        drawIC2Information();
     }
 
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j)
@@ -30,10 +29,10 @@ public class GuiElectrolysis extends GuiContainer {
         int l = (width - xSize) / 2;
         int i1 = (height - ySize) / 2;
         drawTexturedModalRect(l, i1, 0, 0, xSize, ySize);
-        int j1 = tileElectrolysis.getTimer();
+        int j1 = tileMachine.getTimer();
         if(j1 > 0)
         {
-            int k1 = (int)(19F * (1.0F - (float)j1 / (float)tileElectrolysis.timerDuration));
+            int k1 = (int)(19F * (1.0F - (float)j1 / (float)tileMachine.timerDuration));
             if(k1 > 0)
             {
                 drawTexturedModalRect(l + 111, i1 + 31 + 19 - k1, 197, 19-k1, 7, k1);

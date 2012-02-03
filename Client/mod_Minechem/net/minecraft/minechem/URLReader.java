@@ -54,7 +54,6 @@ public class URLReader {
 		String stringBuilder = "";
 		while((inputLine = in.readLine()) != null) {
 			stringBuilder += inputLine + "\n";
-			System.out.println(inputLine);
 		}
 		
 		in.close();

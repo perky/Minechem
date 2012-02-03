@@ -11,42 +11,38 @@ import net.minecraft.src.buildcraft.api.Orientations;
 import net.minecraft.src.ic2.api.Direction;
 import net.minecraft.src.ic2.api.IEnergySink;
 
-public class TileEntityUnbonder extends TileEntityMinechemMachine implements IEnergySink {
+public class TileEntityUnbonder extends TileEntityMinechemMachine {
 	
-	public static int timerDuration = 120;
 	private boolean isProcessComplete;
-	private boolean isRunning;
-	private boolean hasEnoughPower;
-	public int IC2PowerPerTick = 5;
 	private ItemStack incompatableStack;
 	
 	public TileEntityUnbonder() {
-		IC2PowerPerTick = 5;
+		super();
+		timerDuration = 200;
+		consumeIC2EnergyPerTick = 10;
+		maxIC2EnergyInput = 128;
+		maxIC2Energy = 128;
+		
 		inventoryStack = new ItemStack[5];
 		isProcessComplete = false;
 	}
 	
 	public void updateEntity() {
 		if((timer > 0 && !mod_Minechem.requireIC2Power)
-		|| (timer > 0 && mod_Minechem.requireIC2Power && hasEnoughPower)) {
+		|| (timer > 0 && mod_Minechem.requireIC2Power && didConsumePower())) {
 			timer--;
-			isRunning = true;
 			if(timer <= 0 && canUnbond()) {
 				isProcessComplete = true;
 				unbondingComplete();
 				onInventoryChanged();
-				isRunning = false;
 			} else if(!canUnbond()) {
 				timer = 0;
 				onInventoryChanged();
-				isRunning = false;
 			}
 		} else if(canUnbond()) {
 			timer = timerDuration;
 			isProcessComplete = false;
-			isRunning = true;
 		} else {
-			isRunning = false;
 			for(int i = 1; i < getSizeInventory(); i++) {
 				takeEmptyTubeFromChest(i);
 			}
@@ -219,34 +215,5 @@ public class TileEntityUnbonder extends TileEntityMinechemMachine implements IEn
 	
 	public int getSizeInventorySide(int side) {
 		return side == 1 ? 1 : 4;
-	}
-
-	@Override
-	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction) {
-		return true;
-	}
-
-	@Override
-	public boolean isAddedToEnergyNet() {
-		return true;
-	}
-
-	@Override
-	public boolean demandsEnergy() {
-		if(mod_Minechem.requireIC2Power)
-			return isRunning;
-		else 
-			return false;
-	}
-
-	@Override
-	public int injectEnergy(Direction directionFrom, int amount) {
-		if( amount >= IC2PowerPerTick ) {
-			hasEnoughPower = true;
-			return amount - IC2PowerPerTick;
-		} else {
-			hasEnoughPower = false;
-			return amount;
-		}
 	}
 }

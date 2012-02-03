@@ -11,17 +11,18 @@ import net.minecraft.src.buildcraft.api.Orientations;
 import net.minecraft.src.ic2.api.Direction;
 import net.minecraft.src.ic2.api.IEnergySink;
 
-public class TileEntityBonder extends TileEntityMinechemMachine implements IEnergySink {
+public class TileEntityBonder extends TileEntityMinechemMachine {
 
-	public static int timerDuration = 120;
 	private boolean isProcessComplete;
-	private boolean isRunning;
-	private boolean hasEnoughPower;
-	public int IC2PowerPerTick = 4;
 	public String currentBondFormula;
 	
 	public TileEntityBonder() {
-		IC2PowerPerTick = 4;
+		super();
+		timerDuration = 200;
+		consumeIC2EnergyPerTick = 10;
+		maxIC2EnergyInput = 128;
+		maxIC2Energy = 128;
+		
 		inventoryStack = new ItemStack[5];
 		isProcessComplete = false;
 		currentBondFormula = "";
@@ -30,28 +31,23 @@ public class TileEntityBonder extends TileEntityMinechemMachine implements IEner
 	public void updateEntity()
 	{
 		if((timer > 0 && !mod_Minechem.requireIC2Power)
-		|| (timer > 0 && mod_Minechem.requireIC2Power && hasEnoughPower))
+		|| (timer > 0 && mod_Minechem.requireIC2Power && didConsumePower()))
 		{
 			timer--;
-			isRunning = true;
 			if(timer <= 0)
 			{
 				bondingComplete();
 				onInventoryChanged();
 				isProcessComplete = true;
-				isRunning = false;
 			} else if(!canBond()) {
 				timer = 0;
 				onInventoryChanged();
-				isRunning = false;
 			}
 		} else if(canBond()) {
 			timer = timerDuration;
 			isProcessComplete = false;
-			isRunning = true;
 		} else {
 			takeEmptyTubeFromChest(0);
-			isRunning = false;
 		}
 	}
 	
@@ -172,10 +168,10 @@ public class TileEntityBonder extends TileEntityMinechemMachine implements IEner
 		if(from == Orientations.YPos) {
 			if(isEmptyTube(stack) && inventoryStack[0] == null) {
 				if(tryAddingStack(stack, 0, doAdd)) return true;
-			}
-		} else {
-			for(int i = 1; i < getSizeInventory(); i++) {
-				if(tryAddingStack(stack, i, doAdd)) return true;
+			} else {
+				for(int i = 1; i < getSizeInventory(); i++) {
+					if(tryAddingStack(stack, i, doAdd)) return true;
+				}
 			}
 		}
 		
@@ -184,7 +180,7 @@ public class TileEntityBonder extends TileEntityMinechemMachine implements IEner
 
 	@Override
 	public ItemStack extractItem(boolean doRemove, Orientations from) {
-		if(from == Orientations.YPos) {
+		if(from != Orientations.YPos) {
 			if(!isEmptyTube(inventoryStack[0])) {
 				if(doRemove)
 					return decrStackSize(0, 1);
@@ -210,35 +206,6 @@ public class TileEntityBonder extends TileEntityMinechemMachine implements IEner
 	
 	public int getSizeInventorySide(int side) {
 		return side == 1 ? 4 : 1;
-	}
-
-	@Override
-	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction) {
-		return true;
-	}
-
-	@Override
-	public boolean isAddedToEnergyNet() {
-		return true;
-	}
-
-	@Override
-	public boolean demandsEnergy() {
-		if(mod_Minechem.requireIC2Power)
-			return isRunning;
-		else 
-			return false;
-	}
-
-	@Override
-	public int injectEnergy(Direction directionFrom, int amount) {
-		if( amount >= IC2PowerPerTick ) {
-			hasEnoughPower = true;
-			return amount - IC2PowerPerTick;
-		} else {
-			hasEnoughPower = false;
-			return amount;
-		}
 	}
 
 }

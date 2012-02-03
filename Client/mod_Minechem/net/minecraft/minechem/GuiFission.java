@@ -7,24 +7,19 @@ import net.minecraft.src.mod_Minechem;
 
 import org.lwjgl.opengl.GL11;
 
-public class GuiFission extends GuiContainer {
-
-	private TileEntityMinechemMachine tileMinechem;
+public class GuiFission extends GuiMinechemMachine {
 	
 	public GuiFission(EntityPlayer entityplayer, TileEntity tileentity)
 	{
 		super(new ContainerFission(entityplayer.inventory, (TileEntityFission)tileentity));
-		tileMinechem = (TileEntityMinechemMachine)tileentity;
+		tileMachine = (TileEntityMinechemMachine)tileentity;
 	}
 	
 	protected void drawGuiContainerForegroundLayer()
     {
         fontRenderer.drawString("Fission Reactor", 46, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
-        if(mod_Minechem.requireIC2Power) {
-        	String s = "Requires 8 EU/t";
-        	fontRenderer.drawString(s, 80, (ySize - 96) + 2, 0x404040);
-        }
+        drawIC2Information();
     }
 	
 	@Override
@@ -36,11 +31,11 @@ public class GuiFission extends GuiContainer {
         int i1 = (height - ySize) / 2;
         drawTexturedModalRect(l, i1, 0, 0, xSize, ySize);
         
-        int j1 = tileMinechem.getTimer();
+        int j1 = tileMachine.getTimer();
         if(j1 > 0)
         {
         	int j2 = 0;
-        	int k1 = (int)(16F * (1.0F - (float)j1 / (float)tileMinechem.timerDuration));
+        	int k1 = (int)(16F * (1.0F - (float)j1 / (float)tileMachine.timerDuration));
         	if(k1 < 7)
         		j2 = 0;
         	else

@@ -11,20 +11,31 @@ import net.minecraft.src.mod_Minechem;
 import net.minecraft.src.buildcraft.api.ISpecialInventory;
 import net.minecraft.src.buildcraft.api.Orientations;
 import net.minecraft.src.forge.ISidedInventory;
+import net.minecraft.src.ic2.api.Direction;
+import net.minecraft.src.ic2.api.IEnergySink;
+import net.minecraft.src.ic2.api.Ic2Recipes;
 
-public class TileEntityMinechemMachine extends TileEntity implements IInventory, ISpecialInventory, ISidedInventory {
+public class TileEntityMinechemMachine extends TileEntity implements IInventory, ISpecialInventory, ISidedInventory, IEnergySink {
 
 	protected ItemStack inventoryStack[];
 	protected int timer;
-	public static int timerDuration = 600;
+	public int timerDuration;
 	public boolean isPowering;
 	public boolean isUsingIC2Power;
-	public int IC2PowerPerTick;
+	
+	public int IC2Energy;
+	public int maxIC2Energy;
+	public int maxIC2EnergyInput;
+	public int consumeIC2EnergyPerTick;
 
 	public TileEntityMinechemMachine() {
 		super();
+		timerDuration = 475;
 		isPowering = false;
 		isUsingIC2Power = false;
+		IC2Energy = 0;
+		maxIC2Energy = 100;
+		consumeIC2EnergyPerTick = 1;
 	}
 	
 	public ItemStack[] getInventoryStack() {
@@ -57,10 +68,6 @@ public class TileEntityMinechemMachine extends TileEntity implements IInventory,
 
 	public int getTimer() {
 		return timer;
-	}
-	
-	public int getIC2PowerPerTick() {
-		return IC2PowerPerTick;
 	}
 	
 	// 0 = input.
@@ -159,9 +166,14 @@ public class TileEntityMinechemMachine extends TileEntity implements IInventory,
 		TileEntityChest chest = blockMinechem.findAdjacentChest( worldObj, xCoord, yCoord, zCoord );
 		
 		if(chest != null) {
+			ItemStack emptyTube = new ItemStack(mod_Minechem.itemTesttubeEmpty);
 			for(int i = 0; i < chest.getSizeInventory(); i++) {
 				ItemStack stack = chest.getStackInSlot(i);
-				if(stack == null) {
+				if(stack != null && stack.isItemEqual(emptyTube) && stack.stackSize != 64) {
+					stack.stackSize++;
+					decrStackSize(slotnumber, 1);
+				}
+				else if(stack == null) {
 					chest.setInventorySlotContents(i, decrStackSize(slotnumber, 1));
 				}
 			}
@@ -300,6 +312,53 @@ public class TileEntityMinechemMachine extends TileEntity implements IInventory,
 	@Override
 	public int getSizeInventorySide(int side) {
 		return 0;
+	}
+	
+	@Override
+	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction) {
+		return true;
+	}
+
+	@Override
+	public boolean isAddedToEnergyNet() {
+		return true;
+	}
+
+	@Override
+	public boolean demandsEnergy() {
+		if(mod_Minechem.requireIC2Power) {
+			return IC2Energy < maxIC2Energy;
+		} else 
+			return false;
+	}
+
+	@Override
+	public int injectEnergy(Direction directionFrom, int amount) {
+		if(amount > maxIC2EnergyInput) {
+			float f = 2F;
+	        worldObj.createExplosion(null, xCoord, yCoord, zCoord, f);
+	        worldObj.setBlockWithNotify(xCoord, yCoord, zCoord, 0);
+	        return 0;
+		}
+		
+		int returnEnergy = 0;
+		IC2Energy += amount;
+		if(IC2Energy > maxIC2Energy) {
+			returnEnergy = IC2Energy - maxIC2Energy;
+			IC2Energy = maxIC2Energy;
+		}
+		
+		return returnEnergy;
+	}
+	
+	protected boolean didConsumePower() {
+		if(IC2Energy >= consumeIC2EnergyPerTick) {
+			IC2Energy -= consumeIC2EnergyPerTick;
+			return true;
+		} else {
+			IC2Energy = 0;
+			return false;
+		}
 	}
 
 }
