@@ -167,6 +167,9 @@ public class TileEntityMinechemSorter extends TileEntityMinechemMachine {
 	}
 	
 	private boolean canSortTube(String suppliedFormula, String requestedFormula, int sortDir) {
+		if(suppliedFormula.equals(""))
+			return false;
+		
 		if(!requestedFormula.equals("")){
 			if(requestedFormula.substring(0, 1).equals("!")) {
 				requestedFormula = requestedFormula.replaceFirst("!", "");
@@ -182,10 +185,14 @@ public class TileEntityMinechemSorter extends TileEntityMinechemMachine {
 			Matcher match2 = Pattern.compile(singleElementPattern).matcher(suppliedFormula);
 			if(match1.find() && match2.find()) {
 				String requestedElement = match1.group(1);
-				int requestedAtoms = Integer.valueOf(match1.group(2));
+				int requestedAtoms = 1;
+				if(!match1.group(2).equals(""))
+					requestedAtoms = Integer.valueOf(match1.group(2));
 				
 				String suppliedElement = match2.group(1);
-				int suppliedAtoms = Integer.valueOf(match2.group(2));
+				int suppliedAtoms = 1;
+				if(!match2.group(2).equals(""))
+					suppliedAtoms = Integer.valueOf(match2.group(2));
 				
 				if( suppliedElement.equals(requestedElement) && suppliedAtoms > requestedAtoms) {
 					return true;
@@ -197,10 +204,14 @@ public class TileEntityMinechemSorter extends TileEntityMinechemMachine {
 			Matcher match2 = Pattern.compile(singleElementPattern).matcher(suppliedFormula);
 			if(match1.find() && match2.find()) {
 				String requestedElement = match1.group(1);
-				int requestedAtoms = Integer.valueOf(match1.group(2));
+				int requestedAtoms = 1;
+				if(!match1.group(2).equals(""))
+					requestedAtoms = Integer.valueOf(match1.group(2));
 				
 				String suppliedElement = match2.group(1);
-				int suppliedAtoms = Integer.valueOf(match2.group(2));
+				int suppliedAtoms = 1;
+				if(!match2.group(2).equals(""))
+					suppliedAtoms = Integer.valueOf(match2.group(2));
 				
 				if( suppliedElement.equals(requestedElement) && suppliedAtoms < requestedAtoms) {
 					return true;

@@ -241,6 +241,7 @@ public class mod_Minechem extends BaseMod {
 			Character.valueOf('Y'), new ItemStack(Item.dyePowder, 1, 11),
 			Character.valueOf('B'), new ItemStack(Item.dyePowder, 1, 4),
 			Character.valueOf('G'), new ItemStack(Item.dyePowder, 1, 10),
+			Character.valueOf('T'), tableOfElements
 		});
 		
 		electrolysisRecipes = new HashMap<ItemStack, ElectrolysisRecipe>();

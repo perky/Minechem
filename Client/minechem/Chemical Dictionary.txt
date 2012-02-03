@@ -323,6 +323,7 @@ C10H8 = naphthalene
 C10H15ON = ephedrine
 C10H16O = camphor
 C10H22 = decane
+C11H22 = cycloundecane
 C11H12N2O2 = tryptophan
 C11H24 = undecane
 C11H17NO3 = mescaline

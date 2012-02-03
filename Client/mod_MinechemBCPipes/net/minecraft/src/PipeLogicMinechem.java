@@ -67,10 +67,14 @@ public class PipeLogicMinechem extends PipeLogicStone {
 				Matcher match2 = Pattern.compile(singleElementPattern).matcher(suppliedFormula);
 				if(match1.find() && match2.find()) {
 					String requestedElement = match1.group(1);
-					int requestedAtoms = Integer.valueOf(match1.group(2));
+					int requestedAtoms = 1;
+					if(!match1.group(2).equals(""))
+						requestedAtoms = Integer.valueOf(match1.group(2));
 					
 					String suppliedElement = match2.group(1);
-					int suppliedAtoms = Integer.valueOf(match2.group(2));
+					int suppliedAtoms = 1;
+					if(!match1.group(2).equals(""))
+						suppliedAtoms = Integer.valueOf(match1.group(2));
 					
 					if( suppliedElement.equals(requestedElement) && suppliedAtoms < requestedAtoms) {
 						possibleOrientations.clear();
