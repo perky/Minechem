@@ -13,8 +13,10 @@ import net.minecraft.src.EntityMob;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.MathHelper;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.NBTTagCompound;
+import net.minecraft.src.TileEntityChest;
 import net.minecraft.src.World;
 import net.minecraft.src.mod_Minechem;
 
@@ -24,13 +26,14 @@ public class ItemTestTube extends Item {
 	public static int halfLifeTicks = 50;
 	private static int elementIcon = ModLoader.addOverride("/gui/items.png", "/minechem/testtube_full.png");
 	private static int moleculeIcon = ModLoader.addOverride("/gui/items.png", "/minechem/testtube_molecule.png");
-
+	private Random random;
 	
 	public ItemTestTube(int i) {
 		super(i);
 		setMaxStackSize(1);
 		setHasSubtypes(true);
 		setContainerItem(mod_Minechem.itemTesttubeEmpty);
+		random = new Random();
 	}
 	
 	@Override
@@ -47,55 +50,91 @@ public class ItemTestTube extends Item {
 		super.onCreated(itemstack, world, entityplayer);
 	}
 	
-	@Override
-	public void onUpdate(ItemStack itemstack, World world, Entity entity, int i, boolean flag) {		
+	public void tryDecayFromChest(ItemStack itemstack, World world, Entity entity, TileEntityChest chest, int slotnumber) {
+		ItemStack decayedStack = tryDecay(itemstack, world, entity);
+		emitRadiation(itemstack, world, entity, 1500);
+		if(decayedStack != null) {
+			chest.setInventorySlotContents(slotnumber, decayedStack);
+		}
+	}
+	
+	public void tryDecayFromInventory(ItemStack itemstack, World world, Entity entity, int slotnumber) {
+		ItemStack decayedStack = tryDecay(itemstack, world, entity);
+		emitRadiation(itemstack, world, entity, 1000);
+		if(decayedStack != null) {
+			((EntityPlayer)entity).inventory.setInventorySlotContents(slotnumber, decayedStack);
+		}
+	}
+	
+	public void emitRadiation(ItemStack itemstack, World world, Entity entity, int chance) {
+		chance -= (itemstack.getItemDamage() - 82) * 14;
+		if(random.nextInt(chance) != 0)
+			return;
+		
+		EntityPlayer player = (EntityPlayer)entity;
+		
+		// Get all entities within a 50 block radius around the player.
+		AxisAlignedBB playerBox = player.boundingBox;
+		playerBox = playerBox.expand(10, 10, 10);
+		List entitiesInRange = world.getEntitiesWithinAABBExcludingEntity(player, playerBox);
+		// Lower health for living entities.
+		for(int i1 = 0; i1 < entitiesInRange.size(); i1++){
+			Entity entity1 = (Entity)entitiesInRange.get(i1);
+			if(entity1 instanceof EntityLiving) {
+				EntityLiving entityLiving = (EntityLiving)entity1;
+				entityLiving.setEntityHealth( entityLiving.getEntityHealth() - (1+random.nextInt(6)));
+			}
+		}
+		
+		// Check if player has lead armour.
+		Minecraft minecraft = ModLoader.getMinecraftInstance();
+		ItemStack boots 	= minecraft.thePlayer.inventory.armorInventory[0];
+		ItemStack leggings 	= minecraft.thePlayer.inventory.armorInventory[1];
+		ItemStack torso 	= minecraft.thePlayer.inventory.armorInventory[2];
+		ItemStack helmet 	= minecraft.thePlayer.inventory.armorInventory[3];
+		
+		if(boots != null && leggings != null && torso != null && helmet != null
+				&& boots.itemID == mod_Minechem.leadBoots.shiftedIndex && leggings.itemID == mod_Minechem.leadLeggings.shiftedIndex
+				&& torso.itemID == mod_Minechem.leadTorso.shiftedIndex && helmet.itemID == mod_Minechem.leadHelmet.shiftedIndex)
+		{
+			// Player is sheilded from radiation.
+		} else {
+			// Harm the player.
+			int h = 1+random.nextInt(2);
+			player.setEntityHealth( player.getEntityHealth() - (h) );
+			player.addChatMessage("Take Health: "+h);
+		}
+	}
+	
+	public ItemStack tryDecay(ItemStack itemstack, World world, Entity entity) {
 		NBTTagCompound tag = itemstack.getTagCompound();
 		if(tag != null && tag.getInteger("decaytime") != -1) {
 			EntityPlayer player = (EntityPlayer)entity;
 			int newDecayTime = tag.getInteger("decaytime") - 1;
+			((ItemGeigerCounter)mod_Minechem.geigerCounter).onRadiationTick(world, itemstack.getItemDamage());
 			
 			// Decay and cause radiation poisoning.
 			if(newDecayTime == 0){
-				Random random = new Random();
-				// Get all entities within a 50 block radius around the player.
-				AxisAlignedBB playerBox = player.boundingBox;
-				playerBox = playerBox.expand(50, 50, 50);
-				List entitiesInRange = world.getEntitiesWithinAABBExcludingEntity(player, playerBox);
-				// Lower health for living entities.
-				for(int i1 = 0; i1 < entitiesInRange.size(); i1++){
-					Entity entity1 = (Entity)entitiesInRange.get(i1);
-					if(entity1 instanceof EntityLiving) {
-						EntityLiving entityLiving = (EntityLiving)entity1;
-						entityLiving.setEntityHealth( entityLiving.getEntityHealth() - random.nextInt(4));
-					}
-				}
+
 				
-				// Check if player has lead armour.
-				Minecraft minecraft = ModLoader.getMinecraftInstance();
-				ItemStack boots 	= minecraft.thePlayer.inventory.armorInventory[0];
-				ItemStack leggings 	= minecraft.thePlayer.inventory.armorInventory[1];
-				ItemStack torso 	= minecraft.thePlayer.inventory.armorInventory[2];
-				ItemStack helmet 	= minecraft.thePlayer.inventory.armorInventory[3];
-				
-				if(boots != null && leggings != null && torso != null && helmet != null
-						&& boots.itemID == mod_Minechem.leadBoots.shiftedIndex && leggings.itemID == mod_Minechem.leadLeggings.shiftedIndex
-						&& torso.itemID == mod_Minechem.leadTorso.shiftedIndex && helmet.itemID == mod_Minechem.leadHelmet.shiftedIndex)
-				{
-					// Player is sheilded from radiation.
-				} else {
-					// Harm the player.
-					player.setEntityHealth( player.getEntityHealth() - (1+random.nextInt(4)) );
-					player.addChatMessage("Warning: Radiation damage.");
-				}
-					
 				
 				// Decay into lower element.
 				int newAtomicNumber = itemstack.getItemDamage() - 1;
 				int atoms = tag.getInteger("atoms");
-				player.inventory.setInventorySlotContents(i, new Molecule(newAtomicNumber, atoms).stack);
-			} else
+				itemstack = new Molecule(newAtomicNumber, atoms).stack;
+				
+				return itemstack;
+			} else {
 				tag.setInteger("decaytime", newDecayTime);
+			}
 		}
+		
+		return null;
+	}
+	
+	@Override
+	public void onUpdate(ItemStack itemstack, World world, Entity entity, int i, boolean flag) {		
+		tryDecayFromInventory(itemstack, world, entity, i);
     }
 	
 	//178 == 1;

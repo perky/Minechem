@@ -51,11 +51,28 @@ public class TileEntityFission extends TileEntityMinechemMachine {
 		ItemStack input = inventoryStack[0];
 		Molecule mInput = Molecule.moleculeByItemStack(input);
 		int element = input.getItemDamage();
-		int elementDiv = element / 2;
-		if(inventoryStack[1] != null && elementDiv > 0)
-			inventoryStack[1] = new Molecule(elementDiv, mInput.atoms).stack;
-		if(inventoryStack[2] != null && elementDiv > 0)
-			inventoryStack[2] = new Molecule(elementDiv, mInput.atoms).stack;
+		
+		// If hydrogen, explode >:D
+		if(element == 1) {
+			float f = 12F;
+			worldObj.setBlockWithNotify(xCoord, yCoord, zCoord, 0);
+	        worldObj.createExplosion(null, xCoord, yCoord, zCoord, f);
+	        return;
+		} else {
+			int elementDiv = element / 2;
+			int elementRemainder = element % 2;
+			if(elementRemainder == 1){
+				if(inventoryStack[1] != null && elementDiv > 0)
+					inventoryStack[1] = new Molecule(elementDiv, mInput.atoms).stack;
+				if(inventoryStack[2] != null && elementDiv > 0)
+					inventoryStack[2] = new Molecule(elementDiv+1, mInput.atoms).stack;
+			} else {
+				if(inventoryStack[1] != null && elementDiv > 0)
+					inventoryStack[1] = new Molecule(elementDiv, mInput.atoms).stack;
+				if(inventoryStack[2] != null && elementDiv > 0)
+					inventoryStack[2] = new Molecule(elementDiv, mInput.atoms).stack;
+			}
+		}
 		
 		inventoryStack[0] = new ItemStack(mod_Minechem.itemTesttubeEmpty, 1);
 		dumpSlotToChest(0);

@@ -36,6 +36,7 @@ public class mod_Minechem extends BaseMod {
 	@MLProp public static int itemIDTableOfElements = 3002;
 	@MLProp public static int itemIDHangableTableOfElements = 3003;
 	@MLProp public static int itemIDChemistryBook = 3004;
+	@MLProp public static int itemIDGeigerCounter = 3005;
 	@MLProp public static boolean requireIC2Power = false;
 	@MLProp public static boolean autoUpdateChemicalDictionary = true;
 	@MLProp public static boolean checkForMinechemUpdates = true;
@@ -48,6 +49,7 @@ public class mod_Minechem extends BaseMod {
 	public static Item tableOfElements;
 	public static Item hangableTableOfElements;
 	public static Item chemistryBook;
+	public static Item geigerCounter;
 	public static Block blockMinechem;
 	public static Map<ItemStack, ElectrolysisRecipe> electrolysisRecipes;
 	
@@ -74,6 +76,7 @@ public class mod_Minechem extends BaseMod {
 		tableOfElements = new ItemTableOfElements(itemIDTableOfElements);
 		hangableTableOfElements = new ItemHangableTableOfElements(itemIDHangableTableOfElements);
 		chemistryBook = new ItemChemistryBook(itemIDChemistryBook);
+		geigerCounter = new ItemGeigerCounter(itemIDGeigerCounter);
 		leadBoots.setItemName("leadboots");
 		leadLeggings.setItemName("leadleggings");
 		leadTorso.setItemName("leadTorso");
@@ -98,6 +101,7 @@ public class mod_Minechem extends BaseMod {
 		ModLoader.AddName(leadLeggings, "Lead Leggings");
 		ModLoader.AddName(leadTorso, "Lead Chestplate");
 		ModLoader.AddName(leadHelmet, "Lead Helmet");
+		ModLoader.AddName(geigerCounter, "Geiger Counter");
 		
 		ModLoader.RegisterTileEntity(net.minecraft.minechem.TileEntityElectrolysis.class, "minechem_tileelectrolysis");
 		ModLoader.RegisterTileEntity(net.minecraft.minechem.TileEntityFusion.class, "minechem_tilefusion");
@@ -136,6 +140,12 @@ public class mod_Minechem extends BaseMod {
 		
 		Item.itemsList[blockIDMinechem] = new ItemMinechem(blockIDMinechem-256, blockMinechem).setItemName("itemminechem");
 		
+		ModLoader.AddShapelessRecipe(new Molecule(115, 1).stack, new Object[]{
+			Item.appleRed
+		});
+		ModLoader.AddShapelessRecipe(new ItemStack(geigerCounter, 1), new Object[]{
+			Item.ingotIron
+		});
 		ModLoader.AddRecipe(new ItemStack(blockMinechem, 1, ItemMinechem.electrolysis), new Object[]{
 			"RRR",
 			"#-#",
@@ -481,7 +491,7 @@ public class mod_Minechem extends BaseMod {
 		MinecraftForge.addDungeonLoot(new ItemStack(itemTesttubeEmpty), 1, 12, 64);
 		
 		tickCount = 0;
-		updateDelay = 4;
+		updateDelay = 2;
 		ModLoader.SetInGameHook(this, true, true);
 		
 		//MinecraftForgeClient.registerCustomItemRenderer(itemTesttube.shiftedIndex, new RenderTestTube());
@@ -574,34 +584,32 @@ public class mod_Minechem extends BaseMod {
 		
 		int currentTries = 0;
 		int currentBlock = 0;
-		int tries = 50;
+		int tries = 1000;
 		int blocklimit = 10;
 		int radius = 8;
-		int posx = MathHelper.floor_double(player.posX);
-		int posy = MathHelper.floor_double(player.posY);
-		int posz = MathHelper.floor_double(player.posZ);
+		int posx = MathHelper.floor_double(player.posX) - radius;
+		int posy = MathHelper.floor_double(player.posY) - radius;
+		int posz = MathHelper.floor_double(player.posZ) - radius;
 		
-		while(currentTries < tries) {
-			currentTries++;
-			int x = posx + (random.nextInt(radius * 2) - radius);
-			int y = posy + (random.nextInt(radius * 2) - radius);
-			int z = posz + (random.nextInt(radius * 2) - radius);
-			
-			if(y > 255)
-				y = 255;
-			if(y < 1)
-				y = 1;
-			
-			if(world.getBlockId(x, y, z) == Block.chest.blockID) {
-				TileEntityChest chest = (TileEntityChest)world.getBlockTileEntity(x, y, z);
-				for(int i = 0; i < chest.getSizeInventory(); i++) {
-					ItemStack stack = chest.getStackInSlot(i);
-					if(stack != null && stack.itemID == itemTesttube.shiftedIndex) {
-						stack.getItem().onUpdate(stack, world, player, 0, false);
+		for(int x = posx; x < posx+(radius*2); x++) {
+			for(int y = posy; y < posy+(radius*2); y++) {
+				for(int z = posz; z < posz+(radius*2); z++) {
+					if(y > 255) break;
+					if(y < 1) continue;
+					if(world.getBlockId(x, y, z) == Block.chest.blockID) {
+						if(random.nextInt(1) != 0) continue;
+						TileEntityChest chest = (TileEntityChest)world.getBlockTileEntity(x, y, z);
+						for(int i = 0; i < chest.getSizeInventory(); i++) {
+							ItemStack stack = chest.getStackInSlot(i);
+							if(stack != null && stack.itemID == itemTesttube.shiftedIndex) {
+								((ItemTestTube)itemTesttube).tryDecayFromChest(stack, world, player, chest, i);
+							}
+						}
 					}
 				}
 			}
 		}
+		
 		return true;
 	}
 
