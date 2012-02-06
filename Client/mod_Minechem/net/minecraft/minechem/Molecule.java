@@ -1,6 +1,8 @@
 package net.minecraft.minechem;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -187,6 +189,93 @@ public class Molecule {
 		}
 		
 		return this.stack;
+	}
+	
+	public static String getSimpleMolecularFormula(String formula) {
+		String simpleFormula = "";
+		List<Object[]> elements = parseMolecularFormula(formula);
+		if(elements != null) {
+			for(Object[] element : elements) {
+				String elementName = (String)element[0];
+				int atoms = (Integer)element[1];
+				if(atoms == 1)
+					simpleFormula += elementName;
+				else
+					simpleFormula += elementName + atoms;
+			}
+		}
+		
+		return simpleFormula;
+	}
+	
+	public static List<Object[]> parseMolecularFormula(String formula) {
+		if( formula == null || formula.equals("") )
+			return null;
+		
+		Pattern bracketsPattern = Pattern.compile("\\(.*?\\)\\d*");
+		Pattern elementPattern = Pattern.compile("([A-Z][a-z]*)(\\d*)");
+		Pattern insideBracketsPattern = Pattern.compile("\\(((?:[A-Z][a-z]*\\d*)+)\\)(\\d*)");
+
+		String outsideBrackets = formula.replaceAll( bracketsPattern.pattern(), "" );
+		String brackets = "";
+		List<Object[]> elements = new ArrayList();
+		
+		Matcher matchBrackets = bracketsPattern.matcher( formula );
+		while ( matchBrackets.find () ) {
+		  brackets += matchBrackets.group(0);
+		}
+		
+		Matcher matchElement = elementPattern.matcher( outsideBrackets );
+		while ( matchElement.find () ) {
+		  String elementName = matchElement.group(1);
+		  int atoms = 1;
+		  if ( !matchElement.group(2).equals("") )
+		    atoms = Integer.valueOf( matchElement.group(2) );
+		  Object[] newElement = new Object[]{ elementName, atoms };
+		  if( !didAddElementToCollection(newElement, elements) ) {
+			  elements.add( newElement );
+		  }
+		}
+		
+		Matcher matchInsideBrackets = insideBracketsPattern.matcher( brackets );
+		while ( matchInsideBrackets.find () ) {
+		  int multiplier = 1;
+		  if ( !matchInsideBrackets.group(2).equals("") )
+		    multiplier = Integer.valueOf( matchInsideBrackets.group(2) );
+		  matchElement = elementPattern.matcher( matchInsideBrackets.group(1) );
+		  while ( matchElement.find () ) {
+		    String elementName = matchElement.group(1);
+		    int atoms = 1;
+		    if ( !matchElement.group(2).equals("") )
+		      atoms = Integer.valueOf( matchElement.group(2) );
+		    atoms *= multiplier;
+		    Object[] newElement = new Object[]{ elementName, atoms };
+		    if( !didAddElementToCollection(newElement, elements) ) {
+		    	elements.add( newElement );
+		    }
+		  }
+		}
+		
+		if( elements.isEmpty() )
+			return null;
+		else
+			return elements;
+	}
+	
+	private static boolean didAddElementToCollection( Object[] element, List<Object[]> elements ) {
+		int index = 0;
+		String elementName = (String)element[0];
+		int atoms = (Integer)element[1];
+		for(Object[] e : elements) {
+			String elementName1 = (String)e[0];
+			int atoms1 = (Integer)e[1];
+			if( elementName1.equals(elementName) ) {
+				elements.set( index, new Object[]{ elementName, atoms + atoms1} );
+				return true;
+			}
+			index++;
+		}
+		return false;
 	}
 
 }
