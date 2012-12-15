@@ -81,7 +81,6 @@ public class MinechemRecipes {
 		
 		addDecomposerRecipe(new ItemStack(Block.oreCoal), element(C,2));
 		addDecomposerRecipe(new ItemStack(Item.coal), element(C,1));
-		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.coal));
 		
 		addDecomposerRecipe(new ItemStack(Item.gunpowder), molecule(potassiumNitrate), element(S,2), element(C,1));
 		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.gunpowder));
@@ -212,12 +211,19 @@ public class MinechemRecipes {
 		return unbondingRecipes.get(getKeyFromItemStack(itemstack));
 	}
 	
-	public ItemStack getSynthesisOutput(ItemStack[] inputRecipe) {
+	public SynthesisRecipe getSynthesisRecipe(ItemStack[] inputRecipe) {
 		for(SynthesisRecipe recipe : synthesisRecipes) {
 			if(recipe.matches(inputRecipe)) {
-				return recipe.getOutputStack();
+				return recipe;
 			}
 		}
+		return null;
+	}
+	
+	public ItemStack getSynthesisOutput(ItemStack[] inputRecipe) {
+		SynthesisRecipe recipe = getSynthesisRecipe(inputRecipe);
+		if(recipe != null)
+			return recipe.getOutputStack();
 		return null;
 	}
 	
@@ -252,4 +258,5 @@ public class MinechemRecipes {
 	private static ItemStack molecule(EnumMolecule molecule) {
 		return new ItemStack(MinechemItems.molecule, 1, molecule.id());
 	}
+	
 }

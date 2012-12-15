@@ -12,10 +12,10 @@ public class SynthesisRecipe {
 	private ArrayList<ItemStack> unshapedRecipe;
 	private boolean isShaped;
 
-	public SynthesisRecipe(ItemStack output, ItemStack[] recipe, boolean isShaped) {
+	public SynthesisRecipe(ItemStack output, ItemStack[] ingredients, boolean isShaped) {
 		this.output = output;
-		this.shapedRecipe = recipe;
-		this.unshapedRecipe = new ArrayList<ItemStack>(Arrays.asList(recipe));
+		this.shapedRecipe = ingredients;
+		this.unshapedRecipe = copyItemArrayIntoList(ingredients);
 		this.isShaped = isShaped;
 	}
 	
@@ -30,11 +30,13 @@ public class SynthesisRecipe {
 		for(int i = 0; i < shapedRecipe.length; i++) {
 			if(inputStacks[i] == null && shapedRecipe[i] != null)
 				return false;
-			if(inputStacks[i] == null)
+			if(shapedRecipe[i] == null && inputStacks[i] != null)
+				return false;
+			if(inputStacks[i] == null || shapedRecipe[i] == null)
 				continue;
 			if(inputStacks[i].itemID != shapedRecipe[i].itemID)
 				return false;
-			if(inputStacks[i].stackSize >= shapedRecipe[i].stackSize)
+			if(inputStacks[i].stackSize < shapedRecipe[i].stackSize)
 				return false;
 			if(inputStacks[i].getItemDamage() != shapedRecipe[i].getItemDamage())
 				return false;
@@ -43,8 +45,44 @@ public class SynthesisRecipe {
 	}
 	
 	private boolean matchesUnshaped(ItemStack[] inputStacks) {
-		ArrayList<ItemStack> inputStackList = new ArrayList(Arrays.asList(inputStacks));
-		return unshapedRecipe.containsAll(inputStackList);
+		ArrayList<ItemStack> inputStackList = copyItemArrayIntoList(inputStacks);
+		ArrayList<ItemStack> ingredients = copyItemList(this.unshapedRecipe);
+		for(ItemStack inputStack : inputStackList) {
+			int ingredientSlot = getIngredientSlotThatMatchesStack(ingredients, inputStack);
+			if(ingredientSlot != -1)
+				ingredients.remove(ingredientSlot);
+			else
+				return false;
+		}
+		return ingredients.size() == 0;
+	}
+	
+	private int getIngredientSlotThatMatchesStack(ArrayList<ItemStack> ingredients, ItemStack itemStack) {
+		for(int slot = 0; slot < ingredients.size(); slot++) {
+			ItemStack ingredientStack = ingredients.get(slot);
+			if(ingredientStack != null && ingredientStack.itemID == itemStack.itemID 
+					&& ingredientStack.getItemDamage() == itemStack.getItemDamage() 
+					&& itemStack.stackSize >= ingredientStack.stackSize)
+				return slot;
+		}
+		return -1;
+	}
+	
+	private ArrayList<ItemStack> copyItemList(ArrayList<ItemStack> itemList) {
+		ArrayList<ItemStack> itemListCopy = new ArrayList();
+		for(ItemStack itemstack : itemList) {
+			itemListCopy.add(itemstack.copy());
+		}
+		return itemListCopy;
+	}
+	
+	private ArrayList<ItemStack> copyItemArrayIntoList(ItemStack[] itemstacks) {
+		ArrayList<ItemStack> itemList = new ArrayList();
+		for(int i = 0; i < itemstacks.length; i++) {
+			if(itemstacks[i] != null)
+				itemList.add(itemstacks[i]);
+		}
+		return itemList;
 	}
 	
 	public boolean hasOutputStack(ItemStack outputStack) {
@@ -52,7 +90,7 @@ public class SynthesisRecipe {
 	}
 	
 	public ItemStack getOutputStack() {
-		return output;
+		return output.copy();
 	}
 	
 	public boolean isShaped() {
@@ -65,5 +103,13 @@ public class SynthesisRecipe {
 	
 	public ArrayList<ItemStack> getUnshapedRecipe() {
 		return unshapedRecipe;
+	}
+	
+	public int getIngredientCount() {
+		int count = 0;
+		for(ItemStack ingredient : unshapedRecipe) {
+			count += ingredient.stackSize;
+		}
+		return count;
 	}
 }

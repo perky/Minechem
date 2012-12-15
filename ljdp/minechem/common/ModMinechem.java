@@ -7,6 +7,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import ljdp.minechem.client.GuiDecomposer;
 import ljdp.minechem.client.GuiMicroscope;
+import ljdp.minechem.client.GuiSynthesis;
 import ljdp.minechem.common.CommonProxy;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -68,6 +69,8 @@ public class ModMinechem implements IGuiHandler {
 			return new ContainerDecomposer(player.inventory, (TileEntityDecomposer)tileEntity);
 		if(tileEntity instanceof TileEntityMicroscope)
 			return new ContainerMicroscope(player.inventory, (TileEntityMicroscope)tileEntity);
+		if(tileEntity instanceof TileEntitySynthesis)
+			return new ContainerSynthesis(player.inventory, (TileEntitySynthesis)tileEntity);
 		return null;
 	}
 
@@ -79,6 +82,8 @@ public class ModMinechem implements IGuiHandler {
 			return new GuiDecomposer(player.inventory, (TileEntityDecomposer)tileEntity);
 		if(tileEntity instanceof TileEntityMicroscope)
 			return new GuiMicroscope(player.inventory, (TileEntityMicroscope)tileEntity);
+		if(tileEntity instanceof TileEntitySynthesis)
+			return new GuiSynthesis(player.inventory, (TileEntitySynthesis)tileEntity);
 		return null;
 	}
 	

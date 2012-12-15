@@ -3,11 +3,16 @@ package ljdp.minechem.common;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
+import net.minecraft.src.Item;
+import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 
 public class ContainerMicroscope extends Container {
 	
+	TileEntityMicroscope microscope;
+	
 	public ContainerMicroscope(InventoryPlayer inventoryPlayer, TileEntityMicroscope microscope) {
+		this.microscope = microscope;
 		addSlotToContainer(new Slot(microscope, 0, 80, 33));
 		for (int i = 0; i < 9; i++) {
             addSlotToContainer(new SlotMicroscopeOutput(microscope, 1+i, 8 + i * 18, 75));
@@ -33,7 +38,32 @@ public class ContainerMicroscope extends Container {
 	
 	@Override
 	public boolean canInteractWith(EntityPlayer var1) {
-		return true;
+		return microscope.isUseableByPlayer(var1);
+	}
+	
+	@Override
+	public ItemStack transferStackInSlot(EntityPlayer entityPlayer, int slot) {
+		Slot slotObject = (Slot) inventorySlots.get(slot);
+		if(slotObject != null && slotObject.getHasStack()) {
+			ItemStack stackInSlot = slotObject.getStack();
+			ItemStack stack = stackInSlot.copy();
+			if(slot == 0) {
+				if(!mergeItemStack(stackInSlot, 1, inventorySlots.size(), true))
+					return null;
+			} else if(slot >= 1) {
+				if(!mergeItemStack(stackInSlot, 0, 1, false))
+					return null;
+			} else if(!mergeItemStack(stackInSlot, 1, inventorySlots.size(), true))
+				return null;
+			
+			if(stackInSlot.stackSize == 0)
+				slotObject.putStack(null);
+			else
+				slotObject.onSlotChanged();
+			
+			return stack;
+		}
+		return null;
 	}
 	
 
