@@ -20,7 +20,14 @@ public class TileEntityMicroscope extends TileEntity implements IInventory {
 	}
 	
 	private void showRecipeForItemStack(ItemStack itemstack) {
-		ArrayList<ItemStack> outputStacks = MinechemRecipes.getInstance().getSynthesisRecipe(itemstack);
+		ItemStack[] outputStacks;
+		if(itemstack.itemID == MinechemItems.molecule.shiftedIndex) {
+			EnumMolecule molecule = ((ItemMolecule)MinechemItems.molecule).getMolecule(itemstack);
+			ArrayList<ItemStack> moleculeComponents = molecule.components();
+			outputStacks = moleculeComponents.toArray(new ItemStack[moleculeComponents.size()]);
+		} else {
+			outputStacks = MinechemRecipes.getInstance().getSynthesisRecipe(itemstack);
+		}
 		if(outputStacks != null) {
 			clearOutputStacks();
 			int slot = 1;

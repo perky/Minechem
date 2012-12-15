@@ -32,8 +32,7 @@ public class MinechemRecipes {
 	private MinechemRecipes() {
 		unbondingRecipes = new HashMap<String, UnbondingRecipe>();
 		synthesisRecipes = new ArrayList<SynthesisRecipe>();
-		
-		addRandomDecomposerRecipe(new ItemStack(Block.stone), 0.5F, 
+		addRandomDecomposerRecipe(new ItemStack(Block.stone), 0.3F, 
 				itemStacks(element(Si), element(O,2)),
 				itemStacks(element(Al,2), element(O,3)),
 				itemStacks(element(K,2), element(O,2)),
@@ -46,9 +45,8 @@ public class MinechemRecipes {
 				itemStacks(element(P,2), element(O,5)),
 				itemStacks(element(Mn), element(O))
 				);
-		addSynthesisRecipe(new ItemStack(Block.stone), element(Si), element(O,2));
 		
-		addRandomDecomposerRecipe(new ItemStack(Block.cobblestone), 0.4F,
+		addRandomDecomposerRecipe(new ItemStack(Block.cobblestone), 0.1F,
 				itemStacks(element(Si), element(O,2)),
 				itemStacks(element(Al,2), element(O,3)),
 				itemStacks(element(K,2), element(O,2)),
@@ -61,40 +59,41 @@ public class MinechemRecipes {
 				itemStacks(element(P,2), element(O,5)),
 				itemStacks(element(Mn), element(O))
 				);
-		addSynthesisRecipe(new ItemStack(Block.cobblestone), element(Si), element(O,2), element(Ca));
 		
-		addDecomposerRecipe(new ItemStack(Block.dirt),
+		addRandomDecomposerRecipe(new ItemStack(Block.dirt), 0.01F,
 				element(H,2), element(O,6), element(Si), element(Ca), element(C)
 				);
-		addSynthesisRecipeFromDecomposerRecipe(new ItemStack(Block.dirt));
 		
 		addDecomposerRecipe(new ItemStack(Block.oreIron), element(Fe,2));
 		addDecomposerRecipe(new ItemStack(Item.ingotIron), element(Fe,1));
-		addSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.ingotIron));
+		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.ingotIron));
 		
 		addDecomposerRecipe(new ItemStack(Block.oreGold), element(Au,2));
 		addDecomposerRecipe(new ItemStack(Item.ingotGold), element(Au,1));
-		addSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.ingotGold));
+		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.ingotGold));
 		
 		addDecomposerRecipe(new ItemStack(Block.oreDiamond), element(C,64), element(C,64));
 		addDecomposerRecipe(new ItemStack(Item.diamond), element(C,64));
-		addSynthesisRecipe(new ItemStack(Item.diamond), element(C,64), element(C,64));
+		addShapedSynthesisRecipe(new ItemStack(Item.diamond), 
+				null, 			element(C,64), 		null,
+				element(C,64),	null,				element(C,64),
+				null,			element(C,64), 		null);
 		
 		addDecomposerRecipe(new ItemStack(Block.oreCoal), element(C,2));
 		addDecomposerRecipe(new ItemStack(Item.coal), element(C,1));
-		addSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.coal));
+		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.coal));
 		
 		addDecomposerRecipe(new ItemStack(Item.gunpowder), molecule(potassiumNitrate), element(S,2), element(C,1));
-		addSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.gunpowder));
+		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.gunpowder));
 		
 		addDecomposerRecipe(new ItemStack(Block.sand), 		molecule(siliconDioxide, 8));
 		addDecomposerRecipe(new ItemStack(Block.glass), 	molecule(siliconDioxide, 16));
 		addDecomposerRecipe(new ItemStack(Block.thinGlass), molecule(siliconDioxide,1));
 		addDecomposerRecipe(new ItemStack(Block.sandStone), molecule(siliconDioxide,12));
-		addSynthesisRecipeFromDecomposerRecipe(new ItemStack(Block.sand));
+		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Block.sand));
 		
 		addDecomposerRecipe(new ItemStack(Block.wood), molecule(cellulose,4));
-		addSynthesisRecipeFromDecomposerRecipe(new ItemStack(Block.wood));
+		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Block.wood));
 		
 		addDecomposerRecipe(new ItemStack(Block.oreLapis),
 				molecule(lazurite, 4),
@@ -104,14 +103,14 @@ public class MinechemRecipes {
 				molecule(pyrite, 4)
 				);
 		addDecomposerRecipe(new ItemStack(Item.dyePowder, 1, 4), molecule(lazurite));
-		addSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.dyePowder, 1, 4));
+		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.dyePowder, 1, 4));
 		
 		addDecomposerRecipe(new ItemStack(Block.glowStone), element(P,4));
 		addDecomposerRecipe(new ItemStack(Item.lightStoneDust), element(P));
-		addSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.lightStoneDust));
+		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.lightStoneDust));
 		
 		addDecomposerRecipe(new ItemStack(Block.tnt), molecule(tnt, 4));
-		addSynthesisRecipeFromDecomposerRecipe(new ItemStack(Block.tnt));
+		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Block.tnt));
 		
 		// OreDictionary Recipes
 		addOreDictDecomposerRecipe("oreSilver", element(Ag,2));
@@ -143,7 +142,7 @@ public class MinechemRecipes {
 	private boolean addOreDictDecomposerAndSynthesisRecipe(String ore, Object...objects) {
 		if(addOreDictDecomposerRecipe(ore, objects)) {
 			int oreID = OreDictionary.getOreID(ore);
-			addSynthesisRecipeFromDecomposerRecipe(new ItemStack(oreID, 1, 0));
+			addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(oreID, 1, 0));
 			return true;
 		}
 		return false;
@@ -173,15 +172,27 @@ public class MinechemRecipes {
 		unbondingRecipes.put(getKeyFromItemStack(input), unbondingRecipe);
 	}
 	
-	private void addSynthesisRecipe(ItemStack output, Object...objects) {
+	private SynthesisRecipe newSynthesisRecipe(ItemStack output, boolean isShaped, Object...objects) {
 		ArrayList inputStacks = itemStacks(objects);
-		SynthesisRecipe synthesisRecipe = new SynthesisRecipe(output, inputStacks);
-		synthesisRecipes.add(synthesisRecipe);
+		ItemStack[] recipe = new ItemStack[objects.length];
+		for(int i = 0; i < objects.length; i++) {
+			recipe[i] = (ItemStack) objects[i];
+		}
+		return new SynthesisRecipe(output, recipe, isShaped);
 	}
 	
-	private void addSynthesisRecipeFromDecomposerRecipe(ItemStack output) {
-		ArrayList inputStacks = getRecipe(output).getOutput();
-		SynthesisRecipe synthesisRecipe = new SynthesisRecipe(output, inputStacks);
+	private void addShapedSynthesisRecipe(ItemStack output, Object...objects) {
+		synthesisRecipes.add(newSynthesisRecipe(output, true, objects));
+	}
+	
+	private void addUnshapedSynthesisRecipe(ItemStack output, Object...objects) {
+		synthesisRecipes.add(newSynthesisRecipe(output, false, objects));
+	}
+	
+	private void addUnshapedSynthesisRecipeFromDecomposerRecipe(ItemStack output) {
+		ArrayList<ItemStack> inputStacks = getRecipe(output).getOutput();
+		ItemStack[] unshapedRecipe = inputStacks.toArray(new ItemStack[inputStacks.size()]);
+		SynthesisRecipe synthesisRecipe = new SynthesisRecipe(output, unshapedRecipe, false);
 		synthesisRecipes.add(synthesisRecipe);
 	}
 	
@@ -201,19 +212,19 @@ public class MinechemRecipes {
 		return unbondingRecipes.get(getKeyFromItemStack(itemstack));
 	}
 	
-	public ItemStack getSynthesisOutput(ArrayList<ItemStack> inputStacks) {
+	public ItemStack getSynthesisOutput(ItemStack[] inputRecipe) {
 		for(SynthesisRecipe recipe : synthesisRecipes) {
-			if(recipe.matches(inputStacks)) {
+			if(recipe.matches(inputRecipe)) {
 				return recipe.getOutputStack();
 			}
 		}
 		return null;
 	}
 	
-	public ArrayList<ItemStack> getSynthesisRecipe(ItemStack outputStack) {
+	public ItemStack[] getSynthesisRecipe(ItemStack outputStack) {
 		for(SynthesisRecipe recipe : synthesisRecipes) {
 			if(recipe.hasOutputStack(outputStack)) {
-				return recipe.getInputStacks();
+				return recipe.getShapedRecipe();
 			}
 		}
 		return null;
