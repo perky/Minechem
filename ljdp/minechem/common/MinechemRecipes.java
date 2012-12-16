@@ -9,7 +9,9 @@ import java.util.HashMap;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
 
 public class MinechemRecipes {
 	
@@ -162,23 +164,59 @@ public class MinechemRecipes {
 		addDecomposerRecipe(new ItemStack(Item.bucketWater), element(H,2), element(O), element(Fe,3));
 		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.bucketWater));
 		
-		// OreDictionary Recipes
-		addOreDictDecomposerRecipe("oreSilver", element(Ag,2));
-		addOreDictDecomposerAndSynthesisRecipe("ingotSilver", element(Ag));
-		addOreDictDecomposerRecipe("oreLead", element(Pb,2));
-		addOreDictDecomposerAndSynthesisRecipe("ingotLead", element(Pb));
-		addOreDictDecomposerRecipe("oreCopper", element(Cu,2));
-		addOreDictDecomposerAndSynthesisRecipe("ingotCopper", element(Cu));
-		addOreDictDecomposerRecipe("oreTin", element(Sn,2));
-		addOreDictDecomposerAndSynthesisRecipe("ingotTin", element(Sn));
-		addOreDictDecomposerRecipe("oreUranium", element(U,2));
-		addOreDictDecomposerAndSynthesisRecipe("itemDropUranium", element(U));
-		
-		addOreDictDecomposerAndSynthesisRecipe("ingotBronze", element(Sn), element(Cu,9));
-		addOreDictDecomposerAndSynthesisRecipe("ingotNickel", element(Ni));
-		addOreDictDecomposerAndSynthesisRecipe("ingotAluminium", element(Al));
-		
 		addSynthesisRecipesFromMolecules();
+	}
+	
+	@ForgeSubscribe
+	public void oreEvent(OreRegisterEvent event) {
+		if(event.Name.contains("oreCopper")) {
+			addDecomposerRecipe(event.Ore, element(Cu,2));
+			return;
+		}
+		if(event.Name.contains("ingotCopper")) {
+			addDecomposerRecipe(event.Ore, element(Cu));
+			addUnshapedSynthesisRecipeFromDecomposerRecipe(event.Ore);
+		}
+		if(event.Name.contains("oreSilver")) {
+			addDecomposerRecipe(event.Ore, element(Ag,2));
+			return;
+		}
+		if(event.Name.contains("ingotSilver")) {
+			addDecomposerRecipe(event.Ore, element(Ag));
+			addUnshapedSynthesisRecipeFromDecomposerRecipe(event.Ore);
+		}
+		if(event.Name.contains("oreTin")) {
+			addDecomposerRecipe(event.Ore, element(Sn,2));
+			return;
+		}
+		if(event.Name.contains("ingotTin")) {
+			addDecomposerRecipe(event.Ore, element(Sn));
+			addUnshapedSynthesisRecipeFromDecomposerRecipe(event.Ore);
+		}
+		if(event.Name.contains("oreLead")) {
+			addDecomposerRecipe(event.Ore, element(Pb,2));
+			return;
+		}
+		if(event.Name.contains("ingotLead")) {
+			addDecomposerRecipe(event.Ore, element(Pb));
+			addUnshapedSynthesisRecipeFromDecomposerRecipe(event.Ore);
+		}
+		if(event.Name.contains("oreCopper")) {
+			addDecomposerRecipe(event.Ore, element(Cu,2));
+			return;
+		}
+		if(event.Name.contains("ingotCopper")) {
+			addDecomposerRecipe(event.Ore, element(Cu));
+			addUnshapedSynthesisRecipeFromDecomposerRecipe(event.Ore);
+		}
+		if(event.Name.contains("ingotBronze")) {
+			addDecomposerRecipe(event.Ore, element(Sn), element(Cu,9));
+			addUnshapedSynthesisRecipeFromDecomposerRecipe(event.Ore);
+		}
+		if(event.Name.contains("ingotNickel")) {
+			addDecomposerRecipe(event.Ore, element(Ni));
+			addUnshapedSynthesisRecipeFromDecomposerRecipe(event.Ore);
+		}
 	}
 	
 	private void addSynthesisRecipesFromMolecules() {
@@ -187,33 +225,6 @@ public class MinechemRecipes {
 			ItemStack[] ingredients = components.toArray(new ItemStack[components.size()]);
 			synthesisRecipes.add(new SynthesisRecipe(molecule(molecule), ingredients, false));
 		}
-	}
-	
-	private boolean addOreDictDecomposerRecipe(String ore, Object...objects) {
-		if(oreNamesHasOre(ore)) {
-			int oreID = OreDictionary.getOreID(ore);
-			addDecomposerRecipe(new ItemStack(oreID, 1, 0), objects);
-			return true;
-		}
-		return false;
-	}
-	
-	private boolean addOreDictDecomposerAndSynthesisRecipe(String ore, Object...objects) {
-		if(addOreDictDecomposerRecipe(ore, objects)) {
-			int oreID = OreDictionary.getOreID(ore);
-			addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(oreID, 1, 0));
-			return true;
-		}
-		return false;
-	}
-	
-	private boolean oreNamesHasOre(String ore) {
-		String[] oreNames = OreDictionary.getOreNames();
-		for(int i = 0; i < oreNames.length; i++) {
-			if(oreNames[i].equals(ore))
-				return true;
-		}
-		return false;
 	}
 	
 	private void addDecomposerRecipe(ItemStack input, Object...objects) {
