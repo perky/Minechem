@@ -10,7 +10,7 @@ import net.minecraft.src.ItemStack;
 
 public enum EnumMolecule {
 	cellulose 				(0, "Cellulose", element(C, 6), element(H, 10), element(O, 5)),
-	water 					(1, "Water", element(H,2), element(O)),
+	
 	carbonDioxide   		(2, "Carbon Dioxide", element(C), element(O,2)),
 	nitrogenDioxide 		(3, "Nitrogen Dioxide", element(N), element(O,2)),
 	toluene					(4, "Toluene", element(C), element(H,3)),

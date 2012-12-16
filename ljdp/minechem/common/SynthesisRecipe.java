@@ -3,6 +3,7 @@ package ljdp.minechem.common;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import net.minecraft.src.Block;
 import net.minecraft.src.ItemStack;
 
 public class SynthesisRecipe {
@@ -34,11 +35,10 @@ public class SynthesisRecipe {
 				return false;
 			if(inputStacks[i] == null || shapedRecipe[i] == null)
 				continue;
-			if(inputStacks[i].itemID != shapedRecipe[i].itemID)
-				return false;
-			if(inputStacks[i].stackSize < shapedRecipe[i].stackSize)
-				return false;
-			if(inputStacks[i].getItemDamage() != shapedRecipe[i].getItemDamage())
+			if(MinechemHelper.stacksAreSameKind(inputStacks[i], shapedRecipe[i]) 
+					&& inputStacks[i].stackSize >= shapedRecipe[i].stackSize)
+				continue;
+			else
 				return false;
 		}
 		return true;
@@ -60,8 +60,7 @@ public class SynthesisRecipe {
 	private int getIngredientSlotThatMatchesStack(ArrayList<ItemStack> ingredients, ItemStack itemStack) {
 		for(int slot = 0; slot < ingredients.size(); slot++) {
 			ItemStack ingredientStack = ingredients.get(slot);
-			if(ingredientStack != null && ingredientStack.itemID == itemStack.itemID 
-					&& ingredientStack.getItemDamage() == itemStack.getItemDamage() 
+			if(ingredientStack != null && MinechemHelper.stacksAreSameKind(itemStack, ingredientStack) 
 					&& itemStack.stackSize >= ingredientStack.stackSize)
 				return slot;
 		}
@@ -86,7 +85,10 @@ public class SynthesisRecipe {
 	}
 	
 	public boolean hasOutputStack(ItemStack outputStack) {
-		return this.output.itemID == outputStack.itemID && this.output.getItemDamage() == outputStack.getItemDamage();
+		if(this.output.itemID == Block.planks.blockID) {
+			System.out.println("-");
+		}
+		return MinechemHelper.stacksAreSameKind(this.output, outputStack);
 	}
 	
 	public ItemStack getOutputStack() {

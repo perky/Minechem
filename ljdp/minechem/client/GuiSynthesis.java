@@ -17,6 +17,13 @@ public class GuiSynthesis extends GuiContainer {
 	
 	public GuiSynthesis(InventoryPlayer inventoryPlayer, TileEntitySynthesis synthesis) {
 		super(new ContainerSynthesis(inventoryPlayer, synthesis));
+		
+	}
+	
+	@Override
+	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
+		super.drawGuiContainerForegroundLayer(par1, par2);
+		fontRenderer.drawString("Chemical Synthesis Table", 5, 5, 0xCCCCCC);
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import net.minecraftforge.common.ISidedInventory;
 public class TileEntityMicroscope extends TileEntity implements IInventory {
 	
 	private ItemStack[] microscopeInventory;
+	public boolean isShaped = true;
 	
 	public TileEntityMicroscope() {
 		microscopeInventory = new ItemStack[getSizeInventory()];
@@ -25,8 +26,16 @@ public class TileEntityMicroscope extends TileEntity implements IInventory {
 			EnumMolecule molecule = ((ItemMolecule)MinechemItems.molecule).getMolecule(itemstack);
 			ArrayList<ItemStack> moleculeComponents = molecule.components();
 			outputStacks = moleculeComponents.toArray(new ItemStack[moleculeComponents.size()]);
+			isShaped = false;
 		} else {
-			outputStacks = MinechemRecipes.getInstance().getSynthesisRecipe(itemstack);
+			SynthesisRecipe recipe = MinechemRecipes.getInstance().getSynthesisRecipe(itemstack);
+			if(recipe != null) {
+				outputStacks = recipe.getShapedRecipe();
+				isShaped = recipe.isShaped();
+			} else {
+				outputStacks = null;
+				isShaped = true;
+			}
 		}
 		if(outputStacks != null) {
 			clearOutputStacks();

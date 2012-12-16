@@ -63,8 +63,7 @@ public class TileEntitySynthesis extends TileEntity implements IInventory {
 		ItemStack[] craftingItems = getCraftingItems();
 		for(int i = 0; i < craftingItems.length; i++) {
 			ItemStack craftingItem = craftingItems[i];
-			if(craftingItem != null && craftingItem.itemID == itemstack.itemID 
-					&& craftingItem.getItemDamage() == itemstack.getItemDamage()
+			if(craftingItem != null && MinechemHelper.stacksAreSameKind(itemstack, craftingItem)
 					&& craftingItem.stackSize >= itemstack.stackSize) {
 				decrStackSize(kStartInput + i, itemstack.stackSize);
 				addEmptyBottles(itemstack.stackSize);

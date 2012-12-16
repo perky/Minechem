@@ -42,5 +42,15 @@ public class BlockSynthesis extends BlockMinechemContainer {
 			}
 		}
 	}
+	
+	@Override
+	public String getTextureFile() {
+		return ModMinechem.proxy.BLOCKS_PNG;
+	}
+	
+	@Override
+	public int getBlockTextureFromSide(int par1) {
+		return par1 == 1 ? 6 : 1;
+	}
 
 }

@@ -13,9 +13,14 @@ public class ContainerMicroscope extends Container {
 	
 	public ContainerMicroscope(InventoryPlayer inventoryPlayer, TileEntityMicroscope microscope) {
 		this.microscope = microscope;
-		addSlotToContainer(new Slot(microscope, 0, 80, 33));
-		for (int i = 0; i < 9; i++) {
-            addSlotToContainer(new SlotMicroscopeOutput(microscope, 1+i, 8 + i * 18, 75));
+		addSlotToContainer(new Slot(microscope, 0, 44, 45));
+		
+		int slot = 0;
+		for(int row = 0; row < 3; row++) {
+			for(int col = 0; col < 3; col++) {
+				addSlotToContainer(new SlotMicroscopeOutput(microscope, 1 + slot, 98 + (col * 18), 27 + (row * 18)));
+				slot++;
+			}
 		}
 		bindPlayerInventory(inventoryPlayer);
 	}

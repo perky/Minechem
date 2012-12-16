@@ -39,5 +39,15 @@ public class BlockMicroscope extends BlockMinechemContainer {
 		if(inputStack != null)
 			itemStacks.add(inputStack);
 	}
+	
+	@Override
+	public String getTextureFile() {
+		return ModMinechem.proxy.BLOCKS_PNG;
+	}
+	
+	@Override
+	public int getBlockTextureFromSide(int par1) {
+		return par1 == 1 ? 14 : 0;
+	}
 
 }

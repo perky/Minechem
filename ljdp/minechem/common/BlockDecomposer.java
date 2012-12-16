@@ -2,8 +2,12 @@ package ljdp.minechem.common;
 
 import java.util.ArrayList;
 
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
+
 import net.minecraft.src.BlockContainer;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
@@ -42,6 +46,16 @@ public class BlockDecomposer extends BlockMinechemContainer {
 				itemStacks.add(itemstack);
 			}
 		}
+	}
+	
+	@Override
+	public String getTextureFile() {
+		return ModMinechem.proxy.BLOCKS_PNG;
+	}
+	
+	@Override
+	public int getBlockTextureFromSide(int par1) {
+		return par1 == 1 ? 7 : 2;
 	}
 	
 
