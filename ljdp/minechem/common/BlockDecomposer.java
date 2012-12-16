@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 public class BlockDecomposer extends BlockMinechemContainer {
 
 	protected BlockDecomposer(int id) {
-		super(id, Material.wood);
+		super(id, Material.iron);
 		setBlockName("blockChemicalDecomposer");
 		setCreativeTab(ModMinechem.minechemTab);
 	}
@@ -33,7 +33,7 @@ public class BlockDecomposer extends BlockMinechemContainer {
 	}
 	
 	@Override
-	public void addStacksDroppedOnBlockBreak(TileEntity tileEntity, ArrayList itemStacks) {
+	public ArrayList<ItemStack> addStacksDroppedOnBlockBreak(TileEntity tileEntity, ArrayList itemStacks) {
 		TileEntityDecomposer decomposer = (TileEntityDecomposer)tileEntity;
 		for(int slot = 0; slot < decomposer.getSizeInventory(); slot++) {
 			ItemStack itemstack = decomposer.getStackInSlot(slot);
@@ -41,6 +41,7 @@ public class BlockDecomposer extends BlockMinechemContainer {
 				itemStacks.add(itemstack);
 			}
 		}
+		return itemStacks;
 	}
 	
 	@Override

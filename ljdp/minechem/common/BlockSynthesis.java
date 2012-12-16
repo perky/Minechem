@@ -33,7 +33,7 @@ public class BlockSynthesis extends BlockMinechemContainer {
 	}
 	
 	@Override
-	public void addStacksDroppedOnBlockBreak(TileEntity tileEntity, ArrayList itemStacks) {
+	public ArrayList<ItemStack> addStacksDroppedOnBlockBreak(TileEntity tileEntity, ArrayList itemStacks) {
 		TileEntitySynthesis decomposer = (TileEntitySynthesis)tileEntity;
 		for(int slot = 0; slot < decomposer.getSizeInventory(); slot++) {
 			ItemStack itemstack = decomposer.getStackInSlot(slot);
@@ -41,6 +41,7 @@ public class BlockSynthesis extends BlockMinechemContainer {
 				itemStacks.add(itemstack);
 			}
 		}
+		return itemStacks;
 	}
 	
 	@Override

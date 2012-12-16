@@ -3,6 +3,7 @@ package ljdp.minechem.common;
 import java.util.ArrayList;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
@@ -17,6 +18,8 @@ public abstract class BlockMinechemContainer extends BlockContainer {
 	
 	protected BlockMinechemContainer(int par1, Material par2Material) {
 		super(par1, par2Material);
+		setHardness(10F);
+		setResistance(1000F);
 	}
 
 	@Override
