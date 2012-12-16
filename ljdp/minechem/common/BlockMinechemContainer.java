@@ -45,7 +45,7 @@ public abstract class BlockMinechemContainer extends BlockContainer {
                 	EntityItem droppedEntity = new EntityItem(world, 
                 			(double)((float)x + randomX), 
                 			(double)((float)y + randomY), 
-                			(double)((float)x + randomZ), 
+                			(double)((float)z + randomZ), 
                 			new ItemStack(itemstack.itemID, randomN, itemstack.getItemDamage())
                 	);
                 	if(itemstack.hasTagCompound())
