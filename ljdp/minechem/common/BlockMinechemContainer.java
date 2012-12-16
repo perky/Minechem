@@ -11,7 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockMinechemContainer extends BlockContainer {
+public abstract class BlockMinechemContainer extends BlockContainer {
 	
 	private Random random = new Random();
 	
@@ -24,7 +24,7 @@ public class BlockMinechemContainer extends BlockContainer {
 		return null;
 	}
 	
-	public void addStacksDroppedOnBlockBreak(TileEntity tileEntity, ArrayList itemStacks) {}
+	public abstract ArrayList<ItemStack> addStacksDroppedOnBlockBreak(TileEntity tileEntity, ArrayList itemStacks);
 	
 	@Override
 	public void breakBlock(World world, int x, int y, int z,
@@ -32,7 +32,7 @@ public class BlockMinechemContainer extends BlockContainer {
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 		if(tileEntity != null) {
 			ArrayList<ItemStack> droppedStacks = new ArrayList();
-			addStacksDroppedOnBlockBreak(tileEntity, droppedStacks);
+			droppedStacks = addStacksDroppedOnBlockBreak(tileEntity, droppedStacks);
 			for(ItemStack itemstack : droppedStacks) {
 				float randomX = this.random.nextFloat() * 0.8F + 0.1F;
                 float randomY = this.random.nextFloat() * 0.8F + 0.1F;
