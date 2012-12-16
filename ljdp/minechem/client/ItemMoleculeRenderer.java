@@ -1,16 +1,13 @@
 package ljdp.minechem.client;
 
-import org.lwjgl.opengl.GL11;
-
 import ljdp.minechem.common.EnumMolecule;
-import ljdp.minechem.common.ItemElement;
 import ljdp.minechem.common.ItemMolecule;
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.Tessellator;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
-import net.minecraftforge.client.IItemRenderer.ItemRendererHelper;
+
+import org.lwjgl.opengl.GL11;
 
 public class ItemMoleculeRenderer implements IItemRenderer {
 	

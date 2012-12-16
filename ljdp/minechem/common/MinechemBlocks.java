@@ -1,8 +1,8 @@
 package ljdp.minechem.common;
 
+import net.minecraft.block.Block;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import net.minecraft.src.Block;
 
 public class MinechemBlocks {
 	public static Block decomposer;

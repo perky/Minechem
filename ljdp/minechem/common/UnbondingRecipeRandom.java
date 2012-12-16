@@ -3,7 +3,7 @@ package ljdp.minechem.common;
 import java.util.ArrayList;
 import java.util.Random;
 
-import net.minecraft.src.ItemStack;
+import net.minecraft.item.ItemStack;
 
 public class UnbondingRecipeRandom extends UnbondingRecipe {
 	

@@ -1,13 +1,13 @@
 package ljdp.minechem.common;
 
-import net.minecraft.src.Item;
+import net.minecraft.item.Item;
 
 public class MinechemItems {
 	public static Item element;
 	public static Item molecule;
 	
 	public static void registerItems() {
-		element = new ItemElement(4736);
+		element  = new ItemElement(4736);
 		molecule = new ItemMolecule(4737);
 	}
 }

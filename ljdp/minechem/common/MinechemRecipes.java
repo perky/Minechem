@@ -1,20 +1,15 @@
 package ljdp.minechem.common;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.lang.model.element.Element;
-
-import cpw.mods.fml.common.registry.GameRegistry;
-
-import net.minecraft.src.Block;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 import static ljdp.minechem.common.EnumElement.*;
 import static ljdp.minechem.common.EnumMolecule.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class MinechemRecipes {
 	

@@ -5,8 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import ljdp.minechem.common.TileEntityDecomposer;
-import net.minecraft.src.Packet250CustomPayload;
-import net.minecraft.src.TileEntity;
 
 public class PacketDecomposerUpdate extends PacketTileEntityUpdate {
 	

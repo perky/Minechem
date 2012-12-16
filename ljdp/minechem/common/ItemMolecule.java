@@ -1,18 +1,14 @@
 package ljdp.minechem.common;
 
-import java.text.AttributedString;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import ljdp.minechem.common.EnumMolecule;
-
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import net.minecraft.src.CreativeTabs;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
 
 public class ItemMolecule extends Item {
 	
@@ -96,7 +92,7 @@ public class ItemMolecule extends Item {
 	}
 
 	public EnumMolecule getMolecule(ItemStack itemstack) {
-		return EnumMolecule.molecules[itemstack.getItemDamage()];
+		return EnumMolecule.getById(itemstack.getItemDamage());
 	}
 
 }

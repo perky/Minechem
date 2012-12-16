@@ -3,19 +3,18 @@ package ljdp.minechem.client;
 import ljdp.minechem.common.ContainerMicroscope;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.TileEntityMicroscope;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-
-import net.minecraft.src.GuiContainer;
-import net.minecraft.src.InventoryPlayer;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.OpenGlHelper;
-import net.minecraft.src.RenderHelper;
-import net.minecraft.src.RenderItem;
-import net.minecraft.src.ScaledResolution;
-import net.minecraft.src.Slot;
 
 public class GuiMicroscope extends GuiContainer {
 		
@@ -27,7 +26,8 @@ public class GuiMicroscope extends GuiContainer {
 	int inputSlotY = 45;
 	public InventoryPlayer inventoryPlayer;
 	protected TileEntityMicroscope microscope;
-	
+	protected RenderItem itemRenderer;
+    
 	public GuiMicroscope(InventoryPlayer inventoryPlayer, TileEntityMicroscope microscope) {
 		super(new ContainerMicroscope(inventoryPlayer, microscope));
 		this.inventoryPlayer = inventoryPlayer;
@@ -36,8 +36,6 @@ public class GuiMicroscope extends GuiContainer {
 		this.ySize = guiHeight;
 		this.itemRenderer = new RenderItemMicroscope(this, this.mc);
 	}
-	
-	
 	
 	private int getMouseX() {
 		return (Mouse.getX() * this.width / this.mc.displayWidth);

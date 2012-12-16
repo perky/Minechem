@@ -1,13 +1,11 @@
 package ljdp.minechem.common.network;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import net.minecraft.src.Packet205ClientCommand;
-import net.minecraft.src.Packet250CustomPayload;
+import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketMinechem {
 	

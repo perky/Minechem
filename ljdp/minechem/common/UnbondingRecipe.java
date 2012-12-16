@@ -2,7 +2,7 @@ package ljdp.minechem.common;
 
 import java.util.ArrayList;
 
-import net.minecraft.src.ItemStack;
+import net.minecraft.item.ItemStack;
 
 public class UnbondingRecipe {
 	protected ArrayList<ItemStack> outputStacks;

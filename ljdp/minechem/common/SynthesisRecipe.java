@@ -1,10 +1,9 @@
 package ljdp.minechem.common;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.ItemStack;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
 public class SynthesisRecipe {
 	

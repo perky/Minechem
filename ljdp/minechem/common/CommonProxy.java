@@ -1,6 +1,6 @@
 package ljdp.minechem.common;
 
-import net.minecraft.src.World;
+import net.minecraft.world.World;
 
 public class CommonProxy {
 	

@@ -1,12 +1,10 @@
 package ljdp.minechem.common;
 
-import ljdp.minechem.common.MinechemItems;
 import static ljdp.minechem.common.EnumElement.*;
-
 import java.util.ArrayList;
 import java.util.Random;
 
-import net.minecraft.src.ItemStack;
+import net.minecraft.item.ItemStack;
 
 public enum EnumMolecule {
 	cellulose 				(0, "Cellulose", element(C, 6), element(H, 10), element(O, 5)),

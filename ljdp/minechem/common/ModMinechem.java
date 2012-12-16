@@ -1,14 +1,13 @@
 package ljdp.minechem.common;
 
-import net.minecraft.src.CreativeTabs;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
 import ljdp.minechem.client.GuiDecomposer;
 import ljdp.minechem.client.GuiMicroscope;
 import ljdp.minechem.client.GuiSynthesis;
-import ljdp.minechem.common.CommonProxy;
+import ljdp.minechem.common.network.PacketHandler;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -21,10 +20,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import ljdp.minechem.common.MinechemItems;
-import ljdp.minechem.common.network.PacketHandler;
 
 @Mod(modid="minechem", name="MineChem", version="2.0.0a")
 @NetworkMod(

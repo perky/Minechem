@@ -3,12 +3,10 @@ package ljdp.minechem.client;
 import ljdp.minechem.common.ContainerSynthesis;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.TileEntitySynthesis;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.InventoryPlayer;
 
 import org.lwjgl.opengl.GL11;
-
-import net.minecraft.src.Container;
-import net.minecraft.src.GuiContainer;
-import net.minecraft.src.InventoryPlayer;
 
 public class GuiSynthesis extends GuiContainer {
 	

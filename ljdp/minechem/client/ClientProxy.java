@@ -1,7 +1,7 @@
 package ljdp.minechem.client;
 
 import cpw.mods.fml.client.FMLClientHandler;
-import net.minecraft.src.World;
+import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import ljdp.minechem.common.CommonProxy;
 import ljdp.minechem.common.MinechemItems;
