@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.RenderEngine;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
@@ -24,11 +25,11 @@ public class RenderItemMicroscope extends RenderItem {
 	int depthRenderBufferID;
 	boolean isFBOSupported;
 	
-	public RenderItemMicroscope(GuiMicroscope guiMicroscope, Minecraft mc) {
+	public RenderItemMicroscope(GuiMicroscope guiMicroscope) {
 		super();
 		this.guiMicroscope = guiMicroscope;
 		microscopeContainer = (ContainerMicroscope) guiMicroscope.inventorySlots;
-		inventoryPlayer = guiMicroscope.inventoryPlayer;
+		inventoryPlayer     = guiMicroscope.inventoryPlayer;
 		this.mc = Minecraft.getMinecraft();
 	}
 	
@@ -56,17 +57,18 @@ public class RenderItemMicroscope extends RenderItem {
 	public void renderItemAndEffectIntoGUI(FontRenderer par1FontRenderer,
 			RenderEngine par2RenderEngine, ItemStack itemstack, int x,
 			int y) {
-		
-		if(itemstack == microscopeContainer.getSlot(0).getStack() || itemstack == inventoryPlayer.getItemStack()) {
+		if(itemstack == null)
+			return;
+		Slot slot = microscopeContainer.getSlot(0);
+		if(itemstack == slot.getStack() 
+				|| itemstack == inventoryPlayer.getItemStack()) {
 			GL11.glPushMatrix();
-			//GL11.glDisable(GL11.GL_DEPTH_TEST);
 			setScissor(guiMicroscope.eyepieceX, guiMicroscope.eyepieceY, 52, 52);
 			GL11.glTranslatef(x, y, 0.0F);
 			GL11.glScalef(3.0F, 3.0F, 1.0F);
 			GL11.glTranslatef(-x-5.3F, -y-5.3F, 2.0F);
 			super.renderItemAndEffectIntoGUI(par1FontRenderer, par2RenderEngine, itemstack, x, y);
 			stopScissor();
-			//GL11.glEnable(GL11.GL_DEPTH_TEST);
 			GL11.glPopMatrix();
 		}
 		
@@ -95,8 +97,6 @@ public class RenderItemMicroscope extends RenderItem {
 		Tessellator t = Tessellator.instance;
 		t.startDrawingQuads();
         t.setColorOpaque_I(0x121212);
-        //t.setColorRGBA_I(0x121212, 0xAA);
-		//t.setColorRGBA_F(1.0F, 0.0F, 0.0F, 0.5F);
         t.addVertex((double)(x + 0), (double)(y + 0), z);
         t.addVertex((double)(x + 0), (double)(y + height), z);
         t.addVertex((double)(x + width), (double)(y + height), z);
@@ -113,17 +113,7 @@ public class RenderItemMicroscope extends RenderItem {
 			return;
 		if(itemstack == microscopeContainer.getSlot(0).getStack() || 
 				(itemstack == inventoryPlayer.getItemStack() && guiMicroscope.isMouseInMicroscope())) {
-			if (itemstack.stackSize > 1)
-            {
-				/*
-                String stackSize = "" + itemstack.stackSize;
-                GL11.glDisable(GL11.GL_LIGHTING);
-                GL11.glDisable(GL11.GL_DEPTH_TEST);
-                par1FontRenderer.drawStringWithShadow(stackSize, par4 + 29 - 2 - par1FontRenderer.getStringWidth(stackSize), par5 + 16 + 3, 16777215);
-                GL11.glEnable(GL11.GL_LIGHTING);
-                GL11.glEnable(GL11.GL_DEPTH_TEST);
-                */
-            }
+			// do nothing.
 		} else {
 			super.renderItemOverlayIntoGUI(par1FontRenderer, par2RenderEngine, itemstack, par4, par5);
 		}
