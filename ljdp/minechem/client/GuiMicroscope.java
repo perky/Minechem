@@ -20,7 +20,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-public class GuiMicroscope extends GuiMinechemContainer {
+public class GuiMicroscope extends GuiContainerTabbed {
 		
 	int guiWidth = 176;
 	int guiHeight = 189;
@@ -38,9 +38,8 @@ public class GuiMicroscope extends GuiMinechemContainer {
 		this.xSize = guiWidth;
 		this.ySize = guiHeight;
 		this.itemRenderer = new RenderItemMicroscope(this);
+		addTab(new TabHelp(this, "Place an item under the glass to discover new recipes for the Chemical Synthesis Table. Not every item has a recipe."));
 	}
-	
-	
 	
 	private int getMouseX() {
 		return (Mouse.getX() * this.width / this.mc.displayWidth);
@@ -168,6 +167,14 @@ public class GuiMicroscope extends GuiMinechemContainer {
 		//drawMicroscopeSlot();
 		//drawMagnifiedRegion();
 		GL11.glPopMatrix();
+	}
+
+
+
+	@Override
+	protected void drawTooltips(int mouseX, int mouseY) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
