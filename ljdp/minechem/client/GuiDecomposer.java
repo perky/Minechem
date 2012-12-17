@@ -50,11 +50,6 @@ public class GuiDecomposer extends GuiContainerTabbed {
 
 	@Override
 	protected void drawTooltips(int mouseX, int mouseY) {
-		Tab tab = getTabAtPosition(mouseX, mouseY);
-		if(tab != null) {
-			String tooltip = tab.getTooltip();
-			drawTooltip(tooltip);
-		}
 	}
 
 

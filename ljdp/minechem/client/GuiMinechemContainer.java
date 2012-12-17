@@ -19,8 +19,10 @@ import net.minecraft.util.MathHelper;
 
 public abstract class GuiMinechemContainer extends GuiScreen {
 	
+	private static final RenderItem vanillaRenderItem = new RenderItem();
+	
 	/** Stacks renderer. Icons, stack size, health, etc... */
-    protected RenderItem itemRenderer;
+    protected RenderItem itemRenderer = vanillaRenderItem;
 
     /** The X size of the inventory window in pixels. */
     protected int xSize = 176;

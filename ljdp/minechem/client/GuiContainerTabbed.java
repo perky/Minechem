@@ -19,7 +19,7 @@ import codechicken.nei.VisiblityData;
 import codechicken.nei.api.INEIGuiHandler;
 import codechicken.nei.api.TaggedInventoryArea;
 
-public abstract class GuiContainerTabbed extends GuiContainer implements INEIGuiHandler {
+public abstract class GuiContainerTabbed extends GuiMinechemContainer implements INEIGuiHandler {
 
     protected static enum SlotColor {
         BLUE, RED, YELLOW, ORANGE, GREEN, PURPLE;

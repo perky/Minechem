@@ -8,14 +8,14 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import org.lwjgl.opengl.GL11;
 
-public class GuiSynthesis extends GuiContainer {
+public class GuiSynthesis extends GuiContainerTabbed {
 	
 	int guiWidth = 176;
 	int guiHeight = 166;
 	
 	public GuiSynthesis(InventoryPlayer inventoryPlayer, TileEntitySynthesis synthesis) {
 		super(new ContainerSynthesis(inventoryPlayer, synthesis));
-		
+		addTab(new TabHelp(this,"The Chemical Synthesis table takes a recipe of elements and molecules and synthesises an item. To discover recipes make a Microscope."));
 	}
 	
 	@Override
@@ -33,6 +33,11 @@ public class GuiSynthesis extends GuiContainer {
 		int x = (width - guiWidth) / 2;
 		int y = (height - guiHeight) / 2;
 		drawTexturedModalRect(x, y, 0, 0, guiWidth, guiHeight);
+	}
+
+	@Override
+	protected void drawTooltips(int mouseX, int mouseY) {
+		
 	}
 
 }
