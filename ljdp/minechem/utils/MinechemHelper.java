@@ -1,5 +1,8 @@
 package ljdp.minechem.utils;
 
+import java.util.List;
+
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.ItemStack;
 
 public class MinechemHelper {
@@ -16,6 +19,11 @@ public class MinechemHelper {
 		float rightRange = rightMax - rightMin;
 		float valueScaled = (value - leftMin) / leftRange;
 		return rightMin + (valueScaled * rightRange);
+	}
+	
+	public static int getSplitStringHeight(FontRenderer fontRenderer, String string, int width) {
+		List stringRows = fontRenderer.listFormattedStringToWidth(string, width);
+		return stringRows.size() * fontRenderer.FONT_HEIGHT;
 	}
 
 }

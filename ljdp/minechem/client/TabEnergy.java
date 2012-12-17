@@ -47,8 +47,11 @@ public class TabEnergy extends Tab {
 
 	@Override
 	public String getTooltip() {
-		MinechemPowerProvider provider = (MinechemPowerProvider) powerReceptor.getPowerProvider();
-		return String.format("%.1f", provider.getCurrentEnergyUsage()) + " MJ/t";
+		if(!isOpen()) {
+			MinechemPowerProvider provider = (MinechemPowerProvider) powerReceptor.getPowerProvider();
+			return String.format("%.1f", provider.getCurrentEnergyUsage()) + " MJ/t";
+		} else
+			return null;
 	}
 
 }

@@ -25,7 +25,7 @@ public class GuiDecomposer extends GuiContainerTabbed {
 		this.inventoryPlayer = inventoryPlayer;
 		addTab(new TabStateControlDecomposer(this, decomposer));
 		addTab(new TabEnergy(this, decomposer));
-		//addTab(new TabHelp(this));
+		addTab(new TabHelp(this, "The Chemical Decomposer takes any item and decomposes it into its chemical parts, it will also split molecules into individual elements."));
 	}
 	
 	@Override
