@@ -49,7 +49,7 @@ public class ModMinechem implements IGuiHandler {
 		MinecraftForge.EVENT_BUS.register(MinechemRecipes.getInstance());
 		blLog.setParent(FMLLog.getLogger());
 
-	 	blLog.info(Loading Config);
+	 	blLog.info("Loading Config"");
 	 	loadConfig(event);
 	}
 	
