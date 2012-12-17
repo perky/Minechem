@@ -1,7 +1,8 @@
 package ljdp.minechem.client;
 
-import ljdp.minechem.common.IMinechemPowerConsumer;
 import ljdp.minechem.common.MinechemPowerProvider;
+import ljdp.minechem.common.ModMinechem;
+import ljdp.minechem.utils.RollingAverage;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.core.utils.StringUtil;
@@ -15,6 +16,8 @@ public class TabEnergy extends Tab {
 	int subheaderColour = 0xaaafb8;
 	int textColour = 0x000000;
 	IPowerReceptor powerReceptor;
+	float lastEnergy = 0;
+	RollingAverage energyUsageRolling =  new RollingAverage(100);
 	
 	public TabEnergy(Gui gui, IPowerReceptor powerReceptor) {
 		super(gui);
@@ -27,23 +30,25 @@ public class TabEnergy extends Tab {
 	@Override
 	public void draw(int x, int y) {
 		drawBackground(x, y);
+		drawIcon(ModMinechem.proxy.ICONS_PNG, 0, x+2, y+2);
 		if(!isFullyOpened())
 			return;
 		
 		MinechemPowerProvider provider = (MinechemPowerProvider) powerReceptor.getPowerProvider();
+		energyUsageRolling.add(provider.getCurrentEnergyUsage());
 		fontRenderer.drawStringWithShadow("Energy", x + 22, y + 8, headerColour);
-		fontRenderer.drawStringWithShadow("Stored" + ":", x + 22, y + 20, subheaderColour);
-		fontRenderer.drawString(String.format("%.1f", provider.getEnergyStored()) + " MJ", x + 22, y + 32, textColour);
-		fontRenderer.drawStringWithShadow("Out of" + ":", x + 22, y + 44, subheaderColour);
-		fontRenderer.drawString(provider.getMaxEnergyStored() + " MJ", x + 22, y + 56, textColour);
-		fontRenderer.drawStringWithShadow("Max Power" + ":", x + 22, y + 68, subheaderColour);
-		fontRenderer.drawString(provider.getMaxEnergyReceived() + " MJ/t", x + 22, y + 80, textColour);
+		fontRenderer.drawStringWithShadow("Usage" + ":", x + 22, y + 20, subheaderColour);
+		fontRenderer.drawString(String.format("%.1f", energyUsageRolling.getAverage()) + " MJ/t", x + 22, y + 32, textColour);
+		fontRenderer.drawStringWithShadow("Max Usage" + ":", x + 22, y + 44, subheaderColour);
+		fontRenderer.drawString(provider.getMaxEnergyReceived() + " MJ/t", x + 22, y + 56, textColour);
+		fontRenderer.drawStringWithShadow("Stored" + ":", x + 22, y + 68, subheaderColour);
+		fontRenderer.drawString(String.format("%.1f", provider.getEnergyStored()) + " MJ", x + 22, y + 80, textColour);
 	}
 
 	@Override
 	public String getTooltip() {
-		IPowerProvider provider = powerReceptor.getPowerProvider();
-		return provider.getEnergyStored() + " MJ";
+		MinechemPowerProvider provider = (MinechemPowerProvider) powerReceptor.getPowerProvider();
+		return String.format("%.1f", provider.getCurrentEnergyUsage()) + " MJ/t";
 	}
 
 }

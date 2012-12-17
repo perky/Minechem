@@ -23,23 +23,17 @@ public class GuiDecomposer extends GuiContainerTabbed {
 		super(new ContainerDecomposer(inventoryPlayer, decomposer));
 		this.decomposer = decomposer;
 		this.inventoryPlayer = inventoryPlayer;
+		addTab(new TabStateControlDecomposer(this, decomposer));
 		addTab(new TabEnergy(this, decomposer));
+		//addTab(new TabHelp(this));
 	}
 	
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 		super.drawGuiContainerForegroundLayer(par1, par2);
-		String info = "Decomposer : ";
-		State state = decomposer.getState();
-		if(state == State.kProcessIdle)
-			info += "Idle.";
-		else if(state == State.kProcessActive)
-			info += "Working.";
-		else if(state == State.kProcessJammed)
-			info += "Output Jammed.";
-		else if(state == State.kProcessNoBottles)
-			info += "Out of bottles.";
-		fontRenderer.drawString(info, 8, 6, 0xCCCCCC);
+		String info = "Chemical Decomposer";
+		int infoWidth = fontRenderer.getStringWidth(info);
+		fontRenderer.drawString(info, (guiWidth - infoWidth) / 2, 5, 0xCCCCCC);
 		ItemStack currentHeldItem = inventoryPlayer.getItemStack();
 	}
 	

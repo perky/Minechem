@@ -58,7 +58,7 @@ public class MinechemRecipes {
 				);
 		
 		addRandomDecomposerRecipe(new ItemStack(Block.dirt), 0.01F,
-				element(H,2), element(O,6), element(Si), element(Ca), element(C)
+				itemStacks(element(H,2), element(O,6), element(Si), element(Ca), element(C))
 				);
 		
 		addDecomposerRecipe(new ItemStack(Block.oreIron), element(Fe,2));

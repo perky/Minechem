@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 
+import buildcraft.api.core.SafeTimeTracker;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
 
 import ljdp.minechem.common.network.PacketDecomposerUpdate;
 import ljdp.minechem.common.network.PacketHandler;
+import ljdp.minechem.utils.MinechemHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -24,9 +26,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 
-public class TileEntityDecomposer extends TileEntity implements IInventory, ISidedInventory, IPowerReceptor, IMinechemPowerConsumer {
+public class TileEntityDecomposer extends TileEntity implements IInventory, ISidedInventory, IPowerReceptor {
 	
 	private static final int MAX_POWER_STORAGE = 100;
+	private static final float MIN_WORK_PER_SECOND = 1.0F;
+	private static final float MAX_WORK_PER_SECOND = 10.0F;
 	
 	private ItemStack[] decomposerItemStacks;
 	private ArrayList<ItemStack> outputBuffer;
@@ -38,40 +42,36 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 	protected final int kEmptyBottleSlotsSize = 4;
 	protected final int kOutputSlotsSize		= 9;
 	private MinechemPowerProvider powerProvider;
-
+	private SafeTimeTracker updateTracker = new SafeTimeTracker();
+	public State state = State.kProcessIdle;
+	private ItemStack activeStack;
+	private float workToDo = 0;
+	
 	public enum State {
 		kProcessIdle, kProcessActive, kProcessFinished, kProcessJammed, kProcessNoBottles
 	}
-	
-	public float processSpeed = 0.5F;
-	private int tickTimer = 0;
-	public State state = State.kProcessIdle;
-	private ItemStack activeStack;
-
-	private float energyStored;
 	
 	public TileEntityDecomposer() {
 		decomposerItemStacks = new ItemStack[getSizeInventory()];
 		outputBuffer = new ArrayList<ItemStack>();
 		if (PowerFramework.currentFramework != null) {
-			powerProvider = new MinechemPowerProvider(5, 20, 20);
+			powerProvider = new MinechemPowerProvider(2, 20, 10);
 		}
 	}
 	
 	@Override
 	public void updateEntity() {
 		powerProvider.update(this);
-		if(powerProvider.didEnergyStoredChange())
+		if(!worldObj.isRemote && (powerProvider.didEnergyStoredChange || powerProvider.didEnergyUsageChange))
 			sendUpdatePacket();
 		
-		if(state == State.kProcessIdle && canDecomposeInput()) {
+		if((state == State.kProcessIdle  || state == State.kProcessFinished) && canDecomposeInput()) {
+			activeStack = null;
 			decomposeActiveStack();
 			state = State.kProcessActive;
 			this.onInventoryChanged();
 		} else if(!canTakeEmptyBottle()) {
 			state = State.kProcessNoBottles;
-		} else if(state == State.kProcessActive && !worldObj.isRemote) {
-			doProcess();
 		} else if(state == State.kProcessFinished) {
 			activeStack = null;
 			state = State.kProcessIdle;
@@ -80,23 +80,6 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 		} else if(state == State.kProcessNoBottles && canTakeEmptyBottle()) {
 			state = State.kProcessActive;
 		}
-		//System.out.println(powerProvider.getEnergyStored());
-	}
-	
-	private void doProcess() {
-		State oldState = state;
-		powerProvider.resetCurrentEnergyUsage();
-		while(powerProvider.getEnergyStored() > 25) {
-			powerProvider.useEnergy(15, 20, true);
-			if(!worldObj.isRemote) {
-				state = moveBufferItemToOutputSlot();
-				if(state != State.kProcessActive)
-					break;
-			}
-		}
-		this.onInventoryChanged();
-		if(!state.equals(oldState))
-			sendUpdatePacket();
 	}
 	
 	@Override
@@ -112,6 +95,8 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 	}
 		
 	private void sendUpdatePacket() {
+		if(worldObj.isRemote)
+			return;
 		PacketDecomposerUpdate packetDecomposerUpdate = new PacketDecomposerUpdate(this);
 		PacketHandler.sendPacket(packetDecomposerUpdate);
 	}
@@ -370,8 +355,7 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 			nbtTagCompound.setTag("activeStack", activeStackCompound);
 		}
 		nbtTagCompound.setByte("state", (byte)state.ordinal());
-		nbtTagCompound.setShort("tickTimer", (short) tickTimer);
-		nbtTagCompound.setFloat("processSpeed", (float) processSpeed);
+		powerProvider.writeToNBT(nbtTagCompound);
 	}
 	
 	@Override
@@ -388,8 +372,7 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 			activeStack = ItemStack.loadItemStackFromNBT(activeStackCompound);
 		}
 		state = State.values()[nbtTagCompound.getByte("state")];
-		tickTimer = nbtTagCompound.getShort("tickTimer");
-		processSpeed = nbtTagCompound.getFloat("processSpeed");
+		powerProvider.readFromNBT(nbtTagCompound);
 	}
 
 	public State getState() {
@@ -411,28 +394,36 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 	}
 
 	@Override
-	public void doWork() {}
-
-	@Override
-	public int powerRequest() {
-		if(powerProvider.getEnergyStored() < powerProvider.getMaxEnergyStored()) {
-			return this.powerProvider.getMaxEnergyReceived();
-		} else {
-			return 0;
+	public void doWork() {
+		if(state != State.kProcessActive)
+			return;
+		
+		State oldState = state;
+		float minEnergy = powerProvider.getMinEnergyReceived();
+		float maxEnergy = powerProvider.getMaxEnergyReceived();
+		float energyUsed = powerProvider.useEnergy(minEnergy, maxEnergy, true);
+		workToDo += MinechemHelper.translateValue(energyUsed, minEnergy, maxEnergy, 
+				MIN_WORK_PER_SECOND / 20, MAX_WORK_PER_SECOND / 20);
+		if(!worldObj.isRemote) {
+			while(workToDo >= 1) {
+				workToDo--;
+				state = moveBufferItemToOutputSlot();
+				if(state != State.kProcessActive)
+					break;
+			}
+			this.onInventoryChanged();
+			if(!state.equals(oldState))
+				sendUpdatePacket();
 		}
 	}
 
 	@Override
-	public int getCurrentPowerUsage() {
-		float energyStored = powerProvider.getEnergyStored();
-		int powerUsage = 0;
-		int minEnergy = powerProvider.getMinEnergyReceived();
-		int maxEnergy = powerProvider.getMaxEnergyReceived();
-		if(energyStored < minEnergy)
-			powerUsage = minEnergy;
-		if(energyStored > maxEnergy)
-			powerUsage = maxEnergy;
-		return powerUsage;
+	public int powerRequest() {
+		if(powerProvider.getEnergyStored() < powerProvider.getMaxEnergyStored()) {
+			return powerProvider.getMaxEnergyReceived();
+		} else {
+			return 0;
+		}
 	}
 
 }

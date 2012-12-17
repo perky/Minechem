@@ -194,6 +194,7 @@ public abstract class GuiContainerTabbed extends GuiContainer implements INEIGui
     protected void drawTooltip(String tooltip) {
 
         drawCreativeTabHoveringText(tooltip, mouseX, mouseY);
+
     }
 
     protected void drawLiquid(int j, int k, int liquidId, int liquidMeta, int width, int height) {

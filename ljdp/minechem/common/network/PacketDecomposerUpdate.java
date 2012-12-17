@@ -26,17 +26,22 @@ public class PacketDecomposerUpdate extends PacketTileEntityUpdate {
 		MinechemPowerProvider provider = (MinechemPowerProvider)decomposer.getPowerProvider();
 		outputStream.writeByte(decomposer.getState().ordinal());
 		outputStream.writeFloat(provider.getEnergyStored());
+		outputStream.writeFloat(provider.getCurrentEnergyUsage());
 	}
 	
 	@Override
 	public void readData(DataInputStream inputStream) throws IOException {
 		super.readData(inputStream);
-		int state = inputStream.readByte();
-		float energyStored = inputStream.readFloat();
-		decomposer = (TileEntityDecomposer) tileEntity;
-		decomposer.setState(state);
-		MinechemPowerProvider provider = (MinechemPowerProvider) decomposer.getPowerProvider(); 
-		provider.setEnergyStored(energyStored);
+		if(tileEntity instanceof TileEntityDecomposer) {
+			int state = inputStream.readByte();
+			float energyStored = inputStream.readFloat();
+			float energyUsage  = inputStream.readFloat();
+			decomposer = (TileEntityDecomposer) tileEntity;
+			decomposer.setState(state);
+			MinechemPowerProvider provider = (MinechemPowerProvider) decomposer.getPowerProvider(); 
+			provider.setEnergyStored(energyStored);
+			provider.setCurrentEnergyUsage(energyUsage);
+		}
 	}
 
 }

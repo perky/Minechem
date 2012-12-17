@@ -74,13 +74,11 @@ public abstract class Tab {
     }
 
     protected void drawIcon(String texture, int iconIndex, int x, int y) {
-
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
         ForgeHooksClient.bindTexture(texture, 0);
         int textureRow = iconIndex >> 4;
         int textureColumn = iconIndex - 16 * textureRow;
         myGui.drawTexturedModalRect(x, y, 16 * textureColumn, 16 * textureRow, 16, 16);
-
     }
 
     public int getHeight() {
