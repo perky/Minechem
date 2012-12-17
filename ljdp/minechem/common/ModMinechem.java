@@ -41,6 +41,7 @@ public class ModMinechem implements IGuiHandler {
 	
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) {
+		LanguageRegistry.instance().loadLocalization("/lang/minechem/en_GB.properties", "en_GB", false);
 		MinecraftForge.EVENT_BUS.register(MinechemRecipes.getInstance());
 	}
 	

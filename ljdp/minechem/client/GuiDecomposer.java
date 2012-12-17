@@ -4,11 +4,14 @@ import ljdp.minechem.common.ContainerDecomposer;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.TileEntityDecomposer;
 import ljdp.minechem.common.TileEntityDecomposer.State;
+import ljdp.minechem.utils.MinechemHelper;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class GuiDecomposer extends GuiContainerTabbed {
 	
@@ -25,7 +28,7 @@ public class GuiDecomposer extends GuiContainerTabbed {
 		this.inventoryPlayer = inventoryPlayer;
 		addTab(new TabStateControlDecomposer(this, decomposer));
 		addTab(new TabEnergy(this, decomposer));
-		addTab(new TabHelp(this, "The Chemical Decomposer takes any item and decomposes it into its chemical parts, it will also split molecules into individual elements."));
+		addTab(new TabHelp(this, MinechemHelper.getLocalString("help.decomposer")));
 	}
 	
 	@Override

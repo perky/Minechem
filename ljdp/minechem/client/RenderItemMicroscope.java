@@ -27,7 +27,7 @@ public class RenderItemMicroscope extends RenderItem {
 	
 	public RenderItemMicroscope(GuiMicroscope guiMicroscope) {
 		super();
-		this.guiMicroscope = guiMicroscope;
+		this.guiMicroscope  = guiMicroscope;
 		microscopeContainer = (ContainerMicroscope) guiMicroscope.inventorySlots;
 		inventoryPlayer     = guiMicroscope.inventoryPlayer;
 		this.mc = Minecraft.getMinecraft();

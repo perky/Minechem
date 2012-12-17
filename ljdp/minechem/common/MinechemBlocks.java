@@ -1,5 +1,6 @@
 package ljdp.minechem.common;
 
+import ljdp.minechem.utils.MinechemHelper;
 import net.minecraft.block.Block;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -16,15 +17,15 @@ public class MinechemBlocks {
 		
 		GameRegistry.registerBlock(decomposer);
 		GameRegistry.registerTileEntity(TileEntityDecomposer.class, "MinechemTileEntityDecomposer");
-		LanguageRegistry.addName(decomposer, "Chemical Decomposer");
+		LanguageRegistry.addName(decomposer, MinechemHelper.getLocalString("block.name.decomposer"));
 		
 		GameRegistry.registerBlock(microscope);
 		GameRegistry.registerTileEntity(TileEntityMicroscope.class, "minechem.tileEntityMicroscope");
-		LanguageRegistry.addName(microscope, "Microscope");
+		LanguageRegistry.addName(microscope, MinechemHelper.getLocalString("block.name.microscope"));
 		
 		GameRegistry.registerBlock(synthesis);
 		GameRegistry.registerTileEntity(TileEntitySynthesis.class, "minechem.tileEntitySynthesis");
-		LanguageRegistry.addName(synthesis, "Chemical Synthesis Table");
+		LanguageRegistry.addName(synthesis, MinechemHelper.getLocalString("block.name.synthesis"));
 	}
 
 }

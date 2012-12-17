@@ -6,6 +6,7 @@ import ljdp.minechem.common.MinechemPowerProvider;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.TileEntityDecomposer;
 import ljdp.minechem.common.TileEntityDecomposer.State;
+import ljdp.minechem.utils.MinechemHelper;
 import net.minecraft.client.gui.Gui;
 
 public class TabStateControlDecomposer extends TabStateControl {
@@ -13,10 +14,10 @@ public class TabStateControlDecomposer extends TabStateControl {
 	private TileEntityDecomposer decomposer;
 	
 	enum TabState {
-		jammed ("Jammed", 0xAA0000, 6), 
-		noBottles ("Need Empty Bottles", 0xAA0000, 5), 
-		powered ("Powered", 0x00CC00, -1), 
-		unpowered ("Unpowered", 0xAA0000, 7);
+		jammed (MinechemHelper.getLocalString("tab.tooltip.jammed"), 0xAA0000, 6), 
+		noBottles (MinechemHelper.getLocalString("tab.tooltip.nobottles"), 0xAA0000, 5), 
+		powered (MinechemHelper.getLocalString("tab.tooltip.powered"), 0x00CC00, -1), 
+		unpowered (MinechemHelper.getLocalString("tab.tooltip.unpowered"), 0xAA0000, 7);
 		public String tooltip;
 		public int color;
 		public int iconIndex;

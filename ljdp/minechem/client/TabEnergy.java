@@ -2,6 +2,7 @@ package ljdp.minechem.client;
 
 import ljdp.minechem.common.MinechemPowerProvider;
 import ljdp.minechem.common.ModMinechem;
+import ljdp.minechem.utils.MinechemHelper;
 import ljdp.minechem.utils.RollingAverage;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
@@ -36,12 +37,12 @@ public class TabEnergy extends Tab {
 		
 		MinechemPowerProvider provider = (MinechemPowerProvider) powerReceptor.getPowerProvider();
 		energyUsageRolling.add(provider.getCurrentEnergyUsage());
-		fontRenderer.drawStringWithShadow("Energy", x + 22, y + 8, headerColour);
-		fontRenderer.drawStringWithShadow("Usage" + ":", x + 22, y + 20, subheaderColour);
+		fontRenderer.drawStringWithShadow(MinechemHelper.getLocalString("tab.title.energy"), x + 22, y + 8, headerColour);
+		fontRenderer.drawStringWithShadow(MinechemHelper.getLocalString("tab.title.usage") + ":", x + 22, y + 20, subheaderColour);
 		fontRenderer.drawString(String.format("%.1f", energyUsageRolling.getAverage()) + " MJ/t", x + 22, y + 32, textColour);
-		fontRenderer.drawStringWithShadow("Max Usage" + ":", x + 22, y + 44, subheaderColour);
+		fontRenderer.drawStringWithShadow(MinechemHelper.getLocalString("tab.title.maxUsage") + ":", x + 22, y + 44, subheaderColour);
 		fontRenderer.drawString(provider.getMaxEnergyReceived() + " MJ/t", x + 22, y + 56, textColour);
-		fontRenderer.drawStringWithShadow("Stored" + ":", x + 22, y + 68, subheaderColour);
+		fontRenderer.drawStringWithShadow(MinechemHelper.getLocalString("tab.title.stored") + ":", x + 22, y + 68, subheaderColour);
 		fontRenderer.drawString(String.format("%.1f", provider.getEnergyStored()) + " MJ", x + 22, y + 80, textColour);
 	}
 

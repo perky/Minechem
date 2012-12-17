@@ -3,6 +3,7 @@ package ljdp.minechem.client;
 import ljdp.minechem.common.ContainerSynthesis;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.TileEntitySynthesis;
+import ljdp.minechem.utils.MinechemHelper;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 
@@ -15,13 +16,13 @@ public class GuiSynthesis extends GuiContainerTabbed {
 	
 	public GuiSynthesis(InventoryPlayer inventoryPlayer, TileEntitySynthesis synthesis) {
 		super(new ContainerSynthesis(inventoryPlayer, synthesis));
-		addTab(new TabHelp(this,"The Chemical Synthesis table takes a recipe of elements and molecules and synthesises an item. To discover recipes make a Microscope."));
+		addTab(new TabHelp(this, MinechemHelper.getLocalString("help.synthesis")));
 	}
 	
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 		super.drawGuiContainerForegroundLayer(par1, par2);
-		fontRenderer.drawString("Chemical Synthesis Table", 5, 5, 0xCCCCCC);
+		fontRenderer.drawString(MinechemHelper.getLocalString("gui.title.synthesis"), 5, 5, 0xCCCCCC);
 	}
 
 	@Override

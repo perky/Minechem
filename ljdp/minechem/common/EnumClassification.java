@@ -1,5 +1,7 @@
 package ljdp.minechem.common;
 
+import ljdp.minechem.utils.MinechemHelper;
+
 public enum EnumClassification {
 	nonmetal	("Non-metal"),
 	inertGas	("Inert gas"),
@@ -11,15 +13,15 @@ public enum EnumClassification {
 	transitionMetal		("Transition metal"),
 	lanthanide			("Lanthanide"),
 	actinide	("Actinide"),
-	solid		("Solid"),
-	gas			("Gaseous"),
-	liquid		("Liquid"),
-	stable					("Stable"),
-	hardlyRadioactive		("Hardly radioactive"),
-	slightlyRadioactive		("Slightly radioactive"),
-	radioactive				("Radioactive"),
-	highlyRadioactive		("Highly radioactive"),
-	extremelyRadioactive	("Extremely radioactive!");
+	solid		(MinechemHelper.getLocalString("element.property.solid")),
+	gas			(MinechemHelper.getLocalString("element.property.gas")),
+	liquid		(MinechemHelper.getLocalString("element.property.liquid")),
+	stable					(MinechemHelper.getLocalString("element.property.stable")),
+	hardlyRadioactive		(MinechemHelper.getLocalString("element.property.veryLowRadiation")),
+	slightlyRadioactive		(MinechemHelper.getLocalString("element.property.lowRadiation")),
+	radioactive				(MinechemHelper.getLocalString("element.property.mediumRadiation")),
+	highlyRadioactive		(MinechemHelper.getLocalString("element.property.highRadiation")),
+	extremelyRadioactive	(MinechemHelper.getLocalString("element.property.veryHighRadiation"));
 	
 	private final String descriptiveName;
 	EnumClassification(String descriptiveName) {
