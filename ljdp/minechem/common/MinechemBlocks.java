@@ -3,16 +3,16 @@ package ljdp.minechem.common;
 import net.minecraft.block.Block;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import ljdp.minechem.common.ModMineChem;
+
 public class MinechemBlocks {
 	public static Block decomposer;
 	public static Block microscope;
 	public static Block synthesis;
 	
 	public static void registerBlocks() {
-		decomposer = new BlockDecomposer(decomposerID);
-		microscope = new BlockMicroscope(microscopeID);
-		synthesis  = new BlockSynthesis(synthesisID);
+		decomposer = new BlockDecomposer(ModMinechem.decomposerID);
+		microscope = new BlockMicroscope(ModMinechem.microscopeID);
+		synthesis  = new BlockSynthesis(ModMinechem.synthesisID);
 		
 		GameRegistry.registerBlock(decomposer);
 		GameRegistry.registerTileEntity(TileEntityDecomposer.class, "MinechemTileEntityDecomposer");

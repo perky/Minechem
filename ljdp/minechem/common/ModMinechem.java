@@ -1,5 +1,7 @@
 package ljdp.minechem.common;
 
+import java.util.logging.Logger;
+
 import ljdp.minechem.client.GuiDecomposer;
 import ljdp.minechem.client.GuiMicroscope;
 import ljdp.minechem.client.GuiSynthesis;
@@ -8,7 +10,9 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -48,8 +52,7 @@ public class ModMinechem implements IGuiHandler {
 	public void preInit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(MinechemRecipes.getInstance());
 		blLog.setParent(FMLLog.getLogger());
-
-	 	blLog.info("Loading Config"");
+	 	blLog.info("Loading Config");
 	 	loadConfig(event);
 	}
 	
@@ -68,7 +71,6 @@ public class ModMinechem implements IGuiHandler {
 	}
 	public void loadConfig(FMLPreInitializationEvent event){
 	 	Configuration config = new Configuration(event.getSuggestedConfigurationFile());
-
 	 	//Items go below here(I put in an example)
 	 	//obbySwordID = config.getItem(config.CATEGORY_ITEM,"Obsidian Sword", 509).getInt(509);
 	 	//Blocks go below here(Another Example)
