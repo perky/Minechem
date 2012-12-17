@@ -2,6 +2,10 @@ package ljdp.minechem.common;
 
 import java.util.ArrayList;
 
+import buildcraft.api.power.IPowerProvider;
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerFramework;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -9,7 +13,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class BlockDecomposer extends BlockMinechemContainer {
-
+	
+	IPowerProvider powerProvider;
+	
 	protected BlockDecomposer(int id) {
 		super(id, Material.iron);
 		setBlockName("blockChemicalDecomposer");

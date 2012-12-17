@@ -3,13 +3,14 @@ package ljdp.minechem.client;
 import ljdp.minechem.common.ContainerDecomposer;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.TileEntityDecomposer;
+import ljdp.minechem.common.TileEntityDecomposer.State;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
-public class GuiDecomposer extends GuiContainer {
+public class GuiDecomposer extends GuiContainerTabbed {
 	
 	TileEntityDecomposer decomposer;
 	InventoryPlayer inventoryPlayer;
@@ -22,12 +23,23 @@ public class GuiDecomposer extends GuiContainer {
 		super(new ContainerDecomposer(inventoryPlayer, decomposer));
 		this.decomposer = decomposer;
 		this.inventoryPlayer = inventoryPlayer;
+		addTab(new TabEnergy(this, decomposer));
 	}
-	
 	
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-		fontRenderer.drawString("state: " + decomposer.state, 8, 6, 0xCCCCCC);
+		super.drawGuiContainerForegroundLayer(par1, par2);
+		String info = "Decomposer : ";
+		State state = decomposer.getState();
+		if(state == State.kProcessIdle)
+			info += "Idle.";
+		else if(state == State.kProcessActive)
+			info += "Working.";
+		else if(state == State.kProcessJammed)
+			info += "Output Jammed.";
+		else if(state == State.kProcessNoBottles)
+			info += "Out of bottles.";
+		fontRenderer.drawString(info, 8, 6, 0xCCCCCC);
 		ItemStack currentHeldItem = inventoryPlayer.getItemStack();
 	}
 	
@@ -40,5 +52,16 @@ public class GuiDecomposer extends GuiContainer {
 		int y = (height - guiHeight) / 2;
 		drawTexturedModalRect(x, y, 0, 0, guiWidth, guiHeight);
 	}
+
+
+	@Override
+	protected void drawTooltips(int mouseX, int mouseY) {
+		Tab tab = getTabAtPosition(mouseX, mouseY);
+		if(tab != null) {
+			String tooltip = tab.getTooltip();
+			drawTooltip(tooltip);
+		}
+	}
+
 
 }

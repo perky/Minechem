@@ -4,6 +4,8 @@ import net.minecraft.world.World;
 
 public class CommonProxy {
 	
+	public static String TAB_LEFT_PNG 		= "/ljdp/minechem/textures/tab_left.png";
+	public static String TAB_RIGHT_PNG 		= "/ljdp/minechem/textures/tab_right.png";
 	public static String ELEMENTBOTTLES_PNG = "/ljdp/minechem/textures/elementbottles.png";
 	public static String DECOMPOSER_GUI_PNG = "/ljdp/minechem/textures/ChemicalDecomposerGUI.png";
 	public static String MICROSCOPE_GUI_PNG = "/ljdp/minechem/textures/MicroscopeGUI.png";

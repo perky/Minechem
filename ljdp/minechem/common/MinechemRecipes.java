@@ -26,7 +26,7 @@ public class MinechemRecipes {
 		return instance;
 	}
 	
-	private MinechemRecipes() {
+	public void RegisterRecipes() {
 		unbondingRecipes = new HashMap<String, UnbondingRecipe>();
 		synthesisRecipes = new ArrayList<SynthesisRecipe>();
 		addRandomDecomposerRecipe(new ItemStack(Block.stone), 0.3F, 

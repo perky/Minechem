@@ -48,7 +48,7 @@ public class ModMinechem implements IGuiHandler {
 	public void init(FMLInitializationEvent event) {
 		MinechemItems.registerItems();
 		MinechemBlocks.registerBlocks();
-		MinechemRecipes.getInstance();
+		MinechemRecipes.getInstance().RegisterRecipes();
 		NetworkRegistry.instance().registerGuiHandler(this, this);
 		proxy.registerRenderers();
 		LanguageRegistry.instance().addStringLocalization("itemGroup.mineChem", "en_US", "MineChem");

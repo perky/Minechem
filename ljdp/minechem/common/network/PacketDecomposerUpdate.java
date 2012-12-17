@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import ljdp.minechem.common.MinechemPowerProvider;
 import ljdp.minechem.common.TileEntityDecomposer;
 
 public class PacketDecomposerUpdate extends PacketTileEntityUpdate {
@@ -22,15 +23,20 @@ public class PacketDecomposerUpdate extends PacketTileEntityUpdate {
 	@Override
 	public void writeData(DataOutputStream outputStream) throws IOException {
 		super.writeData(outputStream);
-		outputStream.writeByte(decomposer.getState());
+		MinechemPowerProvider provider = (MinechemPowerProvider)decomposer.getPowerProvider();
+		outputStream.writeByte(decomposer.getState().ordinal());
+		outputStream.writeFloat(provider.getEnergyStored());
 	}
 	
 	@Override
 	public void readData(DataInputStream inputStream) throws IOException {
 		super.readData(inputStream);
 		int state = inputStream.readByte();
+		float energyStored = inputStream.readFloat();
 		decomposer = (TileEntityDecomposer) tileEntity;
 		decomposer.setState(state);
+		MinechemPowerProvider provider = (MinechemPowerProvider) decomposer.getPowerProvider(); 
+		provider.setEnergyStored(energyStored);
 	}
 
 }

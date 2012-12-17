@@ -2,6 +2,13 @@ package ljdp.minechem.common;
 
 import java.util.ArrayList;
 
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
+
+import buildcraft.api.power.IPowerProvider;
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerFramework;
+
 import ljdp.minechem.common.network.PacketDecomposerUpdate;
 import ljdp.minechem.common.network.PacketHandler;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,7 +24,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 
-public class TileEntityDecomposer extends TileEntity implements IInventory, ISidedInventory {
+public class TileEntityDecomposer extends TileEntity implements IInventory, ISidedInventory, IPowerReceptor, IMinechemPowerConsumer {
+	
+	private static final int MAX_POWER_STORAGE = 100;
 	
 	private ItemStack[] decomposerItemStacks;
 	private ArrayList<ItemStack> outputBuffer;
@@ -28,8 +37,9 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 	protected final int kEmptyBottleSlotEnd   = 13;
 	protected final int kEmptyBottleSlotsSize = 4;
 	protected final int kOutputSlotsSize		= 9;
+	private MinechemPowerProvider powerProvider;
 
-	protected enum State {
+	public enum State {
 		kProcessIdle, kProcessActive, kProcessFinished, kProcessJammed, kProcessNoBottles
 	}
 	
@@ -37,18 +47,29 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 	private int tickTimer = 0;
 	public State state = State.kProcessIdle;
 	private ItemStack activeStack;
+
+	private float energyStored;
 	
 	public TileEntityDecomposer() {
 		decomposerItemStacks = new ItemStack[getSizeInventory()];
 		outputBuffer = new ArrayList<ItemStack>();
+		if (PowerFramework.currentFramework != null) {
+			powerProvider = new MinechemPowerProvider(5, 20, 20);
+		}
 	}
 	
 	@Override
 	public void updateEntity() {
+		powerProvider.update(this);
+		if(powerProvider.didEnergyStoredChange())
+			sendUpdatePacket();
+		
 		if(state == State.kProcessIdle && canDecomposeInput()) {
 			decomposeActiveStack();
 			state = State.kProcessActive;
 			this.onInventoryChanged();
+		} else if(!canTakeEmptyBottle()) {
+			state = State.kProcessNoBottles;
 		} else if(state == State.kProcessActive && !worldObj.isRemote) {
 			doProcess();
 		} else if(state == State.kProcessFinished) {
@@ -59,24 +80,23 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 		} else if(state == State.kProcessNoBottles && canTakeEmptyBottle()) {
 			state = State.kProcessActive;
 		}
+		//System.out.println(powerProvider.getEnergyStored());
 	}
 	
 	private void doProcess() {
-		tickTimer++;
-		float processTickRate = 1 / processSpeed;
-		if(tickTimer > processTickRate) {
-			tickTimer = 0;
-			State oldState = state;
-			int maxItems = (int) Math.max(1, processSpeed);
-			for(int i = 0; i < maxItems; i++) {
+		State oldState = state;
+		powerProvider.resetCurrentEnergyUsage();
+		while(powerProvider.getEnergyStored() > 25) {
+			powerProvider.useEnergy(15, 20, true);
+			if(!worldObj.isRemote) {
 				state = moveBufferItemToOutputSlot();
 				if(state != State.kProcessActive)
 					break;
 			}
-			this.onInventoryChanged();
-			if(!state.equals(oldState))
-				sendUpdatePacket();
 		}
+		this.onInventoryChanged();
+		if(!state.equals(oldState))
+			sendUpdatePacket();
 	}
 	
 	@Override
@@ -372,12 +392,47 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 		processSpeed = nbtTagCompound.getFloat("processSpeed");
 	}
 
-	public int getState() {
-		return state.ordinal();
+	public State getState() {
+		return state;
 	}
 
 	public void setState(int state) {
 		this.state = State.values()[state];
+	}
+
+	@Override
+	public void setPowerProvider(IPowerProvider provider) {
+		this.powerProvider = (MinechemPowerProvider) provider;
+	}
+
+	@Override
+	public IPowerProvider getPowerProvider() {
+		return powerProvider;
+	}
+
+	@Override
+	public void doWork() {}
+
+	@Override
+	public int powerRequest() {
+		if(powerProvider.getEnergyStored() < powerProvider.getMaxEnergyStored()) {
+			return this.powerProvider.getMaxEnergyReceived();
+		} else {
+			return 0;
+		}
+	}
+
+	@Override
+	public int getCurrentPowerUsage() {
+		float energyStored = powerProvider.getEnergyStored();
+		int powerUsage = 0;
+		int minEnergy = powerProvider.getMinEnergyReceived();
+		int maxEnergy = powerProvider.getMaxEnergyReceived();
+		if(energyStored < minEnergy)
+			powerUsage = minEnergy;
+		if(energyStored > maxEnergy)
+			powerUsage = maxEnergy;
+		return powerUsage;
 	}
 
 }
