@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityMicroscope extends TileEntity implements IInventory {
@@ -17,7 +18,11 @@ public class TileEntityMicroscope extends TileEntity implements IInventory {
 	}
 	
 	private void showRecipeForItemStack(ItemStack itemstack) {
-		ItemStack[] outputStacks;
+		ItemStack[] outputStacks = null;
+		clearOutputStacks();
+		isShaped = true;
+		if(itemstack == null)
+			return;
 		if(itemstack.itemID == MinechemItems.molecule.shiftedIndex) {
 			EnumMolecule molecule = ((ItemMolecule)MinechemItems.molecule).getMolecule(itemstack);
 			ArrayList<ItemStack> moleculeComponents = molecule.components();
@@ -28,13 +33,9 @@ public class TileEntityMicroscope extends TileEntity implements IInventory {
 			if(recipe != null) {
 				outputStacks = recipe.getShapedRecipe();
 				isShaped = recipe.isShaped();
-			} else {
-				outputStacks = null;
-				isShaped = true;
 			}
 		}
 		if(outputStacks != null) {
-			clearOutputStacks();
 			int slot = 1;
 			for(ItemStack output : outputStacks) {
 				microscopeInventory[slot] = output;
@@ -76,15 +77,17 @@ public class TileEntityMicroscope extends TileEntity implements IInventory {
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int var1) {
-		// TODO Auto-generated method stub
-		return null;
+	public ItemStack getStackInSlotOnClosing(int slot) {
+		ItemStack itemstack = microscopeInventory[slot];
+		microscopeInventory[slot] = null;
+		showRecipeForItemStack(null);
+		return itemstack;
 	}
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemStack) {
 		microscopeInventory[slot] = itemStack;
-		if(itemStack != null) {
+		if(slot == 0) {
 			showRecipeForItemStack(itemStack);
 		}
 	}

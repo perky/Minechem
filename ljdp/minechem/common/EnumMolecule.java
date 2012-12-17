@@ -47,6 +47,7 @@ public enum EnumMolecule {
 	vinylChloride			(32, "Vinyl Chloride", element(C,2), element(H,3), element(Cl)),
 	polyvinylChloride		(33, "Polyvinyl Chloride", molecule(vinylChloride,64)),
 	methamphetamine 		(34, "Methamphetamine", element(C,10), element(H,15), element(N)),
+	psilocybin				(35, "Psilocybin", element(C,12), element(H,17), element(N,2), element(O,4), element(P)),
 	;
 	
 	

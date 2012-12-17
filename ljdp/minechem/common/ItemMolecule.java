@@ -3,10 +3,16 @@ package ljdp.minechem.common;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 
@@ -75,6 +81,8 @@ public class ItemMolecule extends Item {
 		return string;
 	}
 	
+	
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack par1ItemStack,
@@ -93,6 +101,54 @@ public class ItemMolecule extends Item {
 
 	public EnumMolecule getMolecule(ItemStack itemstack) {
 		return EnumMolecule.getById(itemstack.getItemDamage());
+	}
+	
+	/**
+     * returns the action that specifies what animation to play when the items is being used
+     */
+    public EnumAction getItemUseAction(ItemStack par1ItemStack)
+    {
+        return EnumAction.drink;
+    }
+    
+    /**
+     * How long it takes to use or consume an item
+     */
+    public int getMaxItemUseDuration(ItemStack par1ItemStack)
+    {
+        return 32;
+    }
+
+    @Override
+    public ItemStack onFoodEaten(ItemStack par1ItemStack, World par2World,
+    		EntityPlayer par3EntityPlayer) {
+    	
+    	if (!par3EntityPlayer.capabilities.isCreativeMode)
+        {
+            --par1ItemStack.stackSize;
+        }
+
+        if (!par2World.isRemote)
+        {
+        	EnumMolecule molecule = getMolecule(par1ItemStack);
+
+        	if(molecule == EnumMolecule.psilocybin) {
+        		par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), 30 * 20, 0));
+        		par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), 20 * 20, 10));
+        		par3EntityPlayer.attackEntityFrom(DamageSource.magic, 2);
+        	} else {
+        		par3EntityPlayer.attackEntityFrom(DamageSource.magic, 5);
+        	}
+        }
+
+        return par1ItemStack;
+    }
+	
+	@Override
+	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,
+			EntityPlayer par3EntityPlayer) {
+		par3EntityPlayer.setItemInUse(par1ItemStack, getMaxItemUseDuration(par1ItemStack));
+		return par1ItemStack;
 	}
 
 }

@@ -299,54 +299,13 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 	public void closeChest() {
 	}
 	
-	private NBTTagList writeItemStackArrayToTagList(ItemStack[] itemstacks) {
-		NBTTagList taglist = new NBTTagList();
-		for(int slot = 0; slot < itemstacks.length; slot++) {
-			ItemStack itemstack = itemstacks[slot];
-			if(itemstack != null) {
-				NBTTagCompound itemstackCompound = new NBTTagCompound();
-				itemstackCompound.setByte("slot", (byte)slot);
-				itemstack.writeToNBT(itemstackCompound);
-				taglist.appendTag(itemstackCompound);
-			}
-		}
-		return taglist;
-	}
 	
-	private ItemStack[] readTagListToItemStackArray(NBTTagList taglist, ItemStack[] itemstacks) {
-		for(int i = 0; i < taglist.tagCount(); i++) {
-			NBTTagCompound itemstackCompound = (NBTTagCompound) taglist.tagAt(i);
-			byte slot = itemstackCompound.getByte("slot");
-			itemstacks[slot] = ItemStack.loadItemStackFromNBT(itemstackCompound);
-		}
-		return itemstacks;
-	}
-	
-	private NBTTagList writeItemStackListToTagList(ArrayList<ItemStack> list) {
-		NBTTagList taglist = new NBTTagList();
-		for(ItemStack itemstack : list) {
-			NBTTagCompound itemstackCompound = new NBTTagCompound();
-			itemstack.writeToNBT(itemstackCompound);
-			taglist.appendTag(itemstackCompound);
-		}
-		return taglist;
-	}
-	
-	private ArrayList<ItemStack> readTagListToItemStackList(NBTTagList taglist) {
-		ArrayList<ItemStack> itemlist = new ArrayList<ItemStack>();
-		for(int i = 0; i < taglist.tagCount(); i++) {
-			NBTTagCompound itemstackCompound = (NBTTagCompound) taglist.tagAt(i);
-			ItemStack itemstack = ItemStack.loadItemStackFromNBT(itemstackCompound);
-			itemlist.add(itemstack);
-		}
-		return itemlist;
-	}
 	
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeToNBT(nbtTagCompound);
-		NBTTagList inventory = writeItemStackArrayToTagList(decomposerItemStacks);
-		NBTTagList buffer	 = writeItemStackListToTagList(outputBuffer);
+		NBTTagList inventory = MinechemHelper.writeItemStackArrayToTagList(decomposerItemStacks);
+		NBTTagList buffer	 = MinechemHelper.writeItemStackListToTagList(outputBuffer);
 		nbtTagCompound.setTag("inventory", inventory);
 		nbtTagCompound.setTag("buffer", buffer);
 		if(activeStack != null) {
@@ -364,8 +323,8 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 		NBTTagList inventory = nbtTagCompound.getTagList("inventory");
 		NBTTagList buffer	 = nbtTagCompound.getTagList("buffer");
 		decomposerItemStacks = new ItemStack[getSizeInventory()];
-		outputBuffer		 = readTagListToItemStackList(buffer);
-		readTagListToItemStackArray(inventory, decomposerItemStacks);
+		outputBuffer		 = MinechemHelper.readTagListToItemStackList(buffer);
+		MinechemHelper.readTagListToItemStackArray(inventory, decomposerItemStacks);
 		
 		if(nbtTagCompound.getTag("activeStack") != null) {
 			NBTTagCompound activeStackCompound = (NBTTagCompound)nbtTagCompound.getTag("activeStack");

@@ -29,35 +29,27 @@ public class MinechemRecipes {
 	public void RegisterRecipes() {
 		unbondingRecipes = new HashMap<String, UnbondingRecipe>();
 		synthesisRecipes = new ArrayList<SynthesisRecipe>();
-		addRandomDecomposerRecipe(new ItemStack(Block.stone), 0.3F, 
-				itemStacks(element(Si), element(O,2)),
-				itemStacks(element(Al,2), element(O,3)),
-				itemStacks(element(K,2), element(O,2)),
+		addRandomDecomposerRecipe(new ItemStack(Block.stone), 0.05F, 
+				itemStacks(element(Si), element(O)),
+				itemStacks(element(K,2), element(O)),
 				itemStacks(element(Na,2), element(O)),
 				itemStacks(element(Ca), element(O)),
-				itemStacks(element(Fe), element(O)),
-				itemStacks(element(Fe,2), element(O,3)),
 				itemStacks(element(Mg), element(O)),
-				itemStacks(element(Ti), element(O,2)),
-				itemStacks(element(P,2), element(O,5)),
+				itemStacks(element(Ti), element(O)),
 				itemStacks(element(Mn), element(O))
 				);
 		
-		addRandomDecomposerRecipe(new ItemStack(Block.cobblestone), 0.1F,
-				itemStacks(element(Si), element(O,2)),
-				itemStacks(element(Al,2), element(O,3)),
-				itemStacks(element(K,2), element(O,2)),
+		addRandomDecomposerRecipe(new ItemStack(Block.cobblestone), 0.01F,
+				itemStacks(element(Si), element(O)),
+				itemStacks(element(K,2), element(O)),
 				itemStacks(element(Na,2), element(O)),
 				itemStacks(element(Ca), element(O)),
-				itemStacks(element(Fe), element(O)),
-				itemStacks(element(Fe,2), element(O,3)),
 				itemStacks(element(Mg), element(O)),
-				itemStacks(element(Ti), element(O,2)),
-				itemStacks(element(P,2), element(O,5)),
+				itemStacks(element(Ti), element(O)),
 				itemStacks(element(Mn), element(O))
 				);
 		
-		addRandomDecomposerRecipe(new ItemStack(Block.dirt), 0.01F,
+		addRandomDecomposerRecipe(new ItemStack(Block.dirt), 0.005F,
 				itemStacks(element(H,2), element(O,6), element(Si), element(Ca), element(C))
 				);
 		
@@ -163,6 +155,9 @@ public class MinechemRecipes {
 		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.potion, 1, 0));
 		addDecomposerRecipe(new ItemStack(Item.bucketWater), element(H,2), element(O), element(Fe,3));
 		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.bucketWater));
+		
+		addDecomposerRecipe(new ItemStack(Block.mushroomBrown), molecule(psilocybin));
+		addDecomposerRecipe(new ItemStack(Item.netherStalkSeeds), molecule(methamphetamine));
 		
 		addSynthesisRecipesFromMolecules();
 	}

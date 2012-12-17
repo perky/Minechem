@@ -1,13 +1,20 @@
 package ljdp.minechem.common;
 
+import buildcraft.api.power.IPowerProvider;
+import buildcraft.api.power.IPowerReceptor;
 import ljdp.minechem.utils.MinechemHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntitySynthesis extends TileEntity implements IInventory {
+public class TileEntitySynthesis extends TileEntity implements IInventory, IPowerReceptor {
 	
 	private ItemStack[] synthesisInventory;
 	public static final int kSizeOutput = 1;
@@ -17,9 +24,11 @@ public class TileEntitySynthesis extends TileEntity implements IInventory {
 	public static final int kStartInput = 1;
 	public static final int kStartBottles = 10;
 	private SynthesisRecipe currentRecipe;
+	MinechemPowerProvider powerProvider;
 	
 	public TileEntitySynthesis() {
 		synthesisInventory = new ItemStack[getSizeInventory()];
+		powerProvider = new MinechemPowerProvider(10, 50, 20);
 	}
 	
 	public void onOuputPickupFromSlot(EntityPlayer entityPlayer) {
@@ -99,7 +108,6 @@ public class TileEntitySynthesis extends TileEntity implements IInventory {
 		if(amount > 0) {
 			//Drop the bottles?
 		}
-			
 	}
 
 	@Override
@@ -175,6 +183,54 @@ public class TileEntitySynthesis extends TileEntity implements IInventory {
 			count++;
 		}
 		return count;
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound nbtTagCompound) {
+		super.writeToNBT(nbtTagCompound);
+		NBTTagList inventory = MinechemHelper.writeItemStackArrayToTagList(synthesisInventory);
+		nbtTagCompound.setTag("inventory", inventory);
+		powerProvider.writeToNBT(nbtTagCompound);
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound nbtTagCompound) {
+		super.readFromNBT(nbtTagCompound);
+		synthesisInventory = new ItemStack[getSizeInventory()];
+		NBTTagList inventory = nbtTagCompound.getTagList("inventory");
+		MinechemHelper.readTagListToItemStackArray(inventory, synthesisInventory);
+		powerProvider.readFromNBT(nbtTagCompound);
+	}
+	
+	@Override
+	public Packet getDescriptionPacket() {
+		NBTTagCompound tagCompound = new NBTTagCompound();
+        this.writeToNBT(tagCompound);
+        return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 0, tagCompound);
+	}
+	
+	@Override
+	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
+		this.readFromNBT(pkt.customParam1);
+	}
+
+	@Override
+	public void setPowerProvider(IPowerProvider provider) {
+		this.powerProvider = (MinechemPowerProvider) provider;
+	}
+
+	@Override
+	public IPowerProvider getPowerProvider() {
+		return this.powerProvider;
+	}
+
+	@Override
+	public void doWork() {
+	}
+
+	@Override
+	public int powerRequest() {
+		return 0;
 	}
 
 }
