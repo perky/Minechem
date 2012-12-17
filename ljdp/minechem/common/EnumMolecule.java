@@ -46,6 +46,7 @@ public enum EnumMolecule {
 	malicAcid				(31, "Malic Acid", element(C,4), element(H,6), element(O,5)),
 	vinylChloride			(32, "Vinyl Chloride", element(C,2), element(H,3), element(Cl)),
 	polyvinylChloride		(33, "Polyvinyl Chloride", molecule(vinylChloride,64)),
+	methamphetamine 		(34, "Methamphetamine", element(C,10), element(H,15), element(N)),
 	;
 	
 	
