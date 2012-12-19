@@ -50,42 +50,36 @@ public class ModMinechem implements IGuiHandler {
 	
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) {
-		MinecraftForge.EVENT_BUS.register(MinechemRecipes.getInstance());
 		blLog.setParent(FMLLog.getLogger());
 	 	blLog.info("Loading Config");
 	 	loadConfig(event);
-	}
-	
-	@Init
-	public void init(FMLInitializationEvent event) {
-		blLog.info("Adding Items");
+	 	blLog.info("Adding Items");
 		MinechemItems.registerItems();
 		blLog.info("Adding Blocks");
 		MinechemBlocks.registerBlocks();
 		blLog.info("Adding Recipes");
 		MinechemRecipes.getInstance().RegisterRecipes();
-		
+		blLog.info("Adding Ore Dictionary Recipes");
+		MinecraftForge.EVENT_BUS.register(MinechemRecipes.getInstance());
+	}
+	
+	@Init
+	public void init(FMLInitializationEvent event) {
 		NetworkRegistry.instance().registerGuiHandler(this, this);
 		proxy.registerRenderers();
 		LanguageRegistry.instance().addStringLocalization("itemGroup.mineChem", "en_US", "MineChem");
 	}
-	public void loadConfig(FMLPreInitializationEvent event){
-	 	Configuration config = new Configuration(event.getSuggestedConfigurationFile());
-	 	//Items go below here(I put in an example)
-	 	//obbySwordID = config.getItem(config.CATEGORY_ITEM,"Obsidian Sword", 509).getInt(509);
-	 	//Blocks go below here(Another Example)
-	 	//oreObbyID = config.get(config.CATEGORY_BLOCK,"Obsidian Ore", 201).getInt(201);
-	 	elementID = config.getItem(config.CATEGORY_ITEM,"Element", 4736).getInt(4736);
-	 	moleculeID = config.getItem(config.CATEGORY_ITEM,"MoleCule", 4737).getInt(4737);
-	 	microscopeID = config.get(config.CATEGORY_BLOCK,"Microscope", 4012).getInt(4012);
-	 	decomposerID = config.get(config.CATEGORY_BLOCK,"Decomposer", 4011).getInt(4011);
-	 	synthesisID = config.get(config.CATEGORY_BLOCK,"Synthesis", 4013).getInt(4013);
-	 	config.save();
-	 }
+	
 	@PostInit
 	public void postInit(FMLPostInitializationEvent event) {
-		
 	}
+	
+	private void loadConfig(FMLPreInitializationEvent event){
+	 	Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+	 	MinechemBlocks.loadConfig(config);
+	 	MinechemItems.loadConfig(config);
+	 	config.save();
+	 }
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world,
