@@ -13,3 +13,6 @@ Under the following conditions:
 * _share alike_ - you must license any modification under the same or similar as this one.
 
 For more information on this license see here: http://creativecommons.org/licenses/by-sa/3.0/
+
+# Credits
+Ljdp, Ian, Rushmead
