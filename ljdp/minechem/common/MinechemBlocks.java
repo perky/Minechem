@@ -3,6 +3,7 @@ package ljdp.minechem.common;
 import ljdp.minechem.utils.MinechemHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
@@ -12,16 +13,27 @@ public class MinechemBlocks {
 	public static Block synthesis;
 	public static Block ghostBlock;
 	public static Material materialGas = new MaterialGas();
+	private static int microscopeID;
+	private static int decomposerID;
+	private static int synthesisID;
+	private static int ghostBlockID;
+	
+	public static void loadConfig(Configuration config) {
+		microscopeID = config.get(config.CATEGORY_BLOCK, "Microscope", 4012).getInt(4012);
+	 	decomposerID = config.get(config.CATEGORY_BLOCK, "Decomposer", 4011).getInt(4011);
+	 	synthesisID  = config.get(config.CATEGORY_BLOCK, "Synthesis",  4013).getInt(4013);
+	 	ghostBlockID = config.get(config.CATEGORY_BLOCK, "GhostBlock", 4014).getInt(4014);
+	}
 	
 	public static void registerBlocks() {
-		decomposer = new BlockDecomposer(4011);
-		microscope = new BlockMicroscope(4012);
-		synthesis  = new BlockSynthesis(4013);
-		ghostBlock = new BlockGhostBlock(4014);
+		decomposer = new BlockDecomposer(decomposerID);
+		microscope = new BlockMicroscope(microscopeID);
+		synthesis  = new BlockSynthesis(synthesisID);
+		ghostBlock = new BlockGhostBlock(ghostBlockID);
 		
 		GameRegistry.registerBlock(decomposer);
-		GameRegistry.registerTileEntity(TileEntityDecomposer.class, "MinechemTileEntityDecomposer");
-		LanguageRegistry.addName(decomposer, MinechemHelper.getLocalString("block.name.decomposer"));
+		GameRegistry.registerTileEntity(TileEntityDecomposer.class, "minechem.tileEntityDecomposer");
+		LanguageRegistry.addName(decomposer, "Chemical Decomposer");
 		
 		GameRegistry.registerBlock(microscope);
 		GameRegistry.registerTileEntity(TileEntityMicroscope.class, "minechem.tileEntityMicroscope");

@@ -1,5 +1,7 @@
 package ljdp.minechem.common;
 
+import java.util.logging.Logger;
+
 import ljdp.minechem.client.GuiDecomposer;
 import ljdp.minechem.client.GuiMicroscope;
 import ljdp.minechem.client.GuiSynthesis;
@@ -8,7 +10,9 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -36,29 +40,47 @@ public class ModMinechem implements IGuiHandler {
 	
 	@SidedProxy(clientSide="ljdp.minechem.client.ClientProxy", serverSide="ljdp.minechem.common.CommonProxy")
 	public static CommonProxy proxy;
-	
+	public static int elementID;
+	public static int moleculeID;
+	public static int decomposerID;
+	public static int microscopeID;
+	public static int synthesisID;
+	public static Logger blLog = Logger.getLogger("MineChem");
 	public static CreativeTabs minechemTab = new CreativeTabMinechem("mineChem");
 	
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) {
+		blLog.setParent(FMLLog.getLogger());
+		blLog.info("Loading localization");
 		LanguageRegistry.instance().loadLocalization("/lang/minechem/en_GB.properties", "en_GB", false);
-		MinecraftForge.EVENT_BUS.register(MinechemRecipes.getInstance());
+	 	blLog.info("Loading Config");
+	 	loadConfig(event);
+	 	blLog.info("Adding Items");
 		MinechemItems.registerItems();
+		blLog.info("Adding Blocks");
 		MinechemBlocks.registerBlocks();
+		blLog.info("Adding Recipes");
+		MinechemRecipes.getInstance().RegisterRecipes();
+		blLog.info("Adding Ore Dictionary Recipes");
+		MinecraftForge.EVENT_BUS.register(MinechemRecipes.getInstance());
 	}
 	
 	@Init
 	public void init(FMLInitializationEvent event) {
-		MinechemRecipes.getInstance().RegisterRecipes();
 		NetworkRegistry.instance().registerGuiHandler(this, this);
 		proxy.registerRenderers();
-		LanguageRegistry.instance().addStringLocalization("itemGroup.mineChem", "en_US", "MineChem");
 	}
 	
 	@PostInit
 	public void postInit(FMLPostInitializationEvent event) {
-		
 	}
+	
+	private void loadConfig(FMLPreInitializationEvent event){
+	 	Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+	 	MinechemBlocks.loadConfig(config);
+	 	MinechemItems.loadConfig(config);
+	 	config.save();
+	 }
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world,
