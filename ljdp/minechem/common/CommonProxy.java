@@ -12,6 +12,7 @@ public class CommonProxy {
 	public static String SYNTHESIS_GUI_PNG  = "/ljdp/minechem/textures/SynthesisGUI.png";
 	public static String BLOCKS_PNG			= "/ljdp/minechem/textures/blocktextures.png";
 	public static String ICONS_PNG			= "/ljdp/minechem/textures/icons.png";
+	public static String TERRAIN_ALPHA_PNG  = "/ljdp/minechem/textures/terrainWithAlpha.png";
 	
 	public void registerRenderers() {
 		

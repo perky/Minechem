@@ -12,6 +12,8 @@ import cpw.mods.fml.common.asm.SideOnly;
 
 public class ItemElement extends Item {
 	
+	
+	private static final String textModifier = "\u00A7";
 	private final static EnumElement[] elements = EnumElement.values();
 	private final EnumMap classificationIndexes = new EnumMap<EnumClassification,Integer>(EnumClassification.class);
 	
@@ -82,35 +84,35 @@ public class ItemElement extends Item {
 	
 	@Override
 	public String getItemDisplayName(ItemStack par1ItemStack) {
-		return "§l" + getLongName(par1ItemStack);
+		return textModifier + "l" + getLongName(par1ItemStack);
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack par1ItemStack,
 			EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-		par3List.add("§9" + getShortName(par1ItemStack));
+		par3List.add(textModifier + "9" + getShortName(par1ItemStack));
 		
 		String radioactivityColor;
 		EnumClassification radioactivity = getRadioactivity(par1ItemStack);
 		switch(radioactivity) {
 		case stable:
-			radioactivityColor = "§7";
+			radioactivityColor = textModifier + "7";
 			break;
 		case hardlyRadioactive:
-			radioactivityColor = "§a";
+			radioactivityColor = textModifier + "a";
 			break;
 		case slightlyRadioactive:
-			radioactivityColor = "§2";
+			radioactivityColor = textModifier + "2";
 			break;
 		case radioactive:
-			radioactivityColor = "§e";
+			radioactivityColor = textModifier + "e";
 			break;
 		case highlyRadioactive:
-			radioactivityColor = "§6";
+			radioactivityColor = textModifier + "6";
 			break;
 		case extremelyRadioactive:
-			radioactivityColor = "§4";
+			radioactivityColor = textModifier + "4";
 			break;
 		default:
 			radioactivityColor = "";

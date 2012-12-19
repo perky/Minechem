@@ -26,9 +26,12 @@ public class MinechemRecipes {
 		return instance;
 	}
 	
-	public void RegisterRecipes() {
+	private MinechemRecipes() {
 		unbondingRecipes = new HashMap<String, UnbondingRecipe>();
 		synthesisRecipes = new ArrayList<SynthesisRecipe>();
+	}
+	
+	public void RegisterRecipes() {
 		addRandomDecomposerRecipe(new ItemStack(Block.stone), 0.05F, 
 				itemStacks(element(Si), element(O)),
 				itemStacks(element(K,2), element(O)),
@@ -157,6 +160,7 @@ public class MinechemRecipes {
 		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.bucketWater));
 		
 		addDecomposerRecipe(new ItemStack(Block.mushroomBrown), molecule(psilocybin));
+		//TEMP
 		addDecomposerRecipe(new ItemStack(Item.netherStalkSeeds), molecule(methamphetamine));
 		
 		addSynthesisRecipesFromMolecules();

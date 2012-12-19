@@ -43,12 +43,12 @@ public class ModMinechem implements IGuiHandler {
 	public void preInit(FMLPreInitializationEvent event) {
 		LanguageRegistry.instance().loadLocalization("/lang/minechem/en_GB.properties", "en_GB", false);
 		MinecraftForge.EVENT_BUS.register(MinechemRecipes.getInstance());
+		MinechemItems.registerItems();
+		MinechemBlocks.registerBlocks();
 	}
 	
 	@Init
 	public void init(FMLInitializationEvent event) {
-		MinechemItems.registerItems();
-		MinechemBlocks.registerBlocks();
 		MinechemRecipes.getInstance().RegisterRecipes();
 		NetworkRegistry.instance().registerGuiHandler(this, this);
 		proxy.registerRenderers();
