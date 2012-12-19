@@ -73,6 +73,7 @@ public class ModMinechem implements IGuiHandler {
 	
 	@Init
 	public void init(FMLInitializationEvent event) {
+		proxy.registerTileEntities();
 		NetworkRegistry.instance().registerGuiHandler(this, this);
 		proxy.registerRenderers();
 	}

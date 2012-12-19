@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
-public class RenderItemMicroscope extends RenderItem {
+public class RenderGUIItemMicroscope extends RenderItem {
 	public ContainerMicroscope microscopeContainer;
 	public InventoryPlayer inventoryPlayer;
 	public GuiMicroscope guiMicroscope;
@@ -25,7 +25,7 @@ public class RenderItemMicroscope extends RenderItem {
 	int depthRenderBufferID;
 	boolean isFBOSupported;
 	
-	public RenderItemMicroscope(GuiMicroscope guiMicroscope) {
+	public RenderGUIItemMicroscope(GuiMicroscope guiMicroscope) {
 		super();
 		this.guiMicroscope  = guiMicroscope;
 		microscopeContainer = (ContainerMicroscope) guiMicroscope.inventorySlots;

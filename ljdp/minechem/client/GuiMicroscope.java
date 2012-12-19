@@ -38,7 +38,7 @@ public class GuiMicroscope extends GuiContainerTabbed {
 		this.microscope = microscope;
 		this.xSize = guiWidth;
 		this.ySize = guiHeight;
-		this.itemRenderer = new RenderItemMicroscope(this);
+		this.itemRenderer = new RenderGUIItemMicroscope(this);
 		addTab(new TabHelp(this, MinechemHelper.getLocalString("help.microscope")));
 	}
 	

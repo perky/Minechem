@@ -29,13 +29,23 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 	private SynthesisRecipe currentRecipe;
 	MinechemPowerProvider powerProvider;
 	
+	int minEnergyPerTick = 24;
+	int maxEnergyPerTick = 200;
+	int activationEnergy = 100;
+	int energyStorage = 10000;
+	
 	public TileEntitySynthesis() {
 		synthesisInventory = new ItemStack[getSizeInventory()];
-		powerProvider = new MinechemPowerProvider(10, 50, 20);
+		powerProvider = new MinechemPowerProvider(minEnergyPerTick, maxEnergyPerTick, activationEnergy, energyStorage);
 	}
 	
 	public void onOuputPickupFromSlot(EntityPlayer entityPlayer) {
 		takeCraftingItems();
+	}
+	
+	@Override
+	public void updateEntity() {
+		powerProvider.update(this);
 	}
 	
 	private boolean getRecipeResult() {
@@ -233,7 +243,10 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 
 	@Override
 	public int powerRequest() {
-		return 0;
+		if(powerProvider.getEnergyStored() < powerProvider.getMaxEnergyStored())
+			return powerProvider.getMaxEnergyReceived();
+		else
+			return 0;
 	}
 
 }

@@ -23,8 +23,8 @@ public class MinechemPowerProvider extends PowerProvider {
 	boolean didEnergyUsageChange;
 	SafeTimeTracker energyUsageTracker = new SafeTimeTracker();
 	
-	public MinechemPowerProvider(int minEnergyReceived, int maxEnergyReceived, int maxStoredEnergy) {
-		this.configure(0, minEnergyReceived, maxEnergyReceived, 0, maxStoredEnergy * 1000);
+	public MinechemPowerProvider(int minEnergyReceived, int maxEnergyReceived, int activationEnergy, int maxStoredEnergy) {
+		this.configure(0, minEnergyReceived, maxEnergyReceived, activationEnergy, maxStoredEnergy);
 	}
 	
 	public boolean didEnergyStoredChange() {

@@ -17,6 +17,7 @@ public class BlockMicroscope extends BlockMinechemContainer {
 		super(par1, Material.iron);
 		setCreativeTab(ModMinechem.minechemTab);
 		setBlockName("minechem.blockMicroscope");
+		setLightValue(0.3F);
 	}
 	
 	@Override
@@ -52,5 +53,21 @@ public class BlockMicroscope extends BlockMinechemContainer {
 	public int getBlockTextureFromSide(int par1) {
 		return par1 == 1 ? 14 : 0;
 	}
+	
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
+	
+	@Override
+	public int getRenderType() {
+		return ModMinechem.proxy.RENDER_MICROSCOPE;
+	}
+	
+	@Override
+    public boolean isOpaqueCube()
+    {
+		return false;
+    }
 
 }

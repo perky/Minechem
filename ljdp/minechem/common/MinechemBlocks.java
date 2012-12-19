@@ -41,15 +41,12 @@ public class MinechemBlocks {
 		ghostBlock = new BlockGhostBlock(ghostBlockID);
 		
 		GameRegistry.registerBlock(decomposer);
-		GameRegistry.registerTileEntity(TileEntityDecomposer.class, "minechem.tileEntityDecomposer");
 		LanguageRegistry.addName(decomposer, "Chemical Decomposer");
 		
 		GameRegistry.registerBlock(microscope);
-		GameRegistry.registerTileEntity(TileEntityMicroscope.class, "minechem.tileEntityMicroscope");
 		LanguageRegistry.addName(microscope, MinechemHelper.getLocalString("block.name.microscope"));
 		
 		GameRegistry.registerBlock(synthesis);
-		GameRegistry.registerTileEntity(TileEntitySynthesis.class, "minechem.tileEntitySynthesis");
 		LanguageRegistry.addName(synthesis, MinechemHelper.getLocalString("block.name.synthesis"));
 		
 		GameRegistry.registerBlock(ghostBlock, ItemGhostBlock.class);

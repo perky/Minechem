@@ -60,7 +60,7 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 		decomposerItemStacks = new ItemStack[getSizeInventory()];
 		outputBuffer = new ArrayList<ItemStack>();
 		if (PowerFramework.currentFramework != null) {
-			powerProvider = new MinechemPowerProvider(2, 20, 10);
+			powerProvider = new MinechemPowerProvider(2, 20, 0, 10000);
 		}
 	}
 	
