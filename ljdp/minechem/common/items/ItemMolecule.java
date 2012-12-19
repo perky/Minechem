@@ -1,7 +1,10 @@
-package ljdp.minechem.common;
+package ljdp.minechem.common.items;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ljdp.minechem.common.EnumMolecule;
+import ljdp.minechem.common.ModMinechem;
 
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.creativetab.CreativeTabs;

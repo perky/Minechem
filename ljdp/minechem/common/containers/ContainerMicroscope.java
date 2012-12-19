@@ -1,5 +1,6 @@
-package ljdp.minechem.common;
+package ljdp.minechem.common.containers;
 
+import ljdp.minechem.common.tileentity.TileEntityMicroscope;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;

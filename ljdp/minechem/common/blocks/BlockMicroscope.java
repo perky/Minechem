@@ -1,10 +1,9 @@
-package ljdp.minechem.common;
+package ljdp.minechem.common.blocks;
 
 import java.util.ArrayList;
 
-import buildcraft.api.power.IPowerProvider;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerFramework;
+import ljdp.minechem.common.ModMinechem;
+import ljdp.minechem.common.tileentity.TileEntityMicroscope;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,16 +11,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockDecomposer extends BlockMinechemContainer {
-	
-	IPowerProvider powerProvider;
-	
-	protected BlockDecomposer(int id) {
-		super(id, Material.iron);
-		setBlockName("blockChemicalDecomposer");
-		setCreativeTab(ModMinechem.minechemTab);
-	}
+public class BlockMicroscope extends BlockMinechemContainer {
 
+	public BlockMicroscope(int par1) {
+		super(par1, Material.iron);
+		setCreativeTab(ModMinechem.minechemTab);
+		setBlockName("minechem.blockMicroscope");
+	}
+	
 	@Override
 	public boolean onBlockActivated(World world, int x, int y,
 			int z, EntityPlayer entityPlayer, int par6, float par7,
@@ -35,18 +32,14 @@ public class BlockDecomposer extends BlockMinechemContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World var1) {
-		return new TileEntityDecomposer();
+		return new TileEntityMicroscope();
 	}
 	
 	@Override
 	public ArrayList<ItemStack> addStacksDroppedOnBlockBreak(TileEntity tileEntity, ArrayList itemStacks) {
-		TileEntityDecomposer decomposer = (TileEntityDecomposer)tileEntity;
-		for(int slot = 0; slot < decomposer.getSizeInventory(); slot++) {
-			ItemStack itemstack = decomposer.getStackInSlot(slot);
-			if(itemstack != null) {
-				itemStacks.add(itemstack);
-			}
-		}
+		ItemStack inputStack = ((TileEntityMicroscope)tileEntity).getStackInSlot(0);
+		if(inputStack != null)
+			itemStacks.add(inputStack);
 		return itemStacks;
 	}
 	
@@ -57,8 +50,7 @@ public class BlockDecomposer extends BlockMinechemContainer {
 	
 	@Override
 	public int getBlockTextureFromSide(int par1) {
-		return par1 == 1 ? 7 : 2;
+		return par1 == 1 ? 14 : 0;
 	}
-	
 
 }

@@ -1,6 +1,13 @@
-package ljdp.minechem.common;
+package ljdp.minechem.common.blocks;
 
 import java.util.ArrayList;
+
+import ljdp.minechem.common.ModMinechem;
+import ljdp.minechem.common.tileentity.TileEntityDecomposer;
+
+import buildcraft.api.power.IPowerProvider;
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerFramework;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,14 +15,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockSynthesis extends BlockMinechemContainer {
-
-	public BlockSynthesis(int par1) {
-		super(par1, Material.iron);
-		setBlockName("minechem.blockSynthesis");
+public class BlockDecomposer extends BlockMinechemContainer {
+	
+	IPowerProvider powerProvider;
+	
+	public BlockDecomposer(int id) {
+		super(id, Material.iron);
+		setBlockName("blockChemicalDecomposer");
 		setCreativeTab(ModMinechem.minechemTab);
 	}
-	
+
 	@Override
 	public boolean onBlockActivated(World world, int x, int y,
 			int z, EntityPlayer entityPlayer, int par6, float par7,
@@ -29,12 +38,12 @@ public class BlockSynthesis extends BlockMinechemContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World var1) {
-		return new TileEntitySynthesis();
+		return new TileEntityDecomposer();
 	}
 	
 	@Override
 	public ArrayList<ItemStack> addStacksDroppedOnBlockBreak(TileEntity tileEntity, ArrayList itemStacks) {
-		TileEntitySynthesis decomposer = (TileEntitySynthesis)tileEntity;
+		TileEntityDecomposer decomposer = (TileEntityDecomposer)tileEntity;
 		for(int slot = 0; slot < decomposer.getSizeInventory(); slot++) {
 			ItemStack itemstack = decomposer.getStackInSlot(slot);
 			if(itemstack != null) {
@@ -51,7 +60,8 @@ public class BlockSynthesis extends BlockMinechemContainer {
 	
 	@Override
 	public int getBlockTextureFromSide(int par1) {
-		return par1 == 1 ? 6 : 1;
+		return par1 == 1 ? 7 : 2;
 	}
+	
 
 }

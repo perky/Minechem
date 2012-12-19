@@ -1,6 +1,15 @@
 package ljdp.minechem.common;
 
-import ljdp.minechem.utils.MinechemHelper;
+import ljdp.minechem.common.blocks.BlockDecomposer;
+import ljdp.minechem.common.blocks.BlockGhostBlock;
+import ljdp.minechem.common.blocks.BlockMicroscope;
+import ljdp.minechem.common.blocks.BlockSynthesis;
+import ljdp.minechem.common.blocks.MaterialGas;
+import ljdp.minechem.common.items.ItemGhostBlock;
+import ljdp.minechem.common.tileentity.TileEntityDecomposer;
+import ljdp.minechem.common.tileentity.TileEntityMicroscope;
+import ljdp.minechem.common.tileentity.TileEntitySynthesis;
+import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.Configuration;

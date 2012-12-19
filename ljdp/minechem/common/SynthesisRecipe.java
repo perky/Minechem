@@ -2,7 +2,7 @@ package ljdp.minechem.common;
 
 import java.util.ArrayList;
 
-import ljdp.minechem.utils.MinechemHelper;
+import ljdp.minechem.common.utils.MinechemHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;

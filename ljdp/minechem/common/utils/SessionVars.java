@@ -1,5 +1,5 @@
 
-package ljdp.minechem.utils;
+package ljdp.minechem.common.utils;
 
 public class SessionVars {
 

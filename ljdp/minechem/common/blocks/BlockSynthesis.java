@@ -1,6 +1,9 @@
-package ljdp.minechem.common;
+package ljdp.minechem.common.blocks;
 
 import java.util.ArrayList;
+
+import ljdp.minechem.common.ModMinechem;
+import ljdp.minechem.common.tileentity.TileEntitySynthesis;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,12 +11,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockMicroscope extends BlockMinechemContainer {
+public class BlockSynthesis extends BlockMinechemContainer {
 
-	public BlockMicroscope(int par1) {
+	public BlockSynthesis(int par1) {
 		super(par1, Material.iron);
+		setBlockName("minechem.blockSynthesis");
 		setCreativeTab(ModMinechem.minechemTab);
-		setBlockName("minechem.blockMicroscope");
 	}
 	
 	@Override
@@ -29,14 +32,18 @@ public class BlockMicroscope extends BlockMinechemContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World var1) {
-		return new TileEntityMicroscope();
+		return new TileEntitySynthesis();
 	}
 	
 	@Override
 	public ArrayList<ItemStack> addStacksDroppedOnBlockBreak(TileEntity tileEntity, ArrayList itemStacks) {
-		ItemStack inputStack = ((TileEntityMicroscope)tileEntity).getStackInSlot(0);
-		if(inputStack != null)
-			itemStacks.add(inputStack);
+		TileEntitySynthesis decomposer = (TileEntitySynthesis)tileEntity;
+		for(int slot = 0; slot < decomposer.getSizeInventory(); slot++) {
+			ItemStack itemstack = decomposer.getStackInSlot(slot);
+			if(itemstack != null) {
+				itemStacks.add(itemstack);
+			}
+		}
 		return itemStacks;
 	}
 	
@@ -47,7 +54,7 @@ public class BlockMicroscope extends BlockMinechemContainer {
 	
 	@Override
 	public int getBlockTextureFromSide(int par1) {
-		return par1 == 1 ? 14 : 0;
+		return par1 == 1 ? 6 : 1;
 	}
 
 }

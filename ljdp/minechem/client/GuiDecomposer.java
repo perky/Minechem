@@ -1,10 +1,10 @@
 package ljdp.minechem.client;
 
-import ljdp.minechem.common.ContainerDecomposer;
 import ljdp.minechem.common.ModMinechem;
-import ljdp.minechem.common.TileEntityDecomposer;
-import ljdp.minechem.common.TileEntityDecomposer.State;
-import ljdp.minechem.utils.MinechemHelper;
+import ljdp.minechem.common.containers.ContainerDecomposer;
+import ljdp.minechem.common.tileentity.TileEntityDecomposer;
+import ljdp.minechem.common.tileentity.TileEntityDecomposer.State;
+import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;

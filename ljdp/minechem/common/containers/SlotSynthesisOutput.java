@@ -1,5 +1,6 @@
-package ljdp.minechem.common;
+package ljdp.minechem.common.containers;
 
+import ljdp.minechem.common.tileentity.TileEntitySynthesis;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;

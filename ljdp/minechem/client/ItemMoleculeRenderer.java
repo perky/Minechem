@@ -1,7 +1,7 @@
 package ljdp.minechem.client;
 
 import ljdp.minechem.common.EnumMolecule;
-import ljdp.minechem.common.ItemMolecule;
+import ljdp.minechem.common.items.ItemMolecule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;

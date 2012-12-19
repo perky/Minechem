@@ -2,7 +2,7 @@ package ljdp.minechem.common;
 
 import java.util.ArrayList;
 
-import ljdp.minechem.utils.RollingAverage;
+import ljdp.minechem.common.utils.RollingAverage;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
 import net.minecraft.tileentity.TileEntity;

@@ -1,7 +1,7 @@
 package ljdp.minechem.client;
 
 import ljdp.minechem.common.ModMinechem;
-import ljdp.minechem.utils.MinechemHelper;
+import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.client.gui.Gui;
 
 public class TabHelp extends Tab {

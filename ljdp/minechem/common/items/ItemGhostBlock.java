@@ -1,4 +1,4 @@
-package ljdp.minechem.common;
+package ljdp.minechem.common.items;
 
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;

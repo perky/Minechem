@@ -1,7 +1,11 @@
-package ljdp.minechem.common;
+package ljdp.minechem.common.items;
 
 import java.util.EnumMap;
 import java.util.List;
+
+import ljdp.minechem.common.EnumClassification;
+import ljdp.minechem.common.EnumElement;
+import ljdp.minechem.common.ModMinechem;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;

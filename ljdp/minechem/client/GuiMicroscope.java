@@ -1,9 +1,9 @@
 package ljdp.minechem.client;
 
-import ljdp.minechem.common.ContainerMicroscope;
 import ljdp.minechem.common.ModMinechem;
-import ljdp.minechem.common.TileEntityMicroscope;
-import ljdp.minechem.utils.MinechemHelper;
+import ljdp.minechem.common.containers.ContainerMicroscope;
+import ljdp.minechem.common.tileentity.TileEntityMicroscope;
+import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;

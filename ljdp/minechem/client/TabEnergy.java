@@ -2,8 +2,8 @@ package ljdp.minechem.client;
 
 import ljdp.minechem.common.MinechemPowerProvider;
 import ljdp.minechem.common.ModMinechem;
-import ljdp.minechem.utils.MinechemHelper;
-import ljdp.minechem.utils.RollingAverage;
+import ljdp.minechem.common.utils.MinechemHelper;
+import ljdp.minechem.common.utils.RollingAverage;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.core.utils.StringUtil;

@@ -4,6 +4,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.Configuration;
 import ljdp.minechem.common.ModMinechem;
+import ljdp.minechem.common.items.ItemElement;
+import ljdp.minechem.common.items.ItemMolecule;
 
 public class MinechemItems {
 	public static Item element;

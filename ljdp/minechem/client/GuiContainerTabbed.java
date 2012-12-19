@@ -4,7 +4,7 @@ package ljdp.minechem.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import ljdp.minechem.utils.SessionVars;
+import ljdp.minechem.common.utils.SessionVars;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.inventory.GuiContainer;

@@ -1,4 +1,4 @@
-package ljdp.minechem.common;
+package ljdp.minechem.common.blocks;
 
 import java.util.ArrayList;
 import java.util.Random;

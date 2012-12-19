@@ -5,7 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import ljdp.minechem.common.MinechemPowerProvider;
-import ljdp.minechem.common.TileEntityDecomposer;
+import ljdp.minechem.common.tileentity.TileEntityDecomposer;
 
 public class PacketDecomposerUpdate extends PacketTileEntityUpdate {
 	

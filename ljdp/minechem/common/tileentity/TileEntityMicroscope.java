@@ -1,6 +1,12 @@
-package ljdp.minechem.common;
+package ljdp.minechem.common.tileentity;
 
 import java.util.ArrayList;
+
+import ljdp.minechem.common.EnumMolecule;
+import ljdp.minechem.common.MinechemItems;
+import ljdp.minechem.common.MinechemRecipes;
+import ljdp.minechem.common.SynthesisRecipe;
+import ljdp.minechem.common.items.ItemMolecule;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;

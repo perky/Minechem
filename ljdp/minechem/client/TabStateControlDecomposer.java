@@ -4,9 +4,9 @@ import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.PowerProvider;
 import ljdp.minechem.common.MinechemPowerProvider;
 import ljdp.minechem.common.ModMinechem;
-import ljdp.minechem.common.TileEntityDecomposer;
-import ljdp.minechem.common.TileEntityDecomposer.State;
-import ljdp.minechem.utils.MinechemHelper;
+import ljdp.minechem.common.tileentity.TileEntityDecomposer;
+import ljdp.minechem.common.tileentity.TileEntityDecomposer.State;
+import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.client.gui.Gui;
 
 public class TabStateControlDecomposer extends TabStateControl {

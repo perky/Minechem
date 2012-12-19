@@ -1,6 +1,6 @@
 package ljdp.minechem.common;
 
-import ljdp.minechem.utils.MinechemHelper;
+import ljdp.minechem.common.utils.MinechemHelper;
 
 public enum EnumClassification {
 	nonmetal	("Non-metal"),

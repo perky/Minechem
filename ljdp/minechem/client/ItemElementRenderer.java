@@ -1,6 +1,6 @@
 package ljdp.minechem.client;
 
-import ljdp.minechem.common.ItemElement;
+import ljdp.minechem.common.items.ItemElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;

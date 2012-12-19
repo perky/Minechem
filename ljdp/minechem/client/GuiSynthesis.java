@@ -1,9 +1,9 @@
 package ljdp.minechem.client;
 
-import ljdp.minechem.common.ContainerSynthesis;
 import ljdp.minechem.common.ModMinechem;
-import ljdp.minechem.common.TileEntitySynthesis;
-import ljdp.minechem.utils.MinechemHelper;
+import ljdp.minechem.common.containers.ContainerSynthesis;
+import ljdp.minechem.common.tileentity.TileEntitySynthesis;
+import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 

@@ -1,4 +1,4 @@
-package ljdp.minechem.common;
+package ljdp.minechem.common.tileentity;
 
 import java.util.ArrayList;
 
@@ -10,9 +10,14 @@ import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
 
+import ljdp.minechem.common.MinechemItems;
+import ljdp.minechem.common.MinechemPowerProvider;
+import ljdp.minechem.common.MinechemRecipes;
+import ljdp.minechem.common.UnbondingRecipe;
+import ljdp.minechem.common.items.ItemMolecule;
 import ljdp.minechem.common.network.PacketDecomposerUpdate;
 import ljdp.minechem.common.network.PacketHandler;
-import ljdp.minechem.utils.MinechemHelper;
+import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -34,13 +39,13 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 	
 	private ItemStack[] decomposerItemStacks;
 	private ArrayList<ItemStack> outputBuffer;
-	protected final int kInputSlot = 0;
-	protected final int kOutputSlotStart    = 1;
-	protected final int kOutputSlotEnd		= 9;
-	protected final int kEmptyBottleSlotStart = 10;
-	protected final int kEmptyBottleSlotEnd   = 13;
-	protected final int kEmptyBottleSlotsSize = 4;
-	protected final int kOutputSlotsSize		= 9;
+	public final int kInputSlot = 0;
+	public final int kOutputSlotStart    = 1;
+	public final int kOutputSlotEnd		= 9;
+	public final int kEmptyBottleSlotStart = 10;
+	public final int kEmptyBottleSlotEnd   = 13;
+	public final int kEmptyBottleSlotsSize = 4;
+	public final int kOutputSlotsSize		= 9;
 	private MinechemPowerProvider powerProvider;
 	private SafeTimeTracker updateTracker = new SafeTimeTracker();
 	public State state = State.kProcessIdle;
@@ -62,7 +67,7 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 	@Override
 	public void updateEntity() {
 		powerProvider.update(this);
-		if(!worldObj.isRemote && (powerProvider.didEnergyStoredChange || powerProvider.didEnergyUsageChange))
+		if(!worldObj.isRemote && (powerProvider.didEnergyStoredChange() || powerProvider.didEnergyUsageChange()))
 			sendUpdatePacket();
 		
 		if((state == State.kProcessIdle  || state == State.kProcessFinished) && canDecomposeInput()) {

@@ -1,8 +1,11 @@
-package ljdp.minechem.common;
+package ljdp.minechem.common.tileentity;
 
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
-import ljdp.minechem.utils.MinechemHelper;
+import ljdp.minechem.common.MinechemPowerProvider;
+import ljdp.minechem.common.MinechemRecipes;
+import ljdp.minechem.common.SynthesisRecipe;
+import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;

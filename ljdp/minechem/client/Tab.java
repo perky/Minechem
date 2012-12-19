@@ -2,7 +2,7 @@
 package ljdp.minechem.client;
 
 import ljdp.minechem.common.ModMinechem;
-import ljdp.minechem.utils.SessionVars;
+import ljdp.minechem.common.utils.SessionVars;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.client.gui.FontRenderer;

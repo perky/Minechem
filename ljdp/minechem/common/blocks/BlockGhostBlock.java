@@ -1,10 +1,12 @@
-package ljdp.minechem.common;
+package ljdp.minechem.common.blocks;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import ljdp.minechem.client.RenderBlockGhostBlock;
+import ljdp.minechem.common.MinechemBlocks;
+import ljdp.minechem.common.ModMinechem;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.block.Block;

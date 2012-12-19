@@ -1,7 +1,7 @@
 package ljdp.minechem.client;
 
 
-import ljdp.minechem.common.ContainerMicroscope;
+import ljdp.minechem.common.containers.ContainerMicroscope;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
