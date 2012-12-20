@@ -51,6 +51,10 @@ public class MinechemBlocks {
 		
 		GameRegistry.registerBlock(ghostBlock, ItemGhostBlock.class);
 		LanguageRegistry.addName(ghostBlock, "ghost block");
+		
+		GameRegistry.registerTileEntity(TileEntityMicroscope.class, "minechem.tileEntityMicroscope");
+		GameRegistry.registerTileEntity(TileEntitySynthesis.class,  "minechem.tileEntitySynthesis");
+		GameRegistry.registerTileEntity(TileEntityDecomposer.class, "minechem.tileEntityDecomposer");
 	}
 
 }

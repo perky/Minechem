@@ -13,6 +13,7 @@ import net.minecraftforge.common.MinecraftForge;
 import ljdp.minechem.common.CommonProxy;
 import ljdp.minechem.common.MinechemBlocks;
 import ljdp.minechem.common.MinechemItems;
+import ljdp.minechem.common.tileentity.TileEntityDecomposer;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
 
 public class ClientProxy extends CommonProxy {
@@ -28,8 +29,11 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.preloadTexture(BLOCKS_PNG);
 		MinecraftForgeClient.preloadTexture(TERRAIN_ALPHA_PNG);
 		MinecraftForgeClient.preloadTexture(MICROSCOPE_MODEL);
+		MinecraftForgeClient.preloadTexture(DECOMPOSER_MODEL_ON);
+		MinecraftForgeClient.preloadTexture(DECOMPOSER_MODEL_OFF);
 		
 		RENDER_MICROSCOPE = RenderingRegistry.getNextAvailableRenderId();
+		RENDER_DECOMPOSER = RenderingRegistry.getNextAvailableRenderId();
 		
 		MinecraftForgeClient.registerItemRenderer(MinechemItems.element.shiftedIndex, new ItemElementRenderer());
 		MinecraftForgeClient.registerItemRenderer(MinechemItems.molecule.shiftedIndex, new ItemMoleculeRenderer());
@@ -37,12 +41,8 @@ public class ClientProxy extends CommonProxy {
 		
 		RenderingRegistry.registerBlockHandler(new RenderBlockGhostBlock());
 		TickRegistry.registerTickHandler(new TickHandler(), Side.CLIENT);
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMicroscope.class, new RenderTileEntityMicroscope());
-	}
-	
-	@Override
-	public void registerTileEntities() {
-		ClientRegistry.registerTileEntity(TileEntityMicroscope.class, "minechem.tileEntityMicroscope", new RenderTileEntityMicroscope());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMicroscope.class, new TileEntityMicroscopeRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecomposer.class, new TileEntityDecomposerRenderer());
 	}
 	
 	@Override

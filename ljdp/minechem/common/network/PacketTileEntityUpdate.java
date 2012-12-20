@@ -11,6 +11,9 @@ import net.minecraft.world.World;
 public class PacketTileEntityUpdate extends PacketMinechem {
 
 	protected TileEntity tileEntity;
+	int x;
+	int y;
+	int z;
 	
 	public PacketTileEntityUpdate(TileEntity tileEntity) {
 		super(true);
@@ -30,9 +33,9 @@ public class PacketTileEntityUpdate extends PacketMinechem {
 	
 	@Override
 	public void readData(DataInputStream inputStream) throws IOException {
-		int x = inputStream.readInt();
-		int y = inputStream.readInt();
-		int z = inputStream.readInt();
+		x = inputStream.readInt();
+		y = inputStream.readInt();
+		z = inputStream.readInt();
 		World world = ModMinechem.proxy.getClientWorld();
 		this.tileEntity = world.getBlockTileEntity(x, y, z);
 	}

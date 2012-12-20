@@ -1,5 +1,8 @@
-package ljdp.minechem.client;
+package ljdp.minechem.client.gui;
 
+import ljdp.minechem.client.gui.tabs.TabEnergy;
+import ljdp.minechem.client.gui.tabs.TabHelp;
+import ljdp.minechem.client.gui.tabs.TabStateControlDecomposer;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.containers.ContainerDecomposer;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;

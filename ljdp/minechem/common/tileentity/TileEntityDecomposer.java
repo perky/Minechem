@@ -28,6 +28,7 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 
@@ -376,8 +377,9 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 					break;
 			}
 			this.onInventoryChanged();
-			if(!state.equals(oldState))
+			if(!state.equals(oldState)) {
 				sendUpdatePacket();
+			}
 		}
 	}
 
@@ -388,6 +390,10 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 		} else {
 			return 0;
 		}
+	}
+
+	public boolean isPowered() {
+		return (state == State.kProcessActive && (powerProvider.getCurrentEnergyUsage() > 0.0F));
 	}
 
 }

@@ -1,9 +1,10 @@
 
-package ljdp.minechem.client;
+package ljdp.minechem.client.gui;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ljdp.minechem.client.gui.tabs.Tab;
 import ljdp.minechem.common.utils.SessionVars;
 
 import net.minecraft.block.Block;

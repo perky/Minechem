@@ -121,5 +121,8 @@ public class TileEntityMicroscope extends TileEntity implements IInventory {
 	@Override
 	public void closeChest() {
 	}
-
+	
+	public int getFacing() {
+		return worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+	}
 }

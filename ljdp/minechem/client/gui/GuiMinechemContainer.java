@@ -1,4 +1,4 @@
-package ljdp.minechem.client;
+package ljdp.minechem.client.gui;
 
 import java.util.List;
 

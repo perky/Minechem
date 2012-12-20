@@ -13,6 +13,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockDecomposer extends BlockMinechemContainer {
@@ -63,5 +64,20 @@ public class BlockDecomposer extends BlockMinechemContainer {
 		return par1 == 1 ? 7 : 2;
 	}
 	
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
+	
+	@Override
+	public int getRenderType() {
+		return ModMinechem.proxy.RENDER_MICROSCOPE;
+	}
+	
+	@Override
+    public boolean isOpaqueCube()
+    {
+		return false;
+    }
 
 }

@@ -2,9 +2,9 @@ package ljdp.minechem.common;
 
 import java.util.logging.Logger;
 
-import ljdp.minechem.client.GuiDecomposer;
-import ljdp.minechem.client.GuiMicroscope;
-import ljdp.minechem.client.GuiSynthesis;
+import ljdp.minechem.client.gui.GuiDecomposer;
+import ljdp.minechem.client.gui.GuiMicroscope;
+import ljdp.minechem.client.gui.GuiSynthesis;
 import ljdp.minechem.common.containers.ContainerDecomposer;
 import ljdp.minechem.common.containers.ContainerMicroscope;
 import ljdp.minechem.common.containers.ContainerSynthesis;
@@ -73,7 +73,6 @@ public class ModMinechem implements IGuiHandler {
 	
 	@Init
 	public void init(FMLInitializationEvent event) {
-		proxy.registerTileEntities();
 		NetworkRegistry.instance().registerGuiHandler(this, this);
 		proxy.registerRenderers();
 	}

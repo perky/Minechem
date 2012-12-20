@@ -1,4 +1,4 @@
-package ljdp.minechem.client;
+package ljdp.minechem.client.gui.tabs;
 
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.PowerProvider;

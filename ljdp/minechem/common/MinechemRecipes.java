@@ -6,6 +6,10 @@ import static ljdp.minechem.common.EnumMolecule.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+
+import ljdp.minechem.common.utils.MinechemHelper;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,7 +23,7 @@ public class MinechemRecipes {
 	private static final MinechemRecipes instance = new MinechemRecipes();
 	
 	/* The list of decomposer recipes */
-	public HashMap<String, UnbondingRecipe> unbondingRecipes;
+	public ArrayList<UnbondingRecipe> unbondingRecipes;
 	public ArrayList<SynthesisRecipe> synthesisRecipes;
 	
 	public static MinechemRecipes getInstance() {
@@ -27,11 +31,14 @@ public class MinechemRecipes {
 	}
 	
 	private MinechemRecipes() {
-		unbondingRecipes = new HashMap<String, UnbondingRecipe>();
+		unbondingRecipes = new ArrayList<UnbondingRecipe>();
 		synthesisRecipes = new ArrayList<SynthesisRecipe>();
 	}
 	
 	public void RegisterRecipes() {
+		ItemStack glassPane = new ItemStack(Block.thinGlass);
+		GameRegistry.addRecipe(new ItemStack(Item.glassBottle, 32), "p#p", "#p#", 'p', glassPane);
+		
 		addRandomDecomposerRecipe(new ItemStack(Block.stone), 0.05F, 
 				itemStacks(element(Si), element(O)),
 				itemStacks(element(K,2), element(O)),
@@ -229,7 +236,7 @@ public class MinechemRecipes {
 	private void addDecomposerRecipe(ItemStack input, Object...objects) {
 		ArrayList outputStacks = itemStacks(objects);
 		UnbondingRecipe unbondingRecipe = new UnbondingRecipe(input, outputStacks);
-		unbondingRecipes.put(getKeyFromItemStack(input), unbondingRecipe);
+		unbondingRecipes.add(unbondingRecipe);
 	}
 	
 	private void addRandomDecomposerRecipe(ItemStack input, float chance, Object...objects) {
@@ -238,7 +245,7 @@ public class MinechemRecipes {
 			outcomes.add(objects[i]);
 		}
 		UnbondingRecipeRandom unbondingRecipe = new UnbondingRecipeRandom(input, chance, outcomes);
-		unbondingRecipes.put(getKeyFromItemStack(input), unbondingRecipe);
+		unbondingRecipes.add(unbondingRecipe);
 	}
 	
 	private SynthesisRecipe newSynthesisRecipe(ItemStack output, boolean isShaped, Object...objects) {
@@ -278,7 +285,11 @@ public class MinechemRecipes {
 	}
 	
 	public UnbondingRecipe getRecipe(ItemStack itemstack) {
-		return unbondingRecipes.get(getKeyFromItemStack(itemstack));
+		for(UnbondingRecipe unbondingRecipe : unbondingRecipes) {
+			if(MinechemHelper.stacksAreSameKind(unbondingRecipe.inputStack, itemstack))
+				return unbondingRecipe;
+		}
+		return null;
 	}
 	
 	public SynthesisRecipe getSynthesisRecipe(ItemStack[] inputRecipe) {

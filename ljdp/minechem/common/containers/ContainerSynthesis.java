@@ -52,6 +52,8 @@ public class ContainerSynthesis extends Container {
 	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer entityPlayer, int slot) {
+		if(!synthesis.hasEnoughPower())
+			return null;
 		Slot slotObject = (Slot) inventorySlots.get(slot);
 		if(slotObject != null && slotObject.getHasStack()) {
 			ItemStack stackInSlot = slotObject.getStack();
@@ -76,8 +78,6 @@ public class ContainerSynthesis extends Container {
 		}
 		return null;
 	}
-	
-	
 	
 	@Override
 	protected void retrySlotClick(int par1, int par2, boolean par3, EntityPlayer par4EntityPlayer) {

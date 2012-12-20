@@ -1,4 +1,4 @@
-package ljdp.minechem.client;
+package ljdp.minechem.client.gui.tabs;
 
 import ljdp.minechem.common.MinechemPowerProvider;
 import ljdp.minechem.common.ModMinechem;

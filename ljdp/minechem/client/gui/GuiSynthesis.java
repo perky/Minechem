@@ -1,5 +1,8 @@
-package ljdp.minechem.client;
+package ljdp.minechem.client.gui;
 
+import ljdp.minechem.client.gui.tabs.TabEnergy;
+import ljdp.minechem.client.gui.tabs.TabEnergySynthesis;
+import ljdp.minechem.client.gui.tabs.TabHelp;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.containers.ContainerSynthesis;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
@@ -16,6 +19,7 @@ public class GuiSynthesis extends GuiContainerTabbed {
 	
 	public GuiSynthesis(InventoryPlayer inventoryPlayer, TileEntitySynthesis synthesis) {
 		super(new ContainerSynthesis(inventoryPlayer, synthesis));
+		addTab(new TabEnergySynthesis(this, synthesis));
 		addTab(new TabHelp(this, MinechemHelper.getLocalString("help.synthesis")));
 	}
 	

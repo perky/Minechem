@@ -20,6 +20,11 @@ public class SlotSynthesisOutput extends Slot {
 	}
 	
 	@Override
+	public boolean canTakeStack(EntityPlayer par1EntityPlayer) {
+		return synthesis.hasEnoughPower();
+	}
+	
+	@Override
 	public void onPickupFromSlot(EntityPlayer par1EntityPlayer,
 			ItemStack par2ItemStack) {
 		super.onPickupFromSlot(par1EntityPlayer, par2ItemStack);

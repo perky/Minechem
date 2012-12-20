@@ -1,5 +1,6 @@
-package ljdp.minechem.client;
+package ljdp.minechem.client.gui;
 
+import ljdp.minechem.client.gui.tabs.TabHelp;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.containers.ContainerMicroscope;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;

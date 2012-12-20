@@ -1,5 +1,5 @@
 
-package ljdp.minechem.client;
+package ljdp.minechem.client.gui.tabs;
 
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.utils.SessionVars;
@@ -21,7 +21,7 @@ public abstract class Tab {
     private boolean open;
 
     protected Gui myGui;
-    protected boolean leftSide;
+    public boolean leftSide;
     protected int overlayColor = 0xffffff;
 
     public int currentShiftX = 0;

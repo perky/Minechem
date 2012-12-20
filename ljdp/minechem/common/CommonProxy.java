@@ -19,17 +19,14 @@ public class CommonProxy {
 	public static String ICONS_PNG			= TEXTURE_DIR + "icons.png";
 	public static String TERRAIN_ALPHA_PNG  = TEXTURE_DIR + "terrainWithAlpha.png";
 	public static String MICROSCOPE_MODEL   = TEXTURE_DIR + "MicroscopeModel.png";
+	public static String DECOMPOSER_MODEL_ON   = TEXTURE_DIR + "DecomposerModelOn.png";
+	public static String DECOMPOSER_MODEL_OFF  = TEXTURE_DIR + "DecomposerModelOff.png";
 	
 	public static int RENDER_MICROSCOPE;
+	public static int RENDER_DECOMPOSER;
 	
 	public void registerRenderers() {
 		
-	}
-	
-	public void registerTileEntities() {
-		GameRegistry.registerTileEntity(TileEntityMicroscope.class, "minechem.tileEntityMicroscope");
-		GameRegistry.registerTileEntity(TileEntitySynthesis.class,  "minechem.tileEntitySynthesis");
-		GameRegistry.registerTileEntity(TileEntityDecomposer.class, "minechem.tileEntityDecomposer");
 	}
 	
 	public World getClientWorld() {

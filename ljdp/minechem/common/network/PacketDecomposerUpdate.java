@@ -41,6 +41,8 @@ public class PacketDecomposerUpdate extends PacketTileEntityUpdate {
 			MinechemPowerProvider provider = (MinechemPowerProvider) decomposer.getPowerProvider(); 
 			provider.setEnergyStored(energyStored);
 			provider.setCurrentEnergyUsage(energyUsage);
+			decomposer.worldObj.markBlockForRenderUpdate2(x, y, z);
+			//decomposer.worldObj.markBlockForUpdate(x, y, z);
 		}
 	}
 

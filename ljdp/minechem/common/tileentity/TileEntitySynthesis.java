@@ -5,6 +5,9 @@ import buildcraft.api.power.IPowerReceptor;
 import ljdp.minechem.common.MinechemPowerProvider;
 import ljdp.minechem.common.MinechemRecipes;
 import ljdp.minechem.common.SynthesisRecipe;
+import ljdp.minechem.common.network.PacketDecomposerUpdate;
+import ljdp.minechem.common.network.PacketHandler;
+import ljdp.minechem.common.network.PacketSynthesisUpdate;
 import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -39,13 +42,17 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 		powerProvider = new MinechemPowerProvider(minEnergyPerTick, maxEnergyPerTick, activationEnergy, energyStorage);
 	}
 	
-	public void onOuputPickupFromSlot(EntityPlayer entityPlayer) {
-		takeCraftingItems();
-	}
-	
 	@Override
 	public void updateEntity() {
 		powerProvider.update(this);
+		if(!worldObj.isRemote && powerProvider.didEnergyStoredChange()) {
+			sendUpdatePacket();
+		}
+	}
+	
+	private void sendUpdatePacket() {
+		PacketSynthesisUpdate packetSynthesisUpdate = new PacketSynthesisUpdate(this);
+		PacketHandler.sendPacket(packetSynthesisUpdate);
 	}
 	
 	private boolean getRecipeResult() {
@@ -188,12 +195,21 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 		super.onInventoryChanged();
 		getRecipeResult();
 	}
+	
+	public void onOuputPickupFromSlot(EntityPlayer entityPlayer) {
+		powerProvider.useEnergy(activationEnergy, activationEnergy, true);
+		takeCraftingItems();
+	}
 
 	public int craftAll() {
 		int count = 0;
 		while(getRecipeResult()) {
-			takeCraftingItems();
-			count++;
+			if(powerProvider.useEnergy(activationEnergy, activationEnergy, true) >= activationEnergy) {
+				takeCraftingItems();
+				count++;
+			} else {
+				break;
+			}
 		}
 		return count;
 	}
@@ -247,6 +263,10 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 			return powerProvider.getMaxEnergyReceived();
 		else
 			return 0;
+	}
+
+	public boolean hasEnoughPower() {
+		return powerProvider.getEnergyStored() >= powerProvider.getActivationEnergy();
 	}
 
 }
