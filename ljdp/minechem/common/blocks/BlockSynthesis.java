@@ -6,9 +6,11 @@ import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class BlockSynthesis extends BlockMinechemContainer {
@@ -17,6 +19,14 @@ public class BlockSynthesis extends BlockMinechemContainer {
 		super(par1, Material.iron);
 		setBlockName("minechem.blockSynthesis");
 		setCreativeTab(ModMinechem.minechemTab);
+	}
+	
+	@Override
+	public void onBlockPlacedBy(World world, int x, int y, int z,
+			EntityLiving entityLiving) {
+		super.onBlockPlacedBy(world, x, y, z, entityLiving);
+		int facing = MathHelper.floor_double((double)(entityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		world.setBlockMetadata(x, y, z, facing);
 	}
 	
 	@Override
@@ -48,13 +58,18 @@ public class BlockSynthesis extends BlockMinechemContainer {
 	}
 	
 	@Override
-	public String getTextureFile() {
-		return ModMinechem.proxy.BLOCKS_PNG;
+	public boolean isOpaqueCube() {
+		return false;
 	}
 	
 	@Override
-	public int getBlockTextureFromSide(int par1) {
-		return par1 == 1 ? 6 : 1;
+	public int getRenderType() {
+		return ModMinechem.proxy.CUSTOM_RENDER_ID;
+	}
+	
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
 	}
 
 }

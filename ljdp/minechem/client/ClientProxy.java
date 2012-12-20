@@ -15,10 +15,9 @@ import ljdp.minechem.common.MinechemBlocks;
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
+import ljdp.minechem.common.tileentity.TileEntitySynthesis;
 
 public class ClientProxy extends CommonProxy {
-	
-	
 	
 	@Override
 	public void registerRenderers() {
@@ -31,18 +30,20 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.preloadTexture(MICROSCOPE_MODEL);
 		MinecraftForgeClient.preloadTexture(DECOMPOSER_MODEL_ON);
 		MinecraftForgeClient.preloadTexture(DECOMPOSER_MODEL_OFF);
+		MinecraftForgeClient.preloadTexture(SYNTHESIS_MODEL);
 		
-		RENDER_MICROSCOPE = RenderingRegistry.getNextAvailableRenderId();
-		RENDER_DECOMPOSER = RenderingRegistry.getNextAvailableRenderId();
+		CUSTOM_RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
 		
 		MinecraftForgeClient.registerItemRenderer(MinechemItems.element.shiftedIndex, new ItemElementRenderer());
 		MinecraftForgeClient.registerItemRenderer(MinechemItems.molecule.shiftedIndex, new ItemMoleculeRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.itemsList[MinechemBlocks.microscope.blockID].shiftedIndex, new ItemMicroscopeRenderer());
-		
+		MinecraftForgeClient.registerItemRenderer(Item.itemsList[MinechemBlocks.decomposer.blockID].shiftedIndex, new ItemDecomposerRenderer());
+		MinecraftForgeClient.registerItemRenderer(Item.itemsList[MinechemBlocks.synthesis.blockID].shiftedIndex, new ItemSynthesisRenderer());
 		RenderingRegistry.registerBlockHandler(new RenderBlockGhostBlock());
 		TickRegistry.registerTickHandler(new TickHandler(), Side.CLIENT);
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMicroscope.class, new TileEntityMicroscopeRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecomposer.class, new TileEntityDecomposerRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySynthesis.class, new TileEntitySynthesisRenderer());
 	}
 	
 	@Override

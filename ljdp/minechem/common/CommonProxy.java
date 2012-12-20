@@ -21,9 +21,9 @@ public class CommonProxy {
 	public static String MICROSCOPE_MODEL   = TEXTURE_DIR + "MicroscopeModel.png";
 	public static String DECOMPOSER_MODEL_ON   = TEXTURE_DIR + "DecomposerModelOn.png";
 	public static String DECOMPOSER_MODEL_OFF  = TEXTURE_DIR + "DecomposerModelOff.png";
+	public static String SYNTHESIS_MODEL	= TEXTURE_DIR + "SynthesiserModel.png";
 	
-	public static int RENDER_MICROSCOPE;
-	public static int RENDER_DECOMPOSER;
+	public static int CUSTOM_RENDER_ID;
 	
 	public void registerRenderers() {
 		

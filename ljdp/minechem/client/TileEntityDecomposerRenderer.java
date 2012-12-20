@@ -13,12 +13,6 @@ import net.minecraftforge.client.ForgeHooksClient;
 public class TileEntityDecomposerRenderer extends TileEntitySpecialRenderer {
 	
 	
-	ModelDecomposer model;
-	
-	public TileEntityDecomposerRenderer() {
-		this.model = new ModelDecomposer();
-	}
-	
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float var8) {
 		if(tileEntity instanceof TileEntityDecomposer) {
@@ -29,11 +23,11 @@ public class TileEntityDecomposerRenderer extends TileEntitySpecialRenderer {
 			GL11.glEnable(GL11.GL_LIGHTING);
 			if(decomposer.isPowered()) {
 				ForgeHooksClient.bindTexture(ModMinechem.proxy.DECOMPOSER_MODEL_ON, 0);
+				decomposer.model.updateWindillRotation(decomposer);
 			} else {
 				ForgeHooksClient.bindTexture(ModMinechem.proxy.DECOMPOSER_MODEL_OFF, 0);
 			}
-			model.updateWindillRotation(decomposer);
-			model.render(0.0625F);
+			decomposer.model.render(0.0625F);
 			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glPopMatrix();
 		}

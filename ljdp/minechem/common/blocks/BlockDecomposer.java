@@ -71,7 +71,7 @@ public class BlockDecomposer extends BlockMinechemContainer {
 	
 	@Override
 	public int getRenderType() {
-		return ModMinechem.proxy.RENDER_MICROSCOPE;
+		return ModMinechem.proxy.CUSTOM_RENDER_ID;
 	}
 	
 	@Override

@@ -227,9 +227,6 @@ public class ModelDecomposer extends ModelBase
   }
   
   public void updateWindillRotation(TileEntityDecomposer decomposer) {
-	  if(!decomposer.isPowered())
-		  return;
-	  
 	  windmillAngle += 0.2F;
 	  if(windmillAngle >= 360.0F)
 		  windmillAngle = 0.0F;

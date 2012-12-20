@@ -7,5 +7,5 @@ public class ItemCopper extends Item {
 	public ItemCopper(int par1) {
 		super(par1);
 	}
-
+	
 }

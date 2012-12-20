@@ -10,6 +10,7 @@ import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
 
+import ljdp.minechem.client.ModelDecomposer;
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.MinechemPowerProvider;
 import ljdp.minechem.common.MinechemRecipes;
@@ -52,6 +53,7 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 	public State state = State.kProcessIdle;
 	private ItemStack activeStack;
 	private float workToDo = 0;
+	public ModelDecomposer model;
 	
 	public enum State {
 		kProcessIdle, kProcessActive, kProcessFinished, kProcessJammed, kProcessNoBottles
@@ -63,6 +65,7 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 		if (PowerFramework.currentFramework != null) {
 			powerProvider = new MinechemPowerProvider(2, 20, 0, 10000);
 		}
+		model = new ModelDecomposer();
 	}
 	
 	@Override

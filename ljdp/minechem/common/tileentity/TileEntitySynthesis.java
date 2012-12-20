@@ -2,6 +2,7 @@ package ljdp.minechem.common.tileentity;
 
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
+import ljdp.minechem.client.ModelSynthesizer;
 import ljdp.minechem.common.MinechemPowerProvider;
 import ljdp.minechem.common.MinechemRecipes;
 import ljdp.minechem.common.SynthesisRecipe;
@@ -31,6 +32,7 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 	public static final int kStartBottles = 10;
 	private SynthesisRecipe currentRecipe;
 	MinechemPowerProvider powerProvider;
+	public ModelSynthesizer model;
 	
 	int minEnergyPerTick = 24;
 	int maxEnergyPerTick = 200;
@@ -40,6 +42,7 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 	public TileEntitySynthesis() {
 		synthesisInventory = new ItemStack[getSizeInventory()];
 		powerProvider = new MinechemPowerProvider(minEnergyPerTick, maxEnergyPerTick, activationEnergy, energyStorage);
+		model = new ModelSynthesizer();
 	}
 	
 	@Override
@@ -266,7 +269,11 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 	}
 
 	public boolean hasEnoughPower() {
-		return powerProvider.getEnergyStored() >= powerProvider.getActivationEnergy();
+		return this.powerProvider.getEnergyStored() >= this.powerProvider.getActivationEnergy();
+	}
+
+	public int getFacing() {
+		return worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 	}
 
 }
