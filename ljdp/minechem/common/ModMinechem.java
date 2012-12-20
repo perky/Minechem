@@ -67,6 +67,8 @@ public class ModMinechem implements IGuiHandler {
 		MinechemBlocks.registerBlocks();
 		blLog.info("Adding Recipes");
 		MinechemRecipes.getInstance().RegisterRecipes();
+		blLog.info("Registering Ore Dictionary items");
+		MinechemItems.registerToOreDictionary();
 		blLog.info("Adding Ore Dictionary Recipes");
 		MinecraftForge.EVENT_BUS.register(MinechemRecipes.getInstance());
 	}

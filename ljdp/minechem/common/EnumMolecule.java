@@ -8,10 +8,10 @@ import net.minecraft.item.ItemStack;
 
 public enum EnumMolecule {
 	cellulose 				(0, "Cellulose", element(C, 6), element(H, 10), element(O, 5)),
-	
+	sucrose					(1, "Sucrose", element(C,12), element(H,22), element(O,11)),
 	carbonDioxide   		(2, "Carbon Dioxide", element(C), element(O,2)),
 	nitrogenDioxide 		(3, "Nitrogen Dioxide", element(N), element(O,2)),
-	toluene					(4, "Toluene", element(C), element(H,3)),
+	toluene					(4, "Toluene", element(C,7), element(H,8)),
 	potassiumNitrate 		(5, "Potassium Nitrate", element(K), element(N), element(O,3)),
 	tnt 					(6, "Trinitrotoluene", 
 			element(C,6), 
@@ -48,6 +48,30 @@ public enum EnumMolecule {
 	polyvinylChloride		(33, "Polyvinyl Chloride", molecule(vinylChloride,64)),
 	methamphetamine 		(34, "Methamphetamine", element(C,10), element(H,15), element(N)),
 	psilocybin				(35, "Psilocybin", element(C,12), element(H,17), element(N,2), element(O,4), element(P)),
+	iron3oxide				(36, "Iron (III) Oxide", element(Fe,2), element(O,3)),
+	strontiumNitrate		(37, "Strontium Nitrate", element(Sr), molecule(nitrate, 2)),
+	magnetite				(38, "Magnetite", element(Fe,3), element(O,4)),
+	magnesiumOxide			(39, "Magnesium Oxide", element(Mg), element(O)),
+	cucurbitacin			(40, "Cucurbitacin", element(C,30), element(H,42), element(O,7)),
+	asparticAcid			(41, "Aspartic Acid", element(C,4), element(H,7), element(N), element(O,4)),
+	hydroxylapatite			(42, "Hydroxylapatite", element(Ca,5), molecule(phosphate,3), element(O), element(H)),
+	alinine					(43, "Alinine", element(C,3), element(H,7), element(N), element(O,2)),
+	glycine					(44, "Glycine", element(C,2), element(H,5), element(N), element(O,2)),
+	serine					(45, "Serine",  element(C,3), element(H,7), molecule(nitrate)),
+	mescaline				(46, "Mescaline", element(C,11), element(H,17), molecule(nitrate)),
+	methyl					(47, "Methyl", element(C), element(H,3)),
+	methylene				(48, "Methylene", element(C), element(H,2)),
+	cyanoacrylate			(49, "Cyanoacrylate", molecule(methyl), molecule(methylene), element(C,3), element(N), element(H), element(O,2)),
+	polycyanoacrylate		(50, "Poly-cyanoacrylate", molecule(cyanoacrylate, 3)),
+	redPigment				(51, "Cobalt(II) nitrate", element(Co), molecule(nitrate,2)),
+	orangePigment			(52, "Potassium Dichromate", element(K,2), element(Cr,2), element(O,7)),
+	yellowPigment			(53, "Potassium Chromate", element(Cr), element(K,2), element(O,4)),
+	limePigment				(54, "Nickel(II) Chloride", element(Ni), element(Cl,2)),
+	lightbluePigment		(55, "Copper(II) Sulfate", element(Cu), molecule(sulfate)),
+	purplePigment			(56, "Potassium Permanganate", element(K), element(Mn), element(O,4)),
+	greenPigment			(57, "Zinc Green", element(Co), element(Zn), element(O,2)),
+	blackPigment			(58, "Carbon Black", element(C), element(H,2), element(O)),
+	whitePigment			(59, "Titanium Dioxide", element(Ti), element(O,2)),
 	;
 	
 	

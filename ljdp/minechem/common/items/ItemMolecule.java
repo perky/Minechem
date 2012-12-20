@@ -153,5 +153,13 @@ public class ItemMolecule extends Item {
 		par3EntityPlayer.setItemInUse(par1ItemStack, getMaxItemUseDuration(par1ItemStack));
 		return par1ItemStack;
 	}
+	
+	/**
+     * Returns True is the item is renderer in full 3D when hold.
+     */
+    public boolean isFull3D()
+    {
+        return true;
+    }
 
 }

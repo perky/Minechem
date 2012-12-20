@@ -36,5 +36,24 @@ public class ItemLens extends Item {
 		par3List.add(new ItemStack(id, 1, 2));
 	}
 	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int getIconFromDamage(int itemDamage) {
+		switch(itemDamage) {
+		case 0:
+			return 12;
+		case 1:
+			return 11;
+		case 2:
+			return 14;
+		}
+		return 15;
+	}
+	
+	@Override
+	public String getTextureFile() {
+		return ModMinechem.proxy.ELEMENTBOTTLES_PNG;
+	}
+	
 	
 }

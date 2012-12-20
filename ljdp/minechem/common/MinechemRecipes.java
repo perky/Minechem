@@ -12,6 +12,7 @@ import ljdp.minechem.common.utils.MinechemHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemRecord;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.oredict.OreDictionary;
@@ -37,7 +38,68 @@ public class MinechemRecipes {
 	
 	public void RegisterRecipes() {
 		ItemStack glassPane = new ItemStack(Block.thinGlass);
-		GameRegistry.addRecipe(new ItemStack(Item.glassBottle, 32), "p#p", "#p#", 'p', glassPane);
+		ItemStack ironIngot = new ItemStack(Item.ingotIron);
+		ItemStack ironBlock = new ItemStack(Block.blockSteel);
+		ItemStack atomicManipulator = new ItemStack(MinechemItems.atomicManipulator);
+		ItemStack glass = new ItemStack(Block.glass);
+		ItemStack redstone = new ItemStack(Item.redstone);
+		GameRegistry.addRecipe(new ItemStack(Item.glassBottle, 32), 
+				"p#p", 
+				"#p#", 
+				'p', glassPane
+		);
+		GameRegistry.addRecipe(MinechemItems.concaveLens, 
+				"G G",
+				"GGG",
+				"G G",
+				'G', glass
+		);
+		GameRegistry.addRecipe(MinechemItems.convexLens, 
+				" G ",
+				"GGG",
+				" G ",
+				'G', glass
+		);
+		GameRegistry.addRecipe(MinechemItems.microscopeLens, 
+				"A",
+				"B",
+				"A",
+				'A', MinechemItems.convexLens,
+				'B', MinechemItems.concaveLens
+		);
+		GameRegistry.addRecipe(new ItemStack(MinechemBlocks.microscope), 
+				" LI",
+				" PI",
+				"III",
+				'L', MinechemItems.microscopeLens,
+				'P', glassPane,
+				'I', ironIngot
+		);
+		GameRegistry.addRecipe(new ItemStack(MinechemItems.atomicManipulator), 
+				"PPP",
+				"PIP",
+				"PPP",
+				'P', new ItemStack(Block.pistonBase),
+				'I', ironBlock
+		);
+		GameRegistry.addRecipe(new ItemStack(MinechemBlocks.decomposer), 
+				"III",
+				"IAI",
+				"IRI",
+				'A', atomicManipulator,
+				'I', ironIngot,
+				'R', redstone
+		);
+		GameRegistry.addRecipe(new ItemStack(MinechemBlocks.synthesis), 
+				"IRI",
+				"IAI",
+				"IDI",
+				'A', atomicManipulator,
+				'I', ironIngot,
+				'R', redstone,
+				'D', new ItemStack(Item.diamond)
+		);
+	
 		
 		addRandomDecomposerRecipe(new ItemStack(Block.stone), 0.05F, 
 				itemStacks(element(Si), element(O)),
@@ -61,25 +123,16 @@ public class MinechemRecipes {
 		
 		addRandomDecomposerRecipe(new ItemStack(Block.dirt), 0.005F,
 				itemStacks(element(H,2), element(O,6), element(Si), element(Ca), element(C))
-				);
+		);
 		
 		addDecomposerRecipe(new ItemStack(Block.oreIron), element(Fe,2));
 		addDecomposerRecipe(new ItemStack(Item.ingotIron), element(Fe,1));
 		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.ingotIron));
 		addDecomposerRecipe(new ItemStack(Item.doorSteel), molecule(cellulose,6));
-		addDecomposerRecipe(new ItemStack(Item.swordSteel), element(Fe,2), molecule(cellulose,1));
-		addDecomposerRecipe(new ItemStack(Item.axeSteel), element(Fe,6), molecule(cellulose,2));
-		addDecomposerRecipe(new ItemStack(Item.hoeSteel), element(Fe,1), molecule(cellulose,1));
-		addDecomposerRecipe(new ItemStack(Item.pickaxeSteel), element(Fe,6), molecule(cellulose,2));
 		
 		addDecomposerRecipe(new ItemStack(Block.oreGold), element(Au,2));
 		addDecomposerRecipe(new ItemStack(Item.ingotGold), element(Au,1));
 		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.ingotGold));
-		addDecomposerRecipe(new ItemStack(Item.swordGold), element(Au,2), molecule(cellulose,1));
-		addDecomposerRecipe(new ItemStack(Item.axeGold),   element(Au,6), molecule(cellulose,2));
-		addDecomposerRecipe(new ItemStack(Item.hoeGold),  element(Au,1), molecule(cellulose,1));
-		addDecomposerRecipe(new ItemStack(Item.pickaxeGold), element(Au,6), molecule(cellulose,2));
-		
 		
 		addDecomposerRecipe(new ItemStack(Block.oreDiamond), element(C,64), element(C,64));
 		addDecomposerRecipe(new ItemStack(Item.diamond), element(C,64));
@@ -87,11 +140,7 @@ public class MinechemRecipes {
 				null, 			element(C,64), 		null,
 				element(C,64),	null,				element(C,64),
 				null,			element(C,64), 		null);
-		addDecomposerRecipe(new ItemStack(Item.swordDiamond), element(C,64), element(C,64), molecule(cellulose,1));
-		addDecomposerRecipe(new ItemStack(Item.axeDiamond), element(C,64), element(C,64), element(C,64), molecule(cellulose,2));
-		addDecomposerRecipe(new ItemStack(Item.hoeDiamond), element(C,64), molecule(cellulose,1));
-		addDecomposerRecipe(new ItemStack(Item.pickaxeDiamond), element(C,64), element(C,64), element(C,64), molecule(cellulose,2));
-		
+
 		addDecomposerRecipe(new ItemStack(Block.oreCoal), element(C,2));
 		addDecomposerRecipe(new ItemStack(Item.coal), element(C,1));
 		
@@ -126,14 +175,10 @@ public class MinechemRecipes {
 				cellulose2,	null,		null,
 				cellulose2,	cellulose2,	null,
 				cellulose2,	null,		null);
+		addDecomposerRecipe(new ItemStack(Block.planks, 1, -1), molecule(cellulose, 4));
 		
-		addDecomposerRecipe(new ItemStack(Block.planks, 1, -1), molecule(cellulose,4));
 		addDecomposerRecipe(new ItemStack(Item.stick), molecule(cellulose,1));
 		addDecomposerRecipe(new ItemStack(Item.doorWood), molecule(cellulose,24));
-		addDecomposerRecipe(new ItemStack(Item.swordWood), molecule(cellulose,9));
-		addDecomposerRecipe(new ItemStack(Item.axeWood), molecule(cellulose,14));
-		addDecomposerRecipe(new ItemStack(Item.hoeWood), molecule(cellulose,6));
-		addDecomposerRecipe(new ItemStack(Item.pickaxeWood), molecule(cellulose,14));
 		
 		addDecomposerRecipe(new ItemStack(Item.flint), molecule(siliconDioxide,16));
 		addDecomposerRecipe(new ItemStack(Block.gravel), molecule(siliconDioxide,4));
@@ -167,8 +212,132 @@ public class MinechemRecipes {
 		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.bucketWater));
 		
 		addDecomposerRecipe(new ItemStack(Block.mushroomBrown), molecule(psilocybin));
+		
+		addDecomposerRecipe(new ItemStack(Block.oreRedstone), molecule(iron3oxide, 6), molecule(strontiumNitrate, 6));
+		addDecomposerRecipe(new ItemStack(Item.redstone), molecule(iron3oxide), molecule(strontiumNitrate));
+		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.redstone));
+		
+		addDecomposerRecipe(new ItemStack(Item.enderPearl), element(Es), molecule(calciumCarbonate,8));
+		addShapedSynthesisRecipe(new ItemStack(Item.enderPearl), 
+				molecule(calciumCarbonate), molecule(calciumCarbonate), molecule(calciumCarbonate),
+				molecule(calciumCarbonate), element(Es),				molecule(calciumCarbonate),
+				molecule(calciumCarbonate), molecule(calciumCarbonate), molecule(calciumCarbonate)
+		);
+		
+		addDecomposerRecipe(new ItemStack(Block.obsidian), molecule(siliconDioxide, 16), molecule(magnetite, 8), molecule(magnesiumOxide, 8));
+		addShapedSynthesisRecipe(new ItemStack(Block.obsidian),
+			molecule(siliconDioxide,4), molecule(siliconDioxide,4), molecule(siliconDioxide,4),
+			molecule(siliconDioxide,4), molecule(magnetite, 8),		molecule(magnesiumOxide,2),
+			molecule(magnesiumOxide,2), molecule(magnesiumOxide,2), molecule(magnesiumOxide,2)
+		);
+		
+		
+		addRandomDecomposerRecipe(new ItemStack(Block.reed), 0.1F, molecule(sucrose), element(H,2), element(O), molecule(asparticAcid));
+		addRandomDecomposerRecipe(new ItemStack(Item.sugar), 0.2F, molecule(sucrose));
+		
+		addShapedSynthesisRecipe(new ItemStack(Block.reed, 32),
+				molecule(sucrose), 	molecule(sucrose), 	null,
+				null,				null,				null,
+				null,				null,				null);
+		addShapedSynthesisRecipe(new ItemStack(Item.sugar, 40),
+				molecule(sucrose), 	null, 				null,
+				null,				molecule(sucrose),	null,
+				null,				null,				null);
+		
+		addDecomposerRecipe(new ItemStack(Block.pumpkin), molecule(cucurbitacin));
+		addDecomposerRecipe(new ItemStack(Block.melon), molecule(cucurbitacin), molecule(asparticAcid));
+		
+		addDecomposerRecipe(new ItemStack(Item.bone), molecule(hydroxylapatite, 3));
+		// BONEMEAL
+		addDecomposerRecipe(new ItemStack(Item.dyePowder, 1, 15), molecule(hydroxylapatite));
+		
+		addShapedSynthesisRecipe(new ItemStack(Item.bone),
+				molecule(hydroxylapatite),	null,						null,
+				null,						molecule(hydroxylapatite),	null,
+				null,						null,						molecule(hydroxylapatite)
+		);
+		
+		addRandomDecomposerRecipe(new ItemStack(Item.silk), 0.1F, molecule(serine), molecule(glycine), molecule(alinine));
+		addShapedSynthesisRecipe(new ItemStack(Item.silk, 64),
+				molecule(serine), molecule(glycine), molecule(alinine),
+				null,			  null,				 null,
+				null,			  null,				 null
+		);
+		
+		addRandomDecomposerRecipe(new ItemStack(Block.cactus), 0.1F, molecule(mescaline));
+		addShapedSynthesisRecipe(new ItemStack(Block.cactus, 16),
+				molecule(mescaline),	null,					molecule(mescaline),
+				null,					molecule(mescaline),	null,
+				molecule(mescaline),	null,					molecule(mescaline)
+		);
+		
+		addRandomDecomposerRecipe(new ItemStack(Item.slimeBall), 0.8F, 
+				itemStacks(molecule(polycyanoacrylate)),
+				itemStacks(element(Nd), element(Hg)),
+				itemStacks(element(H,2), element(O))
+		);
+		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.slimeBall));
+		
+		addDecomposerRecipe(new ItemStack(Item.blazeRod), element(Pu,3));
+		addShapedSynthesisRecipe(new ItemStack(Item.blazeRod), 
+				null, 	element(Pu),	null,
+				null,	element(Pu),	null,
+				null,	element(Pu),	null
+		);
+		
+		addDecomposerRecipe(new ItemStack(Item.magmaCream), element(Hg), element(Pu), molecule(polycyanoacrylate,3));
+		addShapedSynthesisRecipe(new ItemStack(Item.magmaCream), 
+				null, 							element(Hg),					null,
+				molecule(polycyanoacrylate),	molecule(polycyanoacrylate),	molecule(polycyanoacrylate),
+				null,							element(Pu),					null
+		);
+		
+		addDecomposerRecipe(new ItemStack(Item.ghastTear), element(Yb,4), element(No,4));
+		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.ghastTear));
+		
+		
+		addDecomposerRecipe(new ItemStack(Item.dyePowder, 1, 0), molecule(blackPigment));
+		addDecomposerRecipe(new ItemStack(Item.dyePowder, 1, 1), molecule(redPigment));
+		addDecomposerRecipe(new ItemStack(Item.dyePowder, 1, 2), molecule(greenPigment), molecule(blackPigment));
+		addDecomposerRecipe(new ItemStack(Item.dyePowder, 1, 3), molecule(redPigment), molecule(blackPigment));
+		addDecomposerRecipe(new ItemStack(Item.dyePowder, 1, 5), molecule(purplePigment));
+		addDecomposerRecipe(new ItemStack(Item.dyePowder, 1, 6), molecule(lightbluePigment), molecule(blackPigment));
+		addDecomposerRecipe(new ItemStack(Item.dyePowder, 1, 7), molecule(whitePigment), molecule(blackPigment));
+		addDecomposerRecipe(new ItemStack(Item.dyePowder, 1, 8), molecule(whitePigment), molecule(blackPigment, 2));
+		addDecomposerRecipe(new ItemStack(Item.dyePowder, 1, 9), molecule(redPigment), molecule(whitePigment));
+		addDecomposerRecipe(new ItemStack(Item.dyePowder, 1,10), molecule(greenPigment));
+		addDecomposerRecipe(new ItemStack(Item.dyePowder, 1,11), molecule(yellowPigment));
+		addDecomposerRecipe(new ItemStack(Item.dyePowder, 1,12), molecule(lightbluePigment));
+		addDecomposerRecipe(new ItemStack(Item.dyePowder, 1,13), molecule(lightbluePigment), molecule(redPigment));
+		addDecomposerRecipe(new ItemStack(Item.dyePowder, 1,14), molecule(orangePigment));
+		addDecomposerRecipe(new ItemStack(Item.dyePowder, 1,15), molecule(whitePigment));
+		
+		for(int i = 0; i < 16; i++) {
+			addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.dyePowder, 1, i));
+		}
+		
+		addDecomposerRecipe(new ItemStack(Item.record13), molecule(polyvinylChloride));
+		addDecomposerRecipe(new ItemStack(Item.recordCat), molecule(polyvinylChloride));
+		addDecomposerRecipe(new ItemStack(Item.recordFar), molecule(polyvinylChloride));
+		addDecomposerRecipe(new ItemStack(Item.recordMall), molecule(polyvinylChloride));
+		addDecomposerRecipe(new ItemStack(Item.recordMellohi), molecule(polyvinylChloride));
+		addDecomposerRecipe(new ItemStack(Item.recordStal), molecule(polyvinylChloride));
+		addDecomposerRecipe(new ItemStack(Item.recordStrad), molecule(polyvinylChloride));
+		addDecomposerRecipe(new ItemStack(Item.recordWard), molecule(polyvinylChloride));
+		addDecomposerRecipe(new ItemStack(Item.record11), molecule(polyvinylChloride));
+		
+		addShapedSynthesisRecipe(new ItemStack(Item.record13), molecule(polyvinylChloride));
+		addShapedSynthesisRecipe(new ItemStack(Item.recordCat), null, molecule(polyvinylChloride));
+		addShapedSynthesisRecipe(new ItemStack(Item.recordFar), null, null, molecule(polyvinylChloride));
+		addShapedSynthesisRecipe(new ItemStack(Item.recordMall), null, null, null, molecule(polyvinylChloride));
+		addShapedSynthesisRecipe(new ItemStack(Item.recordMellohi), null, null, null, null, molecule(polyvinylChloride));
+		addShapedSynthesisRecipe(new ItemStack(Item.recordStal), null, null, null, null, null, molecule(polyvinylChloride));
+		addShapedSynthesisRecipe(new ItemStack(Item.recordStrad), null, null, null, null, null, null, molecule(polyvinylChloride));
+		addShapedSynthesisRecipe(new ItemStack(Item.recordWard), null, null, null, null, null, null, null, molecule(polyvinylChloride));
+		addShapedSynthesisRecipe(new ItemStack(Item.record11), null, null, null, null, null, null, null, null, molecule(polyvinylChloride));
+		
 		//TEMP
-		addDecomposerRecipe(new ItemStack(Item.netherStalkSeeds), molecule(methamphetamine));
+		//addDecomposerRecipe(new ItemStack(Item.netherStalkSeeds), );
 		
 		addSynthesisRecipesFromMolecules();
 	}
@@ -217,6 +386,13 @@ public class MinechemRecipes {
 		}
 		if(event.Name.contains("ingotBronze")) {
 			addDecomposerRecipe(event.Ore, element(Sn), element(Cu,9));
+			addUnshapedSynthesisRecipeFromDecomposerRecipe(event.Ore);
+		}
+		if(event.Name.contains("oreUranium")) {
+			addDecomposerRecipe(event.Ore, element(U,2));
+		}
+		if(event.Name.contains("itemDropUranium")) {
+			addDecomposerRecipe(event.Ore, element(U));
 			addUnshapedSynthesisRecipeFromDecomposerRecipe(event.Ore);
 		}
 		if(event.Name.contains("ingotNickel")) {

@@ -2,6 +2,7 @@ package ljdp.minechem.common.tileentity;
 
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerFramework;
 import ljdp.minechem.client.ModelSynthesizer;
 import ljdp.minechem.common.MinechemPowerProvider;
 import ljdp.minechem.common.MinechemRecipes;
@@ -41,7 +42,10 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 	
 	public TileEntitySynthesis() {
 		synthesisInventory = new ItemStack[getSizeInventory()];
-		powerProvider = new MinechemPowerProvider(minEnergyPerTick, maxEnergyPerTick, activationEnergy, energyStorage);
+		if (PowerFramework.currentFramework != null) {
+			powerProvider = new MinechemPowerProvider(minEnergyPerTick, maxEnergyPerTick, activationEnergy, energyStorage);
+			powerProvider.configurePowerPerdition(1, 10);
+		}
 		model = new ModelSynthesizer();
 	}
 	
