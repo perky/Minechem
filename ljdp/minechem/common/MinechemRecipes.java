@@ -276,7 +276,7 @@ public class MinechemRecipes {
 				itemStacks(element(Nd), element(Hg)),
 				itemStacks(element(H,2), element(O))
 		);
-		addUnshapedSynthesisRecipeFromDecomposerRecipe(new ItemStack(Item.slimeBall));
+		addUnshapedSynthesisRecipe(new ItemStack(Item.slimeBall), molecule(polycyanoacrylate));
 		
 		addDecomposerRecipe(new ItemStack(Item.blazeRod), element(Pu,3));
 		addShapedSynthesisRecipe(new ItemStack(Item.blazeRod), 
@@ -336,6 +336,8 @@ public class MinechemRecipes {
 		addShapedSynthesisRecipe(new ItemStack(Item.recordWard), null, null, null, null, null, null, null, molecule(polyvinylChloride));
 		addShapedSynthesisRecipe(new ItemStack(Item.record11), null, null, null, null, null, null, null, null, molecule(polyvinylChloride));
 		
+		
+		addDecomposerRecipe(new ItemStack(Item.arrow), element(Mt,2));
 		//TEMP
 		//addDecomposerRecipe(new ItemStack(Item.netherStalkSeeds), );
 		

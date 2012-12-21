@@ -1,6 +1,7 @@
 package ljdp.minechem.common;
 
 import static ljdp.minechem.common.EnumClassification.*;
+import static ljdp.minechem.common.EnumRadioactivity.*;
 
 public enum EnumElement {
 	H	("Hydrogen", nonmetal, gas, stable),
@@ -120,9 +121,9 @@ public enum EnumElement {
 	private final String descriptiveName;
 	private final EnumClassification classification;
 	private final EnumClassification roomState;
-	private final EnumClassification radioactivity;
+	private final EnumRadioactivity radioactivity;
 	EnumElement(String descriptiveName, EnumClassification classification, 
-			EnumClassification roomState, EnumClassification radioactivity) {
+			EnumClassification roomState, EnumRadioactivity radioactivity) {
 		this.descriptiveName = descriptiveName;
 		this.classification = classification;
 		this.roomState = roomState;
@@ -141,7 +142,7 @@ public enum EnumElement {
 		return roomState;
 	}
 	
-	public EnumClassification radioactivity() {
+	public EnumRadioactivity radioactivity() {
 		return radioactivity;
 	}
 	

@@ -5,12 +5,20 @@ import java.util.List;
 
 import ljdp.minechem.common.EnumClassification;
 import ljdp.minechem.common.EnumElement;
+import ljdp.minechem.common.EnumRadioactivity;
 import ljdp.minechem.common.ModMinechem;
+import ljdp.minechem.common.utils.MinechemConstants;
 
+import net.minecraft.client.gui.ChatLine;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 
@@ -20,6 +28,8 @@ public class ItemElement extends Item {
 	private static final String textModifier = "\u00A7";
 	private final static EnumElement[] elements = EnumElement.values();
 	private final EnumMap classificationIndexes = new EnumMap<EnumClassification,Integer>(EnumClassification.class);
+	
+	
 	
 	public ItemElement(int par1) {
 		super(par1);
@@ -39,6 +49,16 @@ public class ItemElement extends Item {
 		classificationIndexes.put(EnumClassification.gas, 1);
 		classificationIndexes.put(EnumClassification.solid, 17);
 		classificationIndexes.put(EnumClassification.liquid, 33);
+	}
+	
+	public void initiateRadioactivity(ItemStack itemstack, World world) {
+		EnumRadioactivity radioactivity = getRadioactivity(itemstack);
+		if(radioactivity != EnumRadioactivity.stable) {
+			NBTTagCompound tagCompound = new NBTTagCompound();
+			tagCompound.setLong("lastUpdate", world.getTotalWorldTime());
+			tagCompound.setShort("life", (short) radioactivity.getLife());
+			itemstack.setTagCompound(tagCompound);
+		}
 	}
 	
 	@Override
@@ -76,9 +96,56 @@ public class ItemElement extends Item {
 		return elements[atomicNumber].roomState().descriptiveName();
 	}
 	
-	public static EnumClassification getRadioactivity(ItemStack itemstack) {
+	public static EnumRadioactivity getRadioactivity(ItemStack itemstack) {
 		int atomicNumber = itemstack.getItemDamage();
 		return elements[atomicNumber].radioactivity();
+	}
+	
+	@Override
+	public void onUpdate(ItemStack itemstack, World world, Entity entity, int slot, boolean isCurrentItem) {
+		super.onUpdate(itemstack, world, entity, slot, isCurrentItem);
+		if(getRadioactivity(itemstack) != EnumRadioactivity.stable)
+			updateRadioactivity(itemstack, world, entity, slot, isCurrentItem);
+	}
+	
+	public void updateRadioactivity(ItemStack itemstack, World world, Entity entity, int slot, boolean isCurrentItem) {
+		NBTTagCompound tagCompound = itemstack.getTagCompound();
+		if(tagCompound == null)
+			return;
+		
+		long lastUpdate = tagCompound.getLong("lastUpdate");
+		long tickDifference = world.getTotalWorldTime() - lastUpdate;
+		int maxDamage = 0;
+		String elementFrom = elements[itemstack.getItemDamage()].descriptiveName();
+		
+		while(tickDifference > 0) {
+			EnumRadioactivity radioactivity = getRadioactivity(itemstack);
+			if(radioactivity == EnumRadioactivity.stable)
+				break;
+			long life =  itemstack.getTagCompound().getShort("life");
+			long lifeToRemove = Math.min(tickDifference, life);
+			life -= lifeToRemove;
+			tickDifference -= lifeToRemove;
+			if(life <= 0) {
+				maxDamage = Math.max(maxDamage, radioactivity.getDamage());
+				int atomicId = itemstack.getItemDamage();
+				itemstack.setItemDamage(atomicId - 1);
+				initiateRadioactivity(itemstack, world);
+				
+			} else {
+				tagCompound.setShort("life", (short)life);
+				tagCompound.setLong("lastUpdate", world.getTotalWorldTime());
+			}
+		}
+		
+		if(maxDamage > 0) {
+			entity.attackEntityFrom(DamageSource.generic, maxDamage);
+			if(entity instanceof EntityPlayer && world.isRemote) {
+				String elementTo = elements[itemstack.getItemDamage()].descriptiveName();
+				String message = String.format("Radiation Damage! %s decayed into %s", elementFrom, elementTo);
+				((EntityPlayer)entity).addChatMessage(message);
+			}
+		}
 	}
 	
 	@Override
@@ -93,12 +160,16 @@ public class ItemElement extends Item {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack par1ItemStack,
+	public void addInformation(ItemStack itemstack,
 			EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-		par3List.add(textModifier + "9" + getShortName(par1ItemStack));
+		par3List.add(textModifier + "9" + getShortName(itemstack) + " (" + (itemstack.getItemDamage() + 1) + ")");
 		
 		String radioactivityColor;
-		EnumClassification radioactivity = getRadioactivity(par1ItemStack);
+		String timeLeft = getRadioactiveLife(itemstack);
+		if(!timeLeft.equals("")) {
+			timeLeft = "(" + timeLeft + ")";
+		}
+		EnumRadioactivity radioactivity = getRadioactivity(itemstack);
 		switch(radioactivity) {
 		case stable:
 			radioactivityColor = textModifier + "7";
@@ -122,11 +193,24 @@ public class ItemElement extends Item {
 			radioactivityColor = "";
 			break;
 		}
-		par3List.add(radioactivityColor + radioactivity.descriptiveName());
-		
-		par3List.add("Atomic Number " + (par1ItemStack.getItemDamage() + 1));
-		par3List.add(getClassification(par1ItemStack));
-		par3List.add(getRoomState(par1ItemStack));
+		par3List.add(radioactivityColor + radioactivity.getDescriptiveName() + " " + timeLeft);
+		par3List.add(getClassification(itemstack));
+		par3List.add(getRoomState(itemstack));
+	}
+	
+	private String getRadioactiveLife(ItemStack itemstack) {
+		String timeLeft = "";
+		if(getRadioactivity(itemstack) != EnumRadioactivity.stable && itemstack.getTagCompound() != null ){
+			NBTTagCompound tagCompound = itemstack.getTagCompound();
+			int life = tagCompound.getShort("life");
+			if(life < MinechemConstants.TICKS_PER_MINUTE)
+				timeLeft = (life / MinechemConstants.TICKS_PER_SECOND) + "s";
+			else if(life < MinechemConstants.TICKS_PER_HOUR)
+				timeLeft = (life / MinechemConstants.TICKS_PER_MINUTE) + "m";
+			else if(life < MinechemConstants.TICKS_PER_DAY)
+				timeLeft = (life / MinechemConstants.TICKS_PER_HOUR) + "hr";
+		}
+		return timeLeft;
 	}
 	
 	@Override
@@ -142,6 +226,10 @@ public class ItemElement extends Item {
 			par3List.add(new ItemStack(itemID, 1, element.ordinal()));
 		}
 	}
-
+	
+	@Override
+	public void onCreated(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
+		initiateRadioactivity(par1ItemStack, par2World);
+	}
 	 
 }

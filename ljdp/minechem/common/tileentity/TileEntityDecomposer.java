@@ -181,6 +181,7 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 	}
 	
 	private boolean addStackToOutputSlots(ItemStack itemstack) {
+		itemstack.getItem().onCreated(itemstack, this.worldObj, null);
 		for(int outputSlot = kOutputSlotStart; outputSlot <= kOutputSlotEnd; outputSlot++) {
 			ItemStack stackInSlot = getStackInSlot(outputSlot);
 			if(stackInSlot == null) {

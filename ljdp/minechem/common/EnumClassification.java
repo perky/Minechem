@@ -15,13 +15,8 @@ public enum EnumClassification {
 	actinide	("Actinide"),
 	solid		(MinechemHelper.getLocalString("element.property.solid")),
 	gas			(MinechemHelper.getLocalString("element.property.gas")),
-	liquid		(MinechemHelper.getLocalString("element.property.liquid")),
-	stable					(MinechemHelper.getLocalString("element.property.stable")),
-	hardlyRadioactive		(MinechemHelper.getLocalString("element.property.veryLowRadiation")),
-	slightlyRadioactive		(MinechemHelper.getLocalString("element.property.lowRadiation")),
-	radioactive				(MinechemHelper.getLocalString("element.property.mediumRadiation")),
-	highlyRadioactive		(MinechemHelper.getLocalString("element.property.highRadiation")),
-	extremelyRadioactive	(MinechemHelper.getLocalString("element.property.veryHighRadiation"));
+	liquid		(MinechemHelper.getLocalString("element.property.liquid"));
+	
 	
 	private final String descriptiveName;
 	EnumClassification(String descriptiveName) {

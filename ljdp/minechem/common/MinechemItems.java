@@ -14,10 +14,10 @@ import ljdp.minechem.common.items.ItemMolecule;
 import ljdp.minechem.common.utils.MinechemHelper;
 
 public class MinechemItems {
-	public static Item element;
-	public static Item molecule;
-	public static Item lens;
-	public static Item atomicManipulator;
+	public static ItemElement element;
+	public static ItemMolecule molecule;
+	public static ItemLens lens;
+	public static ItemAtomicManipulator atomicManipulator;
 	public static ItemStack convexLens;
 	public static ItemStack concaveLens;
 	public static ItemStack microscopeLens;
