@@ -1,5 +1,9 @@
 package ljdp.minechem.common.tileentity;
 
+import java.util.ArrayList;
+
+import buildcraft.api.core.Position;
+import buildcraft.api.inventory.ISpecialInventory;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
@@ -11,6 +15,7 @@ import ljdp.minechem.common.network.PacketDecomposerUpdate;
 import ljdp.minechem.common.network.PacketHandler;
 import ljdp.minechem.common.network.PacketSynthesisUpdate;
 import ljdp.minechem.common.utils.MinechemHelper;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -21,8 +26,10 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.ISidedInventory;
 
-public class TileEntitySynthesis extends TileEntity implements IInventory, IPowerReceptor {
+public class TileEntitySynthesis extends TileEntity implements IInventory, IPowerReceptor, ISidedInventory, ISpecialInventory {
 	
 	private ItemStack[] synthesisInventory;
 	public static final int kSizeOutput = 1;
@@ -39,6 +46,13 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 	int maxEnergyPerTick = 200;
 	int activationEnergy = 100;
 	int energyStorage = 10000;
+	
+	private class ItemStackPointer {
+		IInventory inventory;
+		ItemStack itemstack;
+		int slot;
+		public int stackSize;
+	}
 	
 	public TileEntitySynthesis() {
 		synthesisInventory = new ItemStack[getSizeInventory()];
@@ -278,6 +292,117 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 
 	public int getFacing() {
 		return worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+	}
+
+	@Override
+	public int getStartInventorySide(ForgeDirection side) {
+		if(side == side.WEST || side == side.NORTH || side == side.EAST || side == side.SOUTH)
+			return kStartOutput;
+		else
+			return kStartBottles;
+	}
+
+	@Override
+	public int getSizeInventorySide(ForgeDirection side) {
+		if(side == side.WEST || side == side.NORTH || side == side.EAST || side == side.SOUTH)
+			return kSizeOutput;
+		else
+			return kSizeBottles;
+	}
+
+	@Override
+	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
+		return 0;
+	}
+
+	@Override
+	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
+		if(!doRemove && currentRecipe != null)
+			return new ItemStack[]{currentRecipe.getOutputStack()};
+		
+		if(currentRecipe != null 
+				&& canAddEmptyBottles(currentRecipe.getIngredientCount()) 
+				&& takeStacksFromAdjacentChests(currentRecipe))
+		{
+			addEmptyBottles(currentRecipe.getIngredientCount());
+			return new ItemStack[]{currentRecipe.getOutputStack()};
+		}
+		
+		return null;
+	}
+	
+	private boolean takeStacksFromAdjacentChests(SynthesisRecipe recipe) {
+		ArrayList<ItemStack> ingredients = recipe.getUnshapedRecipe();
+		ArrayList<ItemStackPointer> itemStackPointers = getStacksFromAdjacentChests(ingredients);
+		if(itemStackPointers != null) {
+			for(ItemStackPointer pointer : itemStackPointers) {
+				pointer.inventory.decrStackSize(pointer.slot, pointer.stackSize);
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	private ArrayList<ItemStackPointer> getStacksFromAdjacentChests(ArrayList<ItemStack> stacks) {
+		ArrayList<ItemStackPointer> allPointers = new ArrayList();
+		for(ItemStack itemstack : stacks) {
+			ArrayList<ItemStackPointer> itemStackPointers = getStackFromAdjacentChests(
+					itemstack.itemID, 
+					itemstack.getItemDamage(), 
+					itemstack.stackSize
+			);
+			if(itemStackPointers != null) {
+				allPointers.addAll(itemStackPointers);
+			} else {
+				return null;
+			}
+		}
+		return allPointers;
+	}
+	
+	private ArrayList<ItemStackPointer> getStackFromAdjacentChests(int itemId, int itemDamage, int stackSize) {
+		ArrayList<ItemStackPointer> itemStackPointers = null;
+		itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.NORTH);
+		if(itemStackPointers == null)
+			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.EAST);
+		if(itemStackPointers == null)
+			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.SOUTH);
+		if(itemStackPointers == null)
+			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.WEST);
+		if(itemStackPointers == null)
+			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.UP);
+		return itemStackPointers;
+	}
+	
+	
+	private ArrayList<ItemStackPointer> getStackFromAdjacentChest(int itemId, int itemDamage, int stackSize, ForgeDirection direction) {
+		Position position = new Position(xCoord, yCoord, zCoord, direction);
+		position.moveForwards(1.0);
+		TileEntity tileEntity = worldObj.getBlockTileEntity((int)position.x, (int)position.y, (int)position.z);
+		ArrayList<ItemStackPointer> itemStackPointers = new ArrayList();
+		
+		if(tileEntity instanceof IInventory) {
+			IInventory inventory = MinechemHelper.getInventory((IInventory)tileEntity);
+			for(int slot = 0; slot < inventory.getSizeInventory(); slot++) {
+				ItemStack itemstack = inventory.getStackInSlot(slot);
+				if(itemstack != null && itemstack.itemID == itemId && itemstack.getItemDamage() == itemDamage) {
+					int amount = Math.min(stackSize, itemstack.stackSize);
+					stackSize -= amount;
+					
+					ItemStackPointer itemStackPointer = new ItemStackPointer();
+					itemStackPointer.inventory = inventory;
+					itemStackPointer.itemstack = itemstack;
+					itemStackPointer.slot 	   = slot;
+					itemStackPointer.stackSize = amount;
+					itemStackPointers.add(itemStackPointer);
+					
+					if(stackSize <= 0) {
+						return itemStackPointers;
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 }

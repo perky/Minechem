@@ -398,7 +398,7 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 	}
 
 	public boolean isPowered() {
-		return (state == State.kProcessActive && (powerProvider.getCurrentEnergyUsage() > 0.0F));
+		return (state != State.kProcessJammed && state != State.kProcessNoBottles && (powerProvider.getEnergyStored() > powerProvider.getMinEnergyReceived()));
 	}
 
 }

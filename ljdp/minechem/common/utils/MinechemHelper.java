@@ -3,12 +3,20 @@ package ljdp.minechem.common.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import buildcraft.api.core.Position;
+import buildcraft.core.utils.Utils;
+
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraftforge.common.ForgeDirection;
 
 public class MinechemHelper {
 
@@ -81,6 +89,36 @@ public class MinechemHelper {
 			itemlist.add(itemstack);
 		}
 		return itemlist;
+	}
+	
+	/**
+	 * Ensures that the given inventory is the full inventory, i.e. takes double chests into account.
+	 * @param inv
+	 * @return Modified inventory if double chest, unmodified otherwise.
+	 * Credit to Buildcraft.
+	 */
+	public static IInventory getInventory(IInventory inv) {
+		if (inv instanceof TileEntityChest) {
+			TileEntityChest chest = (TileEntityChest) inv;
+			Position pos = new Position(chest.xCoord, chest.yCoord, chest.zCoord);
+			TileEntity tile;
+			IInventory chest2 = null;
+			tile = Utils.getTile(chest.worldObj, pos, ForgeDirection.WEST);
+			if (tile instanceof TileEntityChest)
+				chest2 = (IInventory) tile;
+			tile = Utils.getTile(chest.worldObj, pos, ForgeDirection.EAST);
+			if (tile instanceof TileEntityChest)
+				chest2 = (IInventory) tile;
+			tile = Utils.getTile(chest.worldObj, pos, ForgeDirection.NORTH);
+			if (tile instanceof TileEntityChest)
+				chest2 = (IInventory) tile;
+			tile = Utils.getTile(chest.worldObj, pos, ForgeDirection.SOUTH);
+			if (tile instanceof TileEntityChest)
+				chest2 = (IInventory) tile;
+			if (chest2 != null)
+				return new InventoryLargeChest("", inv, chest2);
+		}
+		return inv;
 	}
 
 }

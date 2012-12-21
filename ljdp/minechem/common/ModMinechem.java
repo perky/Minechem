@@ -52,7 +52,7 @@ public class ModMinechem implements IGuiHandler {
 	public static int microscopeID;
 	public static int synthesisID;
 	public static Logger blLog = Logger.getLogger("MineChem");
-	public static CreativeTabs minechemTab = new CreativeTabMinechem("mineChem");
+	public static CreativeTabs minechemTab = new CreativeTabMinechem("MineChem");
 	
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) {

@@ -24,12 +24,18 @@ public class ItemMicroscopeRenderer implements IItemRenderer {
 			return true;
 		if(type == ItemRenderType.EQUIPPED)
 			return true;
+		if(type == ItemRenderType.ENTITY)
+			return true;
 		return false;
 	}
 
 	@Override
 	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
 		if(helper == ItemRendererHelper.INVENTORY_BLOCK)
+			return true;
+		if(helper == ItemRendererHelper.ENTITY_BOBBING)
+			return true;
+		if(helper == ItemRendererHelper.ENTITY_ROTATION)
 			return true;
 		return false;
 	}
@@ -39,9 +45,11 @@ public class ItemMicroscopeRenderer implements IItemRenderer {
 		String texture = ModMinechem.proxy.MICROSCOPE_MODEL;
 		GL11.glPushMatrix();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, FMLClientHandler.instance().getClient().renderEngine.getTexture(texture));
+		if(type == ItemRenderType.ENTITY)
+			GL11.glTranslatef(0.0F, 0.5F, 0.0F);
 		if(type == ItemRenderType.EQUIPPED) {
 			GL11.glTranslatef(0.5F, 1.6F, 0.0F);
-			GL11.glRotatef(180f, -1f, 0f, 1f);
+			GL11.glRotatef(180f, 1f, 0f, 1f);
 		} else{ 
 			GL11.glTranslatef(0.0F, 1.0F, 0.0F);
 			GL11.glRotatef(180f, 0f, 0f, 1f);

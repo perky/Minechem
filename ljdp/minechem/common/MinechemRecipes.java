@@ -232,8 +232,10 @@ public class MinechemRecipes {
 		);
 		
 		
-		addRandomDecomposerRecipe(new ItemStack(Block.reed), 0.1F, molecule(sucrose), element(H,2), element(O), molecule(asparticAcid));
-		addRandomDecomposerRecipe(new ItemStack(Item.sugar), 0.2F, molecule(sucrose));
+		addRandomDecomposerRecipe(new ItemStack(Block.reed), 0.1F, 
+				itemStacks(molecule(sucrose), element(H,2), element(O), molecule(asparticAcid)));
+		addRandomDecomposerRecipe(new ItemStack(Item.sugar), 0.2F, 
+				itemStacks(molecule(sucrose)));
 		
 		addShapedSynthesisRecipe(new ItemStack(Block.reed, 32),
 				molecule(sucrose), 	molecule(sucrose), 	null,
@@ -257,14 +259,16 @@ public class MinechemRecipes {
 				null,						null,						molecule(hydroxylapatite)
 		);
 		
-		addRandomDecomposerRecipe(new ItemStack(Item.silk), 0.1F, molecule(serine), molecule(glycine), molecule(alinine));
+		addRandomDecomposerRecipe(new ItemStack(Item.silk), 0.1F, 
+				itemStacks(molecule(serine), molecule(glycine), molecule(alinine))
+		);
 		addShapedSynthesisRecipe(new ItemStack(Item.silk, 64),
 				molecule(serine), molecule(glycine), molecule(alinine),
 				null,			  null,				 null,
 				null,			  null,				 null
 		);
 		
-		addRandomDecomposerRecipe(new ItemStack(Block.cactus), 0.1F, molecule(mescaline));
+		addRandomDecomposerRecipe(new ItemStack(Block.cactus), 0.1F, itemStacks(molecule(mescaline)));
 		addShapedSynthesisRecipe(new ItemStack(Block.cactus, 16),
 				molecule(mescaline),	null,					molecule(mescaline),
 				null,					molecule(mescaline),	null,

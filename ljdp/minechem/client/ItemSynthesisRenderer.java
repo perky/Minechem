@@ -42,7 +42,7 @@ public class ItemSynthesisRenderer implements IItemRenderer {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, FMLClientHandler.instance().getClient().renderEngine.getTexture(texture));
 		if(type == ItemRenderType.EQUIPPED) {
 			GL11.glTranslatef(0.5F, 1.6F, 0.0F);
-			GL11.glRotatef(180f, -1f, 0f, 1f);
+			GL11.glRotatef(180f, 0.1f, 0.0f, 1f);
 		} else{ 
 			GL11.glTranslatef(0.0F, 1.0F, 0.0F);
 			GL11.glRotatef(180f, 0f, 0f, 1f);
