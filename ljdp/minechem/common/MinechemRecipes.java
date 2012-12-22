@@ -581,6 +581,10 @@ public class MinechemRecipes {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(U,2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, element(U,2)));
 		}
+		else if(event.Name.contains("itemDropUranium")) {
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(U,2)));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, element(U,2)));
+		}
 		else if(event.Name.contains("ingotBrass")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Cu,3), element(Zn,2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, element(Cu,3), element(Zn,2)));
