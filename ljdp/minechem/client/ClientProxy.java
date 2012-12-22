@@ -3,6 +3,7 @@ package ljdp.minechem.client;
 import ljdp.minechem.common.CommonProxy;
 import ljdp.minechem.common.MinechemBlocks;
 import ljdp.minechem.common.MinechemItems;
+import ljdp.minechem.common.tileentity.TileEntityBlueprintProjector;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
@@ -29,6 +30,8 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.preloadTexture(DECOMPOSER_MODEL_ON);
 		MinecraftForgeClient.preloadTexture(DECOMPOSER_MODEL_OFF);
 		MinecraftForgeClient.preloadTexture(SYNTHESIS_MODEL);
+		MinecraftForgeClient.preloadTexture(PROJECTOR_MODEL_OFF);
+		MinecraftForgeClient.preloadTexture(PROJECTOR_MODEL_ON);
 		
 		CUSTOM_RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
 		
@@ -37,11 +40,13 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.registerItemRenderer(Item.itemsList[MinechemBlocks.microscope.blockID].shiftedIndex, new ItemMicroscopeRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.itemsList[MinechemBlocks.decomposer.blockID].shiftedIndex, new ItemDecomposerRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.itemsList[MinechemBlocks.synthesis.blockID].shiftedIndex, new ItemSynthesisRenderer());
+		MinecraftForgeClient.registerItemRenderer(Item.itemsList[MinechemBlocks.blueprintProjector.blockID].shiftedIndex, new ItemBlueprintProjectorRenderer());
 		RenderingRegistry.registerBlockHandler(new RenderBlockGhostBlock());
 		TickRegistry.registerTickHandler(new TickHandler(), Side.CLIENT);
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMicroscope.class, new TileEntityMicroscopeRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecomposer.class, new TileEntityDecomposerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySynthesis.class, new TileEntitySynthesisRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBlueprintProjector.class, new  TileEntityBlueprintProjectorRenderer());
 	}
 	
 	@Override

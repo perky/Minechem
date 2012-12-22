@@ -24,7 +24,7 @@ public class BlockGhostBlock extends Block {
 		super(id, 16, MinechemBlocks.materialGas);
 		setBlockName("blockMinechemGhostBlock");
 		setCreativeTab(ModMinechem.minechemTab);
-		setTickRandomly(true);
+		//setTickRandomly(true);
 	}
 	
 	@Override
@@ -32,9 +32,8 @@ public class BlockGhostBlock extends Block {
 			float par8, float par9) {
 		int metadata = world.getBlockMetadata(x, y, z);
 		int blockid  = metadata + 1;
-		if(playerIsHoldingBlock(entityPlayer, Block.blocksList[blockid])) {
-			world.setBlockAndMetadataWithNotify(x, y, z, blockid, 0);
-			world.setBlockAndMetadataWithNotify(x+1, y, z, this.blockID, blockid-1);
+		if(playerIsHoldingBlock(entityPlayer, Block.blockSteel)) {
+			world.setBlockAndMetadataWithNotify(x, y, z, Block.blockSteel.blockID, 0);
 			return true;
 		} else
 			return false;
@@ -47,6 +46,7 @@ public class BlockGhostBlock extends Block {
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random random) {
 		super.updateTick(world, x, y, z, random);
+		/*
 		ArrayList<Vec3> airBlocks = getAdjacentAirBlocks(world, x, y, z);
 		while(airBlocks.size() > 0) {
 			int metadata   = world.getBlockMetadata(x, y, z);
@@ -61,6 +61,7 @@ public class BlockGhostBlock extends Block {
 			if(random.nextFloat() < 0.1F)
 				break;
 		}
+		*/
 	}
 	
 	private ArrayList<Vec3> getAdjacentAirBlocks(World world, int x, int y, int z) {
@@ -78,7 +79,8 @@ public class BlockGhostBlock extends Block {
 	
 	@Override
 	public int getBlockTextureFromSideAndMetadata(int side, int metadata) {
-		return Block.blocksList[metadata + 1].getBlockTextureFromSideAndMetadata(side, metadata);
+		return Block.blockSteel.blockIndexInTexture;
+		//return Block.blocksList[metadata + 1].getBlockTextureFromSideAndMetadata(side, metadata);
 	}
 	
 	@Override

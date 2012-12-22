@@ -22,8 +22,10 @@ public class CommonProxy {
 	public static String DECOMPOSER_MODEL_ON   = TEXTURE_DIR + "DecomposerModelOn.png";
 	public static String DECOMPOSER_MODEL_OFF  = TEXTURE_DIR + "DecomposerModelOff.png";
 	public static String SYNTHESIS_MODEL	= TEXTURE_DIR + "SynthesiserModel.png";
-	
+	public static String PROJECTOR_MODEL_ON = TEXTURE_DIR + "ProjectorModelOn.png";
+	public static String PROJECTOR_MODEL_OFF = TEXTURE_DIR + "ProjectorModelOff.png";
 	public static int CUSTOM_RENDER_ID;
+	
 	
 	public void registerRenderers() {
 		

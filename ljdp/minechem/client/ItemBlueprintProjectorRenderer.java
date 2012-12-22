@@ -10,17 +10,17 @@ import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.IItemRenderer.ItemRendererHelper;
 
-public class ItemDecomposerRenderer extends ItemMinechemRenderer {
-	
-	private ModelDecomposer model;
-	
-	public ItemDecomposerRenderer() {
-		model = new ModelDecomposer();
-	}
+public class ItemBlueprintProjectorRenderer extends ItemMinechemRenderer {
 
+	private ModelProjector model;
+	
+	public ItemBlueprintProjectorRenderer() {
+		model = new ModelProjector();
+	}
+	
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		String texture = ModMinechem.proxy.DECOMPOSER_MODEL_ON;
+		String texture = ModMinechem.proxy.PROJECTOR_MODEL_OFF;
 		GL11.glPushMatrix();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, FMLClientHandler.instance().getClient().renderEngine.getTexture(texture));
 		if(type == ItemRenderType.ENTITY) {
