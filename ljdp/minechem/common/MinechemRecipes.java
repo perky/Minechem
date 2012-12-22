@@ -275,15 +275,15 @@ public class MinechemRecipes {
 		ItemStack appleRed	  = new ItemStack(Item.appleRed);
 		ItemStack appleGold   = new ItemStack(Item.appleGold, 1, 0);
 		ItemStack appleGoldEnchanted   = new ItemStack(Item.appleGold, 1, 1);
-		DecomposerRecipe.add(new DecomposerRecipeChance(sugar, .2F, molecule(sucrose)));
-		DecomposerRecipe.add(new DecomposerRecipeChance(reeds, .05F, molecule(sucrose), element(H,2), element(O)));
+		DecomposerRecipe.add(new DecomposerRecipeChance(sugar, .3F, molecule(sucrose)));
+		DecomposerRecipe.add(new DecomposerRecipeChance(reeds, .1F, molecule(sucrose), element(H,2), element(O)));
 		DecomposerRecipe.add(new DecomposerRecipe(cocoaBean, molecule(theobromine)));
 		DecomposerRecipe.add(new DecomposerRecipe(pumpkin, molecule(cucurbitacin)));
 		DecomposerRecipe.add(new DecomposerRecipe(watermelon, molecule(cucurbitacin), molecule(asparticAcid), molecule(water,16)));
 		DecomposerRecipe.add(new DecomposerRecipe(glisteningMelon, molecule(water,4), element(Cr)));
 		DecomposerRecipe.add(new DecomposerRecipe(melon, element(H,2), element(O)));
 		Element carbon40 = element(C,40);
-		DecomposerRecipe.add(new DecomposerRecipeSelect(carrot, .001F,
+		DecomposerRecipe.add(new DecomposerRecipeSelect(carrot, .05F,
 				new DecomposerRecipe(carbon40, element(H,2)),
 				new DecomposerRecipe(carbon40, element(H,4)),
 				new DecomposerRecipe(carbon40, element(H,8)),
@@ -291,7 +291,7 @@ public class MinechemRecipes {
 				new DecomposerRecipe(carbon40, element(H,32)),
 				new DecomposerRecipe(carbon40, element(H,64))
 		));
-		DecomposerRecipe.add(new DecomposerRecipeSelect(goldenCarrot, .1F,
+		DecomposerRecipe.add(new DecomposerRecipeSelect(goldenCarrot, .2F,
 				new DecomposerRecipe(carbon40, element(H,2), element(Au)),
 				new DecomposerRecipe(carbon40, element(H,4), element(Au)),
 				new DecomposerRecipe(carbon40, element(H,8), element(Au)),
@@ -299,8 +299,8 @@ public class MinechemRecipes {
 				new DecomposerRecipe(carbon40, element(H,32), element(Au)),
 				new DecomposerRecipe(carbon40, element(H,64), element(Au))
 		));
-		DecomposerRecipe.add(new DecomposerRecipeChance(potato, .3F, molecule(water,8), element(K,2), molecule(cellulose)));
-		DecomposerRecipe.add(new DecomposerRecipeChance(bread, .01F, molecule(starch), molecule(sucrose)));
+		DecomposerRecipe.add(new DecomposerRecipeChance(potato, .4F, molecule(water,8), element(K,2), molecule(cellulose)));
+		DecomposerRecipe.add(new DecomposerRecipeChance(bread, .1F, molecule(starch), molecule(sucrose)));
 		DecomposerRecipe.add(new DecomposerRecipe(appleRed, molecule(malicAcid)));
 		DecomposerRecipe.add(new DecomposerRecipe(appleGold, molecule(malicAcid), element(Au,8)));
 		DecomposerRecipe.add(new DecomposerRecipe(appleGold, molecule(malicAcid), element(Au,64), element(Np)));
@@ -459,7 +459,7 @@ public class MinechemRecipes {
 		
 		// REDSTONE
 		DecomposerRecipe.add(new DecomposerRecipeChance(redstoneOre, .8F, molecule(iron3oxide,6), molecule(strontiumNitrate,6)));
-		DecomposerRecipe.add(new DecomposerRecipeChance(redstone, .2F, molecule(iron3oxide), molecule(strontiumNitrate)));
+		DecomposerRecipe.add(new DecomposerRecipeChance(redstone, .42F, molecule(iron3oxide), molecule(strontiumNitrate)));
 		
 		SynthesisRecipe.add(new SynthesisRecipe(redstone, true,
 				null,	null,						molecule(iron3oxide),
@@ -491,8 +491,8 @@ public class MinechemRecipes {
 		ItemStack anyWool = new ItemStack(Block.cloth, 1, -1);
 		ItemStack whiteWool = new ItemStack(Block.cloth, 1, 0);
 		DecomposerRecipe.add(new DecomposerRecipe(bone, molecule(hydroxylapatite)));
-		DecomposerRecipe.add(new DecomposerRecipeChance(silk, .3F, molecule(serine), molecule(glycine), molecule(alinine)));
-		DecomposerRecipe.add(new DecomposerRecipeChance(anyWool, .5F, molecule(serine,3), molecule(glycine,3), molecule(alinine,3)));
+		DecomposerRecipe.add(new DecomposerRecipeChance(silk, .45F, molecule(serine), molecule(glycine), molecule(alinine)));
+		DecomposerRecipe.add(new DecomposerRecipeChance(anyWool, .6F, molecule(serine,3), molecule(glycine,3), molecule(alinine,3)));
 		
 		SynthesisRecipe.add(new SynthesisRecipe(bone, false, molecule(hydroxylapatite)));
 		SynthesisRecipe.add(new SynthesisRecipe(silk, true, molecule(serine), molecule(glycine), molecule(alinine)));
@@ -504,7 +504,7 @@ public class MinechemRecipes {
 		
 		// STONE EARTH
 		ItemStack cobbleStone = new ItemStack(Block.cobblestone);
-		DecomposerRecipe.add(new DecomposerRecipeSelect(stone, .002F,
+		DecomposerRecipe.add(new DecomposerRecipeSelect(stone, .02F,
 				new DecomposerRecipe(element(Si), element(O)),
 				new DecomposerRecipe(element(Fe), element(O)),
 				new DecomposerRecipe(element(Mg), element(O)),
@@ -512,7 +512,7 @@ public class MinechemRecipes {
 				new DecomposerRecipe(element(Pb), element(O)),
 				new DecomposerRecipe(element(Zn), element(O))
 		));
-		DecomposerRecipe.add(new DecomposerRecipeSelect(cobbleStone, .001F,
+		DecomposerRecipe.add(new DecomposerRecipeSelect(cobbleStone, .01F,
 				new DecomposerRecipe(element(Si), element(O)),
 				new DecomposerRecipe(element(Fe), element(O)),
 				new DecomposerRecipe(element(Mg), element(O)),
@@ -520,7 +520,7 @@ public class MinechemRecipes {
 				new DecomposerRecipe(element(Pb), element(O)),
 				new DecomposerRecipe(element(Zn), element(O))
 		));
-		DecomposerRecipe.add(new DecomposerRecipeSelect(dirt, .0005F,
+		DecomposerRecipe.add(new DecomposerRecipeSelect(dirt, .008F,
 				new DecomposerRecipe(element(Si), element(O)),
 				new DecomposerRecipe(element(Fe), element(O)),
 				new DecomposerRecipe(element(Mg), element(O)),
