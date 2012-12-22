@@ -8,6 +8,11 @@ import java.util.Random;
 
 import net.minecraft.item.ItemStack;
 
+// Please dont add new molecules to this Enum.
+// Each molecule needs a unique ID and if two mods had their own
+// version of EnumMolecule it would conflict.
+// If you want to add molecules either send a pull request to
+// github.com/perky/minechem or suggest it on the github issue tracker.
 public enum EnumMolecule {
 	cellulose 				(0, "Cellulose", new Element(C, 6), new Element(H, 10), new Element(O, 5)),
 	water					(1, "Water", new Element(H,2), new Element(O)),
