@@ -29,10 +29,10 @@ public class MinechemItems {
 	private static int lensID;
 	
 	public static void loadConfig(Configuration config) {
-		elementID   = config.getItem(config.CATEGORY_ITEM, "Element", 4736).getInt();
-	 	moleculeID  = config.getItem(config.CATEGORY_ITEM, "Molecule", 4737).getInt();
-	 	lensID	 	= config.getItem(config.CATEGORY_ITEM, "Lens", 4738).getInt();
-	 	atomicManipulatorID = config.getItem(config.CATEGORY_ITEM, "AtomicManipulator", 4739).getInt();
+		elementID   = config.getItem(config.CATEGORY_ITEM, "Element", 4736).getInt(4736);
+	 	moleculeID  = config.getItem(config.CATEGORY_ITEM, "Molecule", 4737).getInt(4737);
+	 	lensID	 	= config.getItem(config.CATEGORY_ITEM, "Lens", 4738).getInt(4738);
+	 	atomicManipulatorID = config.getItem(config.CATEGORY_ITEM, "AtomicManipulator", 4739).getInt(4739);
 	}
 	
 	public static void registerItems() {
