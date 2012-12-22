@@ -18,8 +18,8 @@ public abstract class BlockMinechemContainer extends BlockContainer {
 	
 	protected BlockMinechemContainer(int par1, Material par2Material) {
 		super(par1, par2Material);
-		setHardness(10F);
-		setResistance(1000F);
+		setHardness(2F);
+		setResistance(50F);
 	}
 
 	@Override

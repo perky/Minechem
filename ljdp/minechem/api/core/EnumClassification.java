@@ -1,4 +1,4 @@
-package ljdp.minechem.common;
+package ljdp.minechem.api.core;
 
 import ljdp.minechem.common.utils.MinechemHelper;
 

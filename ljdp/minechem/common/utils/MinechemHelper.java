@@ -3,6 +3,12 @@ package ljdp.minechem.common.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import ljdp.minechem.api.core.Chemical;
+import ljdp.minechem.api.core.Element;
+import ljdp.minechem.api.core.EnumElement;
+import ljdp.minechem.api.core.Molecule;
+import ljdp.minechem.common.MinechemItems;
+
 import buildcraft.api.core.Position;
 import buildcraft.core.utils.Utils;
 
@@ -19,13 +25,6 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraftforge.common.ForgeDirection;
 
 public class MinechemHelper {
-
-	public static boolean stacksAreSameKind(ItemStack is1, ItemStack is2) {
-		int dmg1 = is1.getItemDamage();
-		int dmg2 = is2.getItemDamage();
-		return is1.itemID == is2.itemID 
-				&& (dmg1 == -1 || dmg2 == -1 || (dmg1 == dmg2));
-	}
 	
 	public static float translateValue(float value, float leftMin, float leftMax, float rightMin, float rightMax) {
 		float leftRange = leftMax - leftMin;
@@ -89,6 +88,45 @@ public class MinechemHelper {
 			itemlist.add(itemstack);
 		}
 		return itemlist;
+	}
+	
+	public static ArrayList<ItemStack> convertChemicalsIntoItemStacks(ArrayList<Chemical> chemicals) {
+		ArrayList<ItemStack> stacks = new ArrayList();
+		if(chemicals == null)
+			return stacks;
+		for(Chemical chemical : chemicals) {
+			if(chemical instanceof Element) {
+				stacks.add(new ItemStack(MinechemItems.element, chemical.amount, ((Element) chemical).element.ordinal()));
+			} else if(chemical instanceof Molecule) {
+				stacks.add(new ItemStack(MinechemItems.molecule, chemical.amount, ((Molecule) chemical).molecule.ordinal()));
+			}
+		}
+		return stacks;
+	}
+	
+	public static ItemStack[] convertChemicalArrayIntoItemStackArray(Chemical[] chemicals) {
+		ItemStack[] stacks = new ItemStack[chemicals.length];
+		for(int i = 0; i < chemicals.length; i++) {
+			Chemical chemical = chemicals[i];
+			if(chemical instanceof Element) {
+				stacks[i] = new ItemStack(MinechemItems.element, chemical.amount, ((Element) chemical).element.ordinal());
+			} else if(chemical instanceof Molecule) {
+				stacks[i] = new ItemStack(MinechemItems.molecule, chemical.amount, ((Molecule) chemical).molecule.ordinal());
+			}
+		}
+		return stacks;
+	}
+	
+	public static boolean itemStackMatchesChemical(ItemStack itemstack, Chemical chemical) {
+		if(chemical instanceof Element && itemstack.itemID == MinechemItems.element.shiftedIndex) {
+			Element element = (Element)chemical;
+			return (itemstack.getItemDamage() == element.element.ordinal()) && (itemstack.stackSize >= element.amount);
+		}
+		if (chemical instanceof Molecule && itemstack.itemID == MinechemItems.molecule.shiftedIndex) {
+			Molecule molecule = (Molecule)chemical;
+			return (itemstack.getItemDamage() == molecule.molecule.ordinal()) && (itemstack.stackSize >= molecule.amount);
+		}
+		return false;
 	}
 	
 	/**

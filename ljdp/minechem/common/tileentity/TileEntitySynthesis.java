@@ -7,13 +7,15 @@ import buildcraft.api.inventory.ISpecialInventory;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
+import ljdp.minechem.api.recipe.SynthesisRecipe;
+import ljdp.minechem.api.util.Util;
 import ljdp.minechem.client.ModelSynthesizer;
 import ljdp.minechem.common.MinechemPowerProvider;
 import ljdp.minechem.common.MinechemRecipes;
-import ljdp.minechem.common.SynthesisRecipe;
 import ljdp.minechem.common.network.PacketDecomposerUpdate;
 import ljdp.minechem.common.network.PacketHandler;
 import ljdp.minechem.common.network.PacketSynthesisUpdate;
+import ljdp.minechem.common.recipe.SynthesisRecipeHandler;
 import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -78,9 +80,9 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 	
 	private boolean getRecipeResult() {
 		ItemStack[] craftingItems = getCraftingItems();
-		SynthesisRecipe recipe = MinechemRecipes.getInstance().getSynthesisRecipe(craftingItems);
+		SynthesisRecipe recipe = SynthesisRecipeHandler.instance.getRecipeFromInput(craftingItems);
 		if(recipe != null && canAddEmptyBottles(recipe.getIngredientCount())) {
-			synthesisInventory[kStartOutput] = recipe.getOutputStack().copy();
+			synthesisInventory[kStartOutput] = recipe.getOutput().copy();
 			currentRecipe = recipe;
 			return true;
 		} else {
@@ -100,8 +102,17 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 		return currentRecipe;
 	}
 	
+	private boolean hasCraftingItems() {
+		for(int slot = kStartInput; slot < kStartInput + kSizeInput; slot++) {
+			if(synthesisInventory[slot] != null)
+				return true;
+		}
+		return false;
+	}
+	
 	private void takeCraftingItems() {
-		for(ItemStack ingredient : currentRecipe.getUnshapedRecipe()) {
+		ArrayList<ItemStack> stacks = MinechemHelper.convertChemicalsIntoItemStacks(currentRecipe.getShapelessRecipe());
+		for(ItemStack ingredient : stacks) {
 			takeCraftingItem(ingredient);
 		}
 	}
@@ -110,7 +121,7 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 		ItemStack[] craftingItems = getCraftingItems();
 		for(int i = 0; i < craftingItems.length; i++) {
 			ItemStack craftingItem = craftingItems[i];
-			if(craftingItem != null && MinechemHelper.stacksAreSameKind(itemstack, craftingItem)
+			if(craftingItem != null && Util.stacksAreSameKind(itemstack, craftingItem)
 					&& craftingItem.stackSize >= itemstack.stackSize) {
 				decrStackSize(kStartInput + i, itemstack.stackSize);
 				addEmptyBottles(itemstack.stackSize);
@@ -317,22 +328,24 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 
 	@Override
 	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-		if(!doRemove && currentRecipe != null)
-			return new ItemStack[]{currentRecipe.getOutputStack()};
-		
-		if(currentRecipe != null 
-				&& canAddEmptyBottles(currentRecipe.getIngredientCount()) 
+		ItemStack[] output = new ItemStack[1];
+		if(currentRecipe != null) {
+			output[0] = currentRecipe.getOutput().copy();
+			if(!doRemove)
+				return output;
+			if(canAddEmptyBottles(currentRecipe.getIngredientCount())
 				&& takeStacksFromAdjacentChests(currentRecipe))
-		{
-			addEmptyBottles(currentRecipe.getIngredientCount());
-			return new ItemStack[]{currentRecipe.getOutputStack()};
+			{
+				addEmptyBottles(currentRecipe.getIngredientCount());
+				return output;
+			}
 		}
 		
 		return null;
 	}
 	
 	private boolean takeStacksFromAdjacentChests(SynthesisRecipe recipe) {
-		ArrayList<ItemStack> ingredients = recipe.getUnshapedRecipe();
+		ArrayList<ItemStack> ingredients = MinechemHelper.convertChemicalsIntoItemStacks(recipe.getShapelessRecipe());
 		ArrayList<ItemStackPointer> itemStackPointers = getStacksFromAdjacentChests(ingredients);
 		if(itemStackPointers != null) {
 			for(ItemStackPointer pointer : itemStackPointers) {

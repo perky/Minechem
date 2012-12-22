@@ -3,8 +3,10 @@ package ljdp.minechem.common.items;
 import java.util.ArrayList;
 import java.util.List;
 
-import ljdp.minechem.common.EnumMolecule;
+import ljdp.minechem.api.core.EnumMolecule;
+import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.common.ModMinechem;
+import ljdp.minechem.common.utils.MinechemHelper;
 
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.creativetab.CreativeTabs;
@@ -42,17 +44,11 @@ public class ItemMolecule extends Item {
 	
 	public ArrayList<ItemStack> getElements(ItemStack itemstack) {
 		EnumMolecule molecule = EnumMolecule.molecules[itemstack.getItemDamage()];
-		ArrayList<ItemStack> elements = new ArrayList<ItemStack>();
-		for(ItemStack element : molecule.components()) {
-			elements.add(element.copy());
-		}
-		return elements;
+		return MinechemHelper.convertChemicalsIntoItemStacks(molecule.components());
 	}
 	
-	private static String getFormula(ItemStack itemstack) {
-		int itemDamage = itemstack.getItemDamage();
-		EnumMolecule molecule = EnumMolecule.getById(itemDamage);
-		ArrayList<ItemStack> components = molecule.components();
+	private String getFormula(ItemStack itemstack) {
+		ArrayList<ItemStack> components = getElements(itemstack);
 		String formula = "";
 		for(ItemStack component : components) {
 			if(component.getItem() instanceof ItemElement) {
@@ -62,7 +58,7 @@ public class ItemMolecule extends Item {
 			} else if(component.getItem() instanceof ItemMolecule) {
 				if(component.stackSize > 1)
 					formula += "(";
-				formula += ItemMolecule.getFormula(component);
+				formula += getFormula(component);
 				if(component.stackSize > 1)
 					formula += ")" + component.stackSize;
 			}
@@ -123,28 +119,31 @@ public class ItemMolecule extends Item {
     }
 
     @Override
-    public ItemStack onFoodEaten(ItemStack par1ItemStack, World par2World,
-    		EntityPlayer par3EntityPlayer) {
-    	
-    	if (!par3EntityPlayer.capabilities.isCreativeMode)
-        {
-            --par1ItemStack.stackSize;
-        }
+    public ItemStack onFoodEaten(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
+    	if (!entityPlayer.capabilities.isCreativeMode)
+            --itemStack.stackSize;
 
-        if (!par2World.isRemote)
-        {
-        	EnumMolecule molecule = getMolecule(par1ItemStack);
+        if (world.isRemote)
+        	return itemStack;
+        
+    	EnumMolecule molecule = getMolecule(itemStack);
+    	switch(molecule) {
+    	case psilocybin:
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 0));
+    		entityPlayer.attackEntityFrom(DamageSource.generic, 2);
+    		break;
+    	case amphetamine:
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), Constants.TICKS_PER_SECOND * 20, 7));
+    		break;
+    	case muscarine:
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.wither.getId(), Constants.TICKS_PER_SECOND * 60, 2));
+    		break;
+		default:
+			entityPlayer.attackEntityFrom(DamageSource.generic, 5);
+			break;
+    	}
 
-        	if(molecule == EnumMolecule.psilocybin) {
-        		par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), 30 * 20, 0));
-        		par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), 20 * 20, 10));
-        		par3EntityPlayer.attackEntityFrom(DamageSource.magic, 2);
-        	} else {
-        		par3EntityPlayer.attackEntityFrom(DamageSource.magic, 5);
-        	}
-        }
-
-        return par1ItemStack;
+        return itemStack;
     }
 	
 	@Override

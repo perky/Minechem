@@ -1,7 +1,7 @@
-package ljdp.minechem.common;
+package ljdp.minechem.api.core;
 
-import static ljdp.minechem.common.EnumClassification.*;
-import static ljdp.minechem.common.EnumRadioactivity.*;
+import static ljdp.minechem.api.core.EnumClassification.*;
+import static ljdp.minechem.api.core.EnumRadioactivity.*;
 
 public enum EnumElement {
 	H	("Hydrogen", nonmetal, gas, stable),
@@ -118,6 +118,7 @@ public enum EnumElement {
 	Cn	("Copernicium", transitionMetal, solid, extremelyRadioactive),
 	Mc	("Minecraftium", actinide, liquid, stable);
 	
+	public static EnumElement[] elements = EnumElement.values();
 	private final String descriptiveName;
 	private final EnumClassification classification;
 	private final EnumClassification roomState;

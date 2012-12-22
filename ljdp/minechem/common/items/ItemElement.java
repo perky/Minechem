@@ -3,11 +3,11 @@ package ljdp.minechem.common.items;
 import java.util.EnumMap;
 import java.util.List;
 
-import ljdp.minechem.common.EnumClassification;
-import ljdp.minechem.common.EnumElement;
-import ljdp.minechem.common.EnumRadioactivity;
+import ljdp.minechem.api.core.EnumClassification;
+import ljdp.minechem.api.core.EnumElement;
+import ljdp.minechem.api.core.EnumRadioactivity;
+import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.common.ModMinechem;
-import ljdp.minechem.common.utils.MinechemConstants;
 
 import net.minecraft.client.gui.ChatLine;
 import net.minecraft.creativetab.CreativeTabs;
@@ -203,12 +203,12 @@ public class ItemElement extends Item {
 		if(getRadioactivity(itemstack) != EnumRadioactivity.stable && itemstack.getTagCompound() != null ){
 			NBTTagCompound tagCompound = itemstack.getTagCompound();
 			int life = tagCompound.getShort("life");
-			if(life < MinechemConstants.TICKS_PER_MINUTE)
-				timeLeft = (life / MinechemConstants.TICKS_PER_SECOND) + "s";
-			else if(life < MinechemConstants.TICKS_PER_HOUR)
-				timeLeft = (life / MinechemConstants.TICKS_PER_MINUTE) + "m";
-			else if(life < MinechemConstants.TICKS_PER_DAY)
-				timeLeft = (life / MinechemConstants.TICKS_PER_HOUR) + "hr";
+			if(life < Constants.TICKS_PER_MINUTE)
+				timeLeft = (life / Constants.TICKS_PER_SECOND) + "s";
+			else if(life < Constants.TICKS_PER_HOUR)
+				timeLeft = (life / Constants.TICKS_PER_MINUTE) + "m";
+			else if(life < Constants.TICKS_PER_DAY)
+				timeLeft = (life / Constants.TICKS_PER_HOUR) + "hr";
 		}
 		return timeLeft;
 	}

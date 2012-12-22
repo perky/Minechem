@@ -1,6 +1,6 @@
-package ljdp.minechem.common.utils;
+package ljdp.minechem.api.util;
 
-public class MinechemConstants {
+public class Constants {
 	
 	public static final  int TICKS_PER_SECOND 	= 20;
 	public static final int TICKS_PER_MINUTE 	= TICKS_PER_SECOND * 60;

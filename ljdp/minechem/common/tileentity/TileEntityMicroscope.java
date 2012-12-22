@@ -2,11 +2,13 @@ package ljdp.minechem.common.tileentity;
 
 import java.util.ArrayList;
 
-import ljdp.minechem.common.EnumMolecule;
+import ljdp.minechem.api.core.EnumMolecule;
+import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.MinechemRecipes;
-import ljdp.minechem.common.SynthesisRecipe;
 import ljdp.minechem.common.items.ItemMolecule;
+import ljdp.minechem.common.recipe.SynthesisRecipeHandler;
+import ljdp.minechem.common.utils.MinechemHelper;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -31,13 +33,13 @@ public class TileEntityMicroscope extends TileEntity implements IInventory {
 			return;
 		if(itemstack.itemID == MinechemItems.molecule.shiftedIndex) {
 			EnumMolecule molecule = ((ItemMolecule)MinechemItems.molecule).getMolecule(itemstack);
-			ArrayList<ItemStack> moleculeComponents = molecule.components();
+			ArrayList<ItemStack> moleculeComponents = MinechemHelper.convertChemicalsIntoItemStacks(molecule.components());
 			outputStacks = moleculeComponents.toArray(new ItemStack[moleculeComponents.size()]);
 			isShaped = false;
 		} else {
-			SynthesisRecipe recipe = MinechemRecipes.getInstance().getSynthesisRecipe(itemstack);
+			SynthesisRecipe recipe = SynthesisRecipeHandler.instance.getRecipeFromOutput(itemstack);
 			if(recipe != null) {
-				outputStacks = recipe.getShapedRecipe();
+				outputStacks = MinechemHelper.convertChemicalArrayIntoItemStackArray(recipe.getShapedRecipe());
 				isShaped = recipe.isShaped();
 			}
 		}

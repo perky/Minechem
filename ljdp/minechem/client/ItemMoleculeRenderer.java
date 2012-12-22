@@ -1,6 +1,6 @@
 package ljdp.minechem.client;
 
-import ljdp.minechem.common.EnumMolecule;
+import ljdp.minechem.api.core.EnumMolecule;
 import ljdp.minechem.common.items.ItemMolecule;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;

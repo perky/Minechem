@@ -1,5 +1,6 @@
 package ljdp.minechem.common;
 
+import ljdp.minechem.api.core.EnumElement;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 

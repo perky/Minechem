@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
+import ljdp.minechem.api.core.EnumElement;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.items.ItemAtomicManipulator;
 import ljdp.minechem.common.items.ItemElement;
