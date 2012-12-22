@@ -52,7 +52,7 @@ public abstract class BlockMinechemContainer extends BlockContainer {
                 			new ItemStack(itemstack.itemID, randomN, itemstack.getItemDamage())
                 	);
                 	if(itemstack.hasTagCompound())
-                		droppedEntity.item.setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
+                		droppedEntity.func_92014_d().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
                 	float amplitude = 0.05F;
                 	float yAmplitude = amplitude + 0.2F;
                 	droppedEntity.motionX = (double)((float)this.random.nextGaussian() * amplitude);

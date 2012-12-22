@@ -2,13 +2,13 @@ package ljdp.minechem.common.items;
 
 import java.util.List;
 
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemLens extends Item {
 	

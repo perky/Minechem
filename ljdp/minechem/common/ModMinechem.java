@@ -33,7 +33,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid="minechem", name="MineChem", version="2.0.0a2")
+@Mod(modid="minechem", name="MineChem", version="2.0.0pr1")
 @NetworkMod(
 		clientSideRequired=true, 
 		serverSideRequired=false, 

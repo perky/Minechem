@@ -363,8 +363,6 @@ public abstract class GuiContainerTabbed extends GuiMinechemContainer implements
         return null;
     }
 
-    
-    
     /* INEIGuiHandler */
     @Override
     public VisiblityData modifyVisiblity(GuiContainer gui, VisiblityData currentVisibility) {

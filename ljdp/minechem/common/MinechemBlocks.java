@@ -31,26 +31,26 @@ public class MinechemBlocks {
 		microscopeID = config.get(config.CATEGORY_BLOCK, "Microscope", 4012).getInt(4012);
 	 	decomposerID = config.get(config.CATEGORY_BLOCK, "Decomposer", 4011).getInt(4011);
 	 	synthesisID  = config.get(config.CATEGORY_BLOCK, "Synthesis",  4013).getInt(4013);
-	 	ghostBlockID = config.get(config.CATEGORY_BLOCK, "GhostBlock", 4014).getInt(4014);
+	 	//ghostBlockID = config.get(config.CATEGORY_BLOCK, "GhostBlock", 4014).getInt(4014);
 	}
 	
 	public static void registerBlocks() {
 		decomposer = new BlockDecomposer(decomposerID);
 		microscope = new BlockMicroscope(microscopeID);
 		synthesis  = new BlockSynthesis(synthesisID);
-		ghostBlock = new BlockGhostBlock(ghostBlockID);
+		//ghostBlock = new BlockGhostBlock(ghostBlockID);
 		
-		GameRegistry.registerBlock(decomposer);
+		GameRegistry.registerBlock(decomposer, "minechem.blockDecomposer");
 		LanguageRegistry.addName(decomposer, "Chemical Decomposer");
 		
-		GameRegistry.registerBlock(microscope);
+		GameRegistry.registerBlock(microscope, "minechem.blockMicroscope");
 		LanguageRegistry.addName(microscope, MinechemHelper.getLocalString("block.name.microscope"));
 		
-		GameRegistry.registerBlock(synthesis);
+		GameRegistry.registerBlock(synthesis, "minechem.blockSynthesis");
 		LanguageRegistry.addName(synthesis, MinechemHelper.getLocalString("block.name.synthesis"));
 		
-		GameRegistry.registerBlock(ghostBlock, ItemGhostBlock.class);
-		LanguageRegistry.addName(ghostBlock, "ghost block");
+		//GameRegistry.registerBlock(ghostBlock, ItemGhostBlock.class);
+		//LanguageRegistry.addName(ghostBlock, "ghost block");
 		
 		GameRegistry.registerTileEntity(TileEntityMicroscope.class, "minechem.tileEntityMicroscope");
 		GameRegistry.registerTileEntity(TileEntitySynthesis.class,  "minechem.tileEntitySynthesis");

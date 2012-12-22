@@ -8,8 +8,6 @@ import ljdp.minechem.api.core.EnumElement;
 import ljdp.minechem.api.core.EnumRadioactivity;
 import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.common.ModMinechem;
-
-import net.minecraft.client.gui.ChatLine;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,9 +16,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemElement extends Item {
 	

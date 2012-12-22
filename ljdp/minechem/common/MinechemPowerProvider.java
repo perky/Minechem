@@ -1,13 +1,6 @@
 package ljdp.minechem.common;
 
-import java.util.ArrayList;
-
-import ljdp.minechem.common.utils.RollingAverage;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Side;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.classloading.FMLForgePlugin;
-import net.minecraftforge.common.ForgeDirection;
 import buildcraft.api.core.SafeTimeTracker;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerProvider;

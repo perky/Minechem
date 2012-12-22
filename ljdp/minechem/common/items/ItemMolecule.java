@@ -7,8 +7,6 @@ import ljdp.minechem.api.core.EnumMolecule;
 import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.utils.MinechemHelper;
-
-import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -18,8 +16,8 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemMolecule extends Item {
 	

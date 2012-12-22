@@ -2,21 +2,11 @@ package ljdp.minechem.common.tileentity;
 
 import java.util.ArrayList;
 
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
-
-import buildcraft.api.core.SafeTimeTracker;
-import buildcraft.api.power.IPowerProvider;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerFramework;
-
 import ljdp.minechem.api.recipe.DecomposerRecipe;
 import ljdp.minechem.api.util.Util;
 import ljdp.minechem.client.ModelDecomposer;
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.MinechemPowerProvider;
-import ljdp.minechem.common.MinechemRecipes;
-import ljdp.minechem.common.UnbondingRecipe;
 import ljdp.minechem.common.items.ItemMolecule;
 import ljdp.minechem.common.network.PacketDecomposerUpdate;
 import ljdp.minechem.common.network.PacketHandler;
@@ -32,9 +22,12 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
+import buildcraft.api.core.SafeTimeTracker;
+import buildcraft.api.power.IPowerProvider;
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerFramework;
 
 public class TileEntityDecomposer extends TileEntity implements IInventory, ISidedInventory, IPowerReceptor {
 	

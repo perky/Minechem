@@ -1,11 +1,8 @@
 package ljdp.minechem.client.gui;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -16,13 +13,17 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
-public abstract class GuiMinechemContainer extends GuiScreen {
-	
-	private static final RenderItem vanillaRenderItem = new RenderItem();
-	
-	/** Stacks renderer. Icons, stack size, health, etc... */
-    protected RenderItem itemRenderer = vanillaRenderItem;
+@SideOnly(Side.CLIENT)
+public abstract class GuiMinechemContainer extends GuiScreen
+{
+    /** Stacks renderer. Icons, stack size, health, etc... */
+    protected static RenderItem vanillaItemRenderer = new RenderItem();
+    
+    public RenderItem itemRenderer = vanillaItemRenderer;
 
     /** The X size of the inventory window in pixels. */
     protected int xSize = 176;
@@ -43,14 +44,22 @@ public abstract class GuiMinechemContainer extends GuiScreen {
      */
     protected int guiTop;
     private Slot theSlot;
-    private Slot field_85051_p = null;
+
+    /** Used when touchscreen is enabled */
+    private Slot clickedSlot = null;
     private boolean field_90018_r = false;
-    private ItemStack field_85050_q = null;
+
+    /** Used when touchscreen is enabled */
+    private ItemStack draggedStack = null;
     private int field_85049_r = 0;
     private int field_85048_s = 0;
-    private Slot field_85047_t = null;
-    private long field_85046_u = 0L;
-    private ItemStack field_85045_v = null;
+    private Slot returningStackDestSlot = null;
+    private long returningStackTime = 0L;
+
+    /** Used when touchscreen is enabled */
+    private ItemStack returningStack = null;
+    private Slot field_92033_y = null;
+    private long field_92032_z = 0L;
 
     public GuiMinechemContainer(Container par1Container)
     {
@@ -92,7 +101,6 @@ public abstract class GuiMinechemContainer extends GuiScreen {
         short var7 = 240;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)var6 / 1.0F, (float)var7 / 1.0F);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        int var8;
         int var9;
 
         for (int var13 = 0; var13 < this.inventorySlots.inventorySlots.size(); ++var13)
@@ -105,7 +113,7 @@ public abstract class GuiMinechemContainer extends GuiScreen {
                 this.theSlot = var14;
                 GL11.glDisable(GL11.GL_LIGHTING);
                 GL11.glDisable(GL11.GL_DEPTH_TEST);
-                var8 = var14.xDisplayPosition;
+                int var8 = var14.xDisplayPosition;
                 var9 = var14.yDisplayPosition;
                 this.drawGradientRect(var8, var9, var8 + 16, var9 + 16, -2130706433, -2130706433);
                 GL11.glEnable(GL11.GL_LIGHTING);
@@ -115,42 +123,43 @@ public abstract class GuiMinechemContainer extends GuiScreen {
 
         this.drawGuiContainerForegroundLayer(par1, par2);
         InventoryPlayer var15 = this.mc.thePlayer.inventory;
-        ItemStack var16 = this.field_85050_q == null ? var15.getItemStack() : this.field_85050_q;
+        ItemStack var16 = this.draggedStack == null ? var15.getItemStack() : this.draggedStack;
 
         if (var16 != null)
         {
-            var8 = this.field_85050_q == null ? 8 : 0;
+            byte var18 = 8;
+            var9 = this.draggedStack == null ? 8 : 16;
 
-            if (this.field_85050_q != null && this.field_90018_r)
+            if (this.draggedStack != null && this.field_90018_r)
             {
                 var16 = var16.copy();
                 var16.stackSize = MathHelper.ceiling_float_int((float)var16.stackSize / 2.0F);
             }
 
-            this.func_85044_b(var16, par1 - var4 - var8, par2 - var5 - var8);
+            this.drawItemStack(var16, par1 - var4 - var18, par2 - var5 - var9);
         }
 
-        if (this.field_85045_v != null)
+        if (this.returningStack != null)
         {
-            float var17 = (float)(Minecraft.getSystemTime() - this.field_85046_u) / 100.0F;
+            float var17 = (float)(Minecraft.getSystemTime() - this.returningStackTime) / 100.0F;
 
             if (var17 >= 1.0F)
             {
                 var17 = 1.0F;
-                this.field_85045_v = null;
+                this.returningStack = null;
             }
 
-            var9 = this.field_85047_t.xDisplayPosition - this.field_85049_r;
-            int var10 = this.field_85047_t.yDisplayPosition - this.field_85048_s;
+            var9 = this.returningStackDestSlot.xDisplayPosition - this.field_85049_r;
+            int var10 = this.returningStackDestSlot.yDisplayPosition - this.field_85048_s;
             int var11 = this.field_85049_r + (int)((float)var9 * var17);
             int var12 = this.field_85048_s + (int)((float)var10 * var17);
-            this.func_85044_b(this.field_85045_v, var11, var12);
+            this.drawItemStack(this.returningStack, var11, var12);
         }
 
         if (var15.getItemStack() == null && this.theSlot != null && this.theSlot.getHasStack())
         {
-            ItemStack var18 = this.theSlot.getStack();
-            this.func_74184_a(var18, par1 - var4 + 8, par2 - var5 + 8);
+            ItemStack var19 = this.theSlot.getStack();
+            this.drawItemStackTooltip(var19, par1 - var4 + 8, par2 - var5 + 8);
         }
 
         GL11.glPopMatrix();
@@ -159,18 +168,18 @@ public abstract class GuiMinechemContainer extends GuiScreen {
         RenderHelper.enableStandardItemLighting();
     }
 
-    private void func_85044_b(ItemStack par1ItemStack, int par2, int par3)
+    private void drawItemStack(ItemStack par1ItemStack, int par2, int par3)
     {
         GL11.glTranslatef(0.0F, 0.0F, 32.0F);
         this.zLevel = 200.0F;
         itemRenderer.zLevel = 200.0F;
         itemRenderer.renderItemAndEffectIntoGUI(this.fontRenderer, this.mc.renderEngine, par1ItemStack, par2, par3);
-        itemRenderer.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, par1ItemStack, par2, par3);
+        itemRenderer.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, par1ItemStack, par2, par3 - (this.draggedStack == null ? 0 : 8));
         this.zLevel = 0.0F;
         itemRenderer.zLevel = 0.0F;
     }
 
-    protected void func_74184_a(ItemStack par1ItemStack, int par2, int par3)
+    protected void drawItemStackTooltip(ItemStack par1ItemStack, int par2, int par3)
     {
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         RenderHelper.disableStandardItemLighting();
@@ -201,6 +210,11 @@ public abstract class GuiMinechemContainer extends GuiScreen {
             if (var4.size() > 1)
             {
                 var9 += 2 + (var4.size() - 1) * 10;
+            }
+
+            if (this.guiTop + var7 + var9 + 6 > this.height)
+            {
+                var7 = this.height - var9 - this.guiTop - 6;
             }
 
             this.zLevel = 300.0F;
@@ -301,9 +315,9 @@ public abstract class GuiMinechemContainer extends GuiScreen {
         int var2 = par1Slot.xDisplayPosition;
         int var3 = par1Slot.yDisplayPosition;
         ItemStack var4 = par1Slot.getStack();
-        boolean var5 = par1Slot == this.field_85051_p && this.field_85050_q != null && !this.field_90018_r;
+        boolean var5 = par1Slot == this.clickedSlot && this.draggedStack != null && !this.field_90018_r;
 
-        if (par1Slot == this.field_85051_p && this.field_85050_q != null && this.field_90018_r && var4 != null)
+        if (par1Slot == this.clickedSlot && this.draggedStack != null && this.field_90018_r && var4 != null)
         {
             var4 = var4.copy();
             var4.stackSize /= 2;
@@ -381,7 +395,7 @@ public abstract class GuiMinechemContainer extends GuiScreen {
                 var9 = -999;
             }
 
-            if (this.mc.gameSettings.field_85185_A && var8 && this.mc.thePlayer.inventory.getItemStack() == null)
+            if (this.mc.gameSettings.touchscreen && var8 && this.mc.thePlayer.inventory.getItemStack() == null)
             {
                 this.mc.displayGuiScreen((GuiScreen)null);
                 return;
@@ -389,17 +403,17 @@ public abstract class GuiMinechemContainer extends GuiScreen {
 
             if (var9 != -1)
             {
-                if (this.mc.gameSettings.field_85185_A)
+                if (this.mc.gameSettings.touchscreen)
                 {
                     if (var5 != null && var5.getHasStack())
                     {
-                        this.field_85051_p = var5;
-                        this.field_85050_q = null;
+                        this.clickedSlot = var5;
+                        this.draggedStack = null;
                         this.field_90018_r = par3 == 1;
                     }
                     else
                     {
-                        this.field_85051_p = null;
+                        this.clickedSlot = null;
                     }
                 }
                 else if (var4)
@@ -417,15 +431,39 @@ public abstract class GuiMinechemContainer extends GuiScreen {
 
     protected void func_85041_a(int par1, int par2, int par3, long par4)
     {
-        if (this.field_85051_p != null && this.mc.gameSettings.field_85185_A && this.field_85050_q == null)
+        if (this.clickedSlot != null && this.mc.gameSettings.touchscreen)
         {
             if (par3 == 0 || par3 == 1)
             {
                 Slot var6 = this.getSlotAtPosition(par1, par2);
 
-                if (var6 != this.field_85051_p)
+                if (this.draggedStack == null)
                 {
-                    this.field_85050_q = this.field_85051_p.getStack();
+                    if (var6 != this.clickedSlot)
+                    {
+                        this.draggedStack = this.clickedSlot.getStack().copy();
+                    }
+                }
+                else if (this.draggedStack.stackSize > 1 && var6 != null && this.func_92031_b(var6))
+                {
+                    long var7 = Minecraft.getSystemTime();
+
+                    if (this.field_92033_y == var6)
+                    {
+                        if (var7 - this.field_92032_z > 500L)
+                        {
+                            this.handleMouseClick(this.clickedSlot, this.clickedSlot.slotNumber, 0, 0);
+                            this.handleMouseClick(var6, var6.slotNumber, 1, 0);
+                            this.handleMouseClick(this.clickedSlot, this.clickedSlot.slotNumber, 0, 0);
+                            this.field_92032_z = var7 + 750L;
+                            --this.draggedStack.stackSize;
+                        }
+                    }
+                    else
+                    {
+                        this.field_92033_y = var6;
+                        this.field_92032_z = var7;
+                    }
                 }
             }
         }
@@ -437,7 +475,7 @@ public abstract class GuiMinechemContainer extends GuiScreen {
      */
     protected void mouseMovedOrUp(int par1, int par2, int par3)
     {
-        if (this.field_85051_p != null && this.mc.gameSettings.field_85185_A)
+        if (this.clickedSlot != null && this.mc.gameSettings.touchscreen)
         {
             if (par3 == 0 || par3 == 1)
             {
@@ -457,50 +495,57 @@ public abstract class GuiMinechemContainer extends GuiScreen {
                     var8 = -999;
                 }
 
-                if (this.field_85050_q == null && var4 != this.field_85051_p)
+                if (this.draggedStack == null && var4 != this.clickedSlot)
                 {
-                    this.field_85050_q = this.field_85051_p.getStack();
+                    this.draggedStack = this.clickedSlot.getStack();
                 }
 
-                boolean var9 = var4 == null || !var4.getHasStack();
+                boolean var9 = this.func_92031_b(var4);
 
-                if (var4 != null && var4.getHasStack() && this.field_85050_q != null && ItemStack.areItemStackTagsEqual(var4.getStack(), this.field_85050_q))
+                if (var8 != -1 && this.draggedStack != null && var9)
                 {
-                    var9 |= var4.getStack().stackSize + this.field_85050_q.stackSize <= this.field_85050_q.getMaxStackSize();
-                }
-
-                if (var8 != -1 && this.field_85050_q != null && var9)
-                {
-                    this.handleMouseClick(this.field_85051_p, this.field_85051_p.slotNumber, par3, 0);
+                    this.handleMouseClick(this.clickedSlot, this.clickedSlot.slotNumber, par3, 0);
                     this.handleMouseClick(var4, var8, 0, 0);
 
                     if (this.mc.thePlayer.inventory.getItemStack() != null)
                     {
-                        this.handleMouseClick(this.field_85051_p, this.field_85051_p.slotNumber, par3, 0);
+                        this.handleMouseClick(this.clickedSlot, this.clickedSlot.slotNumber, par3, 0);
                         this.field_85049_r = par1 - var5;
                         this.field_85048_s = par2 - var6;
-                        this.field_85047_t = this.field_85051_p;
-                        this.field_85045_v = this.field_85050_q;
-                        this.field_85046_u = Minecraft.getSystemTime();
+                        this.returningStackDestSlot = this.clickedSlot;
+                        this.returningStack = this.draggedStack;
+                        this.returningStackTime = Minecraft.getSystemTime();
                     }
                     else
                     {
-                        this.field_85045_v = null;
+                        this.returningStack = null;
                     }
                 }
-                else if (this.field_85050_q != null)
+                else if (this.draggedStack != null)
                 {
                     this.field_85049_r = par1 - var5;
                     this.field_85048_s = par2 - var6;
-                    this.field_85047_t = this.field_85051_p;
-                    this.field_85045_v = this.field_85050_q;
-                    this.field_85046_u = Minecraft.getSystemTime();
+                    this.returningStackDestSlot = this.clickedSlot;
+                    this.returningStack = this.draggedStack;
+                    this.returningStackTime = Minecraft.getSystemTime();
                 }
 
-                this.field_85050_q = null;
-                this.field_85051_p = null;
+                this.draggedStack = null;
+                this.clickedSlot = null;
             }
         }
+    }
+
+    private boolean func_92031_b(Slot par1Slot)
+    {
+        boolean var2 = par1Slot == null || !par1Slot.getHasStack();
+
+        if (par1Slot != null && par1Slot.getHasStack() && this.draggedStack != null && ItemStack.areItemStackTagsEqual(par1Slot.getStack(), this.draggedStack))
+        {
+            var2 |= par1Slot.getStack().stackSize + this.draggedStack.stackSize <= this.draggedStack.getMaxStackSize();
+        }
+
+        return var2;
     }
 
     /**

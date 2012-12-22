@@ -1,9 +1,9 @@
 package ljdp.minechem.common.items;
 
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
 import ljdp.minechem.common.ModMinechem;
 import net.minecraft.item.Item;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemAtomicManipulator extends Item {
 	
