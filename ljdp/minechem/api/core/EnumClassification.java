@@ -1,7 +1,5 @@
 package ljdp.minechem.api.core;
 
-import ljdp.minechem.common.utils.MinechemHelper;
-
 public enum EnumClassification {
 	nonmetal	("Non-metal"),
 	inertGas	("Inert gas"),
@@ -13,9 +11,9 @@ public enum EnumClassification {
 	transitionMetal		("Transition metal"),
 	lanthanide			("Lanthanide"),
 	actinide	("Actinide"),
-	solid		(MinechemHelper.getLocalString("element.property.solid")),
-	gas			(MinechemHelper.getLocalString("element.property.gas")),
-	liquid		(MinechemHelper.getLocalString("element.property.liquid"));
+	solid		("Solid"),
+	gas			("Gaseous"),
+	liquid		("Liquid");
 	
 	
 	private final String descriptiveName;

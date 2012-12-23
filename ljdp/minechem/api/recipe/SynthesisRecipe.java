@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import ljdp.minechem.api.core.Chemical;
 import ljdp.minechem.api.core.Molecule;
 import ljdp.minechem.api.util.Util;
-import ljdp.minechem.common.utils.MinechemHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
