@@ -32,6 +32,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.preloadTexture(SYNTHESIS_MODEL);
 		MinecraftForgeClient.preloadTexture(PROJECTOR_MODEL_OFF);
 		MinecraftForgeClient.preloadTexture(PROJECTOR_MODEL_ON);
+		MinecraftForgeClient.preloadTexture(FUSION_GUI_PNG);
 		
 		CUSTOM_RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
 		

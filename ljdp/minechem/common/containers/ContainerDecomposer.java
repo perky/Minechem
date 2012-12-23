@@ -32,16 +32,16 @@ public class ContainerDecomposer extends Container {
 		int y = 62;
 		int j = 0;
 		for(int i = 1; i < 10; i++) {
-			addSlotToContainer(new Slot(decomposer, i, x + (j * 18), y));
+			addSlotToContainer(new SlotOutput(decomposer, i, x + (j * 18), y));
 			j++;
 		}
 	}
 	
 	private void bindBottleSlots() {
-		addSlotToContainer(new Slot(decomposer, decomposer.kEmptyBottleSlotStart,     125, 15));
-		addSlotToContainer(new Slot(decomposer, decomposer.kEmptyBottleSlotStart + 1, 143, 15));
-		addSlotToContainer(new Slot(decomposer, decomposer.kEmptyBottleSlotStart + 2, 125, 33));
-		addSlotToContainer(new Slot(decomposer, decomposer.kEmptyBottleSlotStart + 3, 143, 33));
+		addSlotToContainer(new SlotTestTube(decomposer, decomposer.kEmptyBottleSlotStart,     125, 15));
+		addSlotToContainer(new SlotTestTube(decomposer, decomposer.kEmptyBottleSlotStart + 1, 143, 15));
+		addSlotToContainer(new SlotTestTube(decomposer, decomposer.kEmptyBottleSlotStart + 2, 125, 33));
+		addSlotToContainer(new SlotTestTube(decomposer, decomposer.kEmptyBottleSlotStart + 3, 143, 33));
 	}
 	
 	private void bindPlayerInventory(InventoryPlayer inventoryPlayer) {

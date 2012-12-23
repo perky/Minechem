@@ -3,14 +3,18 @@ package ljdp.minechem.common;
 import java.util.logging.Logger;
 
 import ljdp.minechem.client.gui.GuiDecomposer;
+import ljdp.minechem.client.gui.GuiFusion;
 import ljdp.minechem.client.gui.GuiMicroscope;
 import ljdp.minechem.client.gui.GuiSynthesis;
 import ljdp.minechem.common.containers.ContainerDecomposer;
+import ljdp.minechem.common.containers.ContainerFusion;
 import ljdp.minechem.common.containers.ContainerMicroscope;
 import ljdp.minechem.common.containers.ContainerSynthesis;
 import ljdp.minechem.common.network.PacketHandler;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;
+import ljdp.minechem.common.tileentity.TileEntityFusion;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
+import ljdp.minechem.common.tileentity.TileEntityProxy;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -100,8 +104,20 @@ public class ModMinechem implements IGuiHandler {
 			return new ContainerMicroscope(player.inventory, (TileEntityMicroscope)tileEntity);
 		if(tileEntity instanceof TileEntitySynthesis)
 			return new ContainerSynthesis(player.inventory, (TileEntitySynthesis)tileEntity);
+		if(tileEntity instanceof TileEntityFusion)
+			return new ContainerFusion(player.inventory, (TileEntityFusion)tileEntity);
+		if(tileEntity instanceof TileEntityProxy)
+			return getServerGuiElementFromProxy((TileEntityProxy)tileEntity, player);
 		return null;
 	}
+	
+	public Object getServerGuiElementFromProxy(TileEntityProxy proxy, EntityPlayer player) {
+		TileEntity tileEntity = proxy.getManager();
+		if(tileEntity instanceof TileEntityFusion)
+			return new ContainerFusion(player.inventory, (TileEntityFusion)tileEntity);
+		return null;
+	}
+	
 
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world,
@@ -113,6 +129,17 @@ public class ModMinechem implements IGuiHandler {
 			return new GuiMicroscope(player.inventory, (TileEntityMicroscope)tileEntity);
 		if(tileEntity instanceof TileEntitySynthesis)
 			return new GuiSynthesis(player.inventory, (TileEntitySynthesis)tileEntity);
+		if(tileEntity instanceof TileEntityFusion)
+			return new GuiFusion(player.inventory, (TileEntityFusion)tileEntity);
+		if(tileEntity instanceof TileEntityProxy)
+			return getClientGuiElementFromProxy((TileEntityProxy)tileEntity, player);
+		return null;
+	}
+	
+	public Object getClientGuiElementFromProxy(TileEntityProxy proxy, EntityPlayer player) {
+		TileEntity tileEntity = proxy.getManager();
+		if(tileEntity instanceof TileEntityFusion)
+			return new GuiFusion(player.inventory, (TileEntityFusion)tileEntity);
 		return null;
 	}
 	

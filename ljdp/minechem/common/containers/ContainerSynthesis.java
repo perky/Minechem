@@ -24,7 +24,7 @@ public class ContainerSynthesis extends Container {
 		slot = 0;
 		for(int row = 0; row < 2; row++) {
 			for(int col = 0; col < 2; col++) {
-				addSlotToContainer(new Slot(synthesis, synthesis.kStartBottles + slot, 17 + (col * 18), 27 + (row * 18)));
+				addSlotToContainer(new SlotOutput(synthesis, synthesis.kStartBottles + slot, 17 + (col * 18), 27 + (row * 18)));
 				slot++;
 			}
 		}

@@ -212,8 +212,9 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer var1) {
-		return true;
+	public boolean isUseableByPlayer(EntityPlayer entityPlayer) {
+		double dist = entityPlayer.getDistanceSq((double)xCoord + 0.5D, (double)yCoord + 0.5D, (double)zCoord + 0.5D);
+		return worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this ? false :  dist <= 64.0D;
 	}
 
 	@Override
