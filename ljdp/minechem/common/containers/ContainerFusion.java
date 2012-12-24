@@ -5,6 +5,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class ContainerFusion extends Container {
 
@@ -40,6 +42,31 @@ public class ContainerFusion extends Container {
 	@Override
 	public boolean canInteractWith(EntityPlayer var1) {
 		return fusion.isUseableByPlayer(var1);
+	}
+	
+	@Override
+	public ItemStack transferStackInSlot(EntityPlayer entityPlayer, int slot) {
+		/*
+		Slot slotObject = (Slot) inventorySlots.get(slot);
+		if(slotObject != null && slotObject.getHasStack()) {
+			ItemStack stackInSlot = slotObject.getStack();
+			ItemStack stack = stackInSlot.copy();
+			if(slot >= 0 && slot < fusion.getSizeInventory()) {
+				if(!mergeItemStack(stackInSlot, fusion.getSizeInventory(), inventorySlots.size(), true))
+					return null;
+			} else if(slot >= fusion.getSizeInventory()) {
+				if(!mergeItemStack(stackInSlot, fusion.kStartInput1, fusion.kStartInput1 + 1, false))
+					return null;
+			}
+			
+			if(stackInSlot.stackSize == 0)
+				slotObject.putStack(null);
+			else
+				slotObject.onSlotChanged();
+			
+			return stack;
+		}*/
+		return null;
 	}
 
 

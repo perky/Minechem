@@ -8,6 +8,7 @@ import ljdp.minechem.common.MinechemBlocks;
 import ljdp.minechem.common.blueprint.BlueprintBlock;
 import ljdp.minechem.common.blueprint.MinechemBlueprint;
 import ljdp.minechem.common.tileentity.TileEntityBlueprintProjector.BlockStatus;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityMultiBlock extends TileEntity {
@@ -19,7 +20,7 @@ public class TileEntityMultiBlock extends TileEntity {
 	
 	public MinechemBlueprint blueprint;
 	Integer[][][] structure;
-	boolean completeStructure = true;
+	boolean completeStructure;
 	SafeTimeTracker tracker = new SafeTimeTracker();
 	
 	public void setBlueprint(MinechemBlueprint blueprint) {
@@ -120,5 +121,18 @@ public class TileEntityMultiBlock extends TileEntity {
 				return BlockStatus.INCORRECT;
 			}
 		}
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound nbtTagCompound) {
+		super.writeToNBT(nbtTagCompound);
+		nbtTagCompound.setBoolean("completeStructure", completeStructure);
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound nbtTagCompound) {
+		super.readFromNBT(nbtTagCompound);
+		//completeStructure = nbtTagCompound.getBoolean("completeStructure");
+		completeStructure = false;
 	}
 }

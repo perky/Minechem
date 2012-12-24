@@ -30,7 +30,8 @@ public class PacketFusionUpdate extends PacketTileEntityUpdate {
 	@Override
 	public void readData(DataInputStream inputStream) throws IOException {
 		super.readData(inputStream);
-		if(tileEntity instanceof TileEntityDecomposer) {
+		if(tileEntity instanceof TileEntityFusion) {
+			fusion = (TileEntityFusion) tileEntity;
 			int energyStored = inputStream.readInt();
 			fusion.setEnergyStored(energyStored);
 		}

@@ -59,10 +59,7 @@ public class ContainerSynthesis extends Container {
 			ItemStack stackInSlot = slotObject.getStack();
 			ItemStack stack = stackInSlot.copy();
 			if(slot == synthesis.kStartOutput) {
-				int count = synthesis.craftAll();
-				stack.stackSize = count;
-				if(!mergeItemStack(stack, synthesis.getSizeInventory(), inventorySlots.size(), true))
-					return null;
+				return null;
 			} else if(slot >= 0 && slot < synthesis.getSizeInventory()) {
 				if(!mergeItemStack(stackInSlot, synthesis.getSizeInventory(), inventorySlots.size(), true))
 					return null;

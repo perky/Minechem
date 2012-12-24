@@ -13,8 +13,8 @@ import net.minecraft.inventory.Container;
 
 public class GuiFusion extends GuiContainer {
 	
-	static float increaseRate = .01F;
-	static float decreaseRate = .02F;
+	static float increaseRate = .2F;
+	static float decreaseRate = .4F;
 	
 	TileEntityFusion fusion;
 	int guiWidth = 176;
@@ -50,6 +50,7 @@ public class GuiFusion extends GuiContainer {
 		
 		// DRAW ENERGY BAR
 		updateEnergy();
+		//energy = fusion.getEnergyStored();
 		int energyBarWidth = (int) MinechemHelper.translateValue(energy, 0, fusion.getMaxEnergy(), 0, 160);
 		drawTexturedModalRect(x + 8, y + 38, 0, 192, energyBarWidth, 3);
 		
@@ -59,10 +60,14 @@ public class GuiFusion extends GuiContainer {
 	
 	private void updateEnergy() {
 		targetEnergy = fusion.getEnergyStored();
-		if(energy < (targetEnergy - increaseRate)) {
+		if(energy < (targetEnergy)) {
 			energy += increaseRate;
-		} else if(energy > (targetEnergy + decreaseRate)) {
+			if(energy > targetEnergy)
+				energy = targetEnergy;
+		} else if(energy > (targetEnergy)) {
 			energy -= decreaseRate;
+			if(energy < targetEnergy)
+				energy = targetEnergy;
 		}
 	}
 

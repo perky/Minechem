@@ -90,12 +90,5 @@ public class ContainerDecomposer extends Container {
 		}
 		return null;
 	}
-	
-	@Override
-	public ItemStack slotClick(int par1, int par2, int par3,
-			EntityPlayer par4EntityPlayer) {
-		// TODO Auto-generated method stub
-		return super.slotClick(par1, par2, par3, par4EntityPlayer);
-	}
 
 }

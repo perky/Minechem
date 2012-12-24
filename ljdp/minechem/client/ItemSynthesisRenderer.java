@@ -23,9 +23,10 @@ public class ItemSynthesisRenderer extends ItemMinechemRenderer {
 		String texture = ModMinechem.proxy.SYNTHESIS_MODEL;
 		GL11.glPushMatrix();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, FMLClientHandler.instance().getClient().renderEngine.getTexture(texture));
-		if(type == ItemRenderType.ENTITY)
-			GL11.glTranslatef(0.0F, 0.5F, 0.0F);
-		else if(type == ItemRenderType.EQUIPPED) {
+		if(type == ItemRenderType.ENTITY) {
+			GL11.glTranslatef(0.0F, 1.5F, 0.0F);
+			GL11.glRotatef(180f, 0.1f, 0.0f, 1f);
+		} else if(type == ItemRenderType.EQUIPPED) {
 			GL11.glTranslatef(0.5F, 1.6F, 0.0F);
 			GL11.glRotatef(180f, 0.1f, 0.0f, 1f);
 		} else{ 

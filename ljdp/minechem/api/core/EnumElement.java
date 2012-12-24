@@ -119,7 +119,7 @@ public enum EnumElement {
 	Mc	("Minecraftium", actinide, liquid, stable);
 	
 	public static EnumElement[] elements = EnumElement.values();
-	public static int heaviestMass = 119;
+	public static int heaviestMass = 112;
 	private final String descriptiveName;
 	private final EnumClassification classification;
 	private final EnumClassification roomState;
