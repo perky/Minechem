@@ -6,8 +6,10 @@ import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.tileentity.TileEntityBlueprintProjector;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class BlockBlueprintProjector extends BlockMinechemContainer {
@@ -16,6 +18,14 @@ public class BlockBlueprintProjector extends BlockMinechemContainer {
 		super(id, Material.iron);
 		setBlockName("minechem.blockBlueprintProjector");
 		setCreativeTab(ModMinechem.minechemTab);
+	}
+	
+	@Override
+	public void onBlockPlacedBy(World world, int x, int y, int z,
+			EntityLiving entityLiving) {
+		super.onBlockPlacedBy(world, x, y, z, entityLiving);
+		int facing = MathHelper.floor_double((double)(entityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		world.setBlockMetadata(x, y, z, facing);
 	}
 
 	@Override

@@ -129,6 +129,21 @@ public class MinechemHelper {
 		return false;
 	}
 	
+	public static ForgeDirection getDirectionFromFacing(int facing) {
+		switch (facing) {
+		case 0:
+			return ForgeDirection.SOUTH;
+		case 1:
+			return ForgeDirection.WEST;
+		case 2:
+			return ForgeDirection.NORTH;
+		case 3:
+			return ForgeDirection.EAST;
+		default:
+			return null;
+		}
+	}
+	
 	/**
 	 * Ensures that the given inventory is the full inventory, i.e. takes double chests into account.
 	 * @param inv
