@@ -1,17 +1,22 @@
 package ljdp.minechem.common.tileentity;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import ljdp.minechem.api.recipe.DecomposerRecipe;
 import ljdp.minechem.api.util.Util;
 import ljdp.minechem.client.ModelDecomposer;
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.MinechemPowerProvider;
+import ljdp.minechem.common.gates.IMinechemTriggerProvider;
+import ljdp.minechem.common.gates.MinechemTriggers;
+import ljdp.minechem.common.gates.TriggerFullEnergy;
 import ljdp.minechem.common.items.ItemMolecule;
 import ljdp.minechem.common.network.PacketDecomposerUpdate;
 import ljdp.minechem.common.network.PacketHandler;
 import ljdp.minechem.common.recipe.DecomposerRecipeHandler;
 import ljdp.minechem.common.utils.MinechemHelper;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -25,11 +30,18 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import buildcraft.api.core.SafeTimeTracker;
+import buildcraft.api.gates.ActionManager;
+import buildcraft.api.gates.ITrigger;
+import buildcraft.api.gates.ITriggerProvider;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
+import buildcraft.api.transport.IPipe;
+import buildcraft.core.IMachine;
 
-public class TileEntityDecomposer extends TileEntity implements IInventory, ISidedInventory, IPowerReceptor {
+public class TileEntityDecomposer extends TileEntity implements IInventory, ISidedInventory, 
+IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine
+{
 	
 	private static final int MAX_POWER_STORAGE = 100;
 	private static final float MIN_WORK_PER_SECOND = 1.0F;
@@ -63,6 +75,7 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 			powerProvider.configurePowerPerdition(1, 10);
 		}
 		model = new ModelDecomposer();
+		ActionManager.registerTriggerProvider(this);
 	}
 	
 	@Override
@@ -220,17 +233,25 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 
 	@Override
 	public int getStartInventorySide(ForgeDirection side) {
-		if(side == ForgeDirection.UP) return kInputSlot;
-		if(side == ForgeDirection.DOWN) return kOutputSlotStart;
-		if(side == ForgeDirection.NORTH) return kEmptyBottleSlotStart;
+		if(side == ForgeDirection.UP)
+			return kInputSlot;
+		if(side == ForgeDirection.NORTH || side == ForgeDirection.WEST 
+				|| side == ForgeDirection.EAST || side == ForgeDirection.SOUTH)
+			return kOutputSlotStart;
+		if(side == ForgeDirection.DOWN)
+			return kEmptyBottleSlotStart;
 		return 0;
 	}
 
 	@Override
 	public int getSizeInventorySide(ForgeDirection side) {
-		if(side == ForgeDirection.UP) return 1;
-		if(side == ForgeDirection.DOWN) return kOutputSlotsSize;
-		if(side == ForgeDirection.NORTH) return kEmptyBottleSlotsSize;
+		if(side == ForgeDirection.UP) 
+			return 1;
+		if(side == ForgeDirection.DOWN) 
+			return kEmptyBottleSlotsSize;
+		if(side == ForgeDirection.NORTH || side == ForgeDirection.WEST 
+				|| side == ForgeDirection.EAST || side == ForgeDirection.SOUTH)
+			return kOutputSlotsSize;
 		return 0;
 	}
 
@@ -396,6 +417,53 @@ public class TileEntityDecomposer extends TileEntity implements IInventory, ISid
 
 	public boolean isPowered() {
 		return (state != State.kProcessJammed && state != State.kProcessNoBottles && (powerProvider.getEnergyStored() > powerProvider.getMinEnergyReceived()));
+	}
+
+	@Override
+	public LinkedList<ITrigger> getPipeTriggers(IPipe pipe) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public LinkedList<ITrigger> getNeighborTriggers(Block block, TileEntity tile) {
+		if(tile instanceof TileEntityDecomposer) {
+			LinkedList<ITrigger> triggers = new LinkedList();
+			triggers.add(MinechemTriggers.fullEnergy);
+			triggers.add(MinechemTriggers.noTestTubes);
+			return triggers;
+		}
+		return null;
+	}
+
+	@Override
+	public boolean hasFullEnergy() {
+		return powerProvider.getEnergyStored() >= powerProvider.getMaxEnergyStored();
+	}
+	
+	@Override
+	public boolean hasNoTestTubes() {
+		return this.state == State.kProcessNoBottles;
+	}
+
+	@Override
+	public boolean isActive() {
+		return isPowered();
+	}
+
+	@Override
+	public boolean manageLiquids() {
+		return false;
+	}
+
+	@Override
+	public boolean manageSolids() {
+		return true;
+	}
+
+	@Override
+	public boolean allowActions() {
+		return false;
 	}
 
 }

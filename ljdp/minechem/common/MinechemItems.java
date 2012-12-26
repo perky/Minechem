@@ -9,6 +9,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import ljdp.minechem.api.core.EnumElement;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.items.ItemAtomicManipulator;
+import ljdp.minechem.common.items.ItemBlockFusion;
 import ljdp.minechem.common.items.ItemElement;
 import ljdp.minechem.common.items.ItemFusionStar;
 import ljdp.minechem.common.items.ItemLens;
@@ -30,7 +31,7 @@ public class MinechemItems {
 	private static int atomicManipulatorID;
 	private static int lensID;
 	private static int fusionStarID;
-	
+	private static int blockFusionID;
 	
 	public static void loadConfig(Configuration config) {
 		elementID   = config.getItem(config.CATEGORY_ITEM, "Element", 4736).getInt(4736);

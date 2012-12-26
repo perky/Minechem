@@ -13,6 +13,8 @@ import ljdp.minechem.common.blueprint.BlueprintBlock.Type;
 import ljdp.minechem.common.blueprint.BlueprintFusion;
 import ljdp.minechem.common.blueprint.MinechemBlueprint;
 import ljdp.minechem.common.utils.DirectionMultiplier;
+import ljdp.minechem.common.utils.LocalPosition;
+import ljdp.minechem.common.utils.LocalPosition.Pos3;
 import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -46,22 +48,21 @@ public class TileEntityBlueprintProjector extends TileEntity {
 	private void projectBlueprint() {
 		int facing = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 		ForgeDirection direction = MinechemHelper.getDirectionFromFacing(facing);
-		DirectionMultiplier directionMultiplier = DirectionMultiplier.map.get(direction);
-		Position position = new Position(xCoord, yCoord, zCoord, direction);
+		LocalPosition position = new LocalPosition(xCoord, yCoord, zCoord, direction);
 		position.moveForwards(blueprint.zSize + 1);
 		position.moveLeft(Math.floor(blueprint.xSize / 2));
-		
 		boolean shouldProjectGhostBlocks = true;
-		
 		int totalIncorrectCount = blueprint.getTotalSize();
 		for(int y = 0; y < blueprint.ySize; y++) {
 			int horizontalIncorrectCount = blueprint.getHorizontalSliceSize();
 			Integer[][] blueprintSlice   = blueprint.getHorizontalSlice(y);
 			
+			
+			
 			for(int x = 0; x < blueprint.xSize; x++) {
 				for(int z = 0; z < blueprint.zSize; z++) {
 					if(shouldProjectGhostBlocks) {
-						BlockStatus blockStatus = projectGhostBlock(x, y, z, position, directionMultiplier);
+						BlockStatus blockStatus = projectGhostBlock(x, y, z, position);
 						if(blockStatus == BlockStatus.CORRECT) {
 							horizontalIncorrectCount--;
 							totalIncorrectCount--;
@@ -81,7 +82,7 @@ public class TileEntityBlueprintProjector extends TileEntity {
 		}
 	}
 
-	private void buildStructure(Position position) {
+	private void buildStructure(LocalPosition position) {
 		Integer[][][] resultStructure = blueprint.getResultStructure();
 		HashMap<Integer,BlueprintBlock> blockLookup = blueprint.getBlockLookup();
 		
@@ -100,43 +101,38 @@ public class TileEntityBlueprintProjector extends TileEntity {
 			FMLClientHandler.instance().getClient().thePlayer.addChatMessage("Structure Built.");
 	}
 
-	private TileEntity buildManagerBlock(Position position) {
+	private TileEntity buildManagerBlock(LocalPosition position) {
 		DirectionMultiplier multiplier = DirectionMultiplier.map.get(position.orientation);
-		int x = (int) (blueprint.getManagerPosX() + (position.x * multiplier.xMultiplier));
-		int y = (int) (blueprint.getManagerPosY() + position.y);
-		int z = (int) (blueprint.getManagerPosZ() + (position.z * multiplier.zMultiplier));
+		Pos3 worldPos = position.getLocalPos(blueprint.getManagerPosX(), blueprint.getManagerPosY(), blueprint.getManagerPosZ());
 		BlueprintBlock managerBlock = blueprint.getManagerBlock();
-		worldObj.setBlockAndMetadataWithNotify(x, y, z, managerBlock.block.blockID, managerBlock.metadata);
-		return worldObj.getBlockTileEntity(x, y, z);
+		worldObj.setBlockAndMetadataWithNotify(worldPos.x, worldPos.y, worldPos.z, managerBlock.block.blockID, managerBlock.metadata);
+		return worldObj.getBlockTileEntity(worldPos.x, worldPos.y, worldPos.z);
 	}
 
-	private void setBlock(int x, int y, int z, Position position,
+	private void setBlock(int x, int y, int z, LocalPosition position,
 			int structureId, HashMap<Integer, BlueprintBlock> blockLookup, TileEntity managerTileEntity)
 	{
-		DirectionMultiplier multiplier = DirectionMultiplier.map.get(position.orientation);
-		x = (int) (x + (position.x * multiplier.xMultiplier));
-		y = (int) (y + position.y);
-		z = (int) (z + (position.z * multiplier.zMultiplier));
+		Pos3 worldPos = position.getLocalPos(x, y, z);
 		if(structureId == air) {
-			worldObj.setBlock(x, y, z, 0);
+			worldObj.setBlock(worldPos.x, worldPos.y, worldPos.z, 0);
 		} else {
 			BlueprintBlock blueprintBlock = blockLookup.get(structureId);
 			if(blueprintBlock.type == Type.MANAGER)
 				return;
-			worldObj.setBlockAndMetadata(x, y, z, blueprintBlock.block.blockID, blueprintBlock.metadata);
+			worldObj.setBlockAndMetadata(worldPos.x, worldPos.y, worldPos.z, blueprintBlock.block.blockID, blueprintBlock.metadata);
 			if(blueprintBlock.type == Type.PROXY) {
-				TileEntityProxy proxy = (TileEntityProxy) worldObj.getBlockTileEntity(x, y, z);
-				proxy.setManager(managerTileEntity);
+				TileEntityProxy proxy = (TileEntityProxy) worldObj.getBlockTileEntity(worldPos.x, worldPos.y, worldPos.z);
+				if(proxy != null)
+					proxy.setManager(managerTileEntity);
 			}
 		}
 	}
 
-	private BlockStatus projectGhostBlock(int x, int y, int z, Position position, DirectionMultiplier multiplier) {
-		int worldX = (int) (position.x + (x * multiplier.xMultiplier));
-		int worldY = (int) (position.y + y);
-		int worldZ = (int) (position.z + (z * multiplier.zMultiplier));
+	private BlockStatus projectGhostBlock(int x, int y, int z, LocalPosition position) {
+		Pos3 worldPos = position.getLocalPos(x, y, z);
 		Integer structureID = structure[y][x][z];
-		int blockID = worldObj.getBlockId(worldX, worldY, worldZ);
+		int blockID       = worldObj.getBlockId(worldPos.x, worldPos.y, worldPos.z);
+		int blockMetadata = worldObj.getBlockMetadata(worldPos.x, worldPos.y, worldPos.z);
 		if(structureID == air) {
 			if(blockID == air)
 				return BlockStatus.CORRECT;
@@ -146,10 +142,10 @@ public class TileEntityBlueprintProjector extends TileEntity {
 			HashMap<Integer,BlueprintBlock> lut = blueprint.getBlockLookup();
 			BlueprintBlock blueprintBlock = lut.get(structureID);
 			if(blockID == air) {
-				worldObj.setBlockAndMetadata(worldX, worldY, worldZ, MinechemBlocks.ghostBlock.blockID, 1);
+				worldObj.setBlockAndMetadata(worldPos.x, worldPos.y, worldPos.z, MinechemBlocks.ghostBlock.blockID, structureID);
 				return BlockStatus.INCORRECT;
 			} else if(blockID == blueprintBlock.block.blockID
-					&& worldObj.getBlockMetadata(worldX, worldY, worldZ) == blueprintBlock.metadata) {
+					&& blockMetadata == blueprintBlock.metadata) {
 				return BlockStatus.CORRECT;
 			} else {
 				return BlockStatus.INCORRECT;
@@ -157,14 +153,11 @@ public class TileEntityBlueprintProjector extends TileEntity {
 		}
 	}
 	
-	private void destroyGhostBlock(int x, int y, int z, Position position) {
-		DirectionMultiplier multiplier = DirectionMultiplier.map.get(position.orientation);
-		int worldX = (int) (position.x + (x * multiplier.xMultiplier));
-		int worldY = (int) (position.y + y);
-		int worldZ = (int) (position.z + (z * multiplier.zMultiplier));
-		int blockID = worldObj.getBlockId(worldX, worldY, worldZ);
+	private void destroyGhostBlock(int x, int y, int z, LocalPosition position) {
+		Pos3 worldPos = position.getLocalPos(x, y, z);
+		int blockID = worldObj.getBlockId(worldPos.x, worldPos.y, worldPos.z);
 		if(blockID == MinechemBlocks.ghostBlock.blockID) {
-			worldObj.setBlock(worldX, worldY, worldZ, 0);
+			worldObj.setBlock(worldPos.x, worldPos.y, worldPos.z, 0);
 		}
 	}
 	

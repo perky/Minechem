@@ -10,6 +10,7 @@ import ljdp.minechem.common.containers.ContainerDecomposer;
 import ljdp.minechem.common.containers.ContainerFusion;
 import ljdp.minechem.common.containers.ContainerMicroscope;
 import ljdp.minechem.common.containers.ContainerSynthesis;
+import ljdp.minechem.common.gates.MinechemTriggers;
 import ljdp.minechem.common.network.PacketHandler;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;
 import ljdp.minechem.common.tileentity.TileEntityFusion;
@@ -85,6 +86,7 @@ public class ModMinechem implements IGuiHandler {
 	
 	@PostInit
 	public void postInit(FMLPostInitializationEvent event) {
+		MinechemTriggers.registerTriggers();
 	}
 	
 	private void loadConfig(FMLPreInitializationEvent event){

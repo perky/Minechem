@@ -1,6 +1,7 @@
 package ljdp.minechem.common.blocks;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -13,6 +14,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
@@ -25,52 +27,39 @@ public class BlockGhostBlock extends Block {
 	
 	static Random random = new Random();
 	
+	public HashMap<Integer,ItemStack> blockLookup = new HashMap();
+	
 	public BlockGhostBlock(int id) {
 		super(id, 16, MinechemBlocks.materialGhost);
-		setBlockName("blockMinechemGhostBlock");
+		setBlockName("block.minechemGhostBlock");
 		setCreativeTab(ModMinechem.minechemTab);
-		float var3 = 0.0F;
-        float var4 = 0.0F;
-        this.setBlockBounds(0.0F + var4, 0.0F + var3, 0.0F + var4, 1.0F + var4, 1.0F + var3, 1.0F + var4);
         this.setRequiresSelfNotify();
-		//setTickRandomly(true);
+        blockLookup.put(1, new ItemStack(MinechemBlocks.fusion, 1, 0));
+        blockLookup.put(2, new ItemStack(Block.blockGold, 1, 0));
+        blockLookup.put(3, new ItemStack(MinechemBlocks.fusion, 1, 2));
 	}
 	
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float par7,
 			float par8, float par9) {
 		int metadata = world.getBlockMetadata(x, y, z);
-		int blockid  = metadata + 1;
-		if(playerIsHoldingBlock(entityPlayer, Block.blockSteel)) {
-			world.setBlockAndMetadataWithNotify(x, y, z, Block.blockSteel.blockID, 0);
+		ItemStack itemstack = blockLookup.get(metadata);
+		if(playerIsHoldingBlock(entityPlayer, itemstack)) {
+			world.setBlockAndMetadataWithNotify(x, y, z, itemstack.getItem().shiftedIndex, itemstack.getItemDamage());
 			return true;
 		} else
 			return false;
 	}
 	
-	private boolean playerIsHoldingBlock(EntityPlayer entityPlayer, Block block) {
-		return entityPlayer.inventory.getCurrentItem().itemID == block.blockID;
-	}
-	
-	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entityLiving) {
-		super.onBlockPlacedBy(world, x, y, z, entityLiving);
-		
-	}
-	
-	@Override
-	public void onSetBlockIDWithMetaData(World world, int x, int y,
-			int z, int metadata) {
-		super.onSetBlockIDWithMetaData(world, x, y, z, metadata);
-		world.scheduleBlockUpdate(x, y, z, blockID, 3);
+	private boolean playerIsHoldingBlock(EntityPlayer entityPlayer, ItemStack itemstack) {
+		ItemStack helditem = entityPlayer.inventory.getCurrentItem();
+		return helditem != null && helditem.itemID == itemstack.itemID
+				&& helditem.getItemDamage() == itemstack.getItemDamage();
 	}
 	
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random random) {
 		super.updateTick(world, x, y, z, random);
-		world.scheduleBlockUpdate(x, y, z, blockID, 3);
-		int metadata = world.getBlockMetadata(x, y, z);
-		world.markBlockForRenderUpdate(x, y, z);
 		//System.out.println("update");
 		/*
 		ArrayList<Vec3> airBlocks = getAdjacentAirBlocks(world, x, y, z);
@@ -113,8 +102,11 @@ public class BlockGhostBlock extends Block {
 	
 	@Override
 	public int getBlockTextureFromSideAndMetadata(int side, int metadata) {
-		return Block.blockSteel.blockIndexInTexture;
-		//return Block.blocksList[metadata + 1].getBlockTextureFromSideAndMetadata(side, metadata);
+		ItemStack itemstack = blockLookup.get(metadata);
+		if(itemstack != null)
+			return itemstack.getIconIndex();
+		else
+			return 1;
 	}
 	
 	@Override
@@ -127,13 +119,6 @@ public class BlockGhostBlock extends Block {
 		return par1;
 	}
 	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(int blockid, CreativeTabs par2CreativeTabs, List par3List) {
-		for(int i = 0; i < 16; i++) {
-			par3List.add(new ItemStack(blockid, 1, i));
-		}
-	}
 	/**
      * Triggered whenever an entity collides with this block (enters into the block). Args: world, x, y, z, entity
      */
@@ -170,7 +155,7 @@ public class BlockGhostBlock extends Block {
     @Override
     public boolean renderAsNormalBlock()
     {
-        return false;
+        return true;
     }
     
     /**
@@ -183,22 +168,11 @@ public class BlockGhostBlock extends Block {
     }
     
     @Override
-    public int getRenderType() {
-    	return RenderBlockGhostBlock.renderID;
-    }
-    
-    @Override
     public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6) {
     }
     
     @Override
     public int idDropped(int par1, Random par2Random, int par3) {
     	return 0;
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public int colorMultiplier(IBlockAccess par1iBlockAccess, int par2, int par3, int par4) {
-    	return random.nextInt();
     }
 }

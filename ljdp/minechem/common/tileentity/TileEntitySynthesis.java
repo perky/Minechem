@@ -1,17 +1,24 @@
 package ljdp.minechem.common.tileentity;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import buildcraft.api.core.Position;
+import buildcraft.api.gates.ITrigger;
+import buildcraft.api.gates.ITriggerProvider;
 import buildcraft.api.inventory.ISpecialInventory;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
+import buildcraft.api.transport.IPipe;
+import buildcraft.core.IMachine;
 import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.api.util.Util;
 import ljdp.minechem.client.ModelSynthesizer;
 import ljdp.minechem.common.MinechemPowerProvider;
 import ljdp.minechem.common.MinechemRecipes;
+import ljdp.minechem.common.gates.IMinechemTriggerProvider;
+import ljdp.minechem.common.gates.MinechemTriggers;
 import ljdp.minechem.common.network.PacketDecomposerUpdate;
 import ljdp.minechem.common.network.PacketHandler;
 import ljdp.minechem.common.network.PacketSynthesisUpdate;
@@ -31,7 +38,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 
-public class TileEntitySynthesis extends TileEntity implements IInventory, IPowerReceptor, ISidedInventory, ISpecialInventory {
+public class TileEntitySynthesis extends TileEntity implements IInventory, IPowerReceptor, 
+ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITriggerProvider
+{
 	
 	private ItemStack[] synthesisInventory;
 	public static final int kSizeOutput = 1;
@@ -233,19 +242,6 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 		powerProvider.useEnergy(activationEnergy, activationEnergy, true);
 		takeCraftingItems();
 	}
-
-	public int craftAll() {
-		int count = 0;
-		while(getRecipeResult()) {
-			if(powerProvider.useEnergy(activationEnergy, activationEnergy, true) >= activationEnergy) {
-				takeCraftingItems();
-				count++;
-			} else {
-				break;
-			}
-		}
-		return count;
-	}
 	
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
@@ -415,6 +411,53 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 					}
 				}
 			}
+		}
+		return null;
+	}
+	
+	
+
+	@Override
+	public boolean isActive() {
+		return hasFullEnergy();
+	}
+
+	@Override
+	public boolean manageLiquids() {
+		return false;
+	}
+
+	@Override
+	public boolean manageSolids() {
+		return true;
+	}
+
+	@Override
+	public boolean allowActions() {
+		return false;
+	}
+
+	@Override
+	public boolean hasFullEnergy() {
+		return powerProvider.getEnergyStored() >= powerProvider.getMaxEnergyStored();
+	}
+
+	@Override
+	public boolean hasNoTestTubes() {
+		return false;
+	}
+
+	@Override
+	public LinkedList<ITrigger> getPipeTriggers(IPipe pipe) {
+		return null;
+	}
+
+	@Override
+	public LinkedList<ITrigger> getNeighborTriggers(Block block, TileEntity tile) {
+		if(tile instanceof TileEntitySynthesis) {
+			LinkedList<ITrigger> triggers = new LinkedList();
+			triggers.add(MinechemTriggers.fullEnergy);
+			return triggers;
 		}
 		return null;
 	}

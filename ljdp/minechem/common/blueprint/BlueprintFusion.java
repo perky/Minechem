@@ -11,78 +11,99 @@ import net.minecraft.tileentity.TileEntity;
 
 public class BlueprintFusion extends MinechemBlueprint {
 	
-	public static int wall    = 1;
-	public static int manager = 2;
-	public static int proxy   = 3;
+	private static int A = 1;
+	private static int C = 2;
+	private static int D = 3;
 	private static Integer[][][] structure = {
 	{
-		{air, 	air, 	wall, 	wall, 	wall, 	air, 	air},
-		{air, 	wall, 	air,  	air,  	air, 	wall, 	air},
-		{wall, 	air, 	air,  	air,  	air, 	air, 	wall},
-		{wall, 	air, 	air,  	wall,  	air, 	air, 	wall},
-		{wall, 	air, 	air,  	air,  	air, 	air, 	wall},
-		{air,	wall,	air,	air,	air,	wall,	air},
-		{air,	air,	wall,	wall,	wall,	air,	air},
+		{0,0,0,0,A,A,A,A,A,0,0,0,0},
+		{0,0,A,A,A,A,A,A,A,A,A,0,0},
+		{0,A,A,A,C,C,C,C,C,A,A,A,0},
+		{0,A,A,C,C,C,C,C,C,C,A,A,0},
+		{A,A,C,C,C,C,C,C,C,C,C,A,A},
+		{A,A,C,C,C,C,C,C,C,C,C,A,A},
+		{A,A,C,C,C,C,C,C,C,C,C,A,A},
+		{A,A,C,C,C,C,C,C,C,C,C,A,A},
+		{A,A,C,C,C,C,C,C,C,C,C,A,A},
+		{0,A,A,C,C,C,C,C,C,C,A,A,0},
+		{0,A,A,A,C,C,C,C,C,A,A,A,0},
+		{0,0,A,A,A,A,A,A,A,A,A,0,0},
+		{0,0,0,0,A,A,A,A,A,0,0,0,0}
 	},
 	{
-		{air, 	air, 	wall, 	wall, 	wall, 	air, 	air},
-		{air, 	wall, 	air,  	air,  	air, 	wall, 	air},
-		{wall, 	air, 	air,  	air,  	air, 	air, 	wall},
-		{wall, 	air, 	air,  	wall,  	air, 	air, 	wall},
-		{wall, 	air, 	air,  	air,  	air, 	air, 	wall},
-		{air,	wall,	air,	air,	air,	wall,	air},
-		{air,	air,	wall,	wall,	wall,	air,	air},
+		{0,0,0,0,A,A,A,A,A,0,0,0,0},
+		{0,0,A,A,C,C,C,C,C,A,A,0,0},
+		{0,A,C,C,0,0,0,0,0,C,C,A,0},
+		{0,A,C,0,0,0,0,0,0,0,C,A,0},
+		{A,C,0,0,0,0,0,0,0,0,0,C,A},
+		{A,C,0,0,0,0,A,0,0,0,0,C,A},
+		{A,C,0,0,0,A,D,A,0,0,0,C,A},
+		{A,C,0,0,0,0,A,0,0,0,0,C,A},
+		{A,C,0,0,0,0,0,0,0,0,0,C,A},
+		{0,A,C,0,0,0,0,0,0,0,C,A,0},
+		{0,A,C,C,0,0,0,0,0,C,C,A,0},
+		{0,0,A,A,C,C,C,C,C,A,A,0,0},
+		{0,0,0,0,A,A,A,A,A,0,0,0,0},
 	},
 	{
-		{air, 	air, 	air, 	air, 	air, 	air, 	air},
-		{air, 	air, 	wall,  	wall,  	wall, 	air, 	air},
-		{air, 	wall, 	wall,  	wall,  	wall, 	wall, 	air},
-		{air, 	wall, 	wall,  	wall,  	wall, 	wall, 	air},
-		{air, 	wall, 	wall,  	wall,  	wall, 	wall, 	air},
-		{air,	air,	wall,	wall,	wall,	air,	air},
-		{air,	air,	air,	air,	air,	air,	air},
-	}
+		{0,0,0,0,A,A,A,A,A,0,0,0,0},
+		{0,0,A,A,C,C,C,C,C,A,A,0,0},
+		{0,A,C,C,0,0,0,0,0,C,C,A,0},
+		{0,A,C,0,0,0,0,0,0,0,C,A,0},
+		{A,C,0,0,0,0,0,0,0,0,0,C,A},
+		{A,C,0,0,0,0,A,0,0,0,0,C,A},
+		{A,C,0,0,0,A,C,A,0,0,0,C,A},
+		{A,C,0,0,0,0,A,0,0,0,0,C,A},
+		{A,C,0,0,0,0,0,0,0,0,0,C,A},
+		{0,A,C,0,0,0,0,0,0,0,C,A,0},
+		{0,A,C,C,0,0,0,0,0,C,C,A,0},
+		{0,0,A,A,C,C,C,C,C,A,A,0,0},
+		{0,0,0,0,A,A,A,A,A,0,0,0,0},
+	},
+	{
+		{0,0,0,0,A,A,A,A,A,0,0,0,0},
+		{0,0,A,A,C,C,C,C,C,A,A,0,0},
+		{0,A,C,C,0,0,0,0,0,C,C,A,0},
+		{0,A,C,0,0,0,0,0,0,0,C,A,0},
+		{A,C,0,0,0,0,0,0,0,0,0,C,A},
+		{A,C,0,0,0,0,A,0,0,0,0,C,A},
+		{A,C,0,0,0,A,C,A,0,0,0,C,A},
+		{A,C,0,0,0,0,A,0,0,0,0,C,A},
+		{A,C,0,0,0,0,0,0,0,0,0,C,A},
+		{0,A,C,0,0,0,0,0,0,0,C,A,0},
+		{0,A,C,C,0,0,0,0,0,C,C,A,0},
+		{0,0,A,A,C,C,C,C,C,A,A,0,0},
+		{0,0,0,0,A,A,A,A,A,0,0,0,0},
+	},
+	{
+		{0,0,0,0,0,0,0,0,0,0,0,0,0},
+		{0,0,0,0,0,0,0,0,0,0,0,0,0},
+		{0,0,0,0,C,C,C,C,C,0,0,0,0},
+		{0,0,0,C,C,C,C,C,C,C,0,0,0},
+		{0,0,C,C,C,C,C,C,C,C,C,0,0},
+		{0,0,C,C,C,C,A,C,C,C,C,0,0},
+		{0,0,C,C,C,A,A,A,C,C,C,0,0},
+		{0,0,C,C,C,C,A,C,C,C,C,0,0},
+		{0,0,C,C,C,C,C,C,C,C,C,0,0},
+		{0,0,0,C,C,C,C,C,C,C,0,0,0},
+		{0,0,0,0,C,C,C,C,C,0,0,0,0},
+		{0,0,0,0,0,0,0,0,0,0,0,0,0},
+		{0,0,0,0,0,0,0,0,0,0,0,0,0}
+	},
 	};
-	private static Integer[][][] resultStructure = {
-		{
-			{air, 	air, 	proxy, 	proxy, 	proxy, 	air, 	air},
-			{air, 	proxy, 	air,  	air,  	air, 	proxy, 	air},
-			{proxy, air, 	air,  	air,  	air, 	air, 	proxy},
-			{proxy, air, 	air,  manager,  air, 	air, 	proxy},
-			{proxy, air, 	air,  	air,  	air, 	air, 	proxy},
-			{air,	proxy,	air,	air,	air,	proxy,	air},
-			{air,	air,	proxy,	proxy,	proxy,	air,	air},
-		},
-		{
-			{air, 	air, 	proxy, 	proxy, 	proxy, 	air, 	air},
-			{air, 	proxy, 	air,  	air,  	air, 	proxy, 	air},
-			{proxy, air, 	air,  	air,  	air, 	air, 	proxy},
-			{proxy, air, 	air,  	wall,  	air, 	air, 	proxy},
-			{proxy, air, 	air,  	air,  	air, 	air, 	proxy},
-			{air,	proxy,	air,	air,	air,	proxy,	air},
-			{air,	air,	proxy,	proxy,	proxy,	air,	air},
-		},
-		{
-			{air, 	air, 	air, 	air, 	air, 	air, 	air},
-			{air, 	air, 	proxy,  proxy,  proxy, 	air, 	air},
-			{air, 	proxy, 	proxy,  proxy,  proxy, 	proxy, 	air},
-			{air, 	proxy, 	proxy,  proxy,  proxy, 	proxy, 	air},
-			{air, 	proxy, 	proxy,  proxy,  proxy, 	proxy, 	air},
-			{air,	air,	proxy,	proxy,	proxy,	air,	air},
-			{air,	air,	air,	air,	air,	air,	air},
-		}
-		};
+	
+	private static Integer[][][] resultStructure = structure;
 	
 	public BlueprintFusion() {
-		super(7, 3, 7);
+		super(13, 5, 13);
 	}
 
 	@Override
 	public HashMap<Integer,BlueprintBlock> getBlockLookup() {
 		HashMap<Integer,BlueprintBlock> lookup = new HashMap();
-		lookup.put(wall, 	new BlueprintBlock(Block.blockSteel, 		0, Type.NORMAL));
-		lookup.put(manager, new BlueprintBlock(MinechemBlocks.fusion, 	1, Type.MANAGER));
-		lookup.put(proxy, 	new BlueprintBlock(MinechemBlocks.fusion, 	0, Type.PROXY));
+		lookup.put(A, 	new BlueprintBlock(MinechemBlocks.fusion, 		0, Type.PROXY));
+		lookup.put(C,	new BlueprintBlock(Block.blockGold,		0, Type.NORMAL));
+		lookup.put(D,	new BlueprintBlock(MinechemBlocks.fusion,		2, Type.MANAGER));
 		return lookup;
 	}
 
@@ -98,22 +119,22 @@ public class BlueprintFusion extends MinechemBlueprint {
 
 	@Override
 	public int getManagerPosX() {
-		return 3;
+		return 6;
 	}
 
 	@Override
 	public int getManagerPosY() {
-		return 0;
+		return 1;
 	}
 
 	@Override
 	public int getManagerPosZ() {
-		return 3;
+		return 6;
 	}
 
 	@Override
 	public BlueprintBlock getManagerBlock() {
-		return new BlueprintBlock(MinechemBlocks.fusion, 1, Type.MANAGER);
+		return new BlueprintBlock(MinechemBlocks.fusion, 2, Type.MANAGER);
 	}
 	
 }

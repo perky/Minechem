@@ -1,12 +1,18 @@
 package ljdp.minechem.common.blocks;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.tileentity.TileEntityFusion;
 import ljdp.minechem.common.tileentity.TileEntityProxy;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -16,6 +22,8 @@ public class BlockFusion extends BlockMinechemContainer {
 
 	public BlockFusion(int id) {
 		super(id, Material.iron);
+		setCreativeTab(ModMinechem.minechemTab);
+		setBlockName("minechem.blockFusion");
 	}
 	
 	@Override
@@ -36,7 +44,7 @@ public class BlockFusion extends BlockMinechemContainer {
 	
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
-		if(metadata == 1) 
+		if(metadata == 2) 
 			return new TileEntityFusion();
 		else
 			return new TileEntityProxy();
@@ -48,8 +56,17 @@ public class BlockFusion extends BlockMinechemContainer {
 	}
 	
 	@Override
-	public int getBlockTextureFromSide(int par1) {
+	public int getBlockTextureFromSideAndMetadata(int par1, int metadata) {
+		if(metadata == 2)
+			return 1;
 		return par1 == 1 ? 7 : 2;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List) {
+		for(int i = 0; i < 4; i++)
+			par3List.add(new ItemStack(this.blockID, 1, i));
 	}
 
 }

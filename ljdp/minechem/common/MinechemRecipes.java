@@ -275,8 +275,8 @@ public class MinechemRecipes {
 		ItemStack appleRed	  = new ItemStack(Item.appleRed);
 		ItemStack appleGold   = new ItemStack(Item.appleGold, 1, 0);
 		ItemStack appleGoldEnchanted   = new ItemStack(Item.appleGold, 1, 1);
-		DecomposerRecipe.add(new DecomposerRecipeChance(sugar, .3F, molecule(sucrose)));
-		DecomposerRecipe.add(new DecomposerRecipeChance(reeds, .1F, molecule(sucrose), element(H,2), element(O)));
+		DecomposerRecipe.add(new DecomposerRecipeChance(sugar, .6F, molecule(sucrose)));
+		DecomposerRecipe.add(new DecomposerRecipeChance(reeds, .5F, molecule(sucrose), element(H,2), element(O)));
 		DecomposerRecipe.add(new DecomposerRecipe(cocoaBean, molecule(theobromine)));
 		DecomposerRecipe.add(new DecomposerRecipe(pumpkin, molecule(cucurbitacin)));
 		DecomposerRecipe.add(new DecomposerRecipe(watermelon, molecule(cucurbitacin), molecule(asparticAcid), molecule(water,16)));

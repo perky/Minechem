@@ -7,6 +7,7 @@ import ljdp.minechem.common.blocks.BlockGhostBlock;
 import ljdp.minechem.common.blocks.BlockMicroscope;
 import ljdp.minechem.common.blocks.BlockSynthesis;
 import ljdp.minechem.common.blocks.MaterialGas;
+import ljdp.minechem.common.items.ItemBlockFusion;
 import ljdp.minechem.common.items.ItemGhostBlock;
 import ljdp.minechem.common.tileentity.TileEntityBlueprintProjector;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;
@@ -19,6 +20,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialTransparent;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -52,9 +54,9 @@ public class MinechemBlocks {
 		decomposer = new BlockDecomposer(decomposerID);
 		microscope = new BlockMicroscope(microscopeID);
 		synthesis  = new BlockSynthesis(synthesisID);
+		fusion	   = new BlockFusion(fusionID);
 		ghostBlock = new BlockGhostBlock(ghostBlockID);
 		blueprintProjector = new BlockBlueprintProjector(blueprintProjectorID);
-		fusion	   = new BlockFusion(fusionID);
 		
 		GameRegistry.registerBlock(decomposer, "minechem.blockDecomposer");
 		LanguageRegistry.addName(decomposer, "Chemical Decomposer");
@@ -68,11 +70,11 @@ public class MinechemBlocks {
 		GameRegistry.registerBlock(ghostBlock, ItemGhostBlock.class, "minechem.blockGhostBlock");
 		LanguageRegistry.addName(ghostBlock, "ghost block");
 		
+		GameRegistry.registerBlock(fusion, ItemBlockFusion.class, "minechem.blockFusion");
+		LanguageRegistry.addName(fusion, MinechemHelper.getLocalString("block.name.fusion"));
+		
 		GameRegistry.registerBlock(blueprintProjector, "minechem.blockBlueprintProjector");
 		LanguageRegistry.addName(blueprintProjector, MinechemHelper.getLocalString("block.name.blueprintProjector"));
-		
-		GameRegistry.registerBlock(fusion, "minechem.blockFusion");
-		LanguageRegistry.addName(fusion, MinechemHelper.getLocalString("block.name.fusion"));
 		
 		GameRegistry.registerTileEntity(TileEntityMicroscope.class, "minechem.tileEntityMicroscope");
 		GameRegistry.registerTileEntity(TileEntitySynthesis.class,  "minechem.tileEntitySynthesis");
