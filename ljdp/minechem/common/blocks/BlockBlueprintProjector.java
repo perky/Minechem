@@ -53,5 +53,14 @@ public class BlockBlueprintProjector extends BlockMinechemContainer {
     {
 		return false;
     }
+	
+	@Override
+	public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
+		super.breakBlock(world, x, y, z, par5, par6);
+		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+		if(tileEntity instanceof TileEntityBlueprintProjector) {
+			((TileEntityBlueprintProjector)tileEntity).destroyProjection();
+		}
+	}
 
 }

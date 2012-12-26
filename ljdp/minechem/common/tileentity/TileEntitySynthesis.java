@@ -15,6 +15,7 @@ import buildcraft.core.IMachine;
 import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.api.util.Util;
 import ljdp.minechem.client.ModelSynthesizer;
+import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.MinechemPowerProvider;
 import ljdp.minechem.common.MinechemRecipes;
 import ljdp.minechem.common.gates.IMinechemTriggerProvider;
@@ -327,7 +328,10 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
 		ItemStack[] output = new ItemStack[1];
 		if(currentRecipe != null) {
-			output[0] = currentRecipe.getOutput().copy();
+			ItemStack outputStack = currentRecipe.getOutput().copy();
+			if(outputStack.itemID == MinechemItems.element.shiftedIndex)
+				MinechemItems.element.initiateRadioactivity(outputStack, worldObj);
+			output[0] = outputStack;
 			if(!doRemove)
 				return output;
 			if(canAddEmptyBottles(currentRecipe.getIngredientCount())
@@ -359,7 +363,8 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 			ArrayList<ItemStackPointer> itemStackPointers = getStackFromAdjacentChests(
 					itemstack.itemID, 
 					itemstack.getItemDamage(), 
-					itemstack.stackSize
+					itemstack.stackSize,
+					allPointers
 			);
 			if(itemStackPointers != null) {
 				allPointers.addAll(itemStackPointers);
@@ -370,22 +375,26 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 		return allPointers;
 	}
 	
-	private ArrayList<ItemStackPointer> getStackFromAdjacentChests(int itemId, int itemDamage, int stackSize) {
+	private ArrayList<ItemStackPointer> getStackFromAdjacentChests(int itemId, int itemDamage, int stackSize,
+			ArrayList<ItemStackPointer>allPointers)
+	{
 		ArrayList<ItemStackPointer> itemStackPointers = null;
-		itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.NORTH);
+		itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.NORTH, allPointers);
 		if(itemStackPointers == null)
-			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.EAST);
+			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.EAST, allPointers);
 		if(itemStackPointers == null)
-			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.SOUTH);
+			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.SOUTH, allPointers);
 		if(itemStackPointers == null)
-			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.WEST);
+			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.WEST, allPointers);
 		if(itemStackPointers == null)
-			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.UP);
+			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.UP, allPointers);
 		return itemStackPointers;
 	}
 	
 	
-	private ArrayList<ItemStackPointer> getStackFromAdjacentChest(int itemId, int itemDamage, int stackSize, ForgeDirection direction) {
+	private ArrayList<ItemStackPointer> getStackFromAdjacentChest(int itemId, int itemDamage, int stackSize, ForgeDirection direction,
+			ArrayList<ItemStackPointer>allPointers)
+	{
 		Position position = new Position(xCoord, yCoord, zCoord, direction);
 		position.moveForwards(1.0);
 		TileEntity tileEntity = worldObj.getBlockTileEntity((int)position.x, (int)position.y, (int)position.z);
@@ -395,7 +404,9 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 			IInventory inventory = MinechemHelper.getInventory((IInventory)tileEntity);
 			for(int slot = 0; slot < inventory.getSizeInventory(); slot++) {
 				ItemStack itemstack = inventory.getStackInSlot(slot);
-				if(itemstack != null && itemstack.itemID == itemId && itemstack.getItemDamage() == itemDamage) {
+				if(itemstack != null && itemstack.itemID == itemId && itemstack.getItemDamage() == itemDamage
+						&& !itemStackPointersHasSlot(allPointers, slot, inventory))
+				{
 					int amount = Math.min(stackSize, itemstack.stackSize);
 					stackSize -= amount;
 					
@@ -415,7 +426,13 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 		return null;
 	}
 	
-	
+	private boolean itemStackPointersHasSlot(ArrayList<ItemStackPointer> allPointers, int slot, IInventory inventory) {
+		for(ItemStackPointer itemstackPointer : allPointers) {
+			if(itemstackPointer.inventory == inventory && itemstackPointer.slot == slot)
+				return true;
+		}
+		return false;
+	}
 
 	@Override
 	public boolean isActive() {

@@ -153,6 +153,21 @@ public class TileEntityBlueprintProjector extends TileEntity {
 		}
 	}
 	
+	public void destroyProjection() {
+		int facing = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+		ForgeDirection direction = MinechemHelper.getDirectionFromFacing(facing);
+		LocalPosition position = new LocalPosition(xCoord, yCoord, zCoord, direction);
+		position.moveForwards(blueprint.zSize + 1);
+		position.moveLeft(Math.floor(blueprint.xSize / 2));
+		for(int x = 0; x < blueprint.xSize; x++) {
+			for(int y = 0; y < blueprint.ySize; y++) {
+				for(int z = 0; z < blueprint.zSize; z++) {
+					destroyGhostBlock(x, y, z, position);
+				}
+			}
+		}
+	}
+	
 	private void destroyGhostBlock(int x, int y, int z, LocalPosition position) {
 		Pos3 worldPos = position.getLocalPos(x, y, z);
 		int blockID = worldObj.getBlockId(worldPos.x, worldPos.y, worldPos.z);
