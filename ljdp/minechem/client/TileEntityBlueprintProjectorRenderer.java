@@ -28,7 +28,7 @@ public class TileEntityBlueprintProjectorRenderer extends TileEntitySpecialRende
 			GL11.glRotatef(180f, 0f, 0f, 1f);
 			GL11.glRotatef((facing * 90.0F), 0.0F, 1.0F, 0.0F);
 			GL11.glEnable(GL11.GL_LIGHTING);
-			if(blueprintProjector.isPowered()) {
+			if(blueprintProjector.hasBlueprint()) {
 				ForgeHooksClient.bindTexture(ModMinechem.proxy.PROJECTOR_MODEL_ON, 0);
 			} else {
 				ForgeHooksClient.bindTexture(ModMinechem.proxy.PROJECTOR_MODEL_OFF, 0);

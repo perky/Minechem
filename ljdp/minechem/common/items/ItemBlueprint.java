@@ -35,6 +35,17 @@ public class ItemBlueprint extends Item {
 		setHasSubtypes(true);
 	}
 	
+	@Override
+	public String getTextureFile() {
+		return ModMinechem.proxy.ITEMS_PNG;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int getIconFromDamage(int par1) {
+		return 13;
+	}
+	
 	public static ItemStack createItemStackFromBlueprint(MinechemBlueprint blueprint) {
 		for(int i = 0; i < blueprints.length; i++) {
 			if(blueprints[i].name.equals(blueprint.name)) {
