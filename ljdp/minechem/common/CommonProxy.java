@@ -11,7 +11,8 @@ public class CommonProxy {
 	public static String TEXTURE_DIR		= "/ljdp/minechem/textures/";
 	public static String TAB_LEFT_PNG 		= TEXTURE_DIR + "tab_left.png";
 	public static String TAB_RIGHT_PNG 		= TEXTURE_DIR + "tab_right.png";
-	public static String ELEMENTBOTTLES_PNG = TEXTURE_DIR + "elementbottles.png";
+	public static String ITEMS_PNG			= TEXTURE_DIR + "items.png";
+	//public static String ELEMENTBOTTLES_PNG = TEXTURE_DIR + "elementbottles.png";
 	public static String DECOMPOSER_GUI_PNG = TEXTURE_DIR + "ChemicalDecomposerGUI.png";
 	public static String MICROSCOPE_GUI_PNG = TEXTURE_DIR + "MicroscopeGUI.png";
 	public static String SYNTHESIS_GUI_PNG  = TEXTURE_DIR + "SynthesisGUI.png";

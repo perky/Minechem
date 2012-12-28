@@ -12,6 +12,7 @@ import ljdp.minechem.common.blueprint.BlueprintBlock;
 import ljdp.minechem.common.blueprint.BlueprintBlock.Type;
 import ljdp.minechem.common.blueprint.BlueprintFusion;
 import ljdp.minechem.common.blueprint.MinechemBlueprint;
+import ljdp.minechem.common.sound.LoopingSound;
 import ljdp.minechem.common.utils.DirectionMultiplier;
 import ljdp.minechem.common.utils.LocalPosition;
 import ljdp.minechem.common.utils.LocalPosition.Pos3;
@@ -33,14 +34,18 @@ public class TileEntityBlueprintProjector extends TileEntity {
 	
 	boolean isComplete = false;
 	Integer[][][] structure;
+	LoopingSound projectorSound;
 	
 	public TileEntityBlueprintProjector() {
 		this.blueprint = new BlueprintFusion();
 		this.structure = this.blueprint.getStructure();
+		this.projectorSound = new LoopingSound("ljdp.minechem.projector", 20);
+		this.projectorSound.setVolume(.2F);
 	}
 	
 	@Override
 	public void updateEntity() {
+		this.projectorSound.play(worldObj, xCoord, yCoord, zCoord);
 		if(!isComplete)
 			projectBlueprint();
 	}

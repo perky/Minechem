@@ -54,10 +54,10 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 	MinechemPowerProvider powerProvider;
 	public ModelSynthesizer model;
 	
-	int minEnergyPerTick = 24;
+	int minEnergyPerTick = 30;
 	int maxEnergyPerTick = 200;
 	int activationEnergy = 100;
-	int energyStorage = 10000;
+	int energyStorage = 900000;
 	
 	private class ItemStackPointer {
 		IInventory inventory;
@@ -91,7 +91,7 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 	private boolean getRecipeResult() {
 		ItemStack[] craftingItems = getCraftingItems();
 		SynthesisRecipe recipe = SynthesisRecipeHandler.instance.getRecipeFromInput(craftingItems);
-		if(recipe != null && canAddEmptyBottles(recipe.getIngredientCount())) {
+		if(recipe != null && canAffordRecipe(recipe) && canAddEmptyBottles(recipe.getIngredientCount())) {
 			synthesisInventory[kStartOutput] = recipe.getOutput().copy();
 			currentRecipe = recipe;
 			return true;
@@ -102,7 +102,12 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 		}
 	}
 	
-	private ItemStack[] getCraftingItems() {
+	private boolean canAffordRecipe(SynthesisRecipe recipe) {
+		int energyCost = recipe.energyCost();
+		return powerProvider.getEnergyStored() >= energyCost;
+	}
+	
+	public ItemStack[] getCraftingItems() {
 		ItemStack[] currentRecipe = new ItemStack[9];
 		int i = 0;
 		for(int slot = kStartInput; slot < kStartInput + kSizeInput; slot++) {
@@ -240,10 +245,15 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 	}
 	
 	public void onOuputPickupFromSlot(EntityPlayer entityPlayer) {
-		powerProvider.useEnergy(activationEnergy, activationEnergy, true);
+		takeEnergy(currentRecipe);
 		takeCraftingItems();
 	}
 	
+	private void takeEnergy(SynthesisRecipe recipe) {
+		int energyCost = recipe.energyCost();
+		powerProvider.useEnergy(energyCost, energyCost, true);
+	}
+
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeToNBT(nbtTagCompound);
@@ -335,8 +345,9 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 			if(!doRemove)
 				return output;
 			if(canAddEmptyBottles(currentRecipe.getIngredientCount())
-				&& takeStacksFromAdjacentChests(currentRecipe))
+				&& takeStacksFromAdjacentChests(currentRecipe) && canAffordRecipe(currentRecipe))
 			{
+				takeEnergy(currentRecipe);
 				addEmptyBottles(currentRecipe.getIngredientCount());
 				return output;
 			}
@@ -477,6 +488,10 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 			return triggers;
 		}
 		return null;
+	}
+
+	public SynthesisRecipe getCurrentRecipe() {
+		return currentRecipe;
 	}
 
 }

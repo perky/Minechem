@@ -33,6 +33,7 @@ public class BlockGhostBlock extends Block {
 		super(id, 16, MinechemBlocks.materialGhost);
 		setBlockName("block.minechemGhostBlock");
 		setCreativeTab(ModMinechem.minechemTab);
+		setLightValue(0.5F);
         this.setRequiresSelfNotify();
         blockLookup.put(1, new ItemStack(MinechemBlocks.fusion, 1, 0));
         blockLookup.put(2, new ItemStack(Block.blockGold, 1, 0));

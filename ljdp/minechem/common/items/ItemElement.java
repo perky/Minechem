@@ -59,18 +59,8 @@ public class ItemElement extends Item {
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public int getIconFromDamage(int itemDamage) {
-		EnumClassification roomState = elements[itemDamage].roomState();
-		EnumClassification classification = elements[itemDamage].classification();
-		int row = (Integer) classificationIndexes.get(roomState);
-		int column = (Integer) classificationIndexes.get(classification);
-		return row + column;
-	}
-	
-	@Override
 	public String getTextureFile() {
-		return ModMinechem.proxy.ELEMENTBOTTLES_PNG;
+		return ModMinechem.proxy.ITEMS_PNG;
 	}
 	
 	public static String getShortName(ItemStack itemstack) {
@@ -96,6 +86,10 @@ public class ItemElement extends Item {
 	public static EnumRadioactivity getRadioactivity(ItemStack itemstack) {
 		int atomicNumber = itemstack.getItemDamage();
 		return elements[atomicNumber].radioactivity();
+	}
+	
+	public static EnumElement getElement(ItemStack itemstack) {
+		return EnumElement.elements[itemstack.getItemDamage()];
 	}
 	
 	@Override

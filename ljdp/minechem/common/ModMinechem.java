@@ -12,6 +12,7 @@ import ljdp.minechem.common.containers.ContainerMicroscope;
 import ljdp.minechem.common.containers.ContainerSynthesis;
 import ljdp.minechem.common.gates.MinechemTriggers;
 import ljdp.minechem.common.network.PacketHandler;
+import ljdp.minechem.common.sound.MinechemSoundEvent;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;
 import ljdp.minechem.common.tileentity.TileEntityFusion;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
@@ -76,6 +77,8 @@ public class ModMinechem implements IGuiHandler {
 		MinechemItems.registerToOreDictionary();
 		blLog.info("Adding Ore Dictionary Recipes");
 		MinecraftForge.EVENT_BUS.register(MinechemRecipes.getInstance());
+		blLog.info("Adding Sound Events");
+		MinecraftForge.EVENT_BUS.register(new MinechemSoundEvent());
 	}
 	
 	@Init

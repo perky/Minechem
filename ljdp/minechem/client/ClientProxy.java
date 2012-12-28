@@ -20,7 +20,7 @@ public class ClientProxy extends CommonProxy {
 	
 	@Override
 	public void registerRenderers() {
-		MinecraftForgeClient.preloadTexture(ELEMENTBOTTLES_PNG);
+		MinecraftForgeClient.preloadTexture(ITEMS_PNG);
 		MinecraftForgeClient.preloadTexture(DECOMPOSER_GUI_PNG);
 		MinecraftForgeClient.preloadTexture(MICROSCOPE_GUI_PNG);
 		MinecraftForgeClient.preloadTexture(SYNTHESIS_GUI_PNG);

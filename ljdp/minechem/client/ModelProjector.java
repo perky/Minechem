@@ -131,10 +131,10 @@ public class ModelProjector extends ModelBase
     projectorstand.render(scale);
     body.render(scale);
     lecternstand.render(scale);
-    panelright.render(scale);
+    //panelright.render(scale);
     lectern.render(scale);
-    panelrod.render(scale);
-    panelleft.render(scale);
+    //panelrod.render(scale);
+    //panelleft.render(scale);
     lens1.render(scale);
     lens2.render(scale);
     lens3.render(scale);

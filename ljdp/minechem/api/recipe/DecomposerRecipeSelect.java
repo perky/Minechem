@@ -27,5 +27,10 @@ public class DecomposerRecipeSelect extends DecomposerRecipeChance {
 			return null;
 		}
 	}
+	
+	@Override
+	public ArrayList<Chemical> getOutputRaw() {
+		return possibleRecipes.get(0).getOutputRaw();
+	}
 
 }

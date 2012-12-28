@@ -1,7 +1,11 @@
 package ljdp.minechem.common.items;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import ljdp.minechem.api.core.EnumMolecule;
 import ljdp.minechem.api.util.Constants;
@@ -21,6 +25,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemMolecule extends Item {
 	
+	private Random random = new Random();
+	
 	public ItemMolecule(int par1) {
 		super(par1);
 		setCreativeTab(ModMinechem.minechemTab);
@@ -37,7 +43,7 @@ public class ItemMolecule extends Item {
 	
 	@Override
 	public String getTextureFile() {
-		return ModMinechem.proxy.ELEMENTBOTTLES_PNG;
+		return ModMinechem.proxy.ITEMS_PNG;
 	}
 	
 	public ArrayList<ItemStack> getElements(ItemStack itemstack) {
@@ -84,7 +90,7 @@ public class ItemMolecule extends Item {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack par1ItemStack,
 			EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-		par3List.add(getFormula(par1ItemStack));
+		par3List.add("\u00A79" + getFormula(par1ItemStack));
 	}
 	
 	@Override
@@ -126,8 +132,11 @@ public class ItemMolecule extends Item {
         
     	EnumMolecule molecule = getMolecule(itemStack);
     	switch(molecule) {
+    	case water:
+    		entityPlayer.getFoodStats().addStats(1, .1F);
+    		break;
     	case psilocybin:
-    		entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 0));
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
     		entityPlayer.attackEntityFrom(DamageSource.generic, 2);
     		break;
     	case amphetamine:
@@ -136,12 +145,39 @@ public class ItemMolecule extends Item {
     	case muscarine:
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.wither.getId(), Constants.TICKS_PER_SECOND * 60, 2));
     		break;
+    	case ethanol:
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 2, 1));
+    		entityPlayer.getFoodStats().addStats(3, .1F);
+    		break;
+    	case cyanide:
+    		entityPlayer.attackEntityFrom(DamageSource.generic, 20);
+    		break;
+    	case penicillin:
+    		cureAllPotions(entityPlayer);
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 2, 1));
+    		break;
+    	case testosterone:
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), Constants.TICKS_PER_MINUTE * 5, 2));
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(),   Constants.TICKS_PER_MINUTE * 5, 0));
+    		if(random.nextFloat() < .2F)
+    			entityPlayer.attackEntityFrom(DamageSource.generic, 10);
+    		break;
 		default:
 			entityPlayer.attackEntityFrom(DamageSource.generic, 5);
 			break;
     	}
 
         return itemStack;
+    }
+    
+    private void cureAllPotions(EntityPlayer entityPlayer) {
+    	Collection activePotions = entityPlayer.getActivePotionEffects();
+    	Iterator<Integer> potionKey = activePotions.iterator();
+    	while(potionKey.hasNext()) {
+    		Integer key = potionKey.next();
+    		entityPlayer.removePotionEffect(key);
+            potionKey.remove();
+    	}
     }
 	
 	@Override

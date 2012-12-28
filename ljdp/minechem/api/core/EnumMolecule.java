@@ -84,10 +84,14 @@ public enum EnumMolecule {
 	ethanol					(62, "Ethyl Alchohol", new Element(C,2), new Element(H,6), new Element(O)),
 	amphetamine				(63, "Aphetamine", new Element(C,9), new Element(H,13), new Element(N)),
 	theobromine				(64, "Theobromine", new Element(C,7), new Element(H,8), new Element(N,4), new Element(O,2)),
-	starch					(65, "Starch", new Molecule(cellulose,2)),
+	starch					(65, "Starch", new Molecule(cellulose,2), new Molecule(cellulose,1)),
 	sucrose					(66, "Sucrose", new Element(C,12), new Element(H,22), new Element(O,11)),
 	muscarine				(67, "Muscarine", new Element(C,9), new Element(H,20), new Element(N), new Element(O,2)),
 	aluminiumOxide			(68, "Aluminium Oxide", new Element(Al,2), new Element(O,3)),
+	fullrene				(69, "Fullrene", new Element(C,64), new Element(C,64), new Element(C,64), new Element(C,64)),
+	keratin					(70, "Keratin", new Element(C,2), new Molecule(water), new Element(N)),
+	penicillin				(71, "Penicillin", new Element(C,16), new Element(H,18), new Element(N,2), new Element(O,4), new Element(S)),
+	testosterone			(72, "Testosterone", new Element(C,19), new Element(H,28), new Element(O,2)),
 	;
 	
 	public static EnumMolecule[] molecules = values();
