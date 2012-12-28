@@ -385,7 +385,7 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 
     private boolean takeStacks(SynthesisRecipe recipe) {
         System.out.println("takeStacks");
-        return recipe.takeFromCraftingInventory(craftingInventory)
+        return SynthesisRecipeHandler.takeFromCraftingInventory(recipe, craftingInventory)
             || takeStacksFromAdjacentChests(recipe);
     }
 	
