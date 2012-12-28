@@ -10,6 +10,7 @@ import ljdp.minechem.common.blueprint.BlueprintFusion;
 import ljdp.minechem.common.blueprint.MinechemBlueprint;
 import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -46,6 +47,16 @@ public class ItemBlueprint extends Item {
 	public MinechemBlueprint getBlueprint(ItemStack itemstack) {
 		int metadata = itemstack.getItemDamage();
 		return blueprints[metadata];
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack itemstack, EntityPlayer entityPlayer, List list, boolean par4) {
+		MinechemBlueprint blueprint = getBlueprint(itemstack);
+		if(blueprint != null) {
+			String dimensions = String.format("%d x %d x %d", blueprint.xSize, blueprint.ySize, blueprint.zSize);
+			list.add(dimensions);
+		}
 	}
 	
 	@Override
