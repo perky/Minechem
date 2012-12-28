@@ -118,17 +118,21 @@ public class MinechemHelper {
 	}
 	
 	public static boolean itemStackMatchesChemical(ItemStack itemstack, Chemical chemical) {
+        return itemStackMatchesChemical(itemstack, chemical, 1);
+	}
+	
+	public static boolean itemStackMatchesChemical(ItemStack itemstack, Chemical chemical, int factor) {
 		if(chemical instanceof Element && itemstack.itemID == MinechemItems.element.shiftedIndex) {
 			Element element = (Element)chemical;
-			return (itemstack.getItemDamage() == element.element.ordinal()) && (itemstack.stackSize >= element.amount);
+			return (itemstack.getItemDamage() == element.element.ordinal()) && (itemstack.stackSize >= element.amount * factor);
 		}
 		if (chemical instanceof Molecule && itemstack.itemID == MinechemItems.molecule.shiftedIndex) {
 			Molecule molecule = (Molecule)chemical;
-			return (itemstack.getItemDamage() == molecule.molecule.ordinal()) && (itemstack.stackSize >= molecule.amount);
+			return (itemstack.getItemDamage() == molecule.molecule.ordinal()) && (itemstack.stackSize >= molecule.amount * factor);
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Ensures that the given inventory is the full inventory, i.e. takes double chests into account.
 	 * @param inv

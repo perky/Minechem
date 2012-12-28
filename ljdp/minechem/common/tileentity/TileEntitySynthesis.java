@@ -7,17 +7,18 @@ import buildcraft.api.inventory.ISpecialInventory;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
+import buildcraft.core.inventory.TransactorRoundRobin;
+import java.util.LinkedList;
+import java.util.List;
 import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.api.util.Util;
 import ljdp.minechem.client.ModelSynthesizer;
 import ljdp.minechem.common.MinechemPowerProvider;
-import ljdp.minechem.common.MinechemRecipes;
-import ljdp.minechem.common.network.PacketDecomposerUpdate;
 import ljdp.minechem.common.network.PacketHandler;
 import ljdp.minechem.common.network.PacketSynthesisUpdate;
 import ljdp.minechem.common.recipe.SynthesisRecipeHandler;
+import ljdp.minechem.common.utils.BoundedInventory;
 import ljdp.minechem.common.utils.MinechemHelper;
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -43,6 +44,7 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 	private SynthesisRecipe currentRecipe;
 	MinechemPowerProvider powerProvider;
 	public ModelSynthesizer model;
+    private final IInventory craftingInventory = new BoundedInventory(this, kStartInput, kStartInput + kSizeInput);
 	
 	int minEnergyPerTick = 24;
 	int maxEnergyPerTick = 200;
@@ -322,27 +324,51 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 	}
 
 	@Override
-	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
-		return 0;
+	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection direction) {
+        // add items in round robin fashion to input slots (as the autobench does)
+        return new TransactorRoundRobin(craftingInventory).add(stack, direction, doAdd).stackSize;
 	}
 
 	@Override
-	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-		ItemStack[] output = new ItemStack[1];
-		if(currentRecipe != null) {
-			output[0] = currentRecipe.getOutput().copy();
-			if(!doRemove)
-				return output;
-			if(canAddEmptyBottles(currentRecipe.getIngredientCount())
-				&& takeStacksFromAdjacentChests(currentRecipe))
-			{
-				addEmptyBottles(currentRecipe.getIngredientCount());
-				return output;
-			}
-		}
-		
-		return null;
+	public ItemStack[] extractItem(boolean doRemove, ForgeDirection direction, int maxItemCount) {
+		switch (direction) {
+            case NORTH:
+            case SOUTH:
+            case EAST:
+            case WEST:
+            case UNKNOWN:
+                // extract crafted item from all sides (and unkonwn, which logistics pipes specifies)
+                if(currentRecipe == null) break;
+                ItemStack[] output = new ItemStack[] { currentRecipe.getOutput().copy() };
+                if(!doRemove) return output;
+                if(!canAddEmptyBottles(currentRecipe.getIngredientCount())) break;
+                if(!takeStacks(currentRecipe)) break;
+                addEmptyBottles(currentRecipe.getIngredientCount());
+                return output;
+            case UP:
+            case DOWN:
+                // extract bottles from top/bottom
+                List<ItemStack> stacks = new LinkedList<ItemStack>();
+                for (int slot = kStartBottles; slot < kStartBottles + kSizeBottles; slot++) {
+                    ItemStack stack = doRemove
+                        ? decrStackSize(slot, maxItemCount)
+                        : getStackInSlot(slot);
+                    if (stack != null && stack.stackSize > 0) {
+                        maxItemCount -= stack.stackSize;
+                        stacks.add(stack.copy());
+                        if (maxItemCount == 0) break;
+                    }
+                }
+                return stacks.toArray(new ItemStack[0]);
+        }
+        return new ItemStack[0];
 	}
+
+    private boolean takeStacks(SynthesisRecipe recipe) {
+        System.out.println("takeStacks");
+        return recipe.takeFromCraftingInventory(craftingInventory)
+            || takeStacksFromAdjacentChests(recipe);
+    }
 	
 	private boolean takeStacksFromAdjacentChests(SynthesisRecipe recipe) {
 		ArrayList<ItemStack> ingredients = MinechemHelper.convertChemicalsIntoItemStacks(recipe.getShapelessRecipe());

@@ -33,13 +33,21 @@ public class SynthesisRecipeHandler {
 	}
 	
 	public boolean itemStacksMatchesRecipe(ItemStack[] stacks, SynthesisRecipe recipe) {
+        return itemStacksMatchesRecipe(stacks, recipe, 1);
+    }
+
+	public boolean itemStacksMatchesRecipe(ItemStack[] stacks, SynthesisRecipe recipe, int factor) {
 		if(recipe.isShaped())
-			return itemStacksMatchesShapedRecipe(stacks, recipe);
+			return itemStacksMatchesShapedRecipe(stacks, recipe, factor);
 		else
-			return itemStacksMatchesShapelessRecipe(stacks, recipe);
+			return itemStacksMatchesShapelessRecipe(stacks, recipe, factor);
 	}
 
 	private boolean itemStacksMatchesShapelessRecipe(ItemStack[] stacks, SynthesisRecipe recipe) {
+        return itemStacksMatchesShapelessRecipe(stacks, recipe, 1);
+    }
+
+	private boolean itemStacksMatchesShapelessRecipe(ItemStack[] stacks, SynthesisRecipe recipe, int factor) {
 		ArrayList<ItemStack> stacksList = new ArrayList();
 		ArrayList<ItemStack> shapelessRecipe = MinechemHelper.convertChemicalsIntoItemStacks(recipe.getShapelessRecipe());
 		for(ItemStack itemstack : stacks) {
@@ -47,7 +55,7 @@ public class SynthesisRecipeHandler {
 				stacksList.add(itemstack.copy());
 		}
 		for(ItemStack itemstack : stacksList) {
-			int ingredientSlot = getIngredientSlotThatMatchesStack(shapelessRecipe, itemstack);
+			int ingredientSlot = getIngredientSlotThatMatchesStack(shapelessRecipe, itemstack, factor);
 			if(ingredientSlot != -1)
 				shapelessRecipe.remove(ingredientSlot);
 			else
@@ -57,6 +65,10 @@ public class SynthesisRecipeHandler {
 	}
 
 	private boolean itemStacksMatchesShapedRecipe(ItemStack[] stacks, SynthesisRecipe recipe) {
+        return itemStacksMatchesShapedRecipe(stacks, recipe, 1);
+    }
+
+	private boolean itemStacksMatchesShapedRecipe(ItemStack[] stacks, SynthesisRecipe recipe, int factor) {
 		Chemical[] chemicals = recipe.getShapedRecipe();
 		for(int i = 0; i < chemicals.length; i++) {
 			if(stacks[i] == null && chemicals[i] != null)
@@ -65,7 +77,7 @@ public class SynthesisRecipeHandler {
 				return false;
 			if(stacks[i] == null || chemicals[i] == null)
 				continue;
-			if(MinechemHelper.itemStackMatchesChemical(stacks[i], chemicals[i]))
+			if(MinechemHelper.itemStackMatchesChemical(stacks[i], chemicals[i], factor))
 				continue;
 			else
 				return false;
@@ -74,10 +86,14 @@ public class SynthesisRecipeHandler {
 	}
 	
 	private int getIngredientSlotThatMatchesStack(ArrayList<ItemStack> ingredients, ItemStack itemstack) {
+        return getIngredientSlotThatMatchesStack(ingredients, itemstack, 1);
+    }
+
+	private int getIngredientSlotThatMatchesStack(ArrayList<ItemStack> ingredients, ItemStack itemstack, int factor) {
 		for(int slot = 0; slot < ingredients.size(); slot++) {
 			ItemStack ingredientStack = ingredients.get(slot);
 			if(ingredientStack != null && Util.stacksAreSameKind(itemstack, ingredientStack) 
-					&& itemstack.stackSize >= ingredientStack.stackSize)
+					&& itemstack.stackSize >= ingredientStack.stackSize * factor)
 				return slot;
 		}
 		return -1;
