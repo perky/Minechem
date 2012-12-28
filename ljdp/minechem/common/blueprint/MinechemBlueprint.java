@@ -16,6 +16,7 @@ public abstract class MinechemBlueprint {
 	private int totalSize;
 	private int horizontalSize;
 	private int verticalSize;
+	public String name;
 	
 	public MinechemBlueprint(int xSize, int ySize, int zSize) 
 	{

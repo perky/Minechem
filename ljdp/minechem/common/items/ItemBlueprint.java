@@ -4,6 +4,7 @@ import java.util.List;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.blueprint.BlueprintFusion;
 import ljdp.minechem.common.blueprint.MinechemBlueprint;
@@ -31,6 +32,15 @@ public class ItemBlueprint extends Item {
 		setItemName("minechem.itemBlueprint");
 		setCreativeTab(ModMinechem.minechemTab);
 		setHasSubtypes(true);
+	}
+	
+	public static ItemStack createItemStackFromBlueprint(MinechemBlueprint blueprint) {
+		for(int i = 0; i < blueprints.length; i++) {
+			if(blueprints[i].name.equals(blueprint.name)) {
+				return new ItemStack(MinechemItems.blueprint, 1, i);
+			}
+		}
+		return null;
 	}
 	
 	public MinechemBlueprint getBlueprint(ItemStack itemstack) {

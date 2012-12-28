@@ -37,17 +37,16 @@ public class TileEntityBlueprintProjector extends TileEntity {
 	LoopingSound projectorSound;
 	
 	public TileEntityBlueprintProjector() {
-		this.blueprint = new BlueprintFusion();
-		this.structure = this.blueprint.getStructure();
 		this.projectorSound = new LoopingSound("ljdp.minechem.projector", 20);
 		this.projectorSound.setVolume(.2F);
 	}
 	
 	@Override
 	public void updateEntity() {
-		this.projectorSound.play(worldObj, xCoord, yCoord, zCoord);
-		if(!isComplete)
+		if(blueprint != null && !isComplete) {
 			projectBlueprint();
+			this.projectorSound.play(worldObj, xCoord, yCoord, zCoord);
+		}
 	}
 	
 	private void projectBlueprint() {
@@ -78,28 +77,6 @@ public class TileEntityBlueprintProjector extends TileEntity {
 			if(verticalIncorrectCount != 0)
 				shouldProjectGhostBlocks = false;
 		}
-		/*
-		for(int y = 0; y < blueprint.ySize; y++) {
-			int horizontalIncorrectCount = blueprint.getHorizontalSliceSize();
-			Integer[][] blueprintSlice   = blueprint.getHorizontalSlice(y);
-			
-			
-			for(int x = 0; x < blueprint.xSize; x++) {
-				for(int z = 0; z < blueprint.zSize; z++) {
-					if(shouldProjectGhostBlocks) {
-						BlockStatus blockStatus = projectGhostBlock(x, y, z, position);
-						if(blockStatus == BlockStatus.CORRECT) {
-							horizontalIncorrectCount--;
-							totalIncorrectCount--;
-						}
-					} else {
-						destroyGhostBlock(x, y, z, position);
-					}
-				}
-			}
-			if(horizontalIncorrectCount != 0)
-				shouldProjectGhostBlocks = false;
-		}*/
 		
 		if(totalIncorrectCount == 0 && !isComplete) {
 			isComplete = true;
@@ -179,6 +156,8 @@ public class TileEntityBlueprintProjector extends TileEntity {
 	}
 	
 	public void destroyProjection() {
+		if(this.blueprint == null)
+			return;
 		int facing = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 		ForgeDirection direction = MinechemHelper.getDirectionFromFacing(facing);
 		LocalPosition position = new LocalPosition(xCoord, yCoord, zCoord, direction);
@@ -212,5 +191,22 @@ public class TileEntityBlueprintProjector extends TileEntity {
 	
 	public int getFacing() {
 		return worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+	}
+
+	public void setBlueprint(MinechemBlueprint blueprint) {
+		this.blueprint = blueprint;
+		this.structure = blueprint.getStructure();
+	}
+	
+	public MinechemBlueprint takeBlueprint() {
+		destroyProjection();
+		MinechemBlueprint blueprint = this.blueprint;
+		this.blueprint = null;
+		this.structure = null;
+		return blueprint;
+	}
+
+	public boolean hasBlueprint() {
+		return this.blueprint != null;
 	}
 }

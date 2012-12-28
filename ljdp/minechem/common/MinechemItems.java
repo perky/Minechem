@@ -10,6 +10,7 @@ import ljdp.minechem.api.core.EnumElement;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.items.ItemAtomicManipulator;
 import ljdp.minechem.common.items.ItemBlockFusion;
+import ljdp.minechem.common.items.ItemBlueprint;
 import ljdp.minechem.common.items.ItemElement;
 import ljdp.minechem.common.items.ItemFusionStar;
 import ljdp.minechem.common.items.ItemLens;
@@ -25,6 +26,7 @@ public class MinechemItems {
 	public static ItemStack concaveLens;
 	public static ItemStack microscopeLens;
 	public static ItemFusionStar fusionStar;
+	public static ItemBlueprint blueprint;
 	
 	private static int elementID;
 	private static int moleculeID;
@@ -32,6 +34,7 @@ public class MinechemItems {
 	private static int lensID;
 	private static int fusionStarID;
 	private static int blockFusionID;
+	private static int blueprintID;
 	
 	public static void loadConfig(Configuration config) {
 		elementID   = config.getItem(config.CATEGORY_ITEM, "Element", 4736).getInt(4736);
@@ -39,6 +42,7 @@ public class MinechemItems {
 	 	lensID	 	= config.getItem(config.CATEGORY_ITEM, "Lens", 4738).getInt(4738);
 	 	atomicManipulatorID = config.getItem(config.CATEGORY_ITEM, "AtomicManipulator", 4739).getInt(4739);
 	 	fusionStarID = config.getItem(config.CATEGORY_ITEM, "FusionStar", 4740).getInt(4740);
+	 	blueprintID  = config.getItem(config.CATEGORY_ITEM, "Blueprint", 4741).getInt(4741);
 	}
 	
 	public static void registerItems() {
@@ -50,6 +54,7 @@ public class MinechemItems {
 		convexLens  = new ItemStack(lens, 1, 1);
 		microscopeLens = new ItemStack(lens, 1, 2);
 		fusionStar  = new ItemFusionStar(fusionStarID);
+		blueprint   = new ItemBlueprint(blueprintID);
 		LanguageRegistry.addName(atomicManipulator, MinechemHelper.getLocalString("item.name.atomicmanipulator"));
 		LanguageRegistry.addName(fusionStar, MinechemHelper.getLocalString("item.name.fusionStar"));
 	}

@@ -96,6 +96,7 @@ public class BlueprintFusion extends MinechemBlueprint {
 	
 	public BlueprintFusion() {
 		super(13, 5, 13);
+		this.name = "blueprintFusion";
 	}
 
 	@Override
