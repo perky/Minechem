@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 public class ItemBlockFusion extends ItemBlock {
 	
 	private static final String[] names = {
-		"Fusion Wall", "Fusion Something", "Fusion Core", "Fusion Something"
+		"Fusion Wall", "Tungsten Plating", "Fusion Core"
 	};
 	
 	public ItemBlockFusion(int par1) {

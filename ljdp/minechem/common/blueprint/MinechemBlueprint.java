@@ -1,6 +1,8 @@
 package ljdp.minechem.common.blueprint;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -9,6 +11,8 @@ import net.minecraft.tileentity.TileEntity;
 public abstract class MinechemBlueprint {
 	
 	public static int air   = 0;
+	public static HashMap<Integer,MinechemBlueprint> blueprints = new HashMap();
+	public static MinechemBlueprint fusion;
 	
 	public int xSize;
 	public int ySize;
@@ -17,6 +21,17 @@ public abstract class MinechemBlueprint {
 	private int horizontalSize;
 	private int verticalSize;
 	public String name;
+	public int id;
+	
+	public static void registerBlueprint(int id, MinechemBlueprint blueprint) {
+		blueprint.id = id;
+		blueprints.put(id, blueprint);
+	}
+	
+	public static void registerBlueprints() {
+		fusion = new BlueprintFusion();
+		registerBlueprint(0, fusion);
+	}
 	
 	public MinechemBlueprint(int xSize, int ySize, int zSize) 
 	{

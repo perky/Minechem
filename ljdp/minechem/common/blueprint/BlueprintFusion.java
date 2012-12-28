@@ -13,7 +13,6 @@ public class BlueprintFusion extends MinechemBlueprint {
 	
 	private static int A = 1;
 	private static int C = 2;
-	private static int D = 3;
 	private static Integer[][][] structure = {
 	{
 		{0,0,0,0,A,A,A,A,A,0,0,0,0},
@@ -100,9 +99,8 @@ public class BlueprintFusion extends MinechemBlueprint {
 	@Override
 	public HashMap<Integer,BlueprintBlock> getBlockLookup() {
 		HashMap<Integer,BlueprintBlock> lookup = new HashMap();
-		lookup.put(A, 	new BlueprintBlock(MinechemBlocks.fusion, 		0, Type.PROXY));
-		lookup.put(C,	new BlueprintBlock(Block.blockGold,		0, Type.NORMAL));
-		lookup.put(D,	new BlueprintBlock(MinechemBlocks.fusion,		2, Type.MANAGER));
+		lookup.put(A, 	new BlueprintBlock(MinechemBlocks.fusion, 0, Type.PROXY));
+		lookup.put(C,	new BlueprintBlock(MinechemBlocks.fusion, 1, Type.NORMAL));
 		return lookup;
 	}
 

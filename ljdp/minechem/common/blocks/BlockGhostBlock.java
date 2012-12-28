@@ -28,61 +28,35 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockGhostBlock extends BlockContainer {
 	
-	static Random random = new Random();
-	
-	public HashMap<Integer,ItemStack> blockLookup = new HashMap();
-	
 	public BlockGhostBlock(int id) {
 		super(id, Material.iron);
 		setBlockName("block.minechemGhostBlock");
 		setCreativeTab(ModMinechem.minechemTab);
 		setLightValue(0.5F);
         this.setRequiresSelfNotify();
-        blockLookup.put(1, new ItemStack(MinechemBlocks.fusion, 1, 0));
-        blockLookup.put(2, new ItemStack(Block.blockGold, 1, 0));
-        blockLookup.put(3, new ItemStack(MinechemBlocks.fusion, 1, 2));
 	}
 	
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float par7,
 			float par8, float par9) {
-		int metadata = world.getBlockMetadata(x, y, z);
-		ItemStack itemstack = blockLookup.get(metadata);
-		if(playerIsHoldingBlock(entityPlayer, itemstack)) {
-			world.setBlockAndMetadataWithNotify(x, y, z, itemstack.getItem().shiftedIndex, itemstack.getItemDamage());
-			return true;
-		} else
-			return false;
+		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+		if(tileEntity instanceof TileEntityGhostBlock) {
+			TileEntityGhostBlock ghostBlock = (TileEntityGhostBlock) tileEntity;
+			ItemStack blockAsStack = ghostBlock.getBlockAsItemStack();
+			if(playerIsHoldingItem(entityPlayer, blockAsStack)) {
+				world.setBlockAndMetadataWithNotify(x, y, z, blockAsStack.getItem().shiftedIndex, blockAsStack.getItemDamage());
+				return true;
+			}
+		}
+		return false;
 	}
 	
-	private boolean playerIsHoldingBlock(EntityPlayer entityPlayer, ItemStack itemstack) {
+	private boolean playerIsHoldingItem(EntityPlayer entityPlayer, ItemStack itemstack) {
 		ItemStack helditem = entityPlayer.inventory.getCurrentItem();
 		return helditem != null && helditem.itemID == itemstack.itemID
 				&& helditem.getItemDamage() == itemstack.getItemDamage();
 	}
-	
-	@Override
-	public void updateTick(World world, int x, int y, int z, Random random) {
-		super.updateTick(world, x, y, z, random);
-		//System.out.println("update");
-		/*
-		ArrayList<Vec3> airBlocks = getAdjacentAirBlocks(world, x, y, z);
-		while(airBlocks.size() > 0) {
-			int metadata   = world.getBlockMetadata(x, y, z);
-			int randomSlot = random.nextInt(airBlocks.size());
-			Vec3 expansionPos = airBlocks.get(randomSlot);
-			world.setBlockAndMetadata(
-					(int) expansionPos.xCoord, 
-					(int) expansionPos.yCoord, 
-					(int) expansionPos.zCoord, 
-					this.blockID, metadata);
-			airBlocks.remove(randomSlot);
-			if(random.nextFloat() < 0.1F)
-				break;
-		}
-		*/
-	}
-	
+
 	/**
      * Returns whether this block is collideable based on the arguments passed in Args: blockMetaData, unknownFlag
      */
@@ -90,28 +64,6 @@ public class BlockGhostBlock extends BlockContainer {
     {
         return true;
     }
-	
-	private ArrayList<Vec3> getAdjacentAirBlocks(World world, int x, int y, int z) {
-		ArrayList<Vec3> airBlocks = new ArrayList();
-		for(int i = -1; i <= 1; i++) {
-			for(int j = -1; j <= 1; j++) {
-				for(int k = -1; k <= 1; k++) {
-					if(world.getBlockId(x+i, y+j, z+k) == 0)
-						airBlocks.add(Vec3.createVectorHelper(x+i, y+j, z+k));
-				}
-			}
-		}
-		return airBlocks;
-	}
-	
-	@Override
-	public int getBlockTextureFromSideAndMetadata(int side, int metadata) {
-		ItemStack itemstack = blockLookup.get(metadata);
-		if(itemstack != null)
-			return itemstack.getIconIndex();
-		else
-			return 1;
-	}
 	
 	@Override
 	public String getTextureFile() {

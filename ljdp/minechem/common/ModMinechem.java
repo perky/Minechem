@@ -7,6 +7,7 @@ import ljdp.minechem.client.gui.GuiFusion;
 import ljdp.minechem.client.gui.GuiMicroscope;
 import ljdp.minechem.client.gui.GuiProjector;
 import ljdp.minechem.client.gui.GuiSynthesis;
+import ljdp.minechem.common.blueprint.MinechemBlueprint;
 import ljdp.minechem.common.containers.ContainerDecomposer;
 import ljdp.minechem.common.containers.ContainerFusion;
 import ljdp.minechem.common.containers.ContainerMicroscope;
@@ -87,6 +88,8 @@ public class ModMinechem implements IGuiHandler {
 		MinecraftForge.EVENT_BUS.register(MinechemRecipes.getInstance());
 		blLog.info("Adding Sound Events");
 		MinecraftForge.EVENT_BUS.register(new MinechemSoundEvent());
+		blLog.info("Registering Blueprints");
+		MinechemBlueprint.registerBlueprints();
 		blLog.info("Registering Villager Trades");
 		for(int i = 0; i < 5; i++)
 			VillagerRegistry.instance().registerVillageTradeHandler(i, new VillageTradeHandler());

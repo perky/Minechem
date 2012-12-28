@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 import buildcraft.api.core.Position;
 import ljdp.minechem.common.MinechemBlocks;
@@ -13,6 +14,7 @@ import ljdp.minechem.common.blueprint.BlueprintBlock;
 import ljdp.minechem.common.blueprint.BlueprintBlock.Type;
 import ljdp.minechem.common.blueprint.BlueprintFusion;
 import ljdp.minechem.common.blueprint.MinechemBlueprint;
+import ljdp.minechem.common.network.PacketHandler;
 import ljdp.minechem.common.sound.LoopingSound;
 import ljdp.minechem.common.utils.DirectionMultiplier;
 import ljdp.minechem.common.utils.LocalPosition;
@@ -149,7 +151,7 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 			HashMap<Integer,BlueprintBlock> lut = blueprint.getBlockLookup();
 			BlueprintBlock blueprintBlock = lut.get(structureID);
 			if(blockID == air) {
-				worldObj.setBlockAndMetadata(worldPos.x, worldPos.y, worldPos.z, MinechemBlocks.ghostBlock.blockID, structureID);
+				createGhostBlock(worldPos.x, worldPos.y, worldPos.z, structureID);
 				return BlockStatus.INCORRECT;
 			} else if(blockID == blueprintBlock.block.blockID
 					&& blockMetadata == blueprintBlock.metadata) {
@@ -157,6 +159,16 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 			} else {
 				return BlockStatus.INCORRECT;
 			}
+		}
+	}
+	
+	private void createGhostBlock(int x, int y, int z, int blockID) {
+		worldObj.setBlockAndMetadata(x, y, z, MinechemBlocks.ghostBlock.blockID, 0);
+		TileEntity tileEntity = worldObj.getBlockTileEntity(x, y, z);
+		if(tileEntity instanceof TileEntityGhostBlock) {
+			TileEntityGhostBlock ghostBlock = (TileEntityGhostBlock) tileEntity;
+			ghostBlock.setBlueprint(this.blueprint);
+			ghostBlock.setBlockID(blockID);
 		}
 	}
 	
@@ -199,15 +211,19 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 	}
 
 	public void setBlueprint(MinechemBlueprint blueprint) {
-		this.blueprint = blueprint;
-		this.structure = blueprint.getStructure();
+		if(blueprint != null) {
+			this.blueprint = blueprint;
+			this.structure = blueprint.getStructure();
+		} else {
+			destroyProjection();
+			this.blueprint = null;
+			this.structure = null;
+		}
 	}
 	
 	public MinechemBlueprint takeBlueprint() {
-		destroyProjection();
 		MinechemBlueprint blueprint = this.blueprint;
-		this.blueprint = null;
-		this.structure = null;
+		setBlueprint(null);
 		return blueprint;
 	}
 
@@ -229,8 +245,7 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 	public ItemStack decrStackSize(int slot, int amount) {
 		ItemStack blueprintItem = this.inventory[0];
 		this.inventory[0] = null;
-		destroyProjection();
-		this.blueprint = null;
+		setBlueprint(null);
 		return blueprintItem;
 	}
 
@@ -290,9 +305,12 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 		if(blueprintNBT != null) {
 			ItemStack blueprintStack = ItemStack.loadItemStackFromNBT(blueprintNBT);
 			MinechemBlueprint blueprint = MinechemItems.blueprint.getBlueprint(blueprintStack);
+			setBlueprint(blueprint);
 			this.inventory[0] = blueprintStack;
-			this.blueprint = blueprint;
-			this.structure = blueprint.getStructure();
 		}
+	}
+
+	public MinechemBlueprint getBlueprint() {
+		return this.blueprint;
 	}
 }

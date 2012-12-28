@@ -210,8 +210,7 @@ public class TileEntityFusion extends TileEntityMultiBlock implements IInventory
 	public boolean isUseableByPlayer(EntityPlayer entityPlayer) {
 		if(!completeStructure)
 			return false;
-		double dist = entityPlayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D);
-		return worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this ? false :  dist <= 64.0D;
+		return true;
 	}
 	@Override
 	public void openChest() {}

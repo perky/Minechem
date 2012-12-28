@@ -70,6 +70,10 @@ public class GuiProjector extends GuiContainerTabbed {
 
 	private void drawBlueprintInfo(ItemStack blueprintStack) {
 		MinechemBlueprint blueprint = MinechemItems.blueprint.getBlueprint(blueprintStack);
+		if(blueprint == null) {
+			System.out.println("NULL blueprint");
+			return;
+		}
 		String name = blueprintStack.getDisplayName().replace("Blueprint", "");
 		this.fontRenderer.drawStringWithShadow(name, 64, 12, 0xFFFFFF);
 		HashMap<Integer, Integer> blockCount = getBlockCount(blueprint);

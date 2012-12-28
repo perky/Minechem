@@ -22,18 +22,11 @@ public class ItemBlueprint extends Item {
 		"item.name.blueprintVat"
 	};
 	
-	public static final MinechemBlueprint[] blueprints = {
-		new BlueprintFusion(),
-		null,
-		null
-	};
-	
 	public ItemBlueprint(int id) {
 		super(id);
 		setItemName("minechem.itemBlueprint");
 		setCreativeTab(ModMinechem.minechemTab);
 		setHasSubtypes(true);
-		setMaxDamage(blueprints.length-1);
 	}
 	
 	@Override
@@ -48,17 +41,12 @@ public class ItemBlueprint extends Item {
 	}
 	
 	public static ItemStack createItemStackFromBlueprint(MinechemBlueprint blueprint) {
-		for(int i = 0; i < blueprints.length; i++) {
-			if(blueprints[i].name.equals(blueprint.name)) {
-				return new ItemStack(MinechemItems.blueprint, 1, i);
-			}
-		}
-		return null;
+		return new ItemStack(MinechemItems.blueprint, 1, blueprint.id);
 	}
 	
 	public MinechemBlueprint getBlueprint(ItemStack itemstack) {
 		int metadata = itemstack.getItemDamage();
-		return blueprints[metadata];
+		return MinechemBlueprint.blueprints.get(metadata);
 	}
 	
 	@Override

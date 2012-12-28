@@ -57,15 +57,20 @@ public class BlockFusion extends BlockMinechemContainer {
 	
 	@Override
 	public int getBlockTextureFromSideAndMetadata(int par1, int metadata) {
-		if(metadata == 2)
-			return 1;
-		return par1 == 1 ? 7 : 2;
+		switch(metadata) {
+		case 0:
+			return 16;
+		case 1:
+			return 17;
+		default:
+			return 0;
+		}
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List) {
-		for(int i = 0; i < 4; i++)
+		for(int i = 0; i < 3; i++)
 			par3List.add(new ItemStack(this.blockID, 1, i));
 	}
 

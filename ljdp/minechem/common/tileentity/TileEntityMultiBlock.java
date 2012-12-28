@@ -101,6 +101,8 @@ public class TileEntityMultiBlock extends TileEntity {
 	}
 	
 	private BlockStatus checkBlock(int x, int y, int z) {
+		if(x == blueprint.getManagerPosX() && y == blueprint.getManagerPosY() && z == blueprint.getManagerPosZ())
+			return BlockStatus.CORRECT;
 		int worldX = (int) (xCoord + (offsetX + x));
 		int worldY = (int) (yCoord + (offsetY + y));
 		int worldZ = (int) (zCoord + (offsetZ + z));
