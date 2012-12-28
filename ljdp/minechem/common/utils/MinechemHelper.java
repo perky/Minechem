@@ -2,6 +2,7 @@ package ljdp.minechem.common.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import ljdp.minechem.api.core.Chemical;
 import ljdp.minechem.api.core.Element;
@@ -15,6 +16,7 @@ import buildcraft.core.utils.Utils;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
@@ -22,9 +24,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
 public class MinechemHelper {
+	
+	public static Random random = new Random();
 	
 	public static float translateValue(float value, float leftMin, float leftMax, float rightMin, float rightMax) {
 		float leftRange = leftMax - leftMin;
@@ -132,7 +137,48 @@ public class MinechemHelper {
 		}
 		return false;
 	}
-
+	
+	public static ForgeDirection getDirectionFromFacing(int facing) {
+		switch (facing) {
+		case 0:
+			return ForgeDirection.SOUTH;
+		case 1:
+			return ForgeDirection.WEST;
+		case 2:
+			return ForgeDirection.NORTH;
+		case 3:
+			return ForgeDirection.EAST;
+		default:
+			return null;
+		}
+	}
+	
+	public static void ejectItemStackIntoWorld(ItemStack itemstack, World world, int x, int y, int z) {
+		float randomX = random.nextFloat() * 0.8F + 0.1F;
+        float randomY = random.nextFloat() * 0.8F + 0.1F;
+        float randomZ = random.nextFloat() * 0.8F + 0.1F;
+        while(itemstack.stackSize > 0) {
+        	int randomN = random.nextInt(21) + 10;
+        	if(randomN > itemstack.stackSize)
+        		randomN = itemstack.stackSize;
+        	itemstack.stackSize -= randomN;
+        	EntityItem droppedEntity = new EntityItem(world, 
+        			(double)((float)x + randomX), 
+        			(double)((float)y + randomY), 
+        			(double)((float)z + randomZ), 
+        			new ItemStack(itemstack.itemID, randomN, itemstack.getItemDamage())
+        	);
+        	if(itemstack.hasTagCompound())
+        		droppedEntity.func_92014_d().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
+        	float amplitude = 0.05F;
+        	float yAmplitude = amplitude + 0.2F;
+        	droppedEntity.motionX = (double)((float)random.nextGaussian() * amplitude);
+        	droppedEntity.motionY = (double)((float)random.nextGaussian() * yAmplitude);
+        	droppedEntity.motionZ = (double)((float)random.nextGaussian() * amplitude);
+            world.spawnEntityInWorld(droppedEntity);
+        }
+	}
+	
 	/**
 	 * Ensures that the given inventory is the full inventory, i.e. takes double chests into account.
 	 * @param inv

@@ -40,4 +40,8 @@ public class DecomposerRecipe {
 	public ArrayList<Chemical> getOutput() {
 		return this.output;
 	}
+	
+	public ArrayList<Chemical> getOutputRaw() {
+		return this.output;
+	}
 }

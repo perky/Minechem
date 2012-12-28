@@ -3,7 +3,10 @@ package ljdp.minechem.common.network;
 public enum PacketType {
 	TileEntityUpdate (PacketTileEntityUpdate.class), 
 	DecomposerUpdate (PacketDecomposerUpdate.class),
-	SynthesisUpdate  (PacketSynthesisUpdate.class);
+	SynthesisUpdate  (PacketSynthesisUpdate.class),
+	FusionUpdate	 (PacketFusionUpdate.class),
+	GhostBlockUpdate (PacketGhostBlock.class),
+	;
 	
 	public static PacketType[] packetTypes = PacketType.values();
 	private Class<? extends PacketMinechem> packetMinechem;

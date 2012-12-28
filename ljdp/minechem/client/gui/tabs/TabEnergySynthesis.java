@@ -1,10 +1,14 @@
 package ljdp.minechem.client.gui.tabs;
 
+import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.common.MinechemPowerProvider;
+import ljdp.minechem.common.MinechemRecipes;
 import ljdp.minechem.common.ModMinechem;
+import ljdp.minechem.common.recipe.SynthesisRecipeHandler;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
 import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.item.ItemStack;
 import buildcraft.api.power.IPowerReceptor;
 
 public class TabEnergySynthesis extends TabEnergy {
@@ -23,15 +27,21 @@ public class TabEnergySynthesis extends TabEnergy {
 		if(!isFullyOpened())
 			return;
 		
+		
 		MinechemPowerProvider provider = (MinechemPowerProvider) powerReceptor.getPowerProvider();
-		energyUsageRolling.add(provider.getCurrentEnergyUsage());
+		int energyCost = 0;
+		ItemStack[] craftingMatrix = synthesis.getCraftingItems();
+		SynthesisRecipe recipe = SynthesisRecipeHandler.instance.getRecipeFromInput(craftingMatrix);
+		if(recipe != null)
+			energyCost = recipe.energyCost();
+		
 		fontRenderer.drawStringWithShadow(MinechemHelper.getLocalString("tab.title.energy"), x + 22, y + 8, headerColour);
 		
 		fontRenderer.drawStringWithShadow(MinechemHelper.getLocalString("tab.title.stored") + ":", x + 22, y + 68, subheaderColour);
 		fontRenderer.drawString(String.format("%.1f", provider.getEnergyStored()) + " MJ", x + 22, y + 80, textColour);
 		
 		fontRenderer.drawStringWithShadow(MinechemHelper.getLocalString("tab.title.activationEnergy") + ":", x + 22, y + 20, subheaderColour);
-		fontRenderer.drawString(provider.getActivationEnergy() + " MJ", x + 22, y + 32, textColour);
+		fontRenderer.drawString(energyCost + " MJ", x + 22, y + 32, textColour);
 		
 		fontRenderer.drawStringWithShadow(MinechemHelper.getLocalString("tab.title.maxUsage") + ":", x + 22, y + 44, subheaderColour);
 		fontRenderer.drawString(provider.getMaxEnergyReceived() + " MJ/t", x + 22, y + 56, textColour);

@@ -12,7 +12,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemLens extends Item {
 	
-	static String[] descriptiveNames = {"item.name.concavelens", "item.name.convexlens", "item.name.microscopelens"};
+	static String[] descriptiveNames = {"item.name.concavelens", "item.name.convexlens", "item.name.microscopelens", "item.name.projectorlens"};
 	
 	public ItemLens(int id) {
 		super(id);
@@ -34,6 +34,7 @@ public class ItemLens extends Item {
 		par3List.add(new ItemStack(id, 1, 0));
 		par3List.add(new ItemStack(id, 1, 1));
 		par3List.add(new ItemStack(id, 1, 2));
+		par3List.add(new ItemStack(id, 1, 3));
 	}
 	
 	@Override
@@ -41,18 +42,20 @@ public class ItemLens extends Item {
 	public int getIconFromDamage(int itemDamage) {
 		switch(itemDamage) {
 		case 0:
-			return 12;
+			return 9;
 		case 1:
-			return 11;
+			return 8;
 		case 2:
-			return 14;
+			return 11;
+		case 3:
+			return 12;
 		}
 		return 15;
 	}
 	
 	@Override
 	public String getTextureFile() {
-		return ModMinechem.proxy.ELEMENTBOTTLES_PNG;
+		return ModMinechem.proxy.ITEMS_PNG;
 	}
 	
 	

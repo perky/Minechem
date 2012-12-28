@@ -15,6 +15,7 @@ public class SynthesisRecipe {
 	private ItemStack output;
 	private Chemical[] shapedRecipe;
 	private ArrayList<Chemical> unshapedRecipe;
+	private int energyCost;
 	private boolean isShaped;
 	
 	public static SynthesisRecipe add(SynthesisRecipe recipe) {
@@ -22,9 +23,10 @@ public class SynthesisRecipe {
 		return recipe;
 	}
 
-	public SynthesisRecipe(ItemStack output, boolean isShaped, Chemical...recipe) {
+	public SynthesisRecipe(ItemStack output, boolean isShaped, int energyCost, Chemical...recipe) {
 		this.output = output;
 		this.isShaped = isShaped;
+		this.energyCost = energyCost;
 		this.shapedRecipe = recipe;
 		this.unshapedRecipe = new ArrayList();
 		for(Chemical ingredient : recipe) {
@@ -33,9 +35,10 @@ public class SynthesisRecipe {
 		}
 	}
 	
-	public SynthesisRecipe(ItemStack output, boolean isShaped, ArrayList<Chemical> recipe) {
+	public SynthesisRecipe(ItemStack output, boolean isShaped, int energyCost, ArrayList<Chemical> recipe) {
 		this.output = output;
 		this.isShaped = isShaped;
+		this.energyCost = energyCost;
 		this.shapedRecipe = recipe.toArray(new Chemical[recipe.size()]);
 		this.unshapedRecipe = recipe;
 	}
@@ -46,6 +49,10 @@ public class SynthesisRecipe {
 	
 	public boolean isShaped() {
 		return this.isShaped;
+	}
+	
+	public int energyCost() {
+		return this.energyCost;
 	}
 	
 	public Chemical[] getShapedRecipe() {

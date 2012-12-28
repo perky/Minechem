@@ -16,12 +16,12 @@ public class ItemAtomicManipulator extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getIconFromDamage(int par1) {
-		return 13;
+		return 10;
 	}
 	
 	@Override
 	public String getTextureFile() {
-		return ModMinechem.proxy.ELEMENTBOTTLES_PNG;
+		return ModMinechem.proxy.ITEMS_PNG;
 	}
 
 }

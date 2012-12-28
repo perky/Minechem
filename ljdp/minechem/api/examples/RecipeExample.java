@@ -51,7 +51,7 @@ public class RecipeExample {
 		// The following will create a recipe for cake out of
 		// uranium stacks in cross shape.
 		Element uranium64 = new Element(U,64);
-		SynthesisRecipe.add(new SynthesisRecipe(cake, true,
+		SynthesisRecipe.add(new SynthesisRecipe(cake, true, 1000,
 				uranium64,		null,		uranium64,
 				null,			uranium64,	null,
 				uranium64,		null,		uranium64

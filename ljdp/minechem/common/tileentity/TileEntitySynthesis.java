@@ -1,24 +1,32 @@
 package ljdp.minechem.common.tileentity;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import buildcraft.api.core.Position;
+import buildcraft.api.gates.ITrigger;
+import buildcraft.api.gates.ITriggerProvider;
 import buildcraft.api.inventory.ISpecialInventory;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
+import buildcraft.api.transport.IPipe;
+import buildcraft.core.IMachine;
 import buildcraft.core.inventory.TransactorRoundRobin;
-import java.util.LinkedList;
 import java.util.List;
 import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.api.util.Util;
 import ljdp.minechem.client.ModelSynthesizer;
+import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.MinechemPowerProvider;
+import ljdp.minechem.common.gates.IMinechemTriggerProvider;
+import ljdp.minechem.common.gates.MinechemTriggers;
 import ljdp.minechem.common.network.PacketHandler;
 import ljdp.minechem.common.network.PacketSynthesisUpdate;
 import ljdp.minechem.common.recipe.SynthesisRecipeHandler;
 import ljdp.minechem.common.utils.BoundedInventory;
 import ljdp.minechem.common.utils.MinechemHelper;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -32,7 +40,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 
-public class TileEntitySynthesis extends TileEntity implements IInventory, IPowerReceptor, ISidedInventory, ISpecialInventory {
+public class TileEntitySynthesis extends TileEntity implements IInventory, IPowerReceptor, 
+ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITriggerProvider
+{
 	
 	private ItemStack[] synthesisInventory;
 	public static final int kSizeOutput = 1;
@@ -46,10 +56,10 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 	public ModelSynthesizer model;
     private final IInventory craftingInventory = new BoundedInventory(this, kStartInput, kStartInput + kSizeInput);
 	
-	int minEnergyPerTick = 24;
+	int minEnergyPerTick = 30;
 	int maxEnergyPerTick = 200;
 	int activationEnergy = 100;
-	int energyStorage = 10000;
+	int energyStorage = 900000;
 	
 	private class ItemStackPointer {
 		IInventory inventory;
@@ -89,7 +99,7 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 	private boolean getRecipeResult() {
 		ItemStack[] craftingItems = getCraftingItems();
 		SynthesisRecipe recipe = SynthesisRecipeHandler.instance.getRecipeFromInput(craftingItems);
-		if(recipe != null && canAddEmptyBottles(recipe.getIngredientCount())) {
+		if(recipe != null && canAffordRecipe(recipe) && canAddEmptyBottles(recipe.getIngredientCount())) {
 			synthesisInventory[kStartOutput] = recipe.getOutput().copy();
 			currentRecipe = recipe;
 			return true;
@@ -100,7 +110,12 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 		}
 	}
 	
-	private ItemStack[] getCraftingItems() {
+	private boolean canAffordRecipe(SynthesisRecipe recipe) {
+		int energyCost = recipe.energyCost();
+		return powerProvider.getEnergyStored() >= energyCost;
+	}
+	
+	public ItemStack[] getCraftingItems() {
 		ItemStack[] currentRecipe = new ItemStack[9];
 		int i = 0;
 		for(int slot = kStartInput; slot < kStartInput + kSizeInput; slot++) {
@@ -220,8 +235,9 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer var1) {
-		return true;
+	public boolean isUseableByPlayer(EntityPlayer entityPlayer) {
+		double dist = entityPlayer.getDistanceSq((double)xCoord + 0.5D, (double)yCoord + 0.5D, (double)zCoord + 0.5D);
+		return worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this ? false :  dist <= 64.0D;
 	}
 
 	@Override
@@ -237,23 +253,15 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 	}
 	
 	public void onOuputPickupFromSlot(EntityPlayer entityPlayer) {
-		powerProvider.useEnergy(activationEnergy, activationEnergy, true);
+		takeEnergy(currentRecipe);
 		takeCraftingItems();
 	}
-
-	public int craftAll() {
-		int count = 0;
-		while(getRecipeResult()) {
-			if(powerProvider.useEnergy(activationEnergy, activationEnergy, true) >= activationEnergy) {
-				takeCraftingItems();
-				count++;
-			} else {
-				break;
-			}
-		}
-		return count;
-	}
 	
+	private void takeEnergy(SynthesisRecipe recipe) {
+		int energyCost = recipe.energyCost();
+		powerProvider.useEnergy(energyCost, energyCost, true);
+	}
+
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeToNBT(nbtTagCompound);
@@ -345,10 +353,15 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
             case UNKNOWN:
                 // extract crafted item from all sides (and unkonwn, which logistics pipes specifies)
                 if(currentRecipe == null) break;
-                ItemStack[] output = new ItemStack[] { currentRecipe.getOutput().copy() };
+                ItemStack outputStack = currentRecipe.getOutput().copy();
+                if(outputStack.itemID == MinechemItems.element.shiftedIndex)
+                    MinechemItems.element.initiateRadioactivity(outputStack, worldObj);
+                ItemStack[] output = new ItemStack[] { outputStack };
                 if(!doRemove) return output;
                 if(!canAddEmptyBottles(currentRecipe.getIngredientCount())) break;
                 if(!takeStacks(currentRecipe)) break;
+                if(!canAffordRecipe(currentRecipe)) break;
+				takeEnergy(currentRecipe);
                 addEmptyBottles(currentRecipe.getIngredientCount());
                 return output;
             case UP:
@@ -394,7 +407,8 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 			ArrayList<ItemStackPointer> itemStackPointers = getStackFromAdjacentChests(
 					itemstack.itemID, 
 					itemstack.getItemDamage(), 
-					itemstack.stackSize
+					itemstack.stackSize,
+					allPointers
 			);
 			if(itemStackPointers != null) {
 				allPointers.addAll(itemStackPointers);
@@ -405,22 +419,26 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 		return allPointers;
 	}
 	
-	private ArrayList<ItemStackPointer> getStackFromAdjacentChests(int itemId, int itemDamage, int stackSize) {
+	private ArrayList<ItemStackPointer> getStackFromAdjacentChests(int itemId, int itemDamage, int stackSize,
+			ArrayList<ItemStackPointer>allPointers)
+	{
 		ArrayList<ItemStackPointer> itemStackPointers = null;
-		itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.NORTH);
+		itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.NORTH, allPointers);
 		if(itemStackPointers == null)
-			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.EAST);
+			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.EAST, allPointers);
 		if(itemStackPointers == null)
-			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.SOUTH);
+			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.SOUTH, allPointers);
 		if(itemStackPointers == null)
-			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.WEST);
+			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.WEST, allPointers);
 		if(itemStackPointers == null)
-			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.UP);
+			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.UP, allPointers);
 		return itemStackPointers;
 	}
 	
 	
-	private ArrayList<ItemStackPointer> getStackFromAdjacentChest(int itemId, int itemDamage, int stackSize, ForgeDirection direction) {
+	private ArrayList<ItemStackPointer> getStackFromAdjacentChest(int itemId, int itemDamage, int stackSize, ForgeDirection direction,
+			ArrayList<ItemStackPointer>allPointers)
+	{
 		Position position = new Position(xCoord, yCoord, zCoord, direction);
 		position.moveForwards(1.0);
 		TileEntity tileEntity = worldObj.getBlockTileEntity((int)position.x, (int)position.y, (int)position.z);
@@ -430,7 +448,9 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 			IInventory inventory = MinechemHelper.getInventory((IInventory)tileEntity);
 			for(int slot = 0; slot < inventory.getSizeInventory(); slot++) {
 				ItemStack itemstack = inventory.getStackInSlot(slot);
-				if(itemstack != null && itemstack.itemID == itemId && itemstack.getItemDamage() == itemDamage) {
+				if(itemstack != null && itemstack.itemID == itemId && itemstack.getItemDamage() == itemDamage
+						&& !itemStackPointersHasSlot(allPointers, slot, inventory))
+				{
 					int amount = Math.min(stackSize, itemstack.stackSize);
 					stackSize -= amount;
 					
@@ -448,6 +468,63 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 			}
 		}
 		return null;
+	}
+	
+	private boolean itemStackPointersHasSlot(ArrayList<ItemStackPointer> allPointers, int slot, IInventory inventory) {
+		for(ItemStackPointer itemstackPointer : allPointers) {
+			if(itemstackPointer.inventory == inventory && itemstackPointer.slot == slot)
+				return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isActive() {
+		return hasFullEnergy();
+	}
+
+	@Override
+	public boolean manageLiquids() {
+		return false;
+	}
+
+	@Override
+	public boolean manageSolids() {
+		return true;
+	}
+
+	@Override
+	public boolean allowActions() {
+		return false;
+	}
+
+	@Override
+	public boolean hasFullEnergy() {
+		return powerProvider.getEnergyStored() >= powerProvider.getMaxEnergyStored();
+	}
+
+	@Override
+	public boolean hasNoTestTubes() {
+		return false;
+	}
+
+	@Override
+	public LinkedList<ITrigger> getPipeTriggers(IPipe pipe) {
+		return null;
+	}
+
+	@Override
+	public LinkedList<ITrigger> getNeighborTriggers(Block block, TileEntity tile) {
+		if(tile instanceof TileEntitySynthesis) {
+			LinkedList<ITrigger> triggers = new LinkedList();
+			triggers.add(MinechemTriggers.fullEnergy);
+			return triggers;
+		}
+		return null;
+	}
+
+	public SynthesisRecipe getCurrentRecipe() {
+		return currentRecipe;
 	}
 
 }

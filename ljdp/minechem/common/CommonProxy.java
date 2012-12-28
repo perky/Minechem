@@ -11,7 +11,8 @@ public class CommonProxy {
 	public static String TEXTURE_DIR		= "/ljdp/minechem/textures/";
 	public static String TAB_LEFT_PNG 		= TEXTURE_DIR + "tab_left.png";
 	public static String TAB_RIGHT_PNG 		= TEXTURE_DIR + "tab_right.png";
-	public static String ELEMENTBOTTLES_PNG = TEXTURE_DIR + "elementbottles.png";
+	public static String ITEMS_PNG			= TEXTURE_DIR + "items.png";
+	//public static String ELEMENTBOTTLES_PNG = TEXTURE_DIR + "elementbottles.png";
 	public static String DECOMPOSER_GUI_PNG = TEXTURE_DIR + "ChemicalDecomposerGUI.png";
 	public static String MICROSCOPE_GUI_PNG = TEXTURE_DIR + "MicroscopeGUI.png";
 	public static String SYNTHESIS_GUI_PNG  = TEXTURE_DIR + "SynthesisGUI.png";
@@ -22,8 +23,12 @@ public class CommonProxy {
 	public static String DECOMPOSER_MODEL_ON   = TEXTURE_DIR + "DecomposerModelOn.png";
 	public static String DECOMPOSER_MODEL_OFF  = TEXTURE_DIR + "DecomposerModelOff.png";
 	public static String SYNTHESIS_MODEL	= TEXTURE_DIR + "SynthesiserModel.png";
-	
+	public static String PROJECTOR_MODEL_ON = TEXTURE_DIR + "ProjectorModelOn.png";
+	public static String PROJECTOR_MODEL_OFF = TEXTURE_DIR + "ProjectorModelOff.png";
+	public static String FUSION_GUI_PNG		= TEXTURE_DIR + "FusionChamberGUI.png";
+	public static String PROJECTOR_GUI_PNG  = TEXTURE_DIR + "ProjectorGUI.png";
 	public static int CUSTOM_RENDER_ID;
+	
 	
 	public void registerRenderers() {
 		

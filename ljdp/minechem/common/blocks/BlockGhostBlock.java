@@ -1,16 +1,24 @@
 package ljdp.minechem.common.blocks;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import ljdp.minechem.client.RenderBlockGhostBlock;
 import ljdp.minechem.common.MinechemBlocks;
 import ljdp.minechem.common.ModMinechem;
+import ljdp.minechem.common.tileentity.TileEntityGhostBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
@@ -18,68 +26,44 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockGhostBlock extends Block {
-
+public class BlockGhostBlock extends BlockContainer {
+	
 	public BlockGhostBlock(int id) {
-		super(id, 16, MinechemBlocks.materialGas);
-		setBlockName("blockMinechemGhostBlock");
+		super(id, Material.iron);
+		setBlockName("block.minechemGhostBlock");
 		setCreativeTab(ModMinechem.minechemTab);
-		setTickRandomly(true);
+		setLightValue(0.5F);
+        this.setRequiresSelfNotify();
 	}
 	
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float par7,
 			float par8, float par9) {
-		int metadata = world.getBlockMetadata(x, y, z);
-		int blockid  = metadata + 1;
-		if(playerIsHoldingBlock(entityPlayer, Block.blocksList[blockid])) {
-			world.setBlockAndMetadataWithNotify(x, y, z, blockid, 0);
-			world.setBlockAndMetadataWithNotify(x+1, y, z, this.blockID, blockid-1);
-			return true;
-		} else
-			return false;
-	}
-	
-	private boolean playerIsHoldingBlock(EntityPlayer entityPlayer, Block block) {
-		return entityPlayer.inventory.getCurrentItem().itemID == block.blockID;
-	}
-	
-	@Override
-	public void updateTick(World world, int x, int y, int z, Random random) {
-		super.updateTick(world, x, y, z, random);
-		ArrayList<Vec3> airBlocks = getAdjacentAirBlocks(world, x, y, z);
-		while(airBlocks.size() > 0) {
-			int metadata   = world.getBlockMetadata(x, y, z);
-			int randomSlot = random.nextInt(airBlocks.size());
-			Vec3 expansionPos = airBlocks.get(randomSlot);
-			world.setBlockAndMetadata(
-					(int) expansionPos.xCoord, 
-					(int) expansionPos.yCoord, 
-					(int) expansionPos.zCoord, 
-					this.blockID, metadata);
-			airBlocks.remove(randomSlot);
-			if(random.nextFloat() < 0.1F)
-				break;
-		}
-	}
-	
-	private ArrayList<Vec3> getAdjacentAirBlocks(World world, int x, int y, int z) {
-		ArrayList<Vec3> airBlocks = new ArrayList();
-		for(int i = -1; i <= 1; i++) {
-			for(int j = -1; j <= 1; j++) {
-				for(int k = -1; k <= 1; k++) {
-					if(world.getBlockId(x+i, y+j, z+k) == 0)
-						airBlocks.add(Vec3.createVectorHelper(x+i, y+j, z+k));
-				}
+		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+		if(tileEntity instanceof TileEntityGhostBlock) {
+			TileEntityGhostBlock ghostBlock = (TileEntityGhostBlock) tileEntity;
+			ItemStack blockAsStack = ghostBlock.getBlockAsItemStack();
+			if(playerIsHoldingItem(entityPlayer, blockAsStack)) {
+				world.setBlockAndMetadataWithNotify(x, y, z, blockAsStack.getItem().shiftedIndex, blockAsStack.getItemDamage());
+				return true;
 			}
 		}
-		return airBlocks;
+		return false;
 	}
 	
-	@Override
-	public int getBlockTextureFromSideAndMetadata(int side, int metadata) {
-		return Block.blocksList[metadata + 1].getBlockTextureFromSideAndMetadata(side, metadata);
+	private boolean playerIsHoldingItem(EntityPlayer entityPlayer, ItemStack itemstack) {
+		ItemStack helditem = entityPlayer.inventory.getCurrentItem();
+		return helditem != null && helditem.itemID == itemstack.itemID
+				&& helditem.getItemDamage() == itemstack.getItemDamage();
 	}
+
+	/**
+     * Returns whether this block is collideable based on the arguments passed in Args: blockMetaData, unknownFlag
+     */
+    public boolean canCollideCheck(int par1, boolean par2)
+    {
+        return true;
+    }
 	
 	@Override
 	public String getTextureFile() {
@@ -91,13 +75,6 @@ public class BlockGhostBlock extends Block {
 		return par1;
 	}
 	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(int blockid, CreativeTabs par2CreativeTabs, List par3List) {
-		for(int i = 0; i < 16; i++) {
-			par3List.add(new ItemStack(blockid, 1, i));
-		}
-	}
 	/**
      * Triggered whenever an entity collides with this block (enters into the block). Args: world, x, y, z, entity
      */
@@ -134,7 +111,12 @@ public class BlockGhostBlock extends Block {
     @Override
     public boolean renderAsNormalBlock()
     {
-        return true;
+        return false;
+    }
+    
+    @Override
+    public int getRenderType() {
+    	return ModMinechem.proxy.CUSTOM_RENDER_ID;
     }
     
     /**
@@ -147,7 +129,16 @@ public class BlockGhostBlock extends Block {
     }
     
     @Override
-    public int getRenderType() {
+    public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6) {
+    }
+    
+    @Override
+    public int idDropped(int par1, Random par2Random, int par3) {
     	return 0;
     }
+
+	@Override
+	public TileEntity createNewTileEntity(World var1) {
+		return new TileEntityGhostBlock();
+	}
 }

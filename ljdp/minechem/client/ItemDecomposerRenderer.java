@@ -10,35 +10,12 @@ import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.IItemRenderer.ItemRendererHelper;
 
-public class ItemDecomposerRenderer implements IItemRenderer {
+public class ItemDecomposerRenderer extends ItemMinechemRenderer {
 	
 	private ModelDecomposer model;
 	
 	public ItemDecomposerRenderer() {
 		model = new ModelDecomposer();
-	}
-	
-	@Override
-	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		if(type == ItemRenderType.EQUIPPED)
-			return true;
-		if(type == ItemRenderType.INVENTORY)
-			return true;
-		if(type == ItemRenderType.ENTITY)
-			return true;
-		return false;
-	}
-
-	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item,
-			ItemRendererHelper helper) {
-		if(helper == ItemRendererHelper.INVENTORY_BLOCK)
-			return true;
-		if(helper == ItemRendererHelper.ENTITY_BOBBING)
-			return true;
-		if(helper == ItemRendererHelper.ENTITY_ROTATION)
-			return true;
-		return false;
 	}
 
 	@Override
