@@ -66,6 +66,12 @@ public class TileEntitySynthesis extends TileEntity implements IInventory, IPowe
 		}
 		model = new ModelSynthesizer();
 	}
+
+    @Override
+    public void validate() {
+        super.validate();
+        getRecipeResult();
+    }
 	
 	@Override
 	public void updateEntity() {
