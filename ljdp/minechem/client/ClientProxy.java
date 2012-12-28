@@ -5,6 +5,7 @@ import ljdp.minechem.common.MinechemBlocks;
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.tileentity.TileEntityBlueprintProjector;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;
+import ljdp.minechem.common.tileentity.TileEntityGhostBlock;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
 import net.minecraft.item.Item;
@@ -48,6 +49,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecomposer.class, new TileEntityDecomposerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySynthesis.class, new TileEntitySynthesisRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBlueprintProjector.class, new  TileEntityBlueprintProjectorRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGhostBlock.class, new TileEntityGhostBlockRenderer());
 	}
 	
 	@Override

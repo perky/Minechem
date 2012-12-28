@@ -8,7 +8,9 @@ import java.util.Random;
 import ljdp.minechem.client.RenderBlockGhostBlock;
 import ljdp.minechem.common.MinechemBlocks;
 import ljdp.minechem.common.ModMinechem;
+import ljdp.minechem.common.tileentity.TileEntityGhostBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -16,6 +18,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
@@ -23,14 +26,14 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockGhostBlock extends Block {
+public class BlockGhostBlock extends BlockContainer {
 	
 	static Random random = new Random();
 	
 	public HashMap<Integer,ItemStack> blockLookup = new HashMap();
 	
 	public BlockGhostBlock(int id) {
-		super(id, 16, MinechemBlocks.materialGhost);
+		super(id, Material.iron);
 		setBlockName("block.minechemGhostBlock");
 		setCreativeTab(ModMinechem.minechemTab);
 		setLightValue(0.5F);
@@ -156,7 +159,12 @@ public class BlockGhostBlock extends Block {
     @Override
     public boolean renderAsNormalBlock()
     {
-        return true;
+        return false;
+    }
+    
+    @Override
+    public int getRenderType() {
+    	return ModMinechem.proxy.CUSTOM_RENDER_ID;
     }
     
     /**
@@ -176,4 +184,9 @@ public class BlockGhostBlock extends Block {
     public int idDropped(int par1, Random par2Random, int par3) {
     	return 0;
     }
+
+	@Override
+	public TileEntity createNewTileEntity(World var1) {
+		return new TileEntityGhostBlock();
+	}
 }

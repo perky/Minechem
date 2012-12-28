@@ -12,6 +12,7 @@ import ljdp.minechem.common.items.ItemGhostBlock;
 import ljdp.minechem.common.tileentity.TileEntityBlueprintProjector;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;
 import ljdp.minechem.common.tileentity.TileEntityFusion;
+import ljdp.minechem.common.tileentity.TileEntityGhostBlock;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
 import ljdp.minechem.common.tileentity.TileEntityProxy;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
@@ -82,6 +83,7 @@ public class MinechemBlocks {
 		GameRegistry.registerTileEntity(TileEntityBlueprintProjector.class, "minechem.tileEntityBlueprintProjector");
 		GameRegistry.registerTileEntity(TileEntityFusion.class, "minechem.tileEntityFusion");
 		GameRegistry.registerTileEntity(TileEntityProxy.class, "minchem.tileEntityProxy");
+		GameRegistry.registerTileEntity(TileEntityGhostBlock.class, "minechem.tileEntityGhostBock");
 	}
 
 }

@@ -58,10 +58,30 @@ public class TileEntityBlueprintProjector extends TileEntity {
 		position.moveLeft(Math.floor(blueprint.xSize / 2));
 		boolean shouldProjectGhostBlocks = true;
 		int totalIncorrectCount = blueprint.getTotalSize();
+		
+		for(int x = 0; x < blueprint.xSize; x ++) {
+			int verticalIncorrectCount = blueprint.getVerticalSliceSize();
+			Integer[][] verticalSlice = blueprint.getVerticalSlice(x);
+			for(int y = 0; y < blueprint.ySize; y++) {
+				for(int z = 0; z < blueprint.zSize; z++) {
+					if(shouldProjectGhostBlocks) {
+						BlockStatus blockStatus = projectGhostBlock(x, y, z, position);
+						if(blockStatus == BlockStatus.CORRECT) {
+							verticalIncorrectCount--;
+							totalIncorrectCount--;
+						}
+					} else {
+						destroyGhostBlock(x, y, z, position);
+					}
+				}
+			}
+			if(verticalIncorrectCount != 0)
+				shouldProjectGhostBlocks = false;
+		}
+		/*
 		for(int y = 0; y < blueprint.ySize; y++) {
 			int horizontalIncorrectCount = blueprint.getHorizontalSliceSize();
 			Integer[][] blueprintSlice   = blueprint.getHorizontalSlice(y);
-			
 			
 			
 			for(int x = 0; x < blueprint.xSize; x++) {
@@ -79,7 +99,7 @@ public class TileEntityBlueprintProjector extends TileEntity {
 			}
 			if(horizontalIncorrectCount != 0)
 				shouldProjectGhostBlocks = false;
-		}
+		}*/
 		
 		if(totalIncorrectCount == 0 && !isComplete) {
 			isComplete = true;

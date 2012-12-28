@@ -15,6 +15,7 @@ public abstract class MinechemBlueprint {
 	public int zSize;
 	private int totalSize;
 	private int horizontalSize;
+	private int verticalSize;
 	
 	public MinechemBlueprint(int xSize, int ySize, int zSize) 
 	{
@@ -22,6 +23,7 @@ public abstract class MinechemBlueprint {
 		this.ySize = ySize;
 		this.zSize = zSize;
 		this.horizontalSize = xSize * zSize;
+		this.verticalSize = ySize * zSize;
 		this.totalSize = this.horizontalSize * ySize;
 	}
 	
@@ -36,8 +38,23 @@ public abstract class MinechemBlueprint {
 		return slice;
 	}
 	
+	public Integer[][] getVerticalSlice(int x) {
+		Integer[][][] structure = getStructure();
+		Integer[][] slice = new Integer[ySize][zSize];
+		for(int y = 0; y < ySize; y++) {
+			for(int z = 0; z < zSize; z++){
+				slice[y][z] = structure[y][x][z];
+			}
+		}
+		return slice;
+	}
+	
 	public int getHorizontalSliceSize() {
 		return this.horizontalSize;
+	}
+	
+	public int getVerticalSliceSize() {
+		return this.verticalSize;
 	}
 	
 	public int getTotalSize() {
