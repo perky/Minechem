@@ -17,8 +17,10 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.ISidedInventory;
 
-public class TileEntityFusion extends TileEntityMultiBlock implements IInventory {
+public class TileEntityFusion extends TileEntityMultiBlock implements IInventory, ISidedInventory {
 	
 	public static int kStartFusionStar = 0;
 	public static int kStartInput1 = 1;
@@ -259,6 +261,22 @@ public class TileEntityFusion extends TileEntityMultiBlock implements IInventory
 	
 	public int getMaxEnergy() {
 		return this.maxEnergy;
+	}
+
+	@Override
+	public int getStartInventorySide(ForgeDirection side) {
+		if(side == ForgeDirection.UP)
+			return kStartOutput;
+		else
+			return kStartInput1;
+	}
+
+	@Override
+	public int getSizeInventorySide(ForgeDirection side) {
+		if(side == ForgeDirection.UP)
+			return 1;
+		else
+			return 2;
 	}
 
 }
