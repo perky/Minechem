@@ -40,16 +40,10 @@ public class BlockBlueprintProjector extends BlockMinechemContainer {
 	{
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 		if(tileEntity instanceof TileEntityBlueprintProjector) {
-			TileEntityBlueprintProjector projector = (TileEntityBlueprintProjector) tileEntity;
-			if(projector.hasBlueprint()) {
-				ItemStack blueprintItem = takeBlueprintFromProjector(projector);
-				ejectItem(blueprintItem, world, x, y, z);
-			} else if(playerIsHoldingBlueprint(entityPlayer)) {
-				ItemStack blueprintItem = getBlueprintFromPlayer(entityPlayer);
-				putBlueprintInsideProjector(blueprintItem, (TileEntityBlueprintProjector)tileEntity);
-			}
+			entityPlayer.openGui(ModMinechem.instance, 0, world, x, y, z);
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	private ItemStack takeBlueprintFromProjector(TileEntityBlueprintProjector projector) {

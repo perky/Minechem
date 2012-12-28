@@ -36,9 +36,9 @@ public class BlueprintFusion extends MinechemBlueprint {
 		{0,A,C,C,0,0,0,0,0,C,C,A,0},
 		{0,A,C,0,0,0,0,0,0,0,C,A,0},
 		{A,C,0,0,0,0,0,0,0,0,0,C,A},
-		{A,C,0,0,0,0,A,0,0,0,0,C,A},
-		{A,C,0,0,0,A,D,A,0,0,0,C,A},
-		{A,C,0,0,0,0,A,0,0,0,0,C,A},
+		{A,C,0,0,0,0,C,0,0,0,0,C,A},
+		{A,C,0,0,0,C,0,C,0,0,0,C,A},
+		{A,C,0,0,0,0,C,0,0,0,0,C,A},
 		{A,C,0,0,0,0,0,0,0,0,0,C,A},
 		{0,A,C,0,0,0,0,0,0,0,C,A,0},
 		{0,A,C,C,0,0,0,0,0,C,C,A,0},
@@ -51,9 +51,9 @@ public class BlueprintFusion extends MinechemBlueprint {
 		{0,A,C,C,0,0,0,0,0,C,C,A,0},
 		{0,A,C,0,0,0,0,0,0,0,C,A,0},
 		{A,C,0,0,0,0,0,0,0,0,0,C,A},
-		{A,C,0,0,0,0,A,0,0,0,0,C,A},
-		{A,C,0,0,0,A,C,A,0,0,0,C,A},
-		{A,C,0,0,0,0,A,0,0,0,0,C,A},
+		{A,C,0,0,0,0,C,0,0,0,0,C,A},
+		{A,C,0,0,0,C,0,C,0,0,0,C,A},
+		{A,C,0,0,0,0,C,0,0,0,0,C,A},
 		{A,C,0,0,0,0,0,0,0,0,0,C,A},
 		{0,A,C,0,0,0,0,0,0,0,C,A,0},
 		{0,A,C,C,0,0,0,0,0,C,C,A,0},
@@ -66,9 +66,9 @@ public class BlueprintFusion extends MinechemBlueprint {
 		{0,A,C,C,0,0,0,0,0,C,C,A,0},
 		{0,A,C,0,0,0,0,0,0,0,C,A,0},
 		{A,C,0,0,0,0,0,0,0,0,0,C,A},
-		{A,C,0,0,0,0,A,0,0,0,0,C,A},
-		{A,C,0,0,0,A,C,A,0,0,0,C,A},
-		{A,C,0,0,0,0,A,0,0,0,0,C,A},
+		{A,C,0,0,0,0,C,0,0,0,0,C,A},
+		{A,C,0,0,0,C,0,C,0,0,0,C,A},
+		{A,C,0,0,0,0,C,0,0,0,0,C,A},
 		{A,C,0,0,0,0,0,0,0,0,0,C,A},
 		{0,A,C,0,0,0,0,0,0,0,C,A,0},
 		{0,A,C,C,0,0,0,0,0,C,C,A,0},
@@ -92,8 +92,6 @@ public class BlueprintFusion extends MinechemBlueprint {
 	},
 	};
 	
-	private static Integer[][][] resultStructure = structure;
-	
 	public BlueprintFusion() {
 		super(13, 5, 13);
 		this.name = "blueprintFusion";
@@ -115,7 +113,7 @@ public class BlueprintFusion extends MinechemBlueprint {
 
 	@Override
 	public Integer[][][] getResultStructure() {
-		return resultStructure;
+		return structure;
 	}
 
 	@Override

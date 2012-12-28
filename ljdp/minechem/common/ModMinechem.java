@@ -5,14 +5,17 @@ import java.util.logging.Logger;
 import ljdp.minechem.client.gui.GuiDecomposer;
 import ljdp.minechem.client.gui.GuiFusion;
 import ljdp.minechem.client.gui.GuiMicroscope;
+import ljdp.minechem.client.gui.GuiProjector;
 import ljdp.minechem.client.gui.GuiSynthesis;
 import ljdp.minechem.common.containers.ContainerDecomposer;
 import ljdp.minechem.common.containers.ContainerFusion;
 import ljdp.minechem.common.containers.ContainerMicroscope;
+import ljdp.minechem.common.containers.ContainerProjector;
 import ljdp.minechem.common.containers.ContainerSynthesis;
 import ljdp.minechem.common.gates.MinechemTriggers;
 import ljdp.minechem.common.network.PacketHandler;
 import ljdp.minechem.common.sound.MinechemSoundEvent;
+import ljdp.minechem.common.tileentity.TileEntityBlueprintProjector;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;
 import ljdp.minechem.common.tileentity.TileEntityFusion;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
@@ -20,6 +23,7 @@ import ljdp.minechem.common.tileentity.TileEntityProxy;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.src.TradeEntry;
 import net.minecraft.tileentity.TileEntity;
@@ -122,9 +126,11 @@ public class ModMinechem implements IGuiHandler {
 			return new ContainerFusion(player.inventory, (TileEntityFusion)tileEntity);
 		if(tileEntity instanceof TileEntityProxy)
 			return getServerGuiElementFromProxy((TileEntityProxy)tileEntity, player);
+		if(tileEntity instanceof TileEntityBlueprintProjector)
+			return new ContainerProjector(player.inventory, (TileEntityBlueprintProjector)tileEntity);
 		return null;
 	}
-	
+
 	public Object getServerGuiElementFromProxy(TileEntityProxy proxy, EntityPlayer player) {
 		TileEntity tileEntity = proxy.getManager();
 		if(tileEntity instanceof TileEntityFusion)
@@ -147,6 +153,8 @@ public class ModMinechem implements IGuiHandler {
 			return new GuiFusion(player.inventory, (TileEntityFusion)tileEntity);
 		if(tileEntity instanceof TileEntityProxy)
 			return getClientGuiElementFromProxy((TileEntityProxy)tileEntity, player);
+		if(tileEntity instanceof TileEntityBlueprintProjector)
+			return new GuiProjector(player.inventory, (TileEntityBlueprintProjector)tileEntity);
 		return null;
 	}
 	

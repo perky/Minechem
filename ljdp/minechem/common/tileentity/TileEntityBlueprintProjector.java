@@ -8,6 +8,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 
 import buildcraft.api.core.Position;
 import ljdp.minechem.common.MinechemBlocks;
+import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.blueprint.BlueprintBlock;
 import ljdp.minechem.common.blueprint.BlueprintBlock.Type;
 import ljdp.minechem.common.blueprint.BlueprintFusion;
@@ -19,11 +20,13 @@ import ljdp.minechem.common.utils.LocalPosition.Pos3;
 import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 
-public class TileEntityBlueprintProjector extends TileEntity {
+public class TileEntityBlueprintProjector extends TileEntity implements IInventory {
 	
 	private static int air;
 	MinechemBlueprint blueprint;
@@ -35,10 +38,12 @@ public class TileEntityBlueprintProjector extends TileEntity {
 	boolean isComplete = false;
 	Integer[][][] structure;
 	LoopingSound projectorSound;
+	private ItemStack[] inventory;
 	
 	public TileEntityBlueprintProjector() {
 		this.projectorSound = new LoopingSound("ljdp.minechem.projector", 20);
 		this.projectorSound.setVolume(.2F);
+		this.inventory = new ItemStack[getSizeInventory()];
 	}
 	
 	@Override
@@ -208,5 +213,86 @@ public class TileEntityBlueprintProjector extends TileEntity {
 
 	public boolean hasBlueprint() {
 		return this.blueprint != null;
+	}
+
+	@Override
+	public int getSizeInventory() {
+		return 1;
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int var1) {
+		return this.inventory[0];
+	}
+
+	@Override
+	public ItemStack decrStackSize(int slot, int amount) {
+		ItemStack blueprintItem = this.inventory[0];
+		this.inventory[0] = null;
+		destroyProjection();
+		this.blueprint = null;
+		return blueprintItem;
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int var1) {
+		return null;
+	}
+
+	@Override
+	public void setInventorySlotContents(int slot, ItemStack itemstack) {
+		this.inventory[0] = itemstack;
+		if(itemstack != null) {
+			MinechemBlueprint blueprint = MinechemItems.blueprint.getBlueprint(itemstack);
+			setBlueprint(blueprint);
+		}
+	}
+
+	@Override
+	public String getInvName() {
+		return "container.blueprintProjector";
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		return 1;
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer var1) {
+		return true;
+	}
+
+	@Override
+	public void openChest() {
+	}
+
+	@Override
+	public void closeChest() {
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound nbtTagCompound) {
+		super.writeToNBT(nbtTagCompound);
+		ItemStack blueprintStack = inventory[0];
+		if(blueprintStack != null) {
+			NBTTagCompound blueprintNBT = new NBTTagCompound();
+			blueprintStack.writeToNBT(blueprintNBT);
+			nbtTagCompound.setTag("blueprint", blueprintNBT);
+		}
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound nbtTagCompound) {
+		super.readFromNBT(nbtTagCompound);
+		this.inventory = new ItemStack[getSizeInventory()];
+		NBTTagCompound blueprintNBT = (NBTTagCompound) nbtTagCompound.getTag("blueprint");
+		if(blueprintNBT != null) {
+			ItemStack blueprintStack = ItemStack.loadItemStackFromNBT(blueprintNBT);
+			MinechemBlueprint blueprint = MinechemItems.blueprint.getBlueprint(blueprintStack);
+			this.inventory[0] = blueprintStack;
+			this.blueprint = blueprint;
+			this.structure = blueprint.getStructure();
+		}
 	}
 }
