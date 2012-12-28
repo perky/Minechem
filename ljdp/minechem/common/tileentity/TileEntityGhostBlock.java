@@ -5,6 +5,7 @@ import ljdp.minechem.common.blueprint.MinechemBlueprint;
 import ljdp.minechem.common.network.PacketGhostBlock;
 import ljdp.minechem.common.network.PacketHandler;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityGhostBlock extends TileEntity {
@@ -39,6 +40,22 @@ public class TileEntityGhostBlock extends TileEntity {
 			PacketGhostBlock packet = new PacketGhostBlock(this);
 			PacketHandler.sendPacket(packet);
 		}
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound nbtTagCompound) {
+		super.writeToNBT(nbtTagCompound);
+		nbtTagCompound.setInteger("blueprintID", blueprint.id);
+		nbtTagCompound.setInteger("blockID", blockID);
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound nbtTagCompound) {
+		super.readFromNBT(nbtTagCompound);
+		this.blockID = nbtTagCompound.getInteger("blockID");
+		int blueprintID = nbtTagCompound.getInteger("blueprintID");
+		this.blueprint = MinechemBlueprint.blueprints.get(blueprintID);
+		sendUpdatePacket();
 	}
 
 }
