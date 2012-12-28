@@ -1,22 +1,6 @@
 package ljdp.minechem.api.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import buildcraft.api.core.Position;
-import buildcraft.core.utils.Utils;
-
-import cpw.mods.fml.common.registry.LanguageRegistry;
-
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
-import net.minecraftforge.common.ForgeDirection;
 
 public class Util {
 

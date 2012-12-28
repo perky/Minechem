@@ -8,6 +8,7 @@ import ljdp.minechem.api.core.EnumElement;
 import ljdp.minechem.api.core.EnumRadioactivity;
 import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.common.ModMinechem;
+import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -184,7 +185,8 @@ public class ItemElement extends Item {
 			radioactivityColor = "";
 			break;
 		}
-		par3List.add(radioactivityColor + radioactivity.getDescriptiveName() + " " + timeLeft);
+		String radioactiveName = MinechemHelper.getLocalString("item.propery." + radioactivity.name());
+		par3List.add(radioactivityColor + radioactiveName + " " + timeLeft);
 		par3List.add(getClassification(itemstack));
 		par3List.add(getRoomState(itemstack));
 	}
