@@ -20,6 +20,8 @@ import ljdp.minechem.common.tileentity.TileEntityProxy;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.src.TradeEntry;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
@@ -34,10 +36,12 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.modloader.ModLoaderHelper;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.common.registry.VillagerRegistry;
 
 @Mod(modid="minechem", name="MineChem", version="2.0.0pr1")
 @NetworkMod(
@@ -79,6 +83,9 @@ public class ModMinechem implements IGuiHandler {
 		MinecraftForge.EVENT_BUS.register(MinechemRecipes.getInstance());
 		blLog.info("Adding Sound Events");
 		MinecraftForge.EVENT_BUS.register(new MinechemSoundEvent());
+		blLog.info("Registering Villager Trades");
+		for(int i = 0; i < 5; i++)
+			VillagerRegistry.instance().registerVillageTradeHandler(i, new VillageTradeHandler());
 	}
 	
 	@Init
@@ -90,6 +97,8 @@ public class ModMinechem implements IGuiHandler {
 	@PostInit
 	public void postInit(FMLPostInitializationEvent event) {
 		MinechemTriggers.registerTriggers();
+		//EntityVillager.
+		//VillagerRegistry.addEmeraldBuyRecipe(villager, list, random, item, chance, min, max)
 	}
 	
 	private void loadConfig(FMLPreInitializationEvent event){

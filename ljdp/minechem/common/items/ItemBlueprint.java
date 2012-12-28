@@ -18,7 +18,7 @@ public class ItemBlueprint extends Item {
 
 	public static final String[] names = {
 		"item.name.blueprintFusion", 
-		"item.name.blueprintFisson",
+		"item.name.blueprintFission",
 		"item.name.blueprintVat"
 	};
 	
@@ -33,6 +33,7 @@ public class ItemBlueprint extends Item {
 		setItemName("minechem.itemBlueprint");
 		setCreativeTab(ModMinechem.minechemTab);
 		setHasSubtypes(true);
+		setMaxDamage(blueprints.length-1);
 	}
 	
 	@Override
