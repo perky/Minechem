@@ -1,8 +1,10 @@
 package ljdp.minechem.client.gui;
 
+import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.client.gui.tabs.TabHelp;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.containers.ContainerMicroscope;
+import ljdp.minechem.common.recipe.SynthesisRecipeHandler;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
 import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.client.Minecraft;
@@ -15,6 +17,7 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 
@@ -31,7 +34,8 @@ public class GuiMicroscope extends GuiContainerTabbed {
 	int inputSlotX = 44;
 	int inputSlotY = 45;
 	public InventoryPlayer inventoryPlayer;
-	protected TileEntityMicroscope microscope;	
+	protected TileEntityMicroscope microscope;
+	GuiMicroscopeSwitch recipeSwitch;
     
 	public GuiMicroscope(InventoryPlayer inventoryPlayer, TileEntityMicroscope microscope) {
 		super(new ContainerMicroscope(inventoryPlayer, microscope));
@@ -40,16 +44,11 @@ public class GuiMicroscope extends GuiContainerTabbed {
 		this.xSize = guiWidth;
 		this.ySize = guiHeight;
 		this.itemRenderer = new RenderGUIItemMicroscope(this);
+		this.recipeSwitch = new GuiMicroscopeSwitch(this);
 		addTab(new TabHelp(this, MinechemHelper.getLocalString("help.microscope")));
 	}
 	
-	private int getMouseX() {
-		return (Mouse.getX() * this.width / this.mc.displayWidth);
-	}
 	
-	private int getMouseY() {
-		return this.height - (Mouse.getY() * this.height / this.mc.displayHeight - 1);
-	}
 	
 	public boolean isMouseInMicroscope() {
 		int mouseX = getMouseX();
@@ -74,7 +73,9 @@ public class GuiMicroscope extends GuiContainerTabbed {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 		super.drawGuiContainerForegroundLayer(par1, par2);
-		fontRenderer.drawString(MinechemHelper.getLocalString("gui.title.microscope"), 5, 5, 0xCCCCCC);
+		String info = MinechemHelper.getLocalString("gui.title.microscope");
+		int infoWidth = fontRenderer.getStringWidth(info);
+		fontRenderer.drawString(info, (guiWidth - infoWidth) / 2, 5, 0x000000);
 	}
 
 	@Override
@@ -94,9 +95,32 @@ public class GuiMicroscope extends GuiContainerTabbed {
 		if(!microscope.isShaped)
 			drawUnshapedOverlay();
 		GL11.glPopMatrix();
+		
+		this.recipeSwitch.setPos(x + 153, y + 26);
+		this.recipeSwitch.draw(mc.renderEngine);
+		ItemStack inputstack = microscope.getStackInSlot(0);
+		if(inputstack != null && !this.recipeSwitch.isMoverOver()) {
+			SynthesisRecipe recipe = SynthesisRecipeHandler.instance.getRecipeFromOutput(inputstack);
+			this.fontRenderer.drawString(recipe.energyCost() + " MJ", x + 108, y + 85, 0x000000);
+			this.inventorySlots.putStackInSlot(1, new ItemStack(Item.appleGold));
+		}
 	}
 
 	@Override
-	protected void drawTooltips(int mouseX, int mouseY) {}
+	protected void drawTooltips(int mouseX, int mouseY) {
+		
+	}
+	
+	@Override
+	protected void mouseClicked(int x, int y, int mouseButton) {
+		super.mouseClicked(x, y, mouseButton);
+		this.recipeSwitch.mouseClicked(x, y, mouseButton);
+	}
+	
+	@Override
+	public void handleMouseInput() {
+		super.handleMouseInput();
+		this.recipeSwitch.handleMouseInput();
+	}
 
 }

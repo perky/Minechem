@@ -42,8 +42,8 @@ public abstract class GuiContainerTabbed extends GuiMinechemContainer implements
     protected ArrayList<Tab> tabListLeft = new ArrayList<Tab>();
     protected ArrayList<Tab> tabListRight = new ArrayList<Tab>();
 
-    protected int mouseX = 0;
-    protected int mouseY = 0;
+    public int mouseX = 0;
+    public int mouseY = 0;
 
     public static boolean drawBorders;
 
@@ -362,6 +362,14 @@ public abstract class GuiContainerTabbed extends GuiMinechemContainer implements
 
         return null;
     }
+    
+    public int getMouseX() {
+		return (Mouse.getX() * this.width / this.mc.displayWidth);
+	}
+	
+    public int getMouseY() {
+		return this.height - (Mouse.getY() * this.height / this.mc.displayHeight - 1);
+	}
 
     /* INEIGuiHandler */
     @Override

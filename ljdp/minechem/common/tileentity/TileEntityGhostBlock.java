@@ -36,10 +36,8 @@ public class TileEntityGhostBlock extends TileEntity {
 	}
 	
 	private void sendUpdatePacket() {
-		if(!worldObj.isRemote) {
-			PacketGhostBlock packet = new PacketGhostBlock(this);
-			PacketHandler.sendPacket(packet);
-		}
+		PacketGhostBlock packet = new PacketGhostBlock(this);
+		PacketHandler.sendPacket(packet);
 	}
 	
 	@Override
