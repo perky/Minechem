@@ -24,39 +24,6 @@ public class TileEntityMicroscope extends TileEntity implements IInventory {
 	public TileEntityMicroscope() {
 		microscopeInventory = new ItemStack[getSizeInventory()];
 	}
-	
-	private void showRecipeForItemStack(ItemStack itemstack) {
-		ItemStack[] outputStacks = null;
-		clearOutputStacks();
-		isShaped = true;
-		if(itemstack == null)
-			return;
-		if(itemstack.itemID == MinechemItems.molecule.shiftedIndex) {
-			EnumMolecule molecule = ((ItemMolecule)MinechemItems.molecule).getMolecule(itemstack);
-			ArrayList<ItemStack> moleculeComponents = MinechemHelper.convertChemicalsIntoItemStacks(molecule.components());
-			outputStacks = moleculeComponents.toArray(new ItemStack[moleculeComponents.size()]);
-			isShaped = false;
-		} else {
-			SynthesisRecipe recipe = SynthesisRecipeHandler.instance.getRecipeFromOutput(itemstack);
-			if(recipe != null) {
-				outputStacks = MinechemHelper.convertChemicalArrayIntoItemStackArray(recipe.getShapedRecipe());
-				isShaped = recipe.isShaped();
-			}
-		}
-		if(outputStacks != null) {
-			int slot = 1;
-			for(ItemStack output : outputStacks) {
-				microscopeInventory[slot] = output;
-				slot++;
-			}
-		}
-	}
-	
-	private void clearOutputStacks() {
-		for(int slot = 1; slot < 10; slot++) {
-			microscopeInventory[slot] = null;
-		}
-	}
 
 	@Override
 	public int getSizeInventory() {
@@ -75,7 +42,6 @@ public class TileEntityMicroscope extends TileEntity implements IInventory {
         {
             ItemStack itemstack = microscopeInventory[slot];
             microscopeInventory[slot] = null;
-            clearOutputStacks();
             return itemstack;
         }
         else
@@ -88,16 +54,12 @@ public class TileEntityMicroscope extends TileEntity implements IInventory {
 	public ItemStack getStackInSlotOnClosing(int slot) {
 		ItemStack itemstack = microscopeInventory[slot];
 		microscopeInventory[slot] = null;
-		showRecipeForItemStack(null);
 		return itemstack;
 	}
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemStack) {
 		microscopeInventory[slot] = itemStack;
-		if(slot == 0) {
-			showRecipeForItemStack(itemStack);
-		}
 	}
 
 	@Override

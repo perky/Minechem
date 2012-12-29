@@ -22,11 +22,13 @@ public class MinechemItems {
 	public static ItemMolecule molecule;
 	public static ItemLens lens;
 	public static ItemAtomicManipulator atomicManipulator;
-	public static ItemStack convexLens;
-	public static ItemStack concaveLens;
-	public static ItemStack microscopeLens;
 	public static ItemFusionStar fusionStar;
 	public static ItemBlueprint blueprint;
+	
+	public static ItemStack convexLens;
+	public static ItemStack concaveLens;
+	public static ItemStack projectorLens;
+	public static ItemStack microscopeLens;
 	
 	private static int elementID;
 	private static int moleculeID;
@@ -50,13 +52,15 @@ public class MinechemItems {
 		molecule = new ItemMolecule(moleculeID);
 		lens	 = new ItemLens(lensID);
 		atomicManipulator = new ItemAtomicManipulator(atomicManipulatorID);
-		concaveLens = new ItemStack(lens, 1, 0);
-		convexLens  = new ItemStack(lens, 1, 1);
-		microscopeLens = new ItemStack(lens, 1, 2);
 		fusionStar  = new ItemFusionStar(fusionStarID);
 		blueprint   = new ItemBlueprint(blueprintID);
 		LanguageRegistry.addName(atomicManipulator, MinechemHelper.getLocalString("item.name.atomicmanipulator"));
 		LanguageRegistry.addName(fusionStar, MinechemHelper.getLocalString("item.name.fusionStar"));
+		
+		concaveLens = new ItemStack(lens, 1, 0);
+		convexLens  = new ItemStack(lens, 1, 1);
+		microscopeLens = new ItemStack(lens, 1, 2);
+		projectorLens = new ItemStack(lens, 1, 3);
 	}
 	
 	public static void registerToOreDictionary() {

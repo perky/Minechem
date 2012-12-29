@@ -19,6 +19,7 @@ import ljdp.minechem.api.recipe.DecomposerRecipeChance;
 import ljdp.minechem.api.recipe.DecomposerRecipeSelect;
 import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.api.util.Util;
+import ljdp.minechem.common.items.ItemElement;
 import ljdp.minechem.common.utils.MinechemHelper;
 
 import net.minecraft.block.Block;
@@ -67,11 +68,7 @@ public class MinechemRecipes {
 		ItemStack atomicManipulator = new ItemStack(MinechemItems.atomicManipulator);
 		ItemStack redstone = new ItemStack(Item.redstone);
 		
-		GameRegistry.addRecipe(new ItemStack(Item.glassBottle, 32), 
-				"p#p", 
-				"#p#", 
-				'p', glasspane
-		);
+		
 		GameRegistry.addRecipe(MinechemItems.concaveLens, 
 				"G G",
 				"GGG",
@@ -124,6 +121,37 @@ public class MinechemRecipes {
 				'D', new ItemStack(Item.diamond)
 		);
 		
+		GameRegistry.addRecipe(new ItemStack(MinechemBlocks.fusion, 16, 0), 
+				"ILI",
+				"ILI",
+				"ILI",
+				'I', ironIngot,
+				'L', ItemElement.createStackOf(Pb,1)
+		);
+		GameRegistry.addRecipe(new ItemStack(MinechemBlocks.fusion, 16, 1), 
+				"IWI",
+				"IBI",
+				"IWI",
+				'I', ironIngot,
+				'W', ItemElement.createStackOf(W,1),
+				'B', ItemElement.createStackOf(Be,1)
+		);
+		GameRegistry.addRecipe(MinechemItems.projectorLens,
+				"ABA",
+				'A', MinechemItems.concaveLens,
+				'B', MinechemItems.convexLens
+		);
+		GameRegistry.addRecipe(new ItemStack(MinechemBlocks.blueprintProjector),
+				" I ",
+				"GPL",
+				" I ",
+				'I', ironIngot,
+				'P', glasspane,
+				'L', MinechemItems.projectorLens,
+				'G', new ItemStack(Block.redstoneLampIdle)
+		);
+				
+		
 		
 		Element carbonStack = element(C,64);
 		
@@ -158,6 +186,33 @@ public class MinechemRecipes {
 				element(V),		molecule(beryl,2),	element(V),
 				null,			element(Cr),		null
 				));
+		
+		DecomposerRecipe.add(new DecomposerRecipe(new ItemStack(Block.blockSteel), element(Fe,18)));
+		DecomposerRecipe.add(new DecomposerRecipe(new ItemStack(Block.blockGold), element(Au,18)));
+		DecomposerRecipe.add(new DecomposerRecipe(new ItemStack(Block.blockDiamond), molecule(fullrene, 36)));
+		DecomposerRecipe.add(new DecomposerRecipe(new ItemStack(Block.blockEmerald), molecule(beryl,2*9), element(Cr,2*9), element(V,2*9)));
+		
+		
+		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Block.blockSteel), true, 5000,
+				element(Fe,2),	element(Fe,2),	element(Fe,2),
+				element(Fe,2),	element(Fe,2),	element(Fe,2),
+				element(Fe,2),	element(Fe,2),	element(Fe,2)
+		));
+		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Block.blockGold), true, 5000,
+				element(Au,2),	element(Au,2),	element(Au,2),
+				element(Au,2),	element(Au,2),	element(Au,2),
+				element(Au,2),	element(Au,2),	element(Au,2)
+		));
+		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Block.blockDiamond), true, 120000,
+				molecule(fullrene,4),	molecule(fullrene,4),	molecule(fullrene,4),
+				molecule(fullrene,4),	molecule(fullrene,4),	molecule(fullrene,4),
+				molecule(fullrene,4),	molecule(fullrene,4),	molecule(fullrene,4)
+		));
+		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Block.blockEmerald), true, 150000,
+				element(Cr,3),	element(Cr,3), 		element(Cr,3),
+				element(V,9),	molecule(beryl,18),	element(V,9),
+				element(Cr,3),	element(Cr,3),		element(Cr,3)
+		));
 		
 		//SAND GLASS FLINT GRAVEL
 		ItemStack sandstone = new ItemStack(Block.sandStone);
@@ -586,6 +641,39 @@ public class MinechemRecipes {
 				new DecomposerRecipe(element(Ti), element(O)),
 				new DecomposerRecipe(element(Pb), element(O)),
 				new DecomposerRecipe(element(Zn), element(O))
+		));
+		
+		ItemStack lavaBucket = new ItemStack(Item.bucketLava);
+		ItemStack netherrack = new ItemStack(Block.netherrack);
+		ItemStack soulsand   = new ItemStack(Block.slowSand);
+		ItemStack endstone   = new ItemStack(Block.whiteStone);
+		DecomposerRecipe.add(new DecomposerRecipeSelect(netherrack, .1F,
+				new DecomposerRecipe(element(Si,2), element(O), element(Fe)),
+				new DecomposerRecipe(element(Si,2), element(Ni), element(Tc)),
+				new DecomposerRecipe(element(Si,3), element(Ti), element(Fe)),
+				new DecomposerRecipe(element(Si,1), element(W,4), element(Cr,2)),
+				new DecomposerRecipe(element(Si,10), element(W,1), element(Zn,8), element(Be,4))
+		));
+		DecomposerRecipe.add(new DecomposerRecipeSelect(soulsand, .2F,
+				new DecomposerRecipe(element(Pb,3), element(Be,1), element(Si,2), element(O)),
+				new DecomposerRecipe(element(Pb,1), element(Si,5), element(O,2)),
+				new DecomposerRecipe(element(Si,2), element(O)),
+				new DecomposerRecipe(element(Si,6), element(O,2)),
+				new DecomposerRecipe(element(Es,1), element(O,2))
+		));
+		DecomposerRecipe.add(new DecomposerRecipeSelect(endstone, .8F,
+				new DecomposerRecipe(element(Si,2), element(O), element(H,4), element(Li)),
+				new DecomposerRecipe(element(Es)),
+				new DecomposerRecipe(element(Pu)),
+				new DecomposerRecipe(element(Fr)),
+				new DecomposerRecipe(element(Nd)),
+				new DecomposerRecipe(element(Si,2), element(O)),
+				new DecomposerRecipe(element(H,4)),
+				new DecomposerRecipe(element(Be,8)),
+				new DecomposerRecipe(element(Li,2)),
+				new DecomposerRecipe(element(Zr)),
+				new DecomposerRecipe(element(Ga)),
+				new DecomposerRecipe(element(Rb))
 		));
 
 		addSynthesisRecipesFromMolecules();

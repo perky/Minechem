@@ -7,6 +7,7 @@ import ljdp.minechem.api.core.EnumClassification;
 import ljdp.minechem.api.core.EnumElement;
 import ljdp.minechem.api.core.EnumRadioactivity;
 import ljdp.minechem.api.util.Constants;
+import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.creativetab.CreativeTabs;
@@ -223,6 +224,10 @@ public class ItemElement extends Item {
 	@Override
 	public void onCreated(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
 		initiateRadioactivity(par1ItemStack, par2World);
+	}
+
+	public static Object createStackOf(EnumElement element, int amount) {
+		return new ItemStack(MinechemItems.element, amount, element.ordinal());
 	}
 	 
 }

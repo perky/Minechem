@@ -24,5 +24,9 @@ public class DecomposerRecipeChance extends DecomposerRecipe {
 		else
 			return null;
 	}
+	
+	public float getChance() {
+		return chance;
+	}
 
 }
