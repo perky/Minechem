@@ -15,6 +15,7 @@ import ljdp.minechem.common.items.ItemElement;
 import ljdp.minechem.common.items.ItemFusionStar;
 import ljdp.minechem.common.items.ItemLens;
 import ljdp.minechem.common.items.ItemMolecule;
+import ljdp.minechem.common.items.ItemTestTube;
 import ljdp.minechem.common.utils.MinechemHelper;
 
 public class MinechemItems {
@@ -24,6 +25,7 @@ public class MinechemItems {
 	public static ItemAtomicManipulator atomicManipulator;
 	public static ItemFusionStar fusionStar;
 	public static ItemBlueprint blueprint;
+	public static ItemTestTube testTube;
 	
 	public static ItemStack convexLens;
 	public static ItemStack concaveLens;
@@ -37,6 +39,7 @@ public class MinechemItems {
 	private static int fusionStarID;
 	private static int blockFusionID;
 	private static int blueprintID;
+	private static int testTubeID;
 	
 	public static void loadConfig(Configuration config) {
 		elementID   = config.getItem(config.CATEGORY_ITEM, "Element", 4736).getInt(4736);
@@ -45,6 +48,7 @@ public class MinechemItems {
 	 	atomicManipulatorID = config.getItem(config.CATEGORY_ITEM, "AtomicManipulator", 4739).getInt(4739);
 	 	fusionStarID = config.getItem(config.CATEGORY_ITEM, "FusionStar", 4740).getInt(4740);
 	 	blueprintID  = config.getItem(config.CATEGORY_ITEM, "Blueprint", 4741).getInt(4741);
+	 	testTubeID   = config.getItem(config.CATEGORY_ITEM, "TestTube", 4742).getInt(4742);
 	}
 	
 	public static void registerItems() {
@@ -54,8 +58,11 @@ public class MinechemItems {
 		atomicManipulator = new ItemAtomicManipulator(atomicManipulatorID);
 		fusionStar  = new ItemFusionStar(fusionStarID);
 		blueprint   = new ItemBlueprint(blueprintID);
+		testTube    = new ItemTestTube(testTubeID);
+		
 		LanguageRegistry.addName(atomicManipulator, MinechemHelper.getLocalString("item.name.atomicmanipulator"));
 		LanguageRegistry.addName(fusionStar, MinechemHelper.getLocalString("item.name.fusionStar"));
+		LanguageRegistry.addName(testTube, MinechemHelper.getLocalString("item.name.testtube"));
 		
 		concaveLens = new ItemStack(lens, 1, 0);
 		convexLens  = new ItemStack(lens, 1, 1);

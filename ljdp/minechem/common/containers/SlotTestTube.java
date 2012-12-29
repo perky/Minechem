@@ -1,5 +1,6 @@
 package ljdp.minechem.common.containers;
 
+import ljdp.minechem.common.MinechemItems;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
@@ -13,7 +14,7 @@ public class SlotTestTube extends Slot {
 	
 	@Override
 	public boolean isItemValid(ItemStack itemStack) {
-		return itemStack.itemID == Item.glassBottle.shiftedIndex;
+		return itemStack.itemID == MinechemItems.testTube.shiftedIndex;
 	}
 
 }

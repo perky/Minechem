@@ -156,7 +156,7 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 		for(int slot = kStartBottles; slot < kStartBottles + kSizeBottles; slot++) {
 			if(synthesisInventory[slot] == null) {
 				amount -= 64;
-			} else if(synthesisInventory[slot].itemID == Item.glassBottle.shiftedIndex) {
+			} else if(synthesisInventory[slot].itemID == MinechemItems.testTube.shiftedIndex) {
 				amount -= getInventoryStackLimit() - synthesisInventory[slot].stackSize;
 			}
 			if(amount <= 0)
@@ -169,9 +169,9 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 		for(int slot = kStartBottles; slot < kStartBottles + kSizeBottles; slot++) {
 			if(synthesisInventory[slot] == null) {
 				int stackSize = Math.min(amount, getInventoryStackLimit());
-				setInventorySlotContents(slot, new ItemStack(Item.glassBottle, stackSize));
+				setInventorySlotContents(slot, new ItemStack(MinechemItems.testTube, stackSize));
 				amount -= stackSize;
-			} else if(synthesisInventory[slot].itemID == Item.glassBottle.shiftedIndex) {
+			} else if(synthesisInventory[slot].itemID == MinechemItems.testTube.shiftedIndex) {
 				int stackAddition = getInventoryStackLimit() - synthesisInventory[slot].stackSize;
 				stackAddition = Math.min(amount, stackAddition);
 				synthesisInventory[slot].stackSize += stackAddition;

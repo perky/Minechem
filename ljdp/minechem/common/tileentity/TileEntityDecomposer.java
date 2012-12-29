@@ -212,7 +212,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 			ItemStack itemstack = getStackInSlot(i);
 			if(itemstack == null)
 				continue;
-			if(itemstack.itemID == Item.glassBottle.shiftedIndex) {
+			if(itemstack.itemID == MinechemItems.testTube.shiftedIndex) {
 				return true;
 			}
 		}
@@ -224,7 +224,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 			ItemStack itemstack = getStackInSlot(i);
 			if(itemstack == null)
 				continue;
-			if(itemstack.itemID == Item.glassBottle.shiftedIndex) {
+			if(itemstack.itemID == MinechemItems.testTube.shiftedIndex) {
 				decrStackSize(i, 1);
 				return true;
 			}
@@ -258,8 +258,8 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 
 	@Override
 	public int addItem(ItemStack incoming, boolean doAdd, ForgeDirection from) {
-        if (incoming.itemID == Item.glassBottle.shiftedIndex) {
-            // accept inbound glass bottles from any direction and place them
+        if (incoming.itemID == MinechemItems.testTube.shiftedIndex) {
+            // accept inbound test tubes from any direction and place them
             // in to the bottle slots
 
             int totalAdded = 0;
@@ -268,7 +268,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
                 ItemStack current = getStackInSlot(slot);
                 if(current == null)
                     current = new ItemStack(incoming.getItem(), 0);
-                if(current.itemID == Item.glassBottle.shiftedIndex) {
+                if(current.itemID == MinechemItems.testTube.shiftedIndex) {
                     int n = Math.min(remaining.stackSize, getInventoryStackLimit() - current.stackSize);
                     if(doAdd) {
                         current.stackSize += n;
