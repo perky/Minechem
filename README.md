@@ -15,4 +15,4 @@ Under the following conditions:
 For more information on this license see here: http://creativecommons.org/licenses/by-sa/3.0/
 
 # Credits
-Ljdp, Ian, Rushmead
+Ljdp, Ian, Rushmead, Adelayde
