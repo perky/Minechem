@@ -121,11 +121,15 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 	}
 
 	private TileEntity buildManagerBlock(LocalPosition position) {
-		DirectionMultiplier multiplier = DirectionMultiplier.map.get(position.orientation);
-		Pos3 worldPos = position.getLocalPos(blueprint.getManagerPosX(), blueprint.getManagerPosY(), blueprint.getManagerPosZ());
 		BlueprintBlock managerBlock = blueprint.getManagerBlock();
-		worldObj.setBlockAndMetadataWithNotify(worldPos.x, worldPos.y, worldPos.z, managerBlock.block.blockID, managerBlock.metadata);
-		return worldObj.getBlockTileEntity(worldPos.x, worldPos.y, worldPos.z);
+		if(managerBlock != null) {
+			DirectionMultiplier multiplier = DirectionMultiplier.map.get(position.orientation);
+			Pos3 worldPos = position.getLocalPos(blueprint.getManagerPosX(), blueprint.getManagerPosY(), blueprint.getManagerPosZ());
+			worldObj.setBlockAndMetadataWithNotify(worldPos.x, worldPos.y, worldPos.z, managerBlock.block.blockID, managerBlock.metadata);
+			return worldObj.getBlockTileEntity(worldPos.x, worldPos.y, worldPos.z);
+		} else {
+			return null;
+		}
 	}
 
 	private void setBlock(int x, int y, int z, LocalPosition position,
@@ -164,7 +168,7 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 				createGhostBlock(worldPos.x, worldPos.y, worldPos.z, structureID);
 				return BlockStatus.INCORRECT;
 			} else if(blockID == blueprintBlock.block.blockID
-					&& blockMetadata == blueprintBlock.metadata) {
+					&& (blockMetadata == blueprintBlock.metadata || blueprintBlock.metadata == -1)) {
 				return BlockStatus.CORRECT;
 			} else {
 				return BlockStatus.INCORRECT;

@@ -3,6 +3,7 @@ package ljdp.minechem.client.gui;
 import ljdp.minechem.client.gui.tabs.TabEnergy;
 import ljdp.minechem.client.gui.tabs.TabEnergySynthesis;
 import ljdp.minechem.client.gui.tabs.TabHelp;
+import ljdp.minechem.client.gui.tabs.TabStateControlSynthesis;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.containers.ContainerSynthesis;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
@@ -19,6 +20,7 @@ public class GuiSynthesis extends GuiContainerTabbed {
 	
 	public GuiSynthesis(InventoryPlayer inventoryPlayer, TileEntitySynthesis synthesis) {
 		super(new ContainerSynthesis(inventoryPlayer, synthesis));
+		addTab(new TabStateControlSynthesis(this, synthesis));
 		addTab(new TabEnergySynthesis(this, synthesis));
 		addTab(new TabHelp(this, MinechemHelper.getLocalString("help.synthesis")));
 	}
@@ -26,7 +28,9 @@ public class GuiSynthesis extends GuiContainerTabbed {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 		super.drawGuiContainerForegroundLayer(par1, par2);
-		fontRenderer.drawString(MinechemHelper.getLocalString("gui.title.synthesis"), 5, 5, 0xCCCCCC);
+		String info = MinechemHelper.getLocalString("gui.title.synthesis");
+		int infoWidth = fontRenderer.getStringWidth(info);
+		fontRenderer.drawString(info, (guiWidth - infoWidth) / 2, 5, 0xCCCCCC);
 	}
 
 	@Override

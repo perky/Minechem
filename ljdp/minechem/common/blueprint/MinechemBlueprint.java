@@ -13,6 +13,7 @@ public abstract class MinechemBlueprint {
 	public static int air   = 0;
 	public static HashMap<Integer,MinechemBlueprint> blueprints = new HashMap();
 	public static MinechemBlueprint fusion;
+	public static MinechemBlueprint direworlf9by9;
 	
 	public int xSize;
 	public int ySize;
@@ -31,6 +32,8 @@ public abstract class MinechemBlueprint {
 	public static void registerBlueprints() {
 		fusion = new BlueprintFusion();
 		registerBlueprint(0, fusion);
+		direworlf9by9 = new BlueprintDirewolf();
+		registerBlueprint(3, direworlf9by9);
 	}
 	
 	public MinechemBlueprint(int xSize, int ySize, int zSize) 

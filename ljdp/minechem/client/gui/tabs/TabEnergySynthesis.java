@@ -2,8 +2,8 @@ package ljdp.minechem.client.gui.tabs;
 
 import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.common.MinechemPowerProvider;
-import ljdp.minechem.common.MinechemRecipes;
 import ljdp.minechem.common.ModMinechem;
+import ljdp.minechem.common.recipe.MinechemRecipes;
 import ljdp.minechem.common.recipe.SynthesisRecipeHandler;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
 import ljdp.minechem.common.utils.MinechemHelper;

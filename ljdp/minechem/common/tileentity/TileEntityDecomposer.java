@@ -63,6 +63,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 	private ItemStack activeStack;
 	private float workToDo = 0;
 	public ModelDecomposer model;
+	private boolean hasFullEnergy;
 	
 	public enum State {
 		kProcessIdle, kProcessActive, kProcessFinished, kProcessJammed, kProcessNoBottles
@@ -84,6 +85,12 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 		powerProvider.update(this);
 		if(!worldObj.isRemote && (powerProvider.didEnergyStoredChange() || powerProvider.didEnergyUsageChange()))
 			sendUpdatePacket();
+		
+		float energyStored = powerProvider.getEnergyStored();
+		if(energyStored >= powerProvider.getMaxEnergyStored())
+			hasFullEnergy = true;
+		if(hasFullEnergy && energyStored < powerProvider.getMaxEnergyStored() / 2)
+			hasFullEnergy = false;
 		
 		if((state == State.kProcessIdle  || state == State.kProcessFinished) && canDecomposeInput()) {
 			activeStack = null;
@@ -485,7 +492,6 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 
 	@Override
 	public LinkedList<ITrigger> getPipeTriggers(IPipe pipe) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -495,6 +501,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 			LinkedList<ITrigger> triggers = new LinkedList();
 			triggers.add(MinechemTriggers.fullEnergy);
 			triggers.add(MinechemTriggers.noTestTubes);
+			triggers.add(MinechemTriggers.outputJammed);
 			return triggers;
 		}
 		return null;
@@ -502,7 +509,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 
 	@Override
 	public boolean hasFullEnergy() {
-		return powerProvider.getEnergyStored() >= powerProvider.getMaxEnergyStored();
+		return this.hasFullEnergy;
 	}
 	
 	@Override
@@ -512,7 +519,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 
 	@Override
 	public boolean isActive() {
-		return isPowered();
+		return this.state == State.kProcessActive;
 	}
 
 	@Override
@@ -528,6 +535,11 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 	@Override
 	public boolean allowActions() {
 		return false;
+	}
+
+	@Override
+	public boolean isJammed() {
+		return this.state == State.kProcessJammed;
 	}
 
 }

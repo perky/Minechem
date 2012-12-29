@@ -1,4 +1,4 @@
-package ljdp.minechem.common;
+package ljdp.minechem.common.recipe;
 
 import static ljdp.minechem.api.core.EnumElement.*;
 import static ljdp.minechem.api.core.EnumMolecule.*;
@@ -19,6 +19,9 @@ import ljdp.minechem.api.recipe.DecomposerRecipeChance;
 import ljdp.minechem.api.recipe.DecomposerRecipeSelect;
 import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.api.util.Util;
+import ljdp.minechem.common.MinechemBlocks;
+import ljdp.minechem.common.MinechemItems;
+import ljdp.minechem.common.UnbondingRecipe;
 import ljdp.minechem.common.items.ItemElement;
 import ljdp.minechem.common.utils.MinechemHelper;
 
@@ -67,8 +70,14 @@ public class MinechemRecipes {
 		ItemStack ironBlock = new ItemStack(Block.blockSteel);
 		ItemStack atomicManipulator = new ItemStack(MinechemItems.atomicManipulator);
 		ItemStack redstone = new ItemStack(Item.redstone);
+		ItemStack testTube16 = new ItemStack(MinechemItems.testTube,16);
 		
-		
+		GameRegistry.addRecipe(testTube16, 
+				" G ",
+				" G ",
+				" G ",
+				'G', glass
+		);
 		GameRegistry.addRecipe(MinechemItems.concaveLens, 
 				"G G",
 				"GGG",
@@ -259,6 +268,68 @@ public class MinechemRecipes {
 				element(N), molecule(water,2), element(N),
 				element(N), molecule(water,1), element(N),
 				element(N), molecule(water,5), element(N)
+		));
+		
+		ItemStack arrow = new ItemStack(Item.arrow);
+		
+		ItemStack paper = new ItemStack(Item.paper);
+		ItemStack leather = new ItemStack(Item.leather);
+		ItemStack snow = new ItemStack(Item.snowball);
+		ItemStack brick = new ItemStack(Item.brick);
+		ItemStack clay = new ItemStack(Item.clay);
+		ItemStack mycelium = new ItemStack(Block.mycelium);
+		ItemStack anySapling = new ItemStack(Block.sapling, 1, -1);
+		
+		DecomposerRecipe.add(new DecomposerRecipe(arrow, element(Si), element(O,2), element(N,6)));
+		DecomposerRecipe.add(new DecomposerRecipeChance(clay, .3F, molecule(kaolinite)));
+		DecomposerRecipe.add(new DecomposerRecipeChance(brick, .5F, molecule(kaolinite)));
+		DecomposerRecipe.add(new DecomposerRecipe(snow, molecule(water)));
+		DecomposerRecipe.add(new DecomposerRecipeChance(mycelium, .05F, molecule(myriocin)));
+		DecomposerRecipe.add(new DecomposerRecipeChance(leather, .5F, molecule(arginine), molecule(glycine), molecule(keratin)));
+		DecomposerRecipe.add(new DecomposerRecipeChance(anySapling, .25F, molecule(cellulose)));
+		DecomposerRecipe.add(new DecomposerRecipeChance(paper, .12F, molecule(cellulose)));
+		
+		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Item.clay, 12), false, 100, molecule(kaolinite)));
+		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Item.brick, 8), true,  400,
+				molecule(kaolinite), molecule(kaolinite), null,
+				molecule(kaolinite), molecule(kaolinite), null
+		));
+		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Item.snowball, 5), true,  20,
+				molecule(water), 	null, 				molecule(water),
+				null,				molecule(water), 	null,
+				molecule(water), 	null, 				molecule(water)
+		));
+		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Block.mycelium, 16), false, 300, molecule(myriocin)));
+		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Item.leather, 5), true,  700,
+				molecule(arginine), null, 			null,
+				null,				element(Cr), 	null,
+				null, 				null, 			molecule(glycine)
+		));
+		
+		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Block.sapling, 1, 0), true, 20,
+				null, 				null, 			null,
+				null,				null, 			null,
+				null, 				null, 			molecule(cellulose)
+		));
+		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Block.sapling, 1, 1), true, 20,
+				null, 				null, 			null,
+				null,				null, 			null,
+				null, 				molecule(cellulose), null			
+		));
+		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Block.sapling, 1, 2), true, 20,
+				null, 				null, 			null,
+				null,				null, 			null,
+				molecule(cellulose),null, 			null
+		));
+		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Block.sapling, 1, 3), true, 20,
+				null, 				null, 			null,
+				null,				null, 			molecule(cellulose),
+				null, 				null, 			null
+		));
+		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Item.paper, 16), true, 150,
+				null, 				molecule(cellulose), 			null,
+				null,				molecule(cellulose), 			null,
+				null, 				molecule(cellulose), 			null
 		));
 		
 		//BREWING ITEMS

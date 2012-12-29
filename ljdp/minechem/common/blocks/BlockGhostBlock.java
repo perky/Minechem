@@ -33,12 +33,22 @@ public class BlockGhostBlock extends BlockContainer {
 		setBlockName("block.minechemGhostBlock");
 		setCreativeTab(ModMinechem.minechemTab);
 		setLightValue(0.5F);
+		setHardness(1000F);
+		setResistance(1000F);
         this.setRequiresSelfNotify();
 	}
 	
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float par7,
 			float par8, float par9) {
+		super.onBlockActivated(world, x, y, z, entityPlayer, side, par7, par8, par9);
+		
+		if(world.isRemote)
+			return true;
+		
+		if(entityPlayer.getDistanceSq((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D) > 64.0D)
+			return true;
+		
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 		if(tileEntity instanceof TileEntityGhostBlock) {
 			TileEntityGhostBlock ghostBlock = (TileEntityGhostBlock) tileEntity;
@@ -55,7 +65,7 @@ public class BlockGhostBlock extends BlockContainer {
 	private boolean playerIsHoldingItem(EntityPlayer entityPlayer, ItemStack itemstack) {
 		ItemStack helditem = entityPlayer.inventory.getCurrentItem();
 		return helditem != null && helditem.itemID == itemstack.itemID
-				&& helditem.getItemDamage() == itemstack.getItemDamage();
+				&& (helditem.getItemDamage() == itemstack.getItemDamage() || itemstack.getItemDamage() == -1);
 	}
 
 	/**

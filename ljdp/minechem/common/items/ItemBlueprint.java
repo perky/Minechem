@@ -19,7 +19,8 @@ public class ItemBlueprint extends Item {
 	public static final String[] names = {
 		"item.name.blueprintFusion", 
 		"item.name.blueprintFission",
-		"item.name.blueprintVat"
+		"item.name.blueprintVat",
+		"item.name.blueprintDirewolf"
 	};
 	
 	public ItemBlueprint(int id) {

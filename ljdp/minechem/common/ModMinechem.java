@@ -15,6 +15,7 @@ import ljdp.minechem.common.containers.ContainerProjector;
 import ljdp.minechem.common.containers.ContainerSynthesis;
 import ljdp.minechem.common.gates.MinechemTriggers;
 import ljdp.minechem.common.network.PacketHandler;
+import ljdp.minechem.common.recipe.MinechemRecipes;
 import ljdp.minechem.common.sound.MinechemSoundEvent;
 import ljdp.minechem.common.tileentity.TileEntityBlueprintProjector;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;
@@ -48,7 +49,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 
-@Mod(modid="minechem", name="MineChem", version="2.0.0pr1")
+@Mod(modid="minechem", name="MineChem", version="2.0.0pr3")
 @NetworkMod(
 		clientSideRequired=true, 
 		serverSideRequired=false, 

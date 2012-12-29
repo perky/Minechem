@@ -1,5 +1,6 @@
 package ljdp.minechem.common.gates;
 
+import ljdp.minechem.common.ModMinechem;
 import net.minecraft.tileentity.TileEntity;
 import buildcraft.api.gates.ITriggerParameter;
 import buildcraft.api.gates.Trigger;
@@ -12,7 +13,12 @@ public class TriggerFullEnergy extends Trigger {
 
 	@Override
 	public String getTextureFile() {
-		return null;
+		return ModMinechem.proxy.ICONS_PNG;
+	}
+	
+	@Override
+	public int getIndexInTexture() {
+		return 9;
 	}
 	
 	@Override
@@ -23,7 +29,7 @@ public class TriggerFullEnergy extends Trigger {
 	
 	@Override
 	public String getDescription() {
-		return "Has Full Energy?";
+		return "Full Energy";
 	}
 	
 	

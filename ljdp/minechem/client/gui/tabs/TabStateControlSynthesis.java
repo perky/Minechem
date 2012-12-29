@@ -1,20 +1,19 @@
 package ljdp.minechem.client.gui.tabs;
 
-import buildcraft.api.power.IPowerProvider;
-import buildcraft.api.power.PowerProvider;
+import net.minecraft.client.gui.Gui;
+import ljdp.minechem.api.recipe.SynthesisRecipe;
+import ljdp.minechem.client.gui.tabs.TabStateControlDecomposer.TabState;
 import ljdp.minechem.common.MinechemPowerProvider;
 import ljdp.minechem.common.ModMinechem;
-import ljdp.minechem.common.tileentity.TileEntityDecomposer;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer.State;
+import ljdp.minechem.common.tileentity.TileEntitySynthesis;
 import ljdp.minechem.common.utils.MinechemHelper;
-import net.minecraft.client.gui.Gui;
 
-public class TabStateControlDecomposer extends TabStateControl {
+public class TabStateControlSynthesis extends TabStateControl {
 	
-	private TileEntityDecomposer decomposer;
+	TileEntitySynthesis synthesis;
 	enum TabState {
-		jammed (MinechemHelper.getLocalString("tab.tooltip.jammed"), 0xAA0000, 6), 
-		noBottles (MinechemHelper.getLocalString("tab.tooltip.nobottles"), 0xAA0000, 5), 
+		norecipe (MinechemHelper.getLocalString("tab.tooltip.norecipe"), 0xAA0000, 10),
 		powered (MinechemHelper.getLocalString("tab.tooltip.powered"), 0x00CC00, -1), 
 		unpowered (MinechemHelper.getLocalString("tab.tooltip.unpowered"), 0xAA0000, 7);
 		public String tooltip;
@@ -28,10 +27,10 @@ public class TabStateControlDecomposer extends TabStateControl {
 	}
 	TabState state;
 	
-	public TabStateControlDecomposer(Gui gui, TileEntityDecomposer decomposer) {
+	public TabStateControlSynthesis(Gui gui, TileEntitySynthesis synthesis) {
 		super(gui);
-		this.decomposer = decomposer;
-		this.state = TabState.unpowered;
+		this.synthesis = synthesis;
+		this.state = TabState.norecipe;
 		this.minWidth = 16 + 9;
 		this.minHeight = 16 + 10;
 		this.maxHeight = this.minHeight;
@@ -41,17 +40,18 @@ public class TabStateControlDecomposer extends TabStateControl {
 	@Override
 	public void update() {
 		super.update();
-		MinechemPowerProvider provider = (MinechemPowerProvider) decomposer.getPowerProvider();
-		State state = decomposer.getState();
-		if(state == State.kProcessJammed)
-			this.state = TabState.jammed;
-		else if(decomposer.getState() == State.kProcessNoBottles)
-			this.state = TabState.noBottles;
-		else if(provider.getEnergyStored() > provider.getMinEnergyReceived() || provider.getCurrentEnergyUsage() > 0)
-			this.state = TabState.powered;
-		else
-			this.state = TabState.unpowered;
-		
+		SynthesisRecipe recipe = synthesis.getCurrentRecipe();
+		MinechemPowerProvider provider = (MinechemPowerProvider) synthesis.getPowerProvider();
+		if(recipe == null) {
+			state = TabState.norecipe;
+		} else {
+			int energyCost = recipe.energyCost();
+			if(provider.getEnergyStored() >= energyCost)
+				state = TabState.powered;
+			else
+				state = TabState.unpowered;
+		}
+
 		this.overlayColor = this.state.color;
 	}
 	

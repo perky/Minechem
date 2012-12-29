@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import buildcraft.api.core.Position;
+import buildcraft.api.gates.ActionManager;
 import buildcraft.api.gates.ITrigger;
 import buildcraft.api.gates.ITriggerProvider;
 import buildcraft.api.inventory.ISpecialInventory;
@@ -40,8 +41,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 
-public class TileEntitySynthesis extends TileEntity implements IInventory, IPowerReceptor, 
-ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITriggerProvider
+public class TileEntitySynthesis extends TileEntity implements IInventory, ISidedInventory, 
+IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialInventory
 {
 	
 	private ItemStack[] synthesisInventory;
@@ -60,6 +61,7 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 	int maxEnergyPerTick = 200;
 	int activationEnergy = 100;
 	int energyStorage = 900000;
+	private boolean hasFullEnergy;
 	
 	private class ItemStackPointer {
 		IInventory inventory;
@@ -75,6 +77,7 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 			powerProvider.configurePowerPerdition(1, 10);
 		}
 		model = new ModelSynthesizer();
+		ActionManager.registerTriggerProvider(this);
 	}
 
     @Override
@@ -89,6 +92,18 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 		if(!worldObj.isRemote && powerProvider.didEnergyStoredChange()) {
 			sendUpdatePacket();
 		}
+		if(powerProvider.getEnergyStored() >= powerProvider.getMaxEnergyStored())
+			hasFullEnergy = true;
+		if(hasFullEnergy && powerProvider.getEnergyStored() < powerProvider.getMaxEnergyStored()/2)
+			hasFullEnergy = false;
+		
+		if(currentRecipe != null
+				&& synthesisInventory[kStartOutput] == null
+				&& canAffordRecipe(currentRecipe) 
+				&& canAddEmptyBottles(currentRecipe.getIngredientCount()))
+		{
+			synthesisInventory[kStartOutput] = currentRecipe.getOutput().copy();
+		}
 	}
 	
 	private void sendUpdatePacket() {
@@ -99,8 +114,9 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 	private boolean getRecipeResult() {
 		ItemStack[] craftingItems = getCraftingItems();
 		SynthesisRecipe recipe = SynthesisRecipeHandler.instance.getRecipeFromInput(craftingItems);
-		if(recipe != null && canAffordRecipe(recipe) && canAddEmptyBottles(recipe.getIngredientCount())) {
-			synthesisInventory[kStartOutput] = recipe.getOutput().copy();
+		if(recipe != null) {
+			if(canAffordRecipe(recipe) && canAddEmptyBottles(recipe.getIngredientCount()))
+				synthesisInventory[kStartOutput] = recipe.getOutput().copy();
 			currentRecipe = recipe;
 			return true;
 		} else {
@@ -480,7 +496,7 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 
 	@Override
 	public boolean isActive() {
-		return hasFullEnergy();
+		return currentRecipe != null;
 	}
 
 	@Override
@@ -500,12 +516,19 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 
 	@Override
 	public boolean hasFullEnergy() {
-		return powerProvider.getEnergyStored() >= powerProvider.getMaxEnergyStored();
+		return hasFullEnergy;
 	}
 
 	@Override
 	public boolean hasNoTestTubes() {
-		return false;
+		boolean hasNoTestTubes = true;
+		for(int slot = kStartBottles; slot < kStartBottles + kSizeBottles; slot++) {
+			if(this.synthesisInventory[slot] != null) {
+				hasNoTestTubes = false;
+				break;
+			}
+		}
+		return hasNoTestTubes;
 	}
 
 	@Override
@@ -518,6 +541,8 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 		if(tile instanceof TileEntitySynthesis) {
 			LinkedList<ITrigger> triggers = new LinkedList();
 			triggers.add(MinechemTriggers.fullEnergy);
+			triggers.add(MinechemTriggers.noTestTubes);
+			triggers.add(MinechemTriggers.outputJammed);
 			return triggers;
 		}
 		return null;
@@ -525,6 +550,17 @@ ISidedInventory, ISpecialInventory, IMinechemTriggerProvider, IMachine, ITrigger
 
 	public SynthesisRecipe getCurrentRecipe() {
 		return currentRecipe;
+	}
+
+	@Override
+	public boolean isJammed() {
+		int count = 0;
+		for(int slot = kStartBottles; slot < kStartBottles + kSizeBottles; slot++) {
+			if(synthesisInventory[slot] != null) {
+				count += synthesisInventory[slot].stackSize;
+			}
+		}
+		return count == (64*4);
 	}
 
 }

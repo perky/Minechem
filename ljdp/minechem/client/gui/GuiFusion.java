@@ -2,6 +2,7 @@ package ljdp.minechem.client.gui;
 
 import org.lwjgl.opengl.GL11;
 
+import ljdp.minechem.client.gui.tabs.TabHelp;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.containers.ContainerFusion;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;
@@ -11,7 +12,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 
-public class GuiFusion extends GuiContainer {
+public class GuiFusion extends GuiContainerTabbed {
 	
 	static float increaseRate = .2F;
 	static float decreaseRate = .4F;
@@ -28,6 +29,7 @@ public class GuiFusion extends GuiContainer {
 		energy = fusion.getEnergyStored();
 		this.xSize = guiWidth;
 		this.ySize = guiHeight;
+		addTab(new TabHelp(this, MinechemHelper.getLocalString("help.fusion")));
 	}
 	
 	@Override
@@ -69,6 +71,12 @@ public class GuiFusion extends GuiContainer {
 			if(energy < targetEnergy)
 				energy = targetEnergy;
 		}
+	}
+
+	@Override
+	protected void drawTooltips(int mouseX, int mouseY) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import ljdp.minechem.api.core.EnumMolecule;
 import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.common.MinechemItems;
-import ljdp.minechem.common.MinechemRecipes;
 import ljdp.minechem.common.items.ItemMolecule;
+import ljdp.minechem.common.recipe.MinechemRecipes;
 import ljdp.minechem.common.recipe.SynthesisRecipeHandler;
 import ljdp.minechem.common.utils.MinechemHelper;
 

@@ -62,9 +62,9 @@ public enum EnumMolecule {
 	cucurbitacin			(40, "Cucurbitacin", new Element(C,30), new Element(H,42), new Element(O,7)),
 	asparticAcid			(41, "Aspartic Acid", new Element(C,4), new Element(H,7), new Element(N), new Element(O,4)),
 	hydroxylapatite			(42, "Hydroxylapatite", new Element(Ca,5), new Molecule(phosphate,3), new Element(O), new Element(H)),
-	alinine					(43, "Alinine", new Element(C,3), new Element(H,7), new Element(N), new Element(O,2)),
-	glycine					(44, "Glycine", new Element(C,2), new Element(H,5), new Element(N), new Element(O,2)),
-	serine					(45, "Serine",  new Element(C,3), new Element(H,7), new Molecule(nitrate)),
+	alinine					(43, "Alinine (amino acid)", new Element(C,3), new Element(H,7), new Element(N), new Element(O,2)),
+	glycine					(44, "Glycine (amino acid)", new Element(C,2), new Element(H,5), new Element(N), new Element(O,2)),
+	serine					(45, "Serine  (amino acid)",  new Element(C,3), new Element(H,7), new Molecule(nitrate)),
 	mescaline				(46, "Mescaline", new Element(C,11), new Element(H,17), new Molecule(nitrate)),
 	methyl					(47, "Methyl", new Element(C), new Element(H,3)),
 	methylene				(48, "Methylene", new Element(C), new Element(H,2)),
@@ -92,6 +92,9 @@ public enum EnumMolecule {
 	keratin					(70, "Keratin", new Element(C,2), new Molecule(water), new Element(N)),
 	penicillin				(71, "Penicillin", new Element(C,16), new Element(H,18), new Element(N,2), new Element(O,4), new Element(S)),
 	testosterone			(72, "Testosterone", new Element(C,19), new Element(H,28), new Element(O,2)),
+	kaolinite				(73, "Kaolinite", new Element(Al,2), new Element(Si,2), new Element(O,5), new Molecule(hydroxide,4)),
+	myriocin				(74, "Myriocin", new Element(C,21), new Element(H,39), new Element(N), new Element(O,6)),
+	arginine				(75, "Arginine (amino acid)", new Element(C,6), new Element(H,14), new Element(N,4), new Element(O,2)),
 	;
 	
 	public static EnumMolecule[] molecules = values();

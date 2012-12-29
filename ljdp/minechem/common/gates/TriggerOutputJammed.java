@@ -1,13 +1,13 @@
 package ljdp.minechem.common.gates;
 
-import ljdp.minechem.common.ModMinechem;
 import net.minecraft.tileentity.TileEntity;
+import ljdp.minechem.common.ModMinechem;
 import buildcraft.api.gates.ITriggerParameter;
 import buildcraft.api.gates.Trigger;
 
-public class TriggerNoTestTubes extends Trigger {
+public class TriggerOutputJammed extends Trigger {
 
-	public TriggerNoTestTubes(int id) {
+	public TriggerOutputJammed(int id) {
 		super(id);
 	}
 
@@ -18,20 +18,18 @@ public class TriggerNoTestTubes extends Trigger {
 	
 	@Override
 	public int getIndexInTexture() {
-		return 5;
+		return 6;
 	}
 	
 	@Override
 	public String getDescription() {
-		return "No Test Tubes";
+		return "Output Jammed";
 	}
 	
 	@Override
 	public boolean isTriggerActive(TileEntity tile, ITriggerParameter parameter) {
-		if(tile instanceof IMinechemTriggerProvider) {
-			return ((IMinechemTriggerProvider)tile).hasNoTestTubes();
-		}
-		return false;
+		IMinechemTriggerProvider triggerProvider = (IMinechemTriggerProvider)tile;
+		return triggerProvider.isJammed();
 	}
 
 }

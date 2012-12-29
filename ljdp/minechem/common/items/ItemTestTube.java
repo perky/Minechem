@@ -10,6 +10,7 @@ public class ItemTestTube extends Item {
 	public ItemTestTube(int id) {
 		super(id);
 		setItemName("minechem.itemTestTube");
+		setCreativeTab(ModMinechem.minechemTab);
 	}
 	
 	@Override
