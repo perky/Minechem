@@ -45,6 +45,7 @@ public class BlockGhostBlock extends BlockContainer {
 			ItemStack blockAsStack = ghostBlock.getBlockAsItemStack();
 			if(playerIsHoldingItem(entityPlayer, blockAsStack)) {
 				world.setBlockAndMetadataWithNotify(x, y, z, blockAsStack.getItem().shiftedIndex, blockAsStack.getItemDamage());
+				entityPlayer.inventory.decrStackSize(entityPlayer.inventory.currentItem, 1);
 				return true;
 			}
 		}

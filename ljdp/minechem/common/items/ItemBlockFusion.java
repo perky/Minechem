@@ -17,7 +17,7 @@ public class ItemBlockFusion extends ItemBlock {
 	
 	@Override
 	public int getMetadata(int damageValue) {
-		return super.getMetadata(damageValue);
+		return damageValue;
 	}
 	
 	@Override

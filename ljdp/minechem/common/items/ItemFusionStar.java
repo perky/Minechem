@@ -14,7 +14,7 @@ public class ItemFusionStar extends Item {
 	public ItemFusionStar(int id) {
 		super(id);
 		this.maxStackSize = 1;
-		this.setMaxDamage(1000);
+		this.setMaxDamage(2000);
 		this.setNoRepair();
 	}
 	

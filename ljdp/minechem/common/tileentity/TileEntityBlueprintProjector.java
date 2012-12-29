@@ -71,7 +71,11 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 			for(int y = 0; y < blueprint.ySize; y++) {
 				for(int z = 0; z < blueprint.zSize; z++) {
 					if(shouldProjectGhostBlocks) {
-						BlockStatus blockStatus = projectGhostBlock(x, y, z, position);
+						BlockStatus blockStatus;
+						if(isManagerBlock(x, y, z)) 
+							blockStatus = BlockStatus.CORRECT;
+						else
+							blockStatus = projectGhostBlock(x, y, z, position);
 						if(blockStatus == BlockStatus.CORRECT) {
 							verticalIncorrectCount--;
 							totalIncorrectCount--;
@@ -100,6 +104,8 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 		for(int x = 0; x < blueprint.xSize; x++) {
 			for(int y = 0; y < blueprint.ySize; y++) {
 				for(int z = 0; z < blueprint.zSize; z++) {
+					if(isManagerBlock(x, y, z))
+						continue;
 					int structureId = resultStructure[y][x][z];
 					setBlock(x, y, z, position, structureId, blockLookup, managerTileEntity);
 				}
@@ -108,6 +114,10 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 		
 		if(worldObj.isRemote)
 			FMLClientHandler.instance().getClient().thePlayer.addChatMessage("Structure Built.");
+	}
+	
+	private boolean isManagerBlock(int x, int y, int z) {
+		return x == blueprint.getManagerPosX() && y == blueprint.getManagerPosY() && z == blueprint.getManagerPosZ();
 	}
 
 	private TileEntity buildManagerBlock(LocalPosition position) {
@@ -218,6 +228,7 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 			destroyProjection();
 			this.blueprint = null;
 			this.structure = null;
+			this.isComplete = false;
 		}
 	}
 	
