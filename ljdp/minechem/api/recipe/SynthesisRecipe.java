@@ -3,10 +3,7 @@ package ljdp.minechem.api.recipe;
 import java.util.ArrayList;
 
 import ljdp.minechem.api.core.Chemical;
-import ljdp.minechem.api.core.Molecule;
-import ljdp.minechem.api.util.Util;
-
-import net.minecraft.block.Block;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
 public class SynthesisRecipe {
