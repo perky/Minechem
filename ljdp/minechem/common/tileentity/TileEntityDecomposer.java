@@ -10,7 +10,6 @@ import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.MinechemPowerProvider;
 import ljdp.minechem.common.gates.IMinechemTriggerProvider;
 import ljdp.minechem.common.gates.MinechemTriggers;
-import ljdp.minechem.common.gates.TriggerFullEnergy;
 import ljdp.minechem.common.items.ItemMolecule;
 import ljdp.minechem.common.network.PacketDecomposerUpdate;
 import ljdp.minechem.common.network.PacketHandler;
@@ -33,14 +32,16 @@ import buildcraft.api.core.SafeTimeTracker;
 import buildcraft.api.gates.ActionManager;
 import buildcraft.api.gates.ITrigger;
 import buildcraft.api.gates.ITriggerProvider;
+import buildcraft.api.inventory.ISpecialInventory;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
 import buildcraft.api.transport.IPipe;
 import buildcraft.core.IMachine;
+import java.util.List;
 
 public class TileEntityDecomposer extends TileEntity implements IInventory, ISidedInventory, 
-IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine
+IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialInventory
 {
 	
 	private static final int MAX_POWER_STORAGE = 100;
@@ -253,6 +254,69 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine
 				|| side == ForgeDirection.EAST || side == ForgeDirection.SOUTH)
 			return kOutputSlotsSize;
 		return 0;
+	}
+
+	@Override
+	public int addItem(ItemStack incoming, boolean doAdd, ForgeDirection from) {
+        if (incoming.itemID == Item.glassBottle.shiftedIndex) {
+            // accept inbound glass bottles from any direction and place them
+            // in to the bottle slots
+
+            int totalAdded = 0;
+            ItemStack remaining = incoming.copy();
+            for(int slot = kEmptyBottleSlotStart; slot < kEmptyBottleSlotEnd && remaining.stackSize > 0; slot++) {
+                ItemStack current = getStackInSlot(slot);
+                if(current == null)
+                    current = new ItemStack(incoming.getItem(), 0);
+                if(current.itemID == Item.glassBottle.shiftedIndex) {
+                    int n = Math.min(remaining.stackSize, getInventoryStackLimit() - current.stackSize);
+                    if(doAdd) {
+                        current.stackSize += n;
+                        setInventorySlotContents(slot, current);
+                    }
+                    remaining.stackSize -= n;
+                    totalAdded += n;
+                }
+            }
+            return totalAdded;
+        } else {
+            // place everything else from any direction into the input slot
+
+            ItemStack current = getStackInSlot(kInputSlot);
+            if (current == null) {
+                current = new ItemStack(incoming.getItem(), 0);
+            } else if(current.itemID != incoming.itemID) {
+                return 0;
+            }
+            int n = Math.min(incoming.stackSize, getInventoryStackLimit() - current.stackSize);
+            if (doAdd) {
+                current.stackSize += n;
+                setInventorySlotContents(kInputSlot, current);
+            }
+            return n;
+        }
+	}
+
+	@Override
+	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
+        // take from the output slot in all directions
+        List<ItemStack> stacks = new LinkedList<ItemStack>();
+        for(int slot = kOutputSlotStart; slot < kOutputSlotEnd && maxItemCount > 0; slot++) {
+            ItemStack stack = getStackInSlot(slot);
+            if (stack == null) continue;
+            if (stack.stackSize == 0) {
+                setInventorySlotContents(slot, null);
+                continue;
+            }
+            int amount = Math.min(maxItemCount, stack.stackSize);
+            maxItemCount -= amount;
+            stacks.add(doRemove
+                ? stack.splitStack(amount)
+                : new ItemStack(stack.getItem(), amount));
+            if (stack.stackSize == 0)
+                setInventorySlotContents(slot, null);
+        }
+        return stacks.toArray(new ItemStack[] {});
 	}
 
 	@Override
