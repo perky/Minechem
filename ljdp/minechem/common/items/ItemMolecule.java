@@ -153,7 +153,7 @@ public class ItemMolecule extends Item {
     		entityPlayer.attackEntityFrom(DamageSource.generic, 20);
     		break;
     	case penicillin:
-    		cureAllPotions(entityPlayer);
+    		cureAllPotions(world, entityPlayer);
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 2, 1));
     		break;
     	case testosterone:
@@ -170,13 +170,10 @@ public class ItemMolecule extends Item {
         return itemStack;
     }
     
-    private void cureAllPotions(EntityPlayer entityPlayer) {
-    	Collection activePotions = entityPlayer.getActivePotionEffects();
-    	Iterator<Integer> potionKey = activePotions.iterator();
-    	while(potionKey.hasNext()) {
-    		Integer key = potionKey.next();
-    		entityPlayer.removePotionEffect(key);
-            potionKey.remove();
+    private void cureAllPotions(World world, EntityPlayer entityPlayer) {
+    	List<PotionEffect> activePotions = new ArrayList(entityPlayer.getActivePotionEffects());
+    	for(PotionEffect potionEffect : activePotions) {
+    		entityPlayer.removePotionEffect(potionEffect.getPotionID());
     	}
     }
 	
