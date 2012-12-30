@@ -12,7 +12,7 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class TileEntityGhostBlock extends TileEntity {
+public class TileEntityGhostBlock extends MinechemTileEntity {
 	
 	private MinechemBlueprint blueprint;
 	private int blockID;
@@ -45,7 +45,8 @@ public class TileEntityGhostBlock extends TileEntity {
 		return new ItemStack(blueprintBlock.block, 1, blueprintBlock.metadata);
 	}
 	
-	private void sendUpdatePacket() {
+	@Override
+	public void sendUpdatePacket() {
 		PacketGhostBlock packet = new PacketGhostBlock(this);
 		PacketHandler.sendPacket(packet);
 	}
@@ -63,18 +64,6 @@ public class TileEntityGhostBlock extends TileEntity {
 		this.blockID    = nbtTagCompound.getInteger("blockID");
 		int blueprintID = nbtTagCompound.getInteger("blueprintID");
 		this.blueprint  = MinechemBlueprint.blueprints.get(blueprintID);
-	}
-	
-	@Override
-	public Packet getDescriptionPacket() {
-		NBTTagCompound tagCompound = new NBTTagCompound();
-        this.writeToNBT(tagCompound);
-        return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 0, tagCompound);
-	}
-	
-	@Override
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		this.readFromNBT(pkt.customParam1);
 	}
 
 }

@@ -11,7 +11,7 @@ import ljdp.minechem.common.tileentity.TileEntityBlueprintProjector.BlockStatus;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityMultiBlock extends TileEntity {
+public abstract class TileEntityMultiBlock extends MinechemTileEntity {
 	
 	private static final Integer air = 0;
 	int offsetX;
@@ -136,7 +136,6 @@ public class TileEntityMultiBlock extends TileEntity {
 	@Override
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 		super.readFromNBT(nbtTagCompound);
-		//completeStructure = nbtTagCompound.getBoolean("completeStructure");
 		completeStructure = false;
 	}
 }

@@ -132,7 +132,8 @@ public class TileEntityFusion extends TileEntityMultiBlock implements IInventory
 		}
 	}
 	
-	private void sendUpdatePacket() {
+	@Override
+	public void sendUpdatePacket() {
 		PacketFusionUpdate fustionUpdate = new PacketFusionUpdate(this);
 		PacketHandler.sendPacket(fustionUpdate);
 	}
@@ -218,18 +219,6 @@ public class TileEntityFusion extends TileEntityMultiBlock implements IInventory
 	public void openChest() {}
 	@Override
 	public void closeChest() {}
-	
-	@Override
-	public Packet getDescriptionPacket() {
-		NBTTagCompound tagCompound = new NBTTagCompound();
-        this.writeToNBT(tagCompound);
-        return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 0, tagCompound);
-	}
-	
-	@Override
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		this.readFromNBT(pkt.customParam1);
-	}
 	
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {

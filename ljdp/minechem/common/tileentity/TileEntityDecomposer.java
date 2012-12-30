@@ -40,7 +40,7 @@ import buildcraft.api.transport.IPipe;
 import buildcraft.core.IMachine;
 import java.util.List;
 
-public class TileEntityDecomposer extends TileEntity implements IInventory, ISidedInventory, 
+public class TileEntityDecomposer extends MinechemTileEntity implements IInventory, ISidedInventory, 
 IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialInventory
 {
 	
@@ -108,20 +108,9 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 			state = State.kProcessActive;
 		}
 	}
-	
-	@Override
-	public Packet getDescriptionPacket() {
-		NBTTagCompound tagCompound = new NBTTagCompound();
-        this.writeToNBT(tagCompound);
-        return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 0, tagCompound);
-	}
-	
-	@Override
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		this.readFromNBT(pkt.customParam1);
-	}
 		
-	private void sendUpdatePacket() {
+	@Override
+	public void sendUpdatePacket() {
 		if(worldObj.isRemote)
 			return;
 		PacketDecomposerUpdate packetDecomposerUpdate = new PacketDecomposerUpdate(this);
