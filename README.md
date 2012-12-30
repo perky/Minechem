@@ -1,4 +1,4 @@
-# Minechem v2.0.0pr3
+# Minechem v2.0.0pr3.1
 Adds chemistry to minecraft.
 
 ## Requirements:
@@ -8,8 +8,8 @@ Adds chemistry to minecraft.
 
 ## Download links
 
-MineChem 2.0.0pr3:
-http://www.mediafire.com/download.php?ann0qojj4pehwks
+MineChem 2.0.0pr3.1:
+http://www.mediafire.com/download.php?rn7dyt67hlfffyu
 
 
 ## Licence

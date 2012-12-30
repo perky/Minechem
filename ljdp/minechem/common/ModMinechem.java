@@ -7,6 +7,7 @@ import ljdp.minechem.client.gui.GuiFusion;
 import ljdp.minechem.client.gui.GuiMicroscope;
 import ljdp.minechem.client.gui.GuiProjector;
 import ljdp.minechem.client.gui.GuiSynthesis;
+import ljdp.minechem.client.sound.MinechemSoundEvent;
 import ljdp.minechem.common.blueprint.MinechemBlueprint;
 import ljdp.minechem.common.containers.ContainerDecomposer;
 import ljdp.minechem.common.containers.ContainerFusion;
@@ -16,7 +17,6 @@ import ljdp.minechem.common.containers.ContainerSynthesis;
 import ljdp.minechem.common.gates.MinechemTriggers;
 import ljdp.minechem.common.network.PacketHandler;
 import ljdp.minechem.common.recipe.MinechemRecipes;
-import ljdp.minechem.common.sound.MinechemSoundEvent;
 import ljdp.minechem.common.tileentity.TileEntityBlueprintProjector;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;
 import ljdp.minechem.common.tileentity.TileEntityFusion;
@@ -49,7 +49,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 
-@Mod(modid="minechem", name="MineChem", version="2.0.0pr3")
+@Mod(modid="minechem", name="MineChem", version="2.0.0pr3.1")
 @NetworkMod(
 		clientSideRequired=true, 
 		serverSideRequired=false, 
@@ -85,10 +85,10 @@ public class ModMinechem implements IGuiHandler {
 		MinechemRecipes.getInstance().RegisterRecipes();
 		blLog.info("Registering Ore Dictionary items");
 		MinechemItems.registerToOreDictionary();
+		blLog.info("Registering Forge Events");
+		proxy.registerHooks();
 		blLog.info("Adding Ore Dictionary Recipes");
 		MinecraftForge.EVENT_BUS.register(MinechemRecipes.getInstance());
-		blLog.info("Adding Sound Events");
-		MinecraftForge.EVENT_BUS.register(new MinechemSoundEvent());
 		blLog.info("Registering Blueprints");
 		MinechemBlueprint.registerBlueprints();
 		blLog.info("Registering Villager Trades");
@@ -105,8 +105,6 @@ public class ModMinechem implements IGuiHandler {
 	@PostInit
 	public void postInit(FMLPostInitializationEvent event) {
 		MinechemTriggers.registerTriggers();
-		//EntityVillager.
-		//VillagerRegistry.addEmeraldBuyRecipe(villager, list, random, item, chance, min, max)
 	}
 	
 	private void loadConfig(FMLPreInitializationEvent event){

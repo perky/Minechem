@@ -1,8 +1,6 @@
-package ljdp.minechem.common.sound;
+package ljdp.minechem.client.sound;
 
 import ljdp.minechem.common.ModMinechem;
-import net.minecraft.client.audio.SoundManager;
-import net.minecraftforge.client.event.sound.PlaySoundSourceEvent;
 import net.minecraftforge.client.event.sound.SoundLoadEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 

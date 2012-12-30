@@ -1,8 +1,10 @@
 package ljdp.minechem.client;
 
+import ljdp.minechem.client.sound.MinechemSoundEvent;
 import ljdp.minechem.common.CommonProxy;
 import ljdp.minechem.common.MinechemBlocks;
 import ljdp.minechem.common.MinechemItems;
+import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.tileentity.TileEntityBlueprintProjector;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;
 import ljdp.minechem.common.tileentity.TileEntityGhostBlock;
@@ -11,6 +13,7 @@ import ljdp.minechem.common.tileentity.TileEntitySynthesis;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -51,6 +54,12 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySynthesis.class, new TileEntitySynthesisRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBlueprintProjector.class, new  TileEntityBlueprintProjectorRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGhostBlock.class, new TileEntityGhostBlockRenderer());
+	}
+	
+	@Override
+	public void registerHooks() {
+		ModMinechem.instance.blLog.info("Adding Sound Events");
+		MinecraftForge.EVENT_BUS.register(new MinechemSoundEvent());
 	}
 	
 	@Override
