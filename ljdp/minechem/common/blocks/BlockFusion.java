@@ -2,6 +2,7 @@ package ljdp.minechem.common.blocks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -48,6 +49,11 @@ public class BlockFusion extends BlockMinechemContainer {
 			return new TileEntityFusion();
 		else
 			return new TileEntityProxy();
+	}
+	
+	@Override
+	public int damageDropped(int metadata) {
+		return metadata;
 	}
 	
 	@Override
