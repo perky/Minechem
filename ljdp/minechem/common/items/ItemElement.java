@@ -97,14 +97,19 @@ public class ItemElement extends Item {
 	@Override
 	public void onUpdate(ItemStack itemstack, World world, Entity entity, int slot, boolean isCurrentItem) {
 		super.onUpdate(itemstack, world, entity, slot, isCurrentItem);
-		if(getRadioactivity(itemstack) != EnumRadioactivity.stable)
-			updateRadioactivity(itemstack, world, entity, slot, isCurrentItem);
+		if(getRadioactivity(itemstack) != EnumRadioactivity.stable) {
+			if(itemstack.getTagCompound() == null)
+				initiateRadioactivity(itemstack, world);
+			else
+				updateRadioactivity(itemstack, world, entity, slot, isCurrentItem);
+		}
 	}
 	
 	public void updateRadioactivity(ItemStack itemstack, World world, Entity entity, int slot, boolean isCurrentItem) {
 		NBTTagCompound tagCompound = itemstack.getTagCompound();
-		if(tagCompound == null)
+		if(tagCompound == null) {
 			return;
+		}
 		
 		long lastUpdate = tagCompound.getLong("lastUpdate");
 		long tickDifference = world.getTotalWorldTime() - lastUpdate;
@@ -133,7 +138,7 @@ public class ItemElement extends Item {
 		
 		if(maxDamage > 0) {
 			entity.attackEntityFrom(DamageSource.generic, maxDamage);
-			if(entity instanceof EntityPlayer && world.isRemote) {
+			if(entity instanceof EntityPlayer && !world.isRemote) {
 				String elementTo = elements[itemstack.getItemDamage()].descriptiveName();
 				String message = String.format("Radiation Damage! %s decayed into %s", elementFrom, elementTo);
 				((EntityPlayer)entity).addChatMessage(message);
@@ -186,7 +191,8 @@ public class ItemElement extends Item {
 			radioactivityColor = "";
 			break;
 		}
-		String radioactiveName = MinechemHelper.getLocalString("item.propery." + radioactivity.name());
+		
+		String radioactiveName = MinechemHelper.getLocalString("element.property." + radioactivity.name());
 		par3List.add(radioactivityColor + radioactiveName + " " + timeLeft);
 		par3List.add(getClassification(itemstack));
 		par3List.add(getRoomState(itemstack));
