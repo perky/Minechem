@@ -1,4 +1,4 @@
-package ljdp.minechem.client;
+package ljdp.minechem.client.render.item;
 
 import ljdp.minechem.api.core.EnumClassification;
 import ljdp.minechem.api.core.EnumElement;

@@ -1,5 +1,17 @@
 package ljdp.minechem.client;
 
+import ljdp.minechem.client.render.RenderBlockGhostBlock;
+import ljdp.minechem.client.render.item.ItemBlueprintProjectorRenderer;
+import ljdp.minechem.client.render.item.ItemDecomposerRenderer;
+import ljdp.minechem.client.render.item.ItemElementRenderer;
+import ljdp.minechem.client.render.item.ItemMicroscopeRenderer;
+import ljdp.minechem.client.render.item.ItemMoleculeRenderer;
+import ljdp.minechem.client.render.item.ItemSynthesisRenderer;
+import ljdp.minechem.client.render.tileentity.TileEntityBlueprintProjectorRenderer;
+import ljdp.minechem.client.render.tileentity.TileEntityDecomposerRenderer;
+import ljdp.minechem.client.render.tileentity.TileEntityGhostBlockRenderer;
+import ljdp.minechem.client.render.tileentity.TileEntityMicroscopeRenderer;
+import ljdp.minechem.client.render.tileentity.TileEntitySynthesisRenderer;
 import ljdp.minechem.client.sound.MinechemSoundEvent;
 import ljdp.minechem.common.CommonProxy;
 import ljdp.minechem.common.MinechemBlocks;
@@ -10,6 +22,7 @@ import ljdp.minechem.common.tileentity.TileEntityDecomposer;
 import ljdp.minechem.common.tileentity.TileEntityGhostBlock;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
+import net.minecraft.client.renderer.entity.RenderPainting;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import ljdp.minechem.client.RenderBlockGhostBlock;
+import ljdp.minechem.client.render.RenderBlockGhostBlock;
 import ljdp.minechem.common.MinechemBlocks;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.tileentity.TileEntityGhostBlock;

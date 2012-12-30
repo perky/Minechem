@@ -1,7 +1,8 @@
-package ljdp.minechem.client;
+package ljdp.minechem.client.render.tileentity;
 
 import org.lwjgl.opengl.GL11;
 
+import ljdp.minechem.client.ModelMicroscope;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;

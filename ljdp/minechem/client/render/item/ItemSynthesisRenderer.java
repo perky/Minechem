@@ -1,5 +1,6 @@
-package ljdp.minechem.client;
+package ljdp.minechem.client.render.item;
 
+import ljdp.minechem.client.ModelSynthesizer;
 import ljdp.minechem.common.ModMinechem;
 
 import org.lwjgl.opengl.GL11;
@@ -10,26 +11,26 @@ import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.IItemRenderer.ItemRendererHelper;
 
-public class ItemBlueprintProjectorRenderer extends ItemMinechemRenderer {
+public class ItemSynthesisRenderer extends ItemMinechemRenderer {
 
-	private ModelProjector model;
+	private ModelSynthesizer model;
 	
-	public ItemBlueprintProjectorRenderer() {
-		model = new ModelProjector();
+	public ItemSynthesisRenderer() {
+		model = new ModelSynthesizer();
 	}
-	
+
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		String texture = ModMinechem.proxy.PROJECTOR_MODEL_OFF;
+		String texture = ModMinechem.proxy.SYNTHESIS_MODEL;
 		GL11.glPushMatrix();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, FMLClientHandler.instance().getClient().renderEngine.getTexture(texture));
 		if(type == ItemRenderType.ENTITY) {
-			GL11.glTranslatef(0.0F, 1.4F, 0.0F);
-			GL11.glRotatef(180f, 0f, 0f, 1f);
+			GL11.glTranslatef(0.0F, 1.5F, 0.0F);
+			GL11.glRotatef(180f, 0.1f, 0.0f, 1f);
 		} else if(type == ItemRenderType.EQUIPPED) {
 			GL11.glTranslatef(0.5F, 1.6F, 0.0F);
-			GL11.glRotatef(180f, -1f, 0f, 1f);
-		} else { 
+			GL11.glRotatef(180f, 0.1f, 0.0f, 1f);
+		} else{ 
 			GL11.glTranslatef(0.0F, 1.0F, 0.0F);
 			GL11.glRotatef(180f, 0f, 0f, 1f);
 		}

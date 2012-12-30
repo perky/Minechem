@@ -1,4 +1,4 @@
-package ljdp.minechem.client;
+package ljdp.minechem.client.render.tileentity;
 
 import java.util.HashMap;
 import java.util.Random;

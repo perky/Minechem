@@ -1,4 +1,4 @@
-package ljdp.minechem.client;
+package ljdp.minechem.client.render.tileentity;
 
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;

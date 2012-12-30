@@ -4,6 +4,8 @@ import ljdp.minechem.common.tileentity.TileEntityDecomposer;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.world.World;
 
 public class CommonProxy {
@@ -39,7 +41,6 @@ public class CommonProxy {
 	}
 
 	public void registerHooks() {
-		
 	}
 
 }

@@ -1,5 +1,6 @@
-package ljdp.minechem.client;
+package ljdp.minechem.client.render.item;
 
+import ljdp.minechem.client.ModelDecomposer;
 import ljdp.minechem.common.ModMinechem;
 
 import org.lwjgl.opengl.GL11;

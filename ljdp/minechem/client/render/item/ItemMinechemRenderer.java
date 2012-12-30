@@ -1,4 +1,4 @@
-package ljdp.minechem.client;
+package ljdp.minechem.client.render.item;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;

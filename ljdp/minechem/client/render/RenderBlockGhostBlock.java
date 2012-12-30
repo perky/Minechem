@@ -1,4 +1,4 @@
-package ljdp.minechem.client;
+package ljdp.minechem.client.render;
 
 import org.lwjgl.opengl.GL11;
 
