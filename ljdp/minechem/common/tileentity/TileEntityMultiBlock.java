@@ -108,7 +108,9 @@ public class TileEntityMultiBlock extends TileEntity {
 		int worldZ = (int) (zCoord + (offsetZ + z));
 		Integer structureID = structure[y][x][z];
 		int blockID = worldObj.getBlockId(worldX, worldY, worldZ);
-		if(structureID == air) {
+		if(structureID == MinechemBlueprint.wildcard) {
+			return BlockStatus.CORRECT;
+		} else if(structureID == air) {
 			if(blockID == air)
 				return BlockStatus.CORRECT;
 			else

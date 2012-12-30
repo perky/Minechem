@@ -156,7 +156,9 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 		Integer structureID = structure[y][x][z];
 		int blockID       = worldObj.getBlockId(worldPos.x, worldPos.y, worldPos.z);
 		int blockMetadata = worldObj.getBlockMetadata(worldPos.x, worldPos.y, worldPos.z);
-		if(structureID == air) {
+		if(structureID == MinechemBlueprint.wildcard) {
+			return BlockStatus.CORRECT;
+		} else if(structureID == air) {
 			if(blockID == air)
 				return BlockStatus.CORRECT;
 			else

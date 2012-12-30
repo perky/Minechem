@@ -10,7 +10,8 @@ import net.minecraft.tileentity.TileEntity;
 
 public abstract class MinechemBlueprint {
 	
-	public static int air   = 0;
+	public static final int wildcard = -1;
+	public static final int air = 0;
 	public static HashMap<Integer,MinechemBlueprint> blueprints = new HashMap();
 	public static MinechemBlueprint fusion;
 	public static MinechemBlueprint direworlf9by9;
