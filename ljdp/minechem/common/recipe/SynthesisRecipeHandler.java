@@ -57,7 +57,7 @@ public class SynthesisRecipeHandler {
 				stacksList.add(itemstack.copy());
 		}
 		for(ItemStack itemstack : stacksList) {
-			int ingredientSlot = getIngredientSlotThatMatchesStack(shapelessRecipe, itemstack, factor);
+			int ingredientSlot = getIngredientSlotThatMatchesStack(shapelessRecipe, itemstack, 1);
 			if(ingredientSlot != -1)
 				shapelessRecipe.remove(ingredientSlot);
 			else
@@ -95,7 +95,7 @@ public class SynthesisRecipeHandler {
 		for(int slot = 0; slot < ingredients.size(); slot++) {
 			ItemStack ingredientStack = ingredients.get(slot);
 			if(ingredientStack != null && Util.stacksAreSameKind(itemstack, ingredientStack) 
-					&& itemstack.stackSize >= ingredientStack.stackSize * factor)
+					&& itemstack.stackSize == ingredientStack.stackSize)
 				return slot;
 		}
 		return -1;
@@ -103,22 +103,12 @@ public class SynthesisRecipeHandler {
 
 
     /**
-     * Takes 1 recipe's worth of items from the inventory, making sure to leave
-     * behind at least 1 recipe's worth of items.
-     *
-     * @return False if taking the items would result in too few items
-     *   remaining.
+     * Clears the crafting inventory.
      */
     public static boolean takeFromCraftingInventory(SynthesisRecipe recipe, final IInventory inv) {
-        ItemStack[] stacks = new ItemStack[inv.getSizeInventory()];
-        for (int slot = 0; slot < inv.getSizeInventory(); slot++)
-            stacks[slot] = inv.getStackInSlot(slot);
-        if (!SynthesisRecipeHandler.instance.itemStacksMatchesRecipe(stacks, recipe, 2))
-            return false;
-        if (recipe.isShaped())
-            takeShapedFromCraftingInventory(recipe, stacks);
-        else
-            takeUnshapedFromCraftingInventory(recipe, stacks);
+    	for(int slot = 0; slot < inv.getSizeInventory(); slot++) {
+    		inv.setInventorySlotContents(slot, null);
+    	}
         return true;
     }
 

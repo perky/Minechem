@@ -1,19 +1,20 @@
 [
 {
-  "modid": "Minechem|Core",
+  "modid": "MineChem",
   "name": "MineChem",
   "description": "Add chemistry to Minecraft.",
-  "version": "2.0.0pr3.1",
+  "version": "@VERSION@",
   "credits": "Created by Ljdp (Luke Perkin)",
   "logoFile": "",
-  "mcversion": "",
-  "url": "",
+  "mcversion": "1.4.6",
+  "url": "https://github.com/perky/Minechem",
   "updateUrl": "",
   "authors": [ "Ljdp", "Ian", "Rushmead", "Adelayde" ],
   "parent":"",
   "screenshots": [],
   "dependencies": [
-     "mod_MinecraftForge"
+     "mod_MinecraftForge",
+     "BuildCraft|Core"
   ]
 }
 ]

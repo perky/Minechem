@@ -197,6 +197,8 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 				break;
 		}
 		if(amount > 0) {
+			ItemStack tubes = new ItemStack(MinechemItems.testTube, amount);
+			MinechemHelper.ejectItemStackIntoWorld(tubes, worldObj, xCoord, yCoord, zCoord);
 			//Drop the bottles?
 		}
 	}
@@ -356,15 +358,18 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
             case WEST:
             case UNKNOWN:
                 // extract crafted item from all sides (and unkonwn, which logistics pipes specifies)
-                if(currentRecipe == null) break;
+                if(currentRecipe == null)
+                	break;
                 ItemStack outputStack = currentRecipe.getOutput().copy();
                 if(outputStack.itemID == MinechemItems.element.shiftedIndex)
                     MinechemItems.element.initiateRadioactivity(outputStack, worldObj);
                 ItemStack[] output = new ItemStack[] { outputStack };
-                if(!doRemove) return output;
-                if(!canAddEmptyBottles(currentRecipe.getIngredientCount())) break;
-                if(!takeStacks(currentRecipe)) break;
-                if(!canAffordRecipe(currentRecipe)) break;
+                if(!doRemove)
+                	return output;
+                if(!takeStacks(currentRecipe))
+                	break;
+                if(!canAffordRecipe(currentRecipe))
+                	break;
 				takeEnergy(currentRecipe);
                 addEmptyBottles(currentRecipe.getIngredientCount());
                 return output;
@@ -388,9 +393,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 	}
 
     private boolean takeStacks(SynthesisRecipe recipe) {
-        System.out.println("takeStacks");
-        return SynthesisRecipeHandler.takeFromCraftingInventory(recipe, craftingInventory)
-            || takeStacksFromAdjacentChests(recipe);
+        return takeStacksFromAdjacentChests(recipe) || SynthesisRecipeHandler.takeFromCraftingInventory(recipe, craftingInventory);
     }
 	
 	private boolean takeStacksFromAdjacentChests(SynthesisRecipe recipe) {

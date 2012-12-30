@@ -1,5 +1,7 @@
 package ljdp.minechem.common;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.logging.Logger;
 
 import ljdp.minechem.client.gui.GuiDecomposer;
@@ -33,11 +35,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -51,7 +55,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid="minechem", name="MineChem", version="2.0.0pr3.1")
+@Mod(modid="minechem", name="MineChem", version="2.0.0pr3.2")
 @NetworkMod(
 		clientSideRequired=true, 
 		serverSideRequired=false, 
@@ -106,8 +110,15 @@ public class ModMinechem implements IGuiHandler {
 	}
 	
 	@PostInit
-	public void postInit(FMLPostInitializationEvent event) {
+	public void postInit(FMLPostInitializationEvent event) throws IOException {
+		checkForBuildcraft();
 		MinechemTriggers.registerTriggers();
+	}
+	
+	private void checkForBuildcraft() throws IOException {
+		if(!Loader.isModLoaded("BuildCraft|Core")) {
+			throw new IOException("MineChem needs BuildCraft installed");
+		}
 	}
 	
 	private void loadConfig(FMLPreInitializationEvent event){
