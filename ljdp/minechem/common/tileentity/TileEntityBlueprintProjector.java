@@ -25,6 +25,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 
@@ -183,8 +186,7 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 		TileEntity tileEntity = worldObj.getBlockTileEntity(x, y, z);
 		if(tileEntity instanceof TileEntityGhostBlock) {
 			TileEntityGhostBlock ghostBlock = (TileEntityGhostBlock) tileEntity;
-			ghostBlock.setBlueprint(this.blueprint);
-			ghostBlock.setBlockID(blockID);
+			ghostBlock.setBlueprintAndID(blueprint, blockID);
 		}
 	}
 	
@@ -318,6 +320,7 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 		super.readFromNBT(nbtTagCompound);
 		this.inventory = new ItemStack[getSizeInventory()];
+		this.isComplete = false;
 		NBTTagCompound blueprintNBT = (NBTTagCompound) nbtTagCompound.getTag("blueprint");
 		if(blueprintNBT != null) {
 			ItemStack blueprintStack = ItemStack.loadItemStackFromNBT(blueprintNBT);
@@ -325,6 +328,18 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 			setBlueprint(blueprint);
 			this.inventory[0] = blueprintStack;
 		}
+	}
+	
+	@Override
+	public Packet getDescriptionPacket() {
+		NBTTagCompound tagCompound = new NBTTagCompound();
+        this.writeToNBT(tagCompound);
+        return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 0, tagCompound);
+	}
+	
+	@Override
+	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
+		this.readFromNBT(pkt.customParam1);
 	}
 
 	public MinechemBlueprint getBlueprint() {

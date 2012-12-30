@@ -14,6 +14,7 @@ public class PacketGhostBlock extends PacketTileEntityUpdate {
 	public PacketGhostBlock(TileEntityGhostBlock ghostBlock) {
 		super(ghostBlock);
 		this.ghostBlock = ghostBlock;
+		this.isChunkDataPacket = true;
 	}
 	
 	public PacketGhostBlock() {
