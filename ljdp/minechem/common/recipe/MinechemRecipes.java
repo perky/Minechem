@@ -863,6 +863,15 @@ public class MinechemRecipes {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, molecule(aluminiumOxide,2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, molecule(aluminiumOxide,2)));
 		}
+		else if(event.Name.contains("ingotElectrum")) {
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Ag, 2), element(Au, 2))));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Ag, 2), element(Au, 2)));
+		}
+	        else if(event.Name.contains("ingotTungsten")) {
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(W, 2)));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Ag, 2))));
+		}
+	
 		
 	}
 	
