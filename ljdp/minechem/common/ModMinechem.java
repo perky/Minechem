@@ -55,7 +55,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid="minechem", name="MineChem", version="2.0.0pr4")
+@Mod(modid="minechem", name="MineChem", version="2.0.0pr4.1")
 @NetworkMod(
 		clientSideRequired=true, 
 		serverSideRequired=false, 
