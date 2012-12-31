@@ -154,10 +154,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 				return false;
 		}
 		if(doTake) {
-			for(ItemStack itemstack : storage) {
-				if(itemstack != null)
-					addEmptyBottles(itemstack.stackSize);
-			}
+			addEmptyBottles(currentRecipe.getIngredientCount());
 			storageInventory.setInventoryStacks(storage);
 		}
 		return true;
