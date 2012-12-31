@@ -761,6 +761,8 @@ public class MinechemRecipes {
 	
 	private void addUnusedSynthesisRecipes() {
 		for(DecomposerRecipe decomposerRecipe : DecomposerRecipe.recipes) {
+			if(decomposerRecipe.getInput().getItemDamage() == -1)
+				continue;
 			boolean hasRecipe = false;
 			for(SynthesisRecipe synthesisRecipe : SynthesisRecipe.recipes) {
 				if(Util.stacksAreSameKind(synthesisRecipe.getOutput(), decomposerRecipe.getInput())) {
