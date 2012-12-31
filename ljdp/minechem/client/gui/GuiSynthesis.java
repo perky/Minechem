@@ -16,10 +16,12 @@ import org.lwjgl.opengl.GL11;
 public class GuiSynthesis extends GuiContainerTabbed {
 	
 	int guiWidth = 176;
-	int guiHeight = 166;
+	int guiHeight = 187;
 	
 	public GuiSynthesis(InventoryPlayer inventoryPlayer, TileEntitySynthesis synthesis) {
 		super(new ContainerSynthesis(inventoryPlayer, synthesis));
+		this.xSize = guiWidth;
+		this.ySize = guiHeight;
 		addTab(new TabStateControlSynthesis(this, synthesis));
 		addTab(new TabEnergySynthesis(this, synthesis));
 		addTab(new TabHelp(this, MinechemHelper.getLocalString("help.synthesis")));
@@ -30,7 +32,7 @@ public class GuiSynthesis extends GuiContainerTabbed {
 		super.drawGuiContainerForegroundLayer(par1, par2);
 		String info = MinechemHelper.getLocalString("gui.title.synthesis");
 		int infoWidth = fontRenderer.getStringWidth(info);
-		fontRenderer.drawString(info, (guiWidth - infoWidth) / 2, 5, 0xCCCCCC);
+		fontRenderer.drawString(info, (guiWidth - infoWidth) / 2, 5, 0x000000);
 	}
 
 	@Override

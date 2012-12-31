@@ -1,5 +1,8 @@
 package ljdp.minechem.common.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -20,6 +23,32 @@ public class BoundedInventory implements IInventory {
         _start = start;
         _end = end;
     }
+    
+    public ItemStack[] copyInventoryToArray() {
+    	ItemStack[] itemstacks = new ItemStack[getSizeInventory()];
+    	for(int slot = 0; slot < getSizeInventory(); slot++) {
+    		ItemStack itemstack = getStackInSlot(slot);
+    		if(itemstack != null)
+    			itemstacks[slot] = itemstack.copy();
+    		else
+    			itemstacks[slot] = null;
+    	}
+    	return itemstacks;
+    }
+    
+    public List<ItemStack> copyInventoryToList() {
+    	List<ItemStack> itemstacks = new ArrayList();
+    	for(int slot = 0; slot < getSizeInventory(); slot++) {
+    		if(getStackInSlot(slot) != null)
+    			itemstacks.add(getStackInSlot(slot).copy());
+    	}
+    	return itemstacks;
+    }
+    
+    public void setInventoryStacks(ItemStack[] itemstacks) {
+		for(int slot = 0; slot < itemstacks.length; slot++)
+			setInventorySlotContents(slot, itemstacks[slot]);
+	}
 
     @Override
     public int getSizeInventory() {

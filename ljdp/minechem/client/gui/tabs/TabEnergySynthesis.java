@@ -30,8 +30,7 @@ public class TabEnergySynthesis extends TabEnergy {
 		
 		MinechemPowerProvider provider = (MinechemPowerProvider) powerReceptor.getPowerProvider();
 		int energyCost = 0;
-		ItemStack[] craftingMatrix = synthesis.getCraftingItems();
-		SynthesisRecipe recipe = SynthesisRecipeHandler.instance.getRecipeFromInput(craftingMatrix);
+		SynthesisRecipe recipe = synthesis.getCurrentRecipe();
 		if(recipe != null)
 			energyCost = recipe.energyCost();
 		
