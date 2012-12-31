@@ -139,7 +139,9 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 			int structureId, HashMap<Integer, BlueprintBlock> blockLookup, TileEntity managerTileEntity)
 	{
 		Pos3 worldPos = position.getLocalPos(x, y, z);
-		if(structureId == air) {
+		if(structureId == MinechemBlueprint.wildcard) {
+			return;
+		} if(structureId == air) {
 			worldObj.setBlock(worldPos.x, worldPos.y, worldPos.z, 0);
 		} else {
 			BlueprintBlock blueprintBlock = blockLookup.get(structureId);
