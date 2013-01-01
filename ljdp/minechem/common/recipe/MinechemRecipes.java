@@ -869,10 +869,24 @@ public class MinechemRecipes {
 		}
 	        else if(event.Name.contains("ingotTungsten")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(W, 2)));
-			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Ag, 2))));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(W, 2))));
 		}
-	
-		
+	        else if(event.Name.contains("ingotZinc")) {
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zn, 2)));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(An, 2))));
+		}
+		else if(event.Name.contains("ingotPlatinum")) {
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Pt, 2)));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Pt, 2))));
+		}
+		else if(event.Name.contains("ingotNickel")) {
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Ni, 2)));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Ni, 2))));
+		}
+		else if(event.Name.contains("plateSilicon")) {
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Si, 2)));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Si, 2))));
+		}
 	}
 	
 	private Element element(EnumElement element, int amount) {
