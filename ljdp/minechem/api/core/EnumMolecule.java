@@ -95,6 +95,12 @@ public enum EnumMolecule {
 	kaolinite				(73, "Kaolinite", new Element(Al,2), new Element(Si,2), new Element(O,5), new Molecule(hydroxide,4)),
 	myriocin				(74, "Myriocin", new Element(C,21), new Element(H,39), new Element(N), new Element(O,6)),
 	arginine				(75, "Arginine (amino acid)", new Element(C,6), new Element(H,14), new Element(N,4), new Element(O,2)),
+	shikimicAcid			(76, "Shikimic Acid", new Element(C,7), new Element(H,10), new Element(O,5)),
+	sulfuricAcid			(77, "Sulfuric Acid", new Element(H,2), new Element(S), new Element(O,4)),
+	glyphosate				(78, "Glyphosate", new Element(C,3), new Element(H,8), new Element(N), new Element(O,5), new Element(P)),
+	quinine					(79, "Quinine", new Element(C,20), new Element(H,24), new Element(N,2), new Element(O,2)),
+	lumefantrine			(80, "Lumefantrine", new Element(C,30), new Element(H,32), new Element(Cl,3), new Element(N), new Element(O)),
+	dota					(81, "DOTA", new Element(C,16), new Element(H,28), new Element(N,4), new Element(O,8))
 	;
 	
 	public static EnumMolecule[] molecules = values();
