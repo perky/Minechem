@@ -17,5 +17,10 @@ public class SlotFusionStar extends Slot {
 	public boolean isItemValid(ItemStack itemStack) {
 		return itemStack.itemID == Item.netherStar.shiftedIndex || itemStack.itemID == MinechemItems.fusionStar.shiftedIndex;
 	}
+	
+	@Override
+	public int getSlotStackLimit() {
+		return 1;
+	}
 
 }
