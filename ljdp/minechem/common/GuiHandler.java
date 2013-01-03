@@ -22,9 +22,15 @@ import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class GuiHandler implements IGuiHandler {
+	
+	public static final int GUI_ID_TILEENTITY = 0;
+	public static final int GUI_ID_JOURNAL    = 1;
+	
 	@Override
-	public Object getServerGuiElement(int ID, EntityPlayer player, World world,
-			int x, int y, int z) {
+	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		if(ID == GUI_ID_JOURNAL) {
+			return getServerGuiElementForJournal(player, world);
+		}
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 		if(tileEntity instanceof TileEntityDecomposer)
 			return new ContainerDecomposer(player.inventory, (TileEntityDecomposer)tileEntity);
@@ -48,10 +54,15 @@ public class GuiHandler implements IGuiHandler {
 		return null;
 	}
 	
+	public Object getServerGuiElementForJournal(EntityPlayer entityPlayer, World world) {
+		return null;
+	}
+	
 
 	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world,
-			int x, int y, int z) {
+	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		if(ID == GUI_ID_JOURNAL)
+			return getClientGuiElementForJournal(player, world);
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 		if(tileEntity instanceof TileEntityDecomposer)
 			return new GuiDecomposer(player.inventory, (TileEntityDecomposer)tileEntity);
@@ -72,6 +83,10 @@ public class GuiHandler implements IGuiHandler {
 		TileEntity tileEntity = proxy.getManager();
 		if(tileEntity instanceof TileEntityFusion)
 			return new GuiFusion(player.inventory, (TileEntityFusion)tileEntity);
+		return null;
+	}
+	
+	public Object getClientGuiElementForJournal(EntityPlayer player, World world) {
 		return null;
 	}
 }
