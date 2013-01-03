@@ -29,6 +29,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemRecord;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
@@ -749,6 +750,7 @@ public class MinechemRecipes {
 
 		addSynthesisRecipesFromMolecules();
 		addUnusedSynthesisRecipes();
+		registerPoisonRecipes();
 	}
 	
 	private void addSynthesisRecipesFromMolecules() {
@@ -776,6 +778,29 @@ public class MinechemRecipes {
 					SynthesisRecipe.add(new SynthesisRecipe(decomposerRecipe.getInput(), false, 100, chemicals));
 			}
 		}
+	}
+	
+	private ItemStack createPoisonedItemStack(Item item, int damageValue) {
+		ItemStack poison = new ItemStack(MinechemItems.molecule, 1, EnumMolecule.poison.ordinal());
+		ItemStack normalStack   = new ItemStack(item, 1, damageValue);
+		ItemStack poisonedStack = new ItemStack(item, 1, damageValue);
+		NBTTagCompound stackTag = new NBTTagCompound();
+		stackTag.setBoolean("minechem.isPoisoned", true);
+		poisonedStack.setTagCompound(stackTag);
+		
+		GameRegistry.addShapelessRecipe(poisonedStack, poison, normalStack);
+		return poisonedStack;
+	}
+	
+	private void registerPoisonRecipes() {
+		createPoisonedItemStack(Item.appleRed, 0);
+		createPoisonedItemStack(Item.porkCooked, 0);
+		createPoisonedItemStack(Item.beefCooked, 0);
+		createPoisonedItemStack(Item.carrot, 0);
+		createPoisonedItemStack(Item.bakedPotato, 0);
+		createPoisonedItemStack(Item.bread, 0);
+		createPoisonedItemStack(Item.potato, 0);
+		createPoisonedItemStack(Item.bucketMilk, 0);
 	}
 	
 	@ForgeSubscribe

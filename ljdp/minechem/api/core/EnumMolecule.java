@@ -100,7 +100,8 @@ public enum EnumMolecule {
 	glyphosate				(78, "Glyphosate", new Element(C,3), new Element(H,8), new Element(N), new Element(O,5), new Element(P)),
 	quinine					(79, "Quinine", new Element(C,20), new Element(H,24), new Element(N,2), new Element(O,2)),
 	lumefantrine			(80, "Lumefantrine", new Element(C,30), new Element(H,32), new Element(Cl,3), new Element(N), new Element(O)),
-	dota					(81, "DOTA", new Element(C,16), new Element(H,28), new Element(N,4), new Element(O,8))
+	dota					(81, "DOTA", new Element(C,16), new Element(H,28), new Element(N,4), new Element(O,8)),
+	poison					(82, "T-2 Mycotoxin", new Element(C,24), new Element(H,34), new Element(O,9)),
 	;
 	
 	public static EnumMolecule[] molecules = values();
