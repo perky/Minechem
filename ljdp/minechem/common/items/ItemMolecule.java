@@ -131,18 +131,32 @@ public class ItemMolecule extends Item {
         	return itemStack;
         
     	EnumMolecule molecule = getMolecule(itemStack);
+    	// Extra effects by Mandrake.
     	switch(molecule) {
     	case water:
     		entityPlayer.getFoodStats().addStats(1, .1F);
     		break;
+		case starch:
+			entityPlayer.getFoodStats().addStats(1, .2F);
+			break;
+	    case sucrose:
+	    	entityPlayer.getFoodStats().addStats(1, .1F);
+	    	break;
     	case psilocybin:
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
     		entityPlayer.attackEntityFrom(DamageSource.generic, 2);
+			entityPlayer.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), Constants.TICKS_PER_SECOND * 30, 5));
     		break;
     	case amphetamine:
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), Constants.TICKS_PER_SECOND * 20, 7));
     		break;
+		case methamphetamine:
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), Constants.TICKS_PER_SECOND * 20, 7));
+    		break;
     	case muscarine:
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.wither.getId(), Constants.TICKS_PER_SECOND * 60, 2));
+    		break;
+		case poison:
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.wither.getId(), Constants.TICKS_PER_SECOND * 60, 2));
     		break;
     	case ethanol:
@@ -162,6 +176,25 @@ public class ItemMolecule extends Item {
     		if(random.nextFloat() < .2F)
     			entityPlayer.attackEntityFrom(DamageSource.generic, 10);
     		break;
+	    case xanax:
+	    	cureAllPotions(world, entityPlayer); 
+	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+	    	break;
+		case mescaline:
+			entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+			entityPlayer.attackEntityFrom(DamageSource.generic, 2);
+			entityPlayer.addPotionEffect(new PotionEffect(Potion.blindness.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+		case quinine:
+    		cureAllPotions(world, entityPlayer);
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 2, 1));
+    		break;
+		case shikimicAcid:
+			// No effect.
+			break; 
+		case sulfuricAcid:
+			entityPlayer.attackEntityFrom(DamageSource.generic, 8);	 
+			break;
 		default:
 			entityPlayer.attackEntityFrom(DamageSource.generic, 5);
 			break;

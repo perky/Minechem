@@ -30,7 +30,7 @@ Under the following conditions:
 For more information on this license see here: http://creativecommons.org/licenses/by-sa/3.0/
 
 ## Credits
-Ljdp, Ian, Rushmead, Adelayde, Phrost
+Ljdp, Ian, Rushmead, Adelayde, Phrost, Mandrake
 
 ## Donate
 Help MineChem out a little:
