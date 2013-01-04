@@ -29,6 +29,7 @@ public class CommonProxy {
 	public static String PROJECTOR_MODEL_OFF = TEXTURE_DIR + "ProjectorModelOff.png";
 	public static String FUSION_GUI_PNG		= TEXTURE_DIR + "FusionChamberGUI.png";
 	public static String PROJECTOR_GUI_PNG  = TEXTURE_DIR + "ProjectorGUI.png";
+	public static String JOURNAL_GUI_PNG	= TEXTURE_DIR + "ChemistsJournalGUI.png";
 	public static int CUSTOM_RENDER_ID;
 	
 	

@@ -1,10 +1,12 @@
 package ljdp.minechem.common;
 
+import ljdp.minechem.client.gui.GuiChemistJournal;
 import ljdp.minechem.client.gui.GuiDecomposer;
 import ljdp.minechem.client.gui.GuiFusion;
 import ljdp.minechem.client.gui.GuiMicroscope;
 import ljdp.minechem.client.gui.GuiProjector;
 import ljdp.minechem.client.gui.GuiSynthesis;
+import ljdp.minechem.common.containers.ContainerChemistJournal;
 import ljdp.minechem.common.containers.ContainerDecomposer;
 import ljdp.minechem.common.containers.ContainerFusion;
 import ljdp.minechem.common.containers.ContainerMicroscope;
@@ -55,7 +57,7 @@ public class GuiHandler implements IGuiHandler {
 	}
 	
 	public Object getServerGuiElementForJournal(EntityPlayer entityPlayer, World world) {
-		return null;
+		return new ContainerChemistJournal(entityPlayer.inventory);
 	}
 	
 
@@ -87,6 +89,6 @@ public class GuiHandler implements IGuiHandler {
 	}
 	
 	public Object getClientGuiElementForJournal(EntityPlayer player, World world) {
-		return null;
+		return new GuiChemistJournal(player);
 	}
 }
