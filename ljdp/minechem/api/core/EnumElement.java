@@ -10,7 +10,7 @@ public enum EnumElement {
 	Be	("Beryllium", alkalineEarthMetal, solid, stable),
 	B	("Boron", semimetallic, solid, stable),
 	C	("Carbon", nonmetal, solid, stable),
-	N	("Nitrogen", nonmetal, solid, stable),
+	N	("Nitrogen", nonmetal, gas, stable),
 	O	("Oxygen", nonmetal, gas, stable),
 	F	("Flourine", halogen, gas, stable),
 	Ne	("Neon", inertGas, gas, stable),
