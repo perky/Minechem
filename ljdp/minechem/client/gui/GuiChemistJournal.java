@@ -222,15 +222,16 @@ public class GuiChemistJournal extends GuiContainerTabbed implements IVerticalSc
 				drawTexturedModalRect(0, 0, 0, 0, this.xSize/2, this.ySize/2);
 			GL11.glPopMatrix();
 			
-			scrollBar.draw();
-			drawSlots(x, y);
-			drawSlotTooltips();
 			if(currentItemStack != null) {
 				drawRecipeGrid();
 				drawRecipeGrid();
 				drawText();
 				drawRecipeSlots(x, y);
 			}
+			
+			scrollBar.draw();
+			drawSlots(x, y);
+			drawSlotTooltips();
 			
 			// Draw page corner overlay.
 			GL11.glPushMatrix();
@@ -259,9 +260,9 @@ public class GuiChemistJournal extends GuiContainerTabbed implements IVerticalSc
 		
 		drawTexturedModalRect(197/2, 41/2, 51/2, 192/2, 54/2, 54/2);
 		if(currentSynthesisRecipe != null && currentSynthesisRecipe.isShaped()) {
-			drawTexturedModalRect(198/2, 121/2, 104/2, 192/2, 54/2, 54/2);
+			drawTexturedModalRect(197/2, 121/2, 104/2, 192/2, 54/2, 54/2);
 		} else {
-			drawTexturedModalRect(198/2, 121/2, 51/2, 192/2, 54/2, 54/2);
+			drawTexturedModalRect(197/2, 121/2, 51/2, 192/2, 54/2, 54/2);
 		}
 		GL11.glPopMatrix();
 		GL11.glDisable(GL11.GL_BLEND);
@@ -271,6 +272,8 @@ public class GuiChemistJournal extends GuiContainerTabbed implements IVerticalSc
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		String itemname = String.format("%sl%s", Constants.TEXT_MODIFIER, currentItemStack.getDisplayName());
+		if(itemname.length() > 18)
+			itemname = itemname.substring(0, 18).trim() + "...";
 		fontRenderer.drawString(itemname, 175, 10, 0x0000FF);
 		fontRenderer.drawString("Decomposer", 175, 20, 0x884400);
 		
@@ -311,15 +314,11 @@ public class GuiChemistJournal extends GuiContainerTabbed implements IVerticalSc
 	private void drawRecipeSlots(int x, int y) {
 		for(GuiFakeSlot slot : synthesisSlots) {
 			if(slot != null) {
-				//slot.setXOffset(SYNTHESIS_X);
-				//slot.setYOffset(SYNTHESIS_Y);
 				slot.draw();
 			}
 		}
 		for(GuiFakeSlot slot : decomposerSlots) {
 			if(slot != null) {
-				//slot.setXOffset(DECOMPOSER_X);
-				//slot.setYOffset(DECOMPOSER_Y);
 				slot.draw();
 			}
 		}
@@ -341,7 +340,7 @@ public class GuiChemistJournal extends GuiContainerTabbed implements IVerticalSc
 
 	@Override
 	public boolean isScrollBarActive() {
-		return true;
+		return listHeight > 130;
 	}
 
 	@Override

@@ -748,9 +748,19 @@ public class MinechemRecipes {
 				new DecomposerRecipe(element(Ga)),
 				new DecomposerRecipe(element(Rb))
 		));
-
+		
+		addDecomposerRecipesFromMolecules();
 		addSynthesisRecipesFromMolecules();
 		addUnusedSynthesisRecipes();
+	}
+	
+	private void addDecomposerRecipesFromMolecules() {
+		for(EnumMolecule aMolecule : EnumMolecule.molecules) {
+			ArrayList<Chemical> components = aMolecule.components();
+			Chemical[] chemicals = components.toArray(new Chemical[components.size()]);
+			ItemStack input = new ItemStack(MinechemItems.molecule, 1, aMolecule.id());
+			DecomposerRecipe.add(new DecomposerRecipe(input, chemicals));
+		}
 	}
 	
 	private void addSynthesisRecipesFromMolecules() {

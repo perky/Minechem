@@ -11,7 +11,6 @@ import cpw.mods.fml.server.FMLServerHandler;
 import ljdp.minechem.common.GuiHandler;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.network.PacketHandler;
-import ljdp.minechem.common.network.PacketJournalItems;
 import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -32,12 +31,11 @@ public class ItemChemistJournal extends Item {
 	}
 	
 	@Override
-	public boolean onItemUse(ItemStack itemStack,
-			EntityPlayer entityPlayer, World world, int x, int y,
-			int z, int side, float par8, float par9, float par10)
-	{
-		entityPlayer.openGui(ModMinechem.instance, GuiHandler.GUI_ID_JOURNAL, world, x, y, z);
-		return false;
+	public ItemStack onItemRightClick(ItemStack par1ItemStack, World world, EntityPlayer entityPlayer) {
+		if(!world.isRemote)
+			entityPlayer.openGui(ModMinechem.instance, GuiHandler.GUI_ID_JOURNAL, world, 
+				entityPlayer.chunkCoordX, entityPlayer.chunkCoordY, entityPlayer.chunkCoordY);
+		return par1ItemStack;
 	}
 	
 	@Override

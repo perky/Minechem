@@ -132,25 +132,16 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 		ItemStack inputStack = getStackInSlot(kInputSlot);
 		if(inputStack == null)
 			return false;
-		if(inputStack.itemID == MinechemItems.molecule.shiftedIndex) {
-			return canTakeEmptyBottle();
-		} else {
-			DecomposerRecipe recipe = DecomposerRecipeHandler.instance.getRecipe(inputStack);
-			return (recipe != null) && canTakeEmptyBottle();
-		}
+		DecomposerRecipe recipe = DecomposerRecipeHandler.instance.getRecipe(inputStack);
+		return (recipe != null) && canTakeEmptyBottle();
 	}
 	
 	private void decomposeActiveStack() {
 		ItemStack inputStack = getActiveStack();
-		if(inputStack.itemID == MinechemItems.molecule.shiftedIndex) {
-			ArrayList<ItemStack> outputStacks = ((ItemMolecule)MinechemItems.molecule).getElements(inputStack);
-			placeStacksInBuffer(outputStacks);
-		} else {
-			DecomposerRecipe recipe = DecomposerRecipeHandler.instance.getRecipe(inputStack);
-			if(recipe != null && recipe.getOutput() != null) {
-				ArrayList<ItemStack> stacks = MinechemHelper.convertChemicalsIntoItemStacks(recipe.getOutput());
-				placeStacksInBuffer(stacks);
-			}
+		DecomposerRecipe recipe = DecomposerRecipeHandler.instance.getRecipe(inputStack);
+		if(recipe != null && recipe.getOutput() != null) {
+			ArrayList<ItemStack> stacks = MinechemHelper.convertChemicalsIntoItemStacks(recipe.getOutput());
+			placeStacksInBuffer(stacks);
 		}
 	}
 	

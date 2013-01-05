@@ -101,6 +101,8 @@ public class GuiVerticalScrollBar extends Gui {
 	}
 	
 	private void onMouseScroll(int value, boolean up) {
+		if(!container.isScrollBarActive())
+			return;
     	if(up)
     		setYPos(ypos - container.getScrollAmount());
     	else
@@ -115,12 +117,15 @@ public class GuiVerticalScrollBar extends Gui {
 	
 	public void draw() {
 		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		int textureID = mc.renderEngine.getTexture("/gui/allitems.png");
 		mc.renderEngine.bindTexture(textureID);
-		if(this.container.isScrollBarActive())
+		if(this.container.isScrollBarActive()) {
 			drawTexturedModalRect(xpos, ypos, activeU, activeV, width, height);
-		else
+		} else {
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.3F);
 			drawTexturedModalRect(xpos, ypos, unactiveU, unactiveV, width, height);
+		}
 	}
 }
