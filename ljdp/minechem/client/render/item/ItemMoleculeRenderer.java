@@ -76,10 +76,10 @@ public class ItemMoleculeRenderer implements IItemRenderer {
 	
 	private void renderItemInEquipped(ItemRenderType type, ItemStack itemstack) {
 		EnumMolecule molecule = ((ItemMolecule)itemstack.getItem()).getMolecule(itemstack);
-		float scale = .06F;
+		float scale = 0.75F;
 		GL11.glPushMatrix();
 		GL11.glScalef(scale, scale, scale);
-		GL11.glTranslatef(1.2F, 1.0F, 0.0F);
+		GL11.glTranslatef(1.2F, 1.1F, -0.25F);
 		GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
 		GL11.glColor3f(molecule.red, molecule.green, molecule.blue);
 		drawTexturedRectUV(type, 0, 0, 0, 0*16, 1*16, 16, 16);
