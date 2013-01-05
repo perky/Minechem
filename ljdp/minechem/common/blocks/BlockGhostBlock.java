@@ -78,11 +78,6 @@ public class BlockGhostBlock extends BlockContainer {
     }
 	
 	@Override
-	public String getTextureFile() {
-		return ModMinechem.proxy.TERRAIN_ALPHA_PNG;
-	}
-	
-	@Override
 	public int damageDropped(int par1) {
 		return par1;
 	}

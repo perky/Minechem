@@ -42,7 +42,6 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.preloadTexture(MICROSCOPE_GUI_PNG);
 		MinecraftForgeClient.preloadTexture(SYNTHESIS_GUI_PNG);
 		MinecraftForgeClient.preloadTexture(BLOCKS_PNG);
-		MinecraftForgeClient.preloadTexture(TERRAIN_ALPHA_PNG);
 		MinecraftForgeClient.preloadTexture(MICROSCOPE_MODEL);
 		MinecraftForgeClient.preloadTexture(DECOMPOSER_MODEL_ON);
 		MinecraftForgeClient.preloadTexture(DECOMPOSER_MODEL_OFF);

@@ -1,12 +1,34 @@
 <?xml version="1.0" ?> 
 <project name="Minechem 2" basedir="../" default="main">
 	
-	<property name="minechem-version" value="2.0.0pr5.1"/>
-	<property name="minechem-src-dir" location="minechem"/>
-	<property name="build-dir" location="minechem-build"/>
-	<property name="forge-dir" location="../Minecraft Src/forge"/>
-	<property name="mcp-dir" location="${forge-dir}/mcp"/>
-	<property name="reobf-dir" location="${mcp-dir}/reobf/minecraft"/>
+	<property name="minechem-version"  value="2.0.0pr5.1"/>
+	<property name="minechem-src-dir"  location="minechem"/>
+	<property name="apis-dir"          location="${minechem-src-dir}/apis"/>
+	<property name="build-dir"         location="minechem-build"/>
+	<property name="forge-dir"         location="../Minecraft Src/forge"/>
+	<property name="mcp-dir"           location="${forge-dir}/mcp"/>
+	<property name="src-dir"           location="${mcp-dir}/src/minecraft"/>
+	<property name="reobf-dir"         location="${mcp-dir}/reobf/minecraft"/>
+	
+	<target name="move-to-mcp">
+		<!-- Copy Minechem classes -->
+        <copy todir="${src-dir}/ljdp">
+            <fileset dir="${minechem-src-dir}/ljdp"/>
+        	<filterset>
+        		   <filter token="VERSION" value="${minechem-version}" />
+        	</filterset>
+        </copy>
+		
+		<!-- Copy NEI API -->
+        <copy todir="${src-dir}/codechicken">
+            <fileset dir="${apis-dir}/NEI/codechicken"/>
+        </copy>
+        
+        <!-- Copy BUILDCRAFT API -->
+        <copy todir="${src-dir}/buildcraft">
+            <fileset dir="${apis-dir}/BuildCraft"/>
+        </copy>
+	</target>
     
 	<target name="compile">
 		<exec dir="${mcp-dir}" executable="cmd" osfamily="windows">
@@ -36,27 +58,12 @@
             <fileset dir="${reobf-dir}/buildcraft/api"/>
         </copy>
         
-        <!-- Copy Minechem textures -->
-        <copy todir="${build-dir}/ljdp/minechem/textures">
-            <fileset dir="${minechem-src-dir}/ljdp/minechem/textures"/>
-        </copy>
-        
-        <!-- Copy Minechem sounds -->
-        <copy todir="${build-dir}/ljdp/minechem/sounds">
-            <fileset dir="${minechem-src-dir}/ljdp/minechem/sounds"/>
-        </copy>
-        
-        <!-- Copy Minechem lang -->
-        <copy todir="${build-dir}/lang">
-            <fileset dir="${minechem-src-dir}/lang"/>
-        </copy>
-        
-        <!-- Copy Minechem mcmodinfo -->
+        <!-- Copy Minechem Resources -->
         <copy todir="${build-dir}">
-            <fileset file="${minechem-src-dir}/mcmod.info"/>
+            <fileset dir="${minechem-src-dir}/resources"/>
         	<filterset>
-        		<filter token="VERSION" value="${minechem-version}" />
-        	</filterset>
+                <filter token="VERSION" value="${minechem-version}" />
+            </filterset>
         </copy>
 	</target>
 	
@@ -65,6 +72,6 @@
 		<zip destfile="${build-dir}/MineChem-${minechem-version}.zip" basedir="${build-dir}"/>
 	</target>
 	
-	<target name="main" depends="compile,move-to-build,package"/>
+	<target name="main" depends="move-to-mcp,compile,move-to-build,package"/>
 	
 </project>

@@ -56,7 +56,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid="minechem", name="MineChem", version="2.0.0pr5.1")
+@Mod(modid="minechem", name="MineChem", version="%VERSION%")
 @NetworkMod(
 		clientSideRequired=true, 
 		serverSideRequired=false, 
@@ -82,7 +82,7 @@ public class ModMinechem {
 	public void preInit(FMLPreInitializationEvent event) {
 		blLog.setParent(FMLLog.getLogger());
 		blLog.info("Loading localization");
-		LanguageRegistry.instance().loadLocalization("/lang/minechem/en_GB.properties", "en_GB", false);
+		LanguageRegistry.instance().loadLocalization(proxy.LANG_GB, "en_GB", false);
 	 	blLog.info("Loading Config");
 	 	loadConfig(event);
 	 	blLog.info("Adding Items");
