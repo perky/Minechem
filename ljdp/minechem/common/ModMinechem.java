@@ -34,6 +34,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -62,7 +63,8 @@ import cpw.mods.fml.relauncher.Side;
 		channels={PacketHandler.MINECHEM_PACKET_CHANNEL}, 
 		packetHandler=PacketHandler.class
 )
-public class ModMinechem implements IGuiHandler {
+
+public class ModMinechem {
 	@Instance("minechem")
 	public static ModMinechem instance;
 	
@@ -104,7 +106,7 @@ public class ModMinechem implements IGuiHandler {
 	
 	@Init
 	public void init(FMLInitializationEvent event) {
-		NetworkRegistry.instance().registerGuiHandler(this, this);
+		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
 		TickRegistry.registerScheduledTickHandler(new ScheduledTickHandler(), Side.SERVER);
 		proxy.registerRenderers();
 	}
@@ -127,58 +129,4 @@ public class ModMinechem implements IGuiHandler {
 	 	MinechemItems.loadConfig(config);
 	 	config.save();
 	 }
-
-	@Override
-	public Object getServerGuiElement(int ID, EntityPlayer player, World world,
-			int x, int y, int z) {
-		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-		if(tileEntity instanceof TileEntityDecomposer)
-			return new ContainerDecomposer(player.inventory, (TileEntityDecomposer)tileEntity);
-		if(tileEntity instanceof TileEntityMicroscope)
-			return new ContainerMicroscope(player.inventory, (TileEntityMicroscope)tileEntity);
-		if(tileEntity instanceof TileEntitySynthesis)
-			return new ContainerSynthesis(player.inventory, (TileEntitySynthesis)tileEntity);
-		if(tileEntity instanceof TileEntityFusion)
-			return new ContainerFusion(player.inventory, (TileEntityFusion)tileEntity);
-		if(tileEntity instanceof TileEntityProxy)
-			return getServerGuiElementFromProxy((TileEntityProxy)tileEntity, player);
-		if(tileEntity instanceof TileEntityBlueprintProjector)
-			return new ContainerProjector(player.inventory, (TileEntityBlueprintProjector)tileEntity);
-		return null;
-	}
-
-	public Object getServerGuiElementFromProxy(TileEntityProxy proxy, EntityPlayer player) {
-		TileEntity tileEntity = proxy.getManager();
-		if(tileEntity instanceof TileEntityFusion)
-			return new ContainerFusion(player.inventory, (TileEntityFusion)tileEntity);
-		return null;
-	}
-	
-
-	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world,
-			int x, int y, int z) {
-		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-		if(tileEntity instanceof TileEntityDecomposer)
-			return new GuiDecomposer(player.inventory, (TileEntityDecomposer)tileEntity);
-		if(tileEntity instanceof TileEntityMicroscope)
-			return new GuiMicroscope(player.inventory, (TileEntityMicroscope)tileEntity);
-		if(tileEntity instanceof TileEntitySynthesis)
-			return new GuiSynthesis(player.inventory, (TileEntitySynthesis)tileEntity);
-		if(tileEntity instanceof TileEntityFusion)
-			return new GuiFusion(player.inventory, (TileEntityFusion)tileEntity);
-		if(tileEntity instanceof TileEntityProxy)
-			return getClientGuiElementFromProxy((TileEntityProxy)tileEntity, player);
-		if(tileEntity instanceof TileEntityBlueprintProjector)
-			return new GuiProjector(player.inventory, (TileEntityBlueprintProjector)tileEntity);
-		return null;
-	}
-	
-	public Object getClientGuiElementFromProxy(TileEntityProxy proxy, EntityPlayer player) {
-		TileEntity tileEntity = proxy.getManager();
-		if(tileEntity instanceof TileEntityFusion)
-			return new GuiFusion(player.inventory, (TileEntityFusion)tileEntity);
-		return null;
-	}
-	
 }

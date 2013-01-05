@@ -5,6 +5,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import cpw.mods.fml.common.network.Player;
+
+import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
 public class PacketMinechem {
@@ -41,6 +44,10 @@ public class PacketMinechem {
 	}
 	
 	public void readData(DataInputStream inputStream) throws IOException { }
-	public void writeData(DataOutputStream outputStream) throws IOException { };
+	public void writeData(DataOutputStream outputStream) throws IOException { }
+
+	public void onReceive(INetworkManager manager, Player player) {
+		
+	};
 
 }

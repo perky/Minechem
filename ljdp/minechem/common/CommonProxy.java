@@ -7,6 +7,15 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.server.FMLServerHandler;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+
 
 public class CommonProxy {
 	
@@ -29,6 +38,8 @@ public class CommonProxy {
 	public static String PROJECTOR_MODEL_OFF = TEXTURE_DIR + "ProjectorModelOff.png";
 	public static String FUSION_GUI_PNG		= TEXTURE_DIR + "FusionChamberGUI.png";
 	public static String PROJECTOR_GUI_PNG  = TEXTURE_DIR + "ProjectorGUI.png";
+	public static String JOURNAL_GUI_PNG	= TEXTURE_DIR + "ChemistsJournalGUI.png";
+
 	public static int CUSTOM_RENDER_ID;
 	
 	
@@ -41,6 +52,17 @@ public class CommonProxy {
 	}
 
 	public void registerHooks() {
+	}
+
+	public EntityPlayer findEntityPlayerByName(String name) {
+		WorldServer[] servers = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
+		EntityPlayer player = null;
+		for(WorldServer server : servers) {
+			player = server.getPlayerEntityByName(name);
+			if(player != null)
+				return player;
+		}
+		return player;
 	}
 
 }

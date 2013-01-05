@@ -11,6 +11,7 @@ import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.items.ItemAtomicManipulator;
 import ljdp.minechem.common.items.ItemBlockFusion;
 import ljdp.minechem.common.items.ItemBlueprint;
+import ljdp.minechem.common.items.ItemChemistJournal;
 import ljdp.minechem.common.items.ItemElement;
 import ljdp.minechem.common.items.ItemFusionStar;
 import ljdp.minechem.common.items.ItemLens;
@@ -26,6 +27,8 @@ public class MinechemItems {
 	public static ItemFusionStar fusionStar;
 	public static ItemBlueprint blueprint;
 	public static ItemTestTube testTube;
+	public static ItemChemistJournal journal;
+
 	
 	public static ItemStack convexLens;
 	public static ItemStack concaveLens;
@@ -40,6 +43,7 @@ public class MinechemItems {
 	private static int blockFusionID;
 	private static int blueprintID;
 	private static int testTubeID;
+	private static int journalID;
 	
 	public static void loadConfig(Configuration config) {
 		elementID   = config.getItem(config.CATEGORY_ITEM, "Element", 4736).getInt(4736);
@@ -49,6 +53,7 @@ public class MinechemItems {
 	 	fusionStarID = config.getItem(config.CATEGORY_ITEM, "FusionStar", 4740).getInt(4740);
 	 	blueprintID  = config.getItem(config.CATEGORY_ITEM, "Blueprint", 4741).getInt(4741);
 	 	testTubeID   = config.getItem(config.CATEGORY_ITEM, "TestTube", 4742).getInt(4742);
+	 	journalID    = config.getItem(config.CATEGORY_ITEM, "ChemistJournal", 4743).getInt();
 	}
 	
 	public static void registerItems() {
@@ -59,10 +64,12 @@ public class MinechemItems {
 		fusionStar  = new ItemFusionStar(fusionStarID);
 		blueprint   = new ItemBlueprint(blueprintID);
 		testTube    = new ItemTestTube(testTubeID);
+		journal		= new ItemChemistJournal(journalID);
 		
 		LanguageRegistry.addName(atomicManipulator, MinechemHelper.getLocalString("item.name.atomicmanipulator"));
 		LanguageRegistry.addName(fusionStar, MinechemHelper.getLocalString("item.name.fusionStar"));
 		LanguageRegistry.addName(testTube, MinechemHelper.getLocalString("item.name.testtube"));
+		LanguageRegistry.addName(journal, MinechemHelper.getLocalString("item.name.chemistJournal"));
 		
 		concaveLens = new ItemStack(lens, 1, 0);
 		convexLens  = new ItemStack(lens, 1, 1);

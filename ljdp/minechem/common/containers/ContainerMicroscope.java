@@ -1,5 +1,6 @@
 package ljdp.minechem.common.containers;
 
+import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -10,15 +11,17 @@ import net.minecraft.item.ItemStack;
 public class ContainerMicroscope extends Container {
 	
 	TileEntityMicroscope microscope;
+	InventoryPlayer inventoryPlayer;
 	
 	public ContainerMicroscope(InventoryPlayer inventoryPlayer, TileEntityMicroscope microscope) {
 		this.microscope = microscope;
+		this.inventoryPlayer = inventoryPlayer;
 		addSlotToContainer(new Slot(microscope, 0, 44, 45));
-		
+		addSlotToContainer(new SlotJournal(microscope, 1, 80, 95));
 		int slot = 0;
 		for(int row = 0; row < 3; row++) {
 			for(int col = 0; col < 3; col++) {
-				addSlotToContainer(new SlotMicroscopeOutput(microscope, 1 + slot, 98 + (col * 18), 27 + (row * 18)));
+				addSlotToContainer(new SlotMicroscopeOutput(microscope, 2 + slot, 98 + (col * 18), 27 + (row * 18)));
 				slot++;
 			}
 		}
@@ -26,8 +29,8 @@ public class ContainerMicroscope extends Container {
 	}
 	
 	private void bindPlayerInventory(InventoryPlayer inventoryPlayer) {
-		int inventoryY = 107;
-		int hotBarY = 165;
+		int inventoryY = 134;
+		int hotBarY = 192;
 		for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                     addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9,
@@ -47,6 +50,9 @@ public class ContainerMicroscope extends Container {
 		ItemStack itemstack = microscope.getStackInSlotOnClosing(0);
 		if(itemstack != null)
 			entityPlayer.dropPlayerItem(itemstack);
+		itemstack = microscope.getStackInSlotOnClosing(1);
+		if(itemstack != null)
+			entityPlayer.dropPlayerItem(itemstack);
 	}
 	
 	@Override
@@ -60,10 +66,13 @@ public class ContainerMicroscope extends Container {
 		if(slotObject != null && slotObject.getHasStack()) {
 			ItemStack stackInSlot = slotObject.getStack();
 			ItemStack stack = stackInSlot.copy();
-			if(slot == 0) {
+			if(slot <= 0) {
 				if(!mergeItemStack(stackInSlot, 1, inventorySlots.size(), true))
 					return null;
-			} else if(slot >= 1) {
+			} else if(stack.itemID == MinechemItems.journal.shiftedIndex) {
+				if(!mergeItemStack(stackInSlot, 1, 2, false))
+					return null;
+			} else if(slot > 1) {
 				if(!mergeItemStack(stackInSlot, 0, 1, false))
 					return null;
 			} else if(!mergeItemStack(stackInSlot, 1, inventorySlots.size(), true))
@@ -78,6 +87,5 @@ public class ContainerMicroscope extends Container {
 		}
 		return null;
 	}
-	
 
 }

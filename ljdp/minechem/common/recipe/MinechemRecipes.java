@@ -160,8 +160,12 @@ public class MinechemRecipes {
 				'L', MinechemItems.projectorLens,
 				'G', new ItemStack(Block.redstoneLampIdle)
 		);
-				
+
+		GameRegistry.addShapelessRecipe(new ItemStack(MinechemItems.journal), 
+				new ItemStack(Item.book), new ItemStack(MinechemItems.testTube));
 		
+		GameRegistry.addRecipe(new RecipeJournalCloning());
+
 		
 		Element carbonStack = element(C,64);
 		
@@ -748,9 +752,19 @@ public class MinechemRecipes {
 				new DecomposerRecipe(element(Rb))
 		));
 
+		addDecomposerRecipesFromMolecules();
 		addSynthesisRecipesFromMolecules();
 		addUnusedSynthesisRecipes();
 		registerPoisonRecipes();
+	}
+	
+	private void addDecomposerRecipesFromMolecules() {
+		for(EnumMolecule aMolecule : EnumMolecule.molecules) {
+			ArrayList<Chemical> components = aMolecule.components();
+			Chemical[] chemicals = components.toArray(new Chemical[components.size()]);
+			ItemStack input = new ItemStack(MinechemItems.molecule, 1, aMolecule.id());
+			DecomposerRecipe.add(new DecomposerRecipe(input, chemicals));
+		}
 	}
 	
 	private void addSynthesisRecipesFromMolecules() {
@@ -780,6 +794,7 @@ public class MinechemRecipes {
 		}
 	}
 	
+
 	private ItemStack createPoisonedItemStack(Item item, int damageValue) {
 		ItemStack poison = new ItemStack(MinechemItems.molecule, 1, EnumMolecule.poison.ordinal());
 		ItemStack normalStack   = new ItemStack(item, 1, damageValue);
@@ -802,7 +817,7 @@ public class MinechemRecipes {
 		createPoisonedItemStack(Item.potato, 0);
 		createPoisonedItemStack(Item.bucketMilk, 0);
 	}
-	
+
 	@ForgeSubscribe
 	public void oreEvent(OreRegisterEvent event) {
 		if(event.Name.contains("oreCopper")) {

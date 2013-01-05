@@ -23,12 +23,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemElement extends Item {
 	
-	
-	private static final String textModifier = "\u00A7";
 	private final static EnumElement[] elements = EnumElement.values();
 	private final EnumMap classificationIndexes = new EnumMap<EnumClassification,Integer>(EnumClassification.class);
-	
-	
 	
 	public ItemElement(int par1) {
 		super(par1);
@@ -153,14 +149,14 @@ public class ItemElement extends Item {
 	
 	@Override
 	public String getItemDisplayName(ItemStack par1ItemStack) {
-		return textModifier + "l" + getLongName(par1ItemStack);
+		return Constants.TEXT_MODIFIER + "l" + getLongName(par1ItemStack);
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack,
 			EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-		par3List.add(textModifier + "9" + getShortName(itemstack) + " (" + (itemstack.getItemDamage() + 1) + ")");
+		par3List.add(Constants.TEXT_MODIFIER + "9" + getShortName(itemstack) + " (" + (itemstack.getItemDamage() + 1) + ")");
 		
 		String radioactivityColor;
 		String timeLeft = getRadioactiveLife(itemstack);
@@ -170,22 +166,22 @@ public class ItemElement extends Item {
 		EnumRadioactivity radioactivity = getRadioactivity(itemstack);
 		switch(radioactivity) {
 		case stable:
-			radioactivityColor = textModifier + "7";
+			radioactivityColor = Constants.TEXT_MODIFIER + "7";
 			break;
 		case hardlyRadioactive:
-			radioactivityColor = textModifier + "a";
+			radioactivityColor = Constants.TEXT_MODIFIER + "a";
 			break;
 		case slightlyRadioactive:
-			radioactivityColor = textModifier + "2";
+			radioactivityColor = Constants.TEXT_MODIFIER + "2";
 			break;
 		case radioactive:
-			radioactivityColor = textModifier + "e";
+			radioactivityColor = Constants.TEXT_MODIFIER + "e";
 			break;
 		case highlyRadioactive:
-			radioactivityColor = textModifier + "6";
+			radioactivityColor = Constants.TEXT_MODIFIER + "6";
 			break;
 		case extremelyRadioactive:
-			radioactivityColor = textModifier + "4";
+			radioactivityColor = Constants.TEXT_MODIFIER + "4";
 			break;
 		default:
 			radioactivityColor = "";
