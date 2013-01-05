@@ -192,12 +192,12 @@ public class MinechemHelper {
     		entityPlayer.getFoodStats().addStats(1, .1F);
     		break;
 		case starch:
-			entityPlayer.getFoodStats().addStats(1, .2F);
+			entityPlayer.getFoodStats().addStats(2, .2F);
 			break;
 	    case sucrose:
 	    	entityPlayer.getFoodStats().addStats(1, .1F);
 	    	break;
-    	case psilocybin:
+    	case psilocybin: // I ate a mushroom pie
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
     		entityPlayer.attackEntityFrom(DamageSource.generic, 2);
 			entityPlayer.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), Constants.TICKS_PER_SECOND * 30, 5));
@@ -234,7 +234,7 @@ public class MinechemHelper {
 	    case xanax:
 	    	cureAllPotions(world, entityPlayer); 
 	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
-	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), Constants.TICKS_PER_SECOND * 30, 2));
 	    	break;
 		case mescaline:
 			entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
@@ -242,7 +242,7 @@ public class MinechemHelper {
 			entityPlayer.addPotionEffect(new PotionEffect(Potion.blindness.getId(), Constants.TICKS_PER_SECOND * 30, 5));
 		case quinine:
     		cureAllPotions(world, entityPlayer);
-    		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 2, 1));
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 1, 1));
     		break;
 		case shikimicAcid:
 			// No effect.
