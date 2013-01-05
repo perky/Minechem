@@ -756,7 +756,7 @@ public class MinechemRecipes {
 		addSynthesisRecipesFromMolecules();
 		addUnusedSynthesisRecipes();
 		registerPoisonRecipes(poison);
-		registerPoisonRecipes(sucrose);
+		// registerPoisonRecipes(sucrose);
 		registerPoisonRecipes(psilocybin);
 		registerPoisonRecipes(methamphetamine);
 		registerPoisonRecipes(amphetamine);
