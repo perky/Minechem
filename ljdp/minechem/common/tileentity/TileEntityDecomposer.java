@@ -10,6 +10,8 @@ import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.MinechemPowerProvider;
 import ljdp.minechem.common.gates.IMinechemTriggerProvider;
 import ljdp.minechem.common.gates.MinechemTriggers;
+import ljdp.minechem.common.inventory.BoundedInventory;
+import ljdp.minechem.common.inventory.Transactor;
 import ljdp.minechem.common.items.ItemMolecule;
 import ljdp.minechem.common.network.PacketDecomposerUpdate;
 import ljdp.minechem.common.network.PacketHandler;
@@ -37,11 +39,10 @@ import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
 import buildcraft.api.transport.IPipe;
-import buildcraft.core.IMachine;
 import java.util.List;
 
 public class TileEntityDecomposer extends MinechemTileEntity implements IInventory, ISidedInventory, 
-IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialInventory
+IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 {
 	
 	private static final int MAX_POWER_STORAGE = 100;
@@ -53,8 +54,8 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 	public final int kInputSlot = 0;
 	public final int kOutputSlotStart    = 1;
 	public final int kOutputSlotEnd		= 9;
-	public final int kEmptyBottleSlotStart = 10;
-	public final int kEmptyBottleSlotEnd   = 13;
+	public final int kEmptyTestTubeSlotStart = 10;
+	public final int kEmptyTestTubeSlotEnd   = 13;
 	public final int kEmptyBottleSlotsSize = 4;
 	public final int kOutputSlotsSize		= 9;
 	private MinechemPowerProvider powerProvider;
@@ -65,17 +66,28 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 	public ModelDecomposer model;
 	private boolean hasFullEnergy;
 	
+	private final BoundedInventory testTubeInventory;
+	private final BoundedInventory outputInventory;
+	private final BoundedInventory inputInventory;
+	private Transactor testTubeTransactor;
+	private Transactor outputTransactor;
+	private Transactor inputTransactor;
+	
 	public enum State {
 		kProcessIdle, kProcessActive, kProcessFinished, kProcessJammed, kProcessNoBottles
 	}
 	
 	public TileEntityDecomposer() {
+		testTubeInventory  = new BoundedInventory(this, kEmptyTestTubeSlotStart, kEmptyTestTubeSlotEnd);
+		outputInventory    = new BoundedInventory(this, kOutputSlotStart, kOutputSlotEnd);
+		inputInventory	   = new BoundedInventory(this, kInputSlot, kInputSlot + 1);
+		testTubeTransactor = new Transactor(testTubeInventory);
+		outputTransactor   = new Transactor(outputInventory);
+		inputTransactor	   = new Transactor(inputInventory);
 		decomposerItemStacks = new ItemStack[getSizeInventory()];
 		outputBuffer = new ArrayList<ItemStack>();
-		if (PowerFramework.currentFramework != null) {
-			powerProvider = new MinechemPowerProvider(2, 20, 0, 10000);
-			powerProvider.configurePowerPerdition(1, 10);
-		}
+		powerProvider = new MinechemPowerProvider(2, 20, 0, 10000);
+		powerProvider.configurePowerPerdition(1, 10);
 		model = new ModelDecomposer();
 		ActionManager.registerTriggerProvider(this);
 	}
@@ -97,14 +109,14 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 			decomposeActiveStack();
 			state = State.kProcessActive;
 			this.onInventoryChanged();
-		} else if(!canTakeEmptyBottle()) {
+		} else if(!canTakeEmptyTestTube()) {
 			state = State.kProcessNoBottles;
 		} else if(state == State.kProcessFinished) {
 			activeStack = null;
 			state = State.kProcessIdle;
 		} else if(state == State.kProcessJammed && canUnjam()) {
 			state = State.kProcessActive;
-		} else if(state == State.kProcessNoBottles && canTakeEmptyBottle()) {
+		} else if(state == State.kProcessNoBottles && canTakeEmptyTestTube()) {
 			state = State.kProcessActive;
 		}
 	}
@@ -133,7 +145,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 		if(inputStack == null)
 			return false;
 		DecomposerRecipe recipe = DecomposerRecipeHandler.instance.getRecipe(inputStack);
-		return (recipe != null) && canTakeEmptyBottle();
+		return (recipe != null) && canTakeEmptyTestTube();
 	}
 	
 	private void decomposeActiveStack() {
@@ -163,13 +175,13 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 	
 	private State moveBufferItemToOutputSlot() {
 		for(ItemStack outputStack : outputBuffer) {
-			if(!canTakeEmptyBottle())
+			if(!canTakeEmptyTestTube())
 				return State.kProcessNoBottles;
 			else if(addStackToOutputSlots(outputStack.copy().splitStack(1))) {
 				outputStack.splitStack(1);
 				if(outputStack.stackSize == 0)
 					outputBuffer.remove(outputStack);
-				takeEmptyBottle();
+				takeEmptyTestTube();
 				return State.kProcessActive;
 			} else {
 				return State.kProcessJammed;
@@ -194,29 +206,14 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 		return false;
 	}
 	
-	private boolean canTakeEmptyBottle() {
-		for(int i = kEmptyBottleSlotStart; i <= kEmptyBottleSlotEnd; i++) {
-			ItemStack itemstack = getStackInSlot(i);
-			if(itemstack == null)
-				continue;
-			if(itemstack.itemID == MinechemItems.testTube.shiftedIndex) {
-				return true;
-			}
-		}
-		return false;
+	private boolean canTakeEmptyTestTube() {
+		ItemStack testTube = testTubeTransactor.removeItem(false);
+		return testTube != null;
 	}
 	
-	private boolean takeEmptyBottle() {
-		for(int i = kEmptyBottleSlotStart; i <= kEmptyBottleSlotEnd; i++) {
-			ItemStack itemstack = getStackInSlot(i);
-			if(itemstack == null)
-				continue;
-			if(itemstack.itemID == MinechemItems.testTube.shiftedIndex) {
-				decrStackSize(i, 1);
-				return true;
-			}
-		}
-		return false;
+	private boolean takeEmptyTestTube() {
+		ItemStack testTube = testTubeTransactor.removeItem(true);
+		return testTube != null;
 	}
 
 	@Override
@@ -227,7 +224,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 				|| side == ForgeDirection.EAST || side == ForgeDirection.SOUTH)
 			return kOutputSlotStart;
 		if(side == ForgeDirection.DOWN)
-			return kEmptyBottleSlotStart;
+			return kEmptyTestTubeSlotStart;
 		return 0;
 	}
 
@@ -246,64 +243,15 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 	@Override
 	public int addItem(ItemStack incoming, boolean doAdd, ForgeDirection from) {
         if (incoming.itemID == MinechemItems.testTube.shiftedIndex) {
-            // accept inbound test tubes from any direction and place them
-            // in to the bottle slots
-
-            int totalAdded = 0;
-            ItemStack remaining = incoming.copy();
-            for(int slot = kEmptyBottleSlotStart; slot < kEmptyBottleSlotEnd && remaining.stackSize > 0; slot++) {
-                ItemStack current = getStackInSlot(slot);
-                if(current == null)
-                    current = new ItemStack(incoming.getItem(), 0);
-                if(current.itemID == MinechemItems.testTube.shiftedIndex) {
-                    int n = Math.min(remaining.stackSize, getInventoryStackLimit() - current.stackSize);
-                    if(doAdd) {
-                        current.stackSize += n;
-                        setInventorySlotContents(slot, current);
-                    }
-                    remaining.stackSize -= n;
-                    totalAdded += n;
-                }
-            }
-            return totalAdded;
+        	return testTubeTransactor.add(incoming, doAdd).stackSize;
         } else {
-            // place everything else from any direction into the input slot
-
-            ItemStack current = getStackInSlot(kInputSlot);
-            if (current == null) {
-                current = new ItemStack(incoming.getItem(), 0);
-            } else if(current.itemID != incoming.itemID) {
-                return 0;
-            }
-            int n = Math.min(incoming.stackSize, getInventoryStackLimit() - current.stackSize);
-            if (doAdd) {
-                current.stackSize += n;
-                setInventorySlotContents(kInputSlot, current);
-            }
-            return n;
+            return inputTransactor.add(incoming, doAdd).stackSize;
         }
 	}
 
 	@Override
 	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-        // take from the output slot in all directions
-        List<ItemStack> stacks = new LinkedList<ItemStack>();
-        for(int slot = kOutputSlotStart; slot < kOutputSlotEnd && maxItemCount > 0; slot++) {
-            ItemStack stack = getStackInSlot(slot);
-            if (stack == null) continue;
-            if (stack.stackSize == 0) {
-                setInventorySlotContents(slot, null);
-                continue;
-            }
-            int amount = Math.min(maxItemCount, stack.stackSize);
-            maxItemCount -= amount;
-            stacks.add(doRemove
-                ? stack.splitStack(amount)
-                : new ItemStack(stack.getItem(), amount));
-            if (stack.stackSize == 0)
-                setInventorySlotContents(slot, null);
-        }
-        return stacks.toArray(new ItemStack[] {});
+		return new Transactor(outputInventory).remove(maxItemCount, doRemove);
 	}
 
 	@Override
@@ -378,8 +326,6 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 	@Override
 	public void closeChest() {
 	}
-	
-	
 	
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
@@ -495,26 +441,6 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 	@Override
 	public boolean hasNoTestTubes() {
 		return this.state == State.kProcessNoBottles;
-	}
-
-	@Override
-	public boolean isActive() {
-		return this.state == State.kProcessActive;
-	}
-
-	@Override
-	public boolean manageLiquids() {
-		return false;
-	}
-
-	@Override
-	public boolean manageSolids() {
-		return true;
-	}
-
-	@Override
-	public boolean allowActions() {
-		return false;
 	}
 
 	@Override
