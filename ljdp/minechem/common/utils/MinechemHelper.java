@@ -7,7 +7,9 @@ import java.util.Random;
 import ljdp.minechem.api.core.Chemical;
 import ljdp.minechem.api.core.Element;
 import ljdp.minechem.api.core.EnumElement;
+import ljdp.minechem.api.core.EnumMolecule;
 import ljdp.minechem.api.core.Molecule;
+import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.common.MinechemItems;
 
 import buildcraft.api.core.Position;
@@ -16,13 +18,17 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
@@ -177,6 +183,85 @@ public class MinechemHelper {
             world.spawnEntityInWorld(droppedEntity);
         }
 	}
+	
+	public static void triggerPlayerEffect(EnumMolecule molecule, EntityPlayer entityPlayer) {
+    	World world = entityPlayer.worldObj;
+    	// Extra effects by Mandrake.
+    	switch(molecule) {
+    	case water:
+    		entityPlayer.getFoodStats().addStats(1, .1F);
+    		break;
+		case starch:
+			entityPlayer.getFoodStats().addStats(1, .2F);
+			break;
+	    case sucrose:
+	    	entityPlayer.getFoodStats().addStats(1, .1F);
+	    	break;
+    	case psilocybin:
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+    		entityPlayer.attackEntityFrom(DamageSource.generic, 2);
+			entityPlayer.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+    		break;
+    	case amphetamine:
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), Constants.TICKS_PER_SECOND * 20, 7));
+    		break;
+		case methamphetamine:
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), Constants.TICKS_PER_SECOND * 20, 7));
+    		break;
+    	case muscarine:
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.wither.getId(), Constants.TICKS_PER_SECOND * 60, 2));
+    		break;
+		case poison:
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.wither.getId(), Constants.TICKS_PER_SECOND * 60, 2));
+    		break;
+    	case ethanol:
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 2, 1));
+    		entityPlayer.getFoodStats().addStats(3, .1F);
+    		break;
+    	case cyanide:
+    		entityPlayer.attackEntityFrom(DamageSource.generic, 20);
+    		break;
+    	case penicillin:
+    		cureAllPotions(world, entityPlayer);
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 2, 1));
+    		break;
+    	case testosterone:
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), Constants.TICKS_PER_MINUTE * 5, 2));
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(),   Constants.TICKS_PER_MINUTE * 5, 0));
+    		if(random.nextFloat() < .2F)
+    			entityPlayer.attackEntityFrom(DamageSource.generic, 10);
+    		break;
+	    case xanax:
+	    	cureAllPotions(world, entityPlayer); 
+	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+	    	break;
+		case mescaline:
+			entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+			entityPlayer.attackEntityFrom(DamageSource.generic, 2);
+			entityPlayer.addPotionEffect(new PotionEffect(Potion.blindness.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+		case quinine:
+    		cureAllPotions(world, entityPlayer);
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 2, 1));
+    		break;
+		case shikimicAcid:
+			// No effect.
+			break; 
+		case sulfuricAcid:
+			entityPlayer.attackEntityFrom(DamageSource.generic, 8);	 
+			break;
+		default:
+			entityPlayer.attackEntityFrom(DamageSource.generic, 5);
+			break;
+    	}
+    }
+    
+    public static void cureAllPotions(World world, EntityPlayer entityPlayer) {
+    	List<PotionEffect> activePotions = new ArrayList(entityPlayer.getActivePotionEffects());
+    	for(PotionEffect potionEffect : activePotions) {
+    		entityPlayer.removePotionEffect(potionEffect.getPotionID());
+    	}
+    }
 	
 	/**
 	 * Ensures that the given inventory is the full inventory, i.e. takes double chests into account.

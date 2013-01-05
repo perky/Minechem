@@ -84,7 +84,7 @@ public class ModMinechem {
 	public void preInit(FMLPreInitializationEvent event) {
 		blLog.setParent(FMLLog.getLogger());
 		blLog.info("Loading localization");
-		LanguageRegistry.instance().loadLocalization(proxy.LANG_GB, "en_GB", false);
+		LanguageRegistry.instance().loadLocalization("/lang/minechem/en_GB.properties", "en_GB", false);
 	 	blLog.info("Loading Config");
 	 	loadConfig(event);
 	 	blLog.info("Adding Items");

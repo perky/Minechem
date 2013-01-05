@@ -3,7 +3,9 @@ package ljdp.minechem.common;
 import java.util.EnumSet;
 import java.util.List;
 
+import ljdp.minechem.api.core.EnumMolecule;
 import ljdp.minechem.api.util.Constants;
+import ljdp.minechem.common.utils.MinechemHelper;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -48,14 +50,22 @@ public class ScheduledTickHandler implements IScheduledTickHandler {
 	}
 	
 	private void checkForPoison(EntityPlayer entityPlayer) {
+		entityPlayer.getFoodStats().addExhaustion(1);
 		ItemStack currentItem = entityPlayer.inventory.getCurrentItem();
-		if(entityPlayer.isEating() && currentItem != null && currentItem.getTagCompound() != null) {
+		if(isPlayerEating(entityPlayer) && currentItem != null && currentItem.getTagCompound() != null) {
 			NBTTagCompound stackTag = currentItem.getTagCompound();
 			boolean isPoisoned = stackTag.getBoolean("minechem.isPoisoned");
-			if(isPoisoned && !entityPlayer.isPotionActive(Potion.wither)) {
-				entityPlayer.addPotionEffect(new PotionEffect(Potion.wither.getId(), Constants.TICKS_PER_MINUTE, 1));
+			int effectType     = stackTag.getInteger("minechem.effectType");
+			EnumMolecule molecule = EnumMolecule.molecules[effectType];
+			if(isPoisoned) {
+				MinechemHelper.triggerPlayerEffect(molecule, entityPlayer);
+				entityPlayer.inventory.decrStackSize(entityPlayer.inventory.currentItem, 1);
 			}
 		}
+	}
+	
+	private boolean isPlayerEating(EntityPlayer player) {
+		return (player.getDataWatcher().getWatchableObjectByte(0) & 1 << 4) != 0;
 	}
 	
 	private void updateElements(EntityPlayer entityPlayer, World world) {

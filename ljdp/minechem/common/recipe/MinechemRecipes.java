@@ -755,7 +755,19 @@ public class MinechemRecipes {
 		addDecomposerRecipesFromMolecules();
 		addSynthesisRecipesFromMolecules();
 		addUnusedSynthesisRecipes();
-		registerPoisonRecipes();
+		registerPoisonRecipes(poison);
+		registerPoisonRecipes(sucrose);
+		registerPoisonRecipes(psilocybin);
+		registerPoisonRecipes(methamphetamine);
+		registerPoisonRecipes(amphetamine);
+		registerPoisonRecipes(muscarine);
+		registerPoisonRecipes(ethanol);
+		registerPoisonRecipes(penicillin);
+		registerPoisonRecipes(testosterone);
+		registerPoisonRecipes(xanax);
+		registerPoisonRecipes(mescaline);
+		registerPoisonRecipes(quinine);
+		registerPoisonRecipes(sulfuricAcid);
 	}
 	
 	private void addDecomposerRecipesFromMolecules() {
@@ -795,27 +807,28 @@ public class MinechemRecipes {
 	}
 	
 
-	private ItemStack createPoisonedItemStack(Item item, int damageValue) {
-		ItemStack poison = new ItemStack(MinechemItems.molecule, 1, EnumMolecule.poison.ordinal());
+	private ItemStack createPoisonedItemStack(Item item, int damageValue, EnumMolecule aMolecule) {
+		ItemStack poison = new ItemStack(MinechemItems.molecule, 1, aMolecule.ordinal());
 		ItemStack normalStack   = new ItemStack(item, 1, damageValue);
 		ItemStack poisonedStack = new ItemStack(item, 1, damageValue);
 		NBTTagCompound stackTag = new NBTTagCompound();
 		stackTag.setBoolean("minechem.isPoisoned", true);
+		stackTag.setInteger("minechem.effectType", aMolecule.ordinal());
 		poisonedStack.setTagCompound(stackTag);
 		
 		GameRegistry.addShapelessRecipe(poisonedStack, poison, normalStack);
 		return poisonedStack;
 	}
 	
-	private void registerPoisonRecipes() {
-		createPoisonedItemStack(Item.appleRed, 0);
-		createPoisonedItemStack(Item.porkCooked, 0);
-		createPoisonedItemStack(Item.beefCooked, 0);
-		createPoisonedItemStack(Item.carrot, 0);
-		createPoisonedItemStack(Item.bakedPotato, 0);
-		createPoisonedItemStack(Item.bread, 0);
-		createPoisonedItemStack(Item.potato, 0);
-		createPoisonedItemStack(Item.bucketMilk, 0);
+	private void registerPoisonRecipes(EnumMolecule aMolecule) {
+		createPoisonedItemStack(Item.appleRed, 0, aMolecule);
+		createPoisonedItemStack(Item.porkCooked, 0, aMolecule);
+		createPoisonedItemStack(Item.beefCooked, 0, aMolecule);
+		createPoisonedItemStack(Item.carrot, 0, aMolecule);
+		createPoisonedItemStack(Item.bakedPotato, 0, aMolecule);
+		createPoisonedItemStack(Item.bread, 0, aMolecule);
+		createPoisonedItemStack(Item.potato, 0, aMolecule);
+		createPoisonedItemStack(Item.bucketMilk, 0, aMolecule);
 	}
 
 	@ForgeSubscribe
