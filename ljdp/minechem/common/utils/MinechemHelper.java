@@ -240,6 +240,7 @@ public class MinechemHelper {
 			entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
 			entityPlayer.attackEntityFrom(DamageSource.generic, 2);
 			entityPlayer.addPotionEffect(new PotionEffect(Potion.blindness.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+			break; // this was missing a break. Sorry for having to fix so many bugs 
 		case quinine:
     		cureAllPotions(world, entityPlayer);
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 1, 1));
