@@ -110,6 +110,8 @@ public class ContainerSynthesis extends ContainerWithFakeSlots {
 	
 	public boolean craftMaxmimum() {
 		List<ItemStack> outputs = synthesis.getMaximumOutput();
+		if(outputs == null)
+			return false;
 		for(ItemStack output : outputs) {
 			if(!mergeItemStack(output, synthesis.getSizeInventory(), inventorySlots.size(), true))
 				return false;

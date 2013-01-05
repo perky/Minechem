@@ -13,8 +13,7 @@
   "parent":"",
   "screenshots": [],
   "dependencies": [
-     "mod_MinecraftForge",
-     "BuildCraft|Core"
+     "mod_MinecraftForge"
   ]
 }
 ]

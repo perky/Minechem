@@ -6,7 +6,6 @@ import ljdp.minechem.common.utils.MinechemHelper;
 import ljdp.minechem.common.utils.RollingAverage;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
-import buildcraft.core.utils.StringUtil;
 import net.minecraft.client.gui.Gui;
 
 public class TabEnergy extends Tab {

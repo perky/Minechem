@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
+import buildcraft.api.power.PowerFramework;
+
 import ljdp.minechem.client.gui.GuiDecomposer;
 import ljdp.minechem.client.gui.GuiFusion;
 import ljdp.minechem.client.gui.GuiMicroscope;
@@ -118,7 +120,7 @@ public class ModMinechem {
 	}
 	
 	private void checkForBuildcraft() throws IOException {
-		if(!Loader.isModLoaded("BuildCraft|Core")) {
+		if (PowerFramework.currentFramework == null) {
 			throw new IOException("MineChem needs BuildCraft installed");
 		}
 	}

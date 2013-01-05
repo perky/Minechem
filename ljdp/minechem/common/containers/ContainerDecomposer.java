@@ -39,10 +39,10 @@ public class ContainerDecomposer extends Container {
 	}
 	
 	private void bindBottleSlots() {
-		addSlotToContainer(new SlotTestTube(decomposer, decomposer.kEmptyBottleSlotStart,     125, 15));
-		addSlotToContainer(new SlotTestTube(decomposer, decomposer.kEmptyBottleSlotStart + 1, 143, 15));
-		addSlotToContainer(new SlotTestTube(decomposer, decomposer.kEmptyBottleSlotStart + 2, 125, 33));
-		addSlotToContainer(new SlotTestTube(decomposer, decomposer.kEmptyBottleSlotStart + 3, 143, 33));
+		addSlotToContainer(new SlotTestTube(decomposer, decomposer.kEmptyTestTubeSlotStart,     125, 15));
+		addSlotToContainer(new SlotTestTube(decomposer, decomposer.kEmptyTestTubeSlotStart + 1, 143, 15));
+		addSlotToContainer(new SlotTestTube(decomposer, decomposer.kEmptyTestTubeSlotStart + 2, 125, 33));
+		addSlotToContainer(new SlotTestTube(decomposer, decomposer.kEmptyTestTubeSlotStart + 3, 143, 33));
 	}
 	
 	private void bindPlayerInventory(InventoryPlayer inventoryPlayer) {
@@ -74,7 +74,7 @@ public class ContainerDecomposer extends Container {
 				if(!mergeItemStack(stackInSlot, kPlayerInventorySlotStart, inventorySlots.size(), true))
 					return null;
 			} else if(stackInSlot.itemID == MinechemItems.testTube.shiftedIndex) {
-				if(!mergeItemStack(stackInSlot, decomposer.kEmptyBottleSlotStart, decomposer.kEmptyBottleSlotEnd + 1, false))
+				if(!mergeItemStack(stackInSlot, decomposer.kEmptyTestTubeSlotStart, decomposer.kEmptyTestTubeSlotEnd + 1, false))
 					return null;
 			} else if(slot >= kPlayerInventorySlotStart) {
 				if(!mergeItemStack(stackInSlot, decomposer.kInputSlot, decomposer.kInputSlot + 1, false))

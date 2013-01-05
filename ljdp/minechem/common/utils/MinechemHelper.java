@@ -11,7 +11,6 @@ import ljdp.minechem.api.core.Molecule;
 import ljdp.minechem.common.MinechemItems;
 
 import buildcraft.api.core.Position;
-import buildcraft.core.utils.Utils;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
@@ -191,22 +190,30 @@ public class MinechemHelper {
 			Position pos = new Position(chest.xCoord, chest.yCoord, chest.zCoord);
 			TileEntity tile;
 			IInventory chest2 = null;
-			tile = Utils.getTile(chest.worldObj, pos, ForgeDirection.WEST);
+			tile = getTile(chest.worldObj, pos, ForgeDirection.WEST);
 			if (tile instanceof TileEntityChest)
 				chest2 = (IInventory) tile;
-			tile = Utils.getTile(chest.worldObj, pos, ForgeDirection.EAST);
+			tile = getTile(chest.worldObj, pos, ForgeDirection.EAST);
 			if (tile instanceof TileEntityChest)
 				chest2 = (IInventory) tile;
-			tile = Utils.getTile(chest.worldObj, pos, ForgeDirection.NORTH);
+			tile = getTile(chest.worldObj, pos, ForgeDirection.NORTH);
 			if (tile instanceof TileEntityChest)
 				chest2 = (IInventory) tile;
-			tile = Utils.getTile(chest.worldObj, pos, ForgeDirection.SOUTH);
+			tile = getTile(chest.worldObj, pos, ForgeDirection.SOUTH);
 			if (tile instanceof TileEntityChest)
 				chest2 = (IInventory) tile;
 			if (chest2 != null)
 				return new InventoryLargeChest("", inv, chest2);
 		}
 		return inv;
+	}
+	
+	public static TileEntity getTile(World world, Position pos, ForgeDirection dir) {
+		Position tmp = new Position(pos);
+		tmp.orientation = dir;
+		tmp.moveForwards(1.0);
+
+		return world.getBlockTileEntity((int) tmp.x, (int) tmp.y, (int) tmp.z);
 	}
 
 }
