@@ -3,9 +3,11 @@ package ljdp.minechem.common.tileentity;
 import java.util.ArrayList;
 
 import ljdp.minechem.api.core.EnumMolecule;
+import ljdp.minechem.api.recipe.DecomposerRecipe;
 import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.items.ItemMolecule;
+import ljdp.minechem.common.recipe.DecomposerRecipeHandler;
 import ljdp.minechem.common.recipe.MinechemRecipes;
 import ljdp.minechem.common.recipe.SynthesisRecipeHandler;
 import ljdp.minechem.common.utils.MinechemHelper;
@@ -14,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityMicroscope extends TileEntity implements IInventory {
@@ -24,10 +27,19 @@ public class TileEntityMicroscope extends TileEntity implements IInventory {
 	public TileEntityMicroscope() {
 		microscopeInventory = new ItemStack[getSizeInventory()];
 	}
+	
+	public void onInspectItemStack(ItemStack itemstack) {
+		SynthesisRecipe synthesisRecipe = SynthesisRecipeHandler.instance.getRecipeFromOutput(itemstack);
+		DecomposerRecipe decomposerRecipe = DecomposerRecipeHandler.instance.getRecipe(itemstack);
+		if(microscopeInventory[1] != null && (synthesisRecipe != null || decomposerRecipe != null))
+		{
+			MinechemItems.journal.addItemStackToJournal(itemstack, microscopeInventory[1], worldObj);
+		}
+	}
 
 	@Override
 	public int getSizeInventory() {
-		return 10;
+		return 11;
 	}
 
 	@Override
@@ -60,6 +72,8 @@ public class TileEntityMicroscope extends TileEntity implements IInventory {
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemStack) {
 		microscopeInventory[slot] = itemStack;
+		if(slot == 0 && itemStack != null && !worldObj.isRemote)
+			onInspectItemStack(itemStack);
 	}
 
 	@Override

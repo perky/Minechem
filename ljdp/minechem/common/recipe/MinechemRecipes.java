@@ -159,6 +159,8 @@ public class MinechemRecipes {
 				'L', MinechemItems.projectorLens,
 				'G', new ItemStack(Block.redstoneLampIdle)
 		);
+		GameRegistry.addShapelessRecipe(new ItemStack(MinechemItems.journal), 
+				new ItemStack(Item.book), new ItemStack(MinechemItems.testTube));
 				
 		
 		

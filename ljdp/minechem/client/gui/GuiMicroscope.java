@@ -36,7 +36,7 @@ import org.lwjgl.opengl.GL12;
 public class GuiMicroscope extends GuiContainerTabbed {
 		
 	int guiWidth = 176;
-	int guiHeight = 189;
+	int guiHeight = 217;
 	int eyepieceX = 25;
 	int eyepieceY = 26;
 	int inputSlotX = 44;
@@ -58,8 +58,6 @@ public class GuiMicroscope extends GuiContainerTabbed {
 		this.recipeSwitch = new GuiMicroscopeSwitch(this);
 		addTab(new TabHelp(this, MinechemHelper.getLocalString("help.microscope")));
 	}
-	
-	
 	
 	public boolean isMouseInMicroscope() {
 		int mouseX = getMouseX();
@@ -123,7 +121,7 @@ public class GuiMicroscope extends GuiContainerTabbed {
 	}
 	
 	private void clearRecipeMatrix() {
-		for(int slot = 1; slot < 1+9; slot++) {
+		for(int slot = 2; slot < 2+9; slot++) {
 			this.inventorySlots.putStackInSlot(slot, null);
 		}
 	}
@@ -139,7 +137,7 @@ public class GuiMicroscope extends GuiContainerTabbed {
 	private void drawSynthesisRecipeMatrix(SynthesisRecipe recipe, int x, int y) {
 		isShapedRecipe = recipe.isShaped();
 		ItemStack[] shapedRecipe = MinechemHelper.convertChemicalArrayIntoItemStackArray(recipe.getShapedRecipe());
-		int slot = 1;
+		int slot = 2;
 		for(ItemStack itemstack : shapedRecipe) {
 			this.inventorySlots.putStackInSlot(slot, itemstack);
 			slot++;
@@ -166,7 +164,7 @@ public class GuiMicroscope extends GuiContainerTabbed {
 	}
 
 	private void drawDecomposerRecipeMatrix(ArrayList<ItemStack> output, int x, int y) {
-		int slot = 1;
+		int slot = 2;
 		for(ItemStack itemstack : output) {
 			this.inventorySlots.putStackInSlot(slot, itemstack);
 			slot++;

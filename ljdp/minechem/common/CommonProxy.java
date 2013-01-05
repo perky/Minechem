@@ -3,10 +3,14 @@ package ljdp.minechem.common;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.server.FMLServerHandler;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class CommonProxy {
 	
@@ -42,6 +46,17 @@ public class CommonProxy {
 	}
 
 	public void registerHooks() {
+	}
+	
+	public EntityPlayer findEntityPlayerByName(String name) {
+		WorldServer[] servers = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
+		EntityPlayer player = null;
+		for(WorldServer server : servers) {
+			player = server.getPlayerEntityByName(name);
+			if(player != null)
+				return player;
+		}
+		return player;
 	}
 
 }

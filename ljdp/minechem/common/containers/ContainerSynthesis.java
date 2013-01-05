@@ -17,6 +17,7 @@ public class ContainerSynthesis extends ContainerWithFakeSlots {
 		bindRecipeMatrixSlots();
 		bindTestTubeSlots();
 		bindStorageSlots();
+		addSlotToContainer(new SlotJournal(synthesis, synthesis.kStartJournal, 26, 36));
 		bindPlayerInventory(inventoryPlayer);
 	}
 	

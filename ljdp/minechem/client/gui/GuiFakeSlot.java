@@ -120,6 +120,7 @@ public class GuiFakeSlot extends Gui {
 		RenderHelper.disableStandardItemLighting();
 		RenderHelper.enableGUIStandardItemLighting();
 		renderItem.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, itemstack, 0, 0);
+		renderItem.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, itemstack, 0, 0);
 		RenderHelper.enableStandardItemLighting();
 		this.zLevel = 0.0F;
 		renderItem.zLevel = 0.0F;

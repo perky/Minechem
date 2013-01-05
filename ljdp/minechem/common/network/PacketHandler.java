@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -24,7 +25,9 @@ public class PacketHandler implements IPacketHandler {
 			byte packetID = inputStream.readByte();
 			PacketType packetType = PacketType.packetTypes[packetID];
 			if(packetType != null) {
-				packetType.newPacket().readData(inputStream);
+				PacketMinechem packetMinechem = packetType.newPacket();
+				packetMinechem.readData(inputStream);
+				packetMinechem.onReceive(manager, player);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -39,6 +42,11 @@ public class PacketHandler implements IPacketHandler {
 		} else if(side == Side.CLIENT) {
 			PacketDispatcher.sendPacketToServer(customPacket);
 		}
+	}
+	
+	public static void sendPacketToPlayer(PacketMinechem packet, EntityPlayer player) {
+		Packet250CustomPayload customPacket = packet.writePacket();
+		PacketDispatcher.sendPacketToPlayer(customPacket, (Player) player);
 	}
 
 }

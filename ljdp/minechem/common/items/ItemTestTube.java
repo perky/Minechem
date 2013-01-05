@@ -21,7 +21,7 @@ public class ItemTestTube extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getIconFromDamage(int par1) {
-		return 0;
+		return 49;
 	}
 
 }

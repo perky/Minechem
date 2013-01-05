@@ -6,6 +6,7 @@ public enum PacketType {
 	SynthesisUpdate  (PacketSynthesisUpdate.class),
 	FusionUpdate	 (PacketFusionUpdate.class),
 	GhostBlockUpdate (PacketGhostBlock.class),
+	JournalItems	 (PacketJournalItems.class)
 	;
 	
 	public static PacketType[] packetTypes = PacketType.values();
