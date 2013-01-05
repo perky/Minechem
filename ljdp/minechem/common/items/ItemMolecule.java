@@ -137,7 +137,7 @@ public class ItemMolecule extends Item {
     		entityPlayer.getFoodStats().addStats(1, .1F);
     		break;
 		case starch:
-			entityPlayer.getFoodStats().addStats(1, .2F);
+			entityPlayer.getFoodStats().addStats(2, .1F);
 			break;
 	    case sucrose:
 	    	entityPlayer.getFoodStats().addStats(1, .1F);
@@ -179,7 +179,7 @@ public class ItemMolecule extends Item {
 	    case xanax:
 	    	cureAllPotions(world, entityPlayer); 
 	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
-	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), Constants.TICKS_PER_SECOND * 30, 2));
 	    	break;
 		case mescaline:
 			entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
