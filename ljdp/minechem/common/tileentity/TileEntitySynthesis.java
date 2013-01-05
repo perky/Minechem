@@ -585,23 +585,39 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 		return false;
 	}
 
-	public ItemStack getMaximumOutput() {
-		ItemStack output = null;
-		int stacksize = 0;
+	public List<ItemStack> getMaximumOutput() {
+		ItemStack template = null;
+		List<ItemStack> outputs = new ArrayList();
+		int templateSize = 0;
 		if(synthesisInventory[kStartOutput] != null) {
-			output = synthesisInventory[kStartOutput].copy();
-			stacksize = output.stackSize;
+			template     = synthesisInventory[kStartOutput].copy();
+			templateSize = template.stackSize;
+			template.stackSize = 0;
+			if(templateSize == 0)
+				templateSize = 1;
+			outputs.add(template.copy());
 		}
 		while(currentRecipe != null && canTakeOutputStack()) {
 			if(takeStacksFromStorage(true)) {
 				takeEnergy(currentRecipe);
-				output.stackSize += stacksize;
+				ItemStack output  = outputs.get(outputs.size()-1);
+				if(output.stackSize + templateSize > output.getMaxStackSize()) {
+					int leftOverStackSize = templateSize - (output.getMaxStackSize() - output.stackSize);
+					output.stackSize = output.getMaxStackSize();
+					if(leftOverStackSize > 0) {
+						ItemStack newOutput = template.copy();
+						newOutput.stackSize = leftOverStackSize;
+						outputs.add(newOutput);
+					}
+				} else {
+					output.stackSize += templateSize;
+				}
 				onInventoryChanged();
 			} else {
 				break;
 			}
 		}
-		return output;
+		return outputs;
 	}
 
 }

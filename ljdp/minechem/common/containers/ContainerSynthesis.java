@@ -1,5 +1,7 @@
 package ljdp.minechem.common.containers;
 
+import java.util.List;
+
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
 import net.minecraft.entity.player.EntityPlayer;
@@ -79,10 +81,8 @@ public class ContainerSynthesis extends ContainerWithFakeSlots {
 				if(!mergeItemStack(stackInSlot, synthesis.kStartJournal, synthesis.kStartJournal + 1, false))
 					return null;
 			} else if(slot == synthesis.kStartOutput) {
-				//stackInSlot = synthesis.getMaximumOutput();
-				//if(!mergeItemStack(stackInSlot, synthesis.getSizeInventory(), inventorySlots.size(), true))
-				//	return null;
-				return null;
+				if(!craftMaxmimum())
+					return null;
 			} else if(slot >= synthesis.kStartBottles && slot < synthesis.kStartBottles + synthesis.kSizeBottles) {
 				if(!mergeItemStack(stackInSlot, synthesis.getSizeInventory(), inventorySlots.size(), true))
 					return null;
@@ -106,6 +106,15 @@ public class ContainerSynthesis extends ContainerWithFakeSlots {
 			return stack;
 		}
 		return null;
+	}
+	
+	public boolean craftMaxmimum() {
+		List<ItemStack> outputs = synthesis.getMaximumOutput();
+		for(ItemStack output : outputs) {
+			if(!mergeItemStack(output, synthesis.getSizeInventory(), inventorySlots.size(), true))
+				return false;
+		}
+		return true;
 	}
 
 }
