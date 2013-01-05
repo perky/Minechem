@@ -14,6 +14,8 @@ import buildcraft.api.power.PowerFramework;
 import buildcraft.api.transport.IPipe;
 import buildcraft.core.IMachine;
 import buildcraft.core.inventory.TransactorRoundRobin;
+import buildcraft.core.inventory.TransactorSimple;
+
 import java.util.List;
 import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.api.util.Util;
@@ -90,7 +92,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
     @Override
 	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection direction) {
         // add items in round robin fashion to input slots (as the autobench does)
-        return new TransactorRoundRobin(storageInventory).add(stack, direction, doAdd).stackSize;
+        return new TransactorSimple(storageInventory).add(stack, direction, doAdd).stackSize;
 	}
 	
 	@Override
@@ -99,7 +101,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 	}
 	
 	public boolean canTakeOutputStack() {
-		return hasEnoughPowerForCurrentRecipe() && takeStacksFromStorage(false);
+		return synthesisInventory[kStartOutput] != null && hasEnoughPowerForCurrentRecipe() && takeStacksFromStorage(false);
 	}
 	
 	public void clearRecipeMatrix() {
@@ -581,6 +583,25 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, IMachine, ISpecialIn
 			return true;
 		}
 		return false;
+	}
+
+	public ItemStack getMaximumOutput() {
+		ItemStack output = null;
+		int stacksize = 0;
+		if(synthesisInventory[kStartOutput] != null) {
+			output = synthesisInventory[kStartOutput].copy();
+			stacksize = output.stackSize;
+		}
+		while(currentRecipe != null && canTakeOutputStack()) {
+			if(takeStacksFromStorage(true)) {
+				takeEnergy(currentRecipe);
+				output.stackSize += stacksize;
+				onInventoryChanged();
+			} else {
+				break;
+			}
+		}
+		return output;
 	}
 
 }

@@ -29,8 +29,8 @@ public class ContainerMicroscope extends Container {
 	}
 	
 	private void bindPlayerInventory(InventoryPlayer inventoryPlayer) {
-		int inventoryY = 134;
-		int hotBarY = 192;
+		int inventoryY = 135;
+		int hotBarY = 193;
 		for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
                     addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9,

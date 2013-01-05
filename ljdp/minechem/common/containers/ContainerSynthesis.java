@@ -1,5 +1,6 @@
 package ljdp.minechem.common.containers;
 
+import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -74,7 +75,13 @@ public class ContainerSynthesis extends ContainerWithFakeSlots {
 		if(slotObject != null && slotObject.getHasStack()) {
 			ItemStack stackInSlot = slotObject.getStack();
 			ItemStack stack = stackInSlot.copy();
-			if(slot == synthesis.kStartOutput) {
+			if(slot != synthesis.kStartJournal && stack.itemID == MinechemItems.journal.shiftedIndex) {
+				if(!mergeItemStack(stackInSlot, synthesis.kStartJournal, synthesis.kStartJournal + 1, false))
+					return null;
+			} else if(slot == synthesis.kStartOutput) {
+				//stackInSlot = synthesis.getMaximumOutput();
+				//if(!mergeItemStack(stackInSlot, synthesis.getSizeInventory(), inventorySlots.size(), true))
+				//	return null;
 				return null;
 			} else if(slot >= synthesis.kStartBottles && slot < synthesis.kStartBottles + synthesis.kSizeBottles) {
 				if(!mergeItemStack(stackInSlot, synthesis.getSizeInventory(), inventorySlots.size(), true))
@@ -83,6 +90,9 @@ public class ContainerSynthesis extends ContainerWithFakeSlots {
 				if(!mergeItemStack(stackInSlot, synthesis.kStartStorage, synthesis.kStartStorage + synthesis.kSizeStorage, false))
 					return null;
 			} else if(slot >= synthesis.kStartStorage && slot < synthesis.kStartStorage + synthesis.kSizeStorage) {
+				if(!mergeItemStack(stackInSlot, synthesis.getSizeInventory(), inventorySlots.size(), true))
+					return null;
+			} else if(slot == synthesis.kStartJournal) {
 				if(!mergeItemStack(stackInSlot, synthesis.getSizeInventory(), inventorySlots.size(), true))
 					return null;
 			} else

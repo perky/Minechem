@@ -53,7 +53,7 @@ public class MinechemItems {
 	 	fusionStarID = config.getItem(config.CATEGORY_ITEM, "FusionStar", 4740).getInt(4740);
 	 	blueprintID  = config.getItem(config.CATEGORY_ITEM, "Blueprint", 4741).getInt(4741);
 	 	testTubeID   = config.getItem(config.CATEGORY_ITEM, "TestTube", 4742).getInt(4742);
-	 	journalID    = config.getItem(config.CATEGORY_ITEM, "ChemistJournal", 4743).getInt();
+	 	journalID    = config.getItem(config.CATEGORY_ITEM, "ChemistJournal", 4743).getInt(4743);
 	}
 	
 	public static void registerItems() {

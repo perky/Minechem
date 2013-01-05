@@ -1,7 +1,7 @@
 <?xml version="1.0" ?> 
 <project name="Minechem 2" basedir="../" default="main">
 	
-	<property name="minechem-version" value="2.0.0pr4.1"/>
+	<property name="minechem-version" value="2.0.0pr5.1"/>
 	<property name="minechem-src-dir" location="minechem"/>
 	<property name="build-dir" location="minechem-build"/>
 	<property name="forge-dir" location="../Minecraft Src/forge"/>
