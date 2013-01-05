@@ -50,7 +50,6 @@ public class ScheduledTickHandler implements IScheduledTickHandler {
 	}
 	
 	private void checkForPoison(EntityPlayer entityPlayer) {
-		entityPlayer.getFoodStats().addExhaustion(1);
 		ItemStack currentItem = entityPlayer.inventory.getCurrentItem();
 		if(isPlayerEating(entityPlayer) && currentItem != null && currentItem.getTagCompound() != null) {
 			NBTTagCompound stackTag = currentItem.getTagCompound();
