@@ -102,7 +102,7 @@ public enum EnumMolecule {
 	lumefantrine			(80, "Lumefantrine", new Element(C,30), new Element(H,32), new Element(Cl,3), new Element(N), new Element(O)),
 	dota					(81, "DOTA", new Element(C,16), new Element(H,28), new Element(N,4), new Element(O,8)),
 	poison					(82, "T-2 Mycotoxin", new Element(C,24), new Element(H,34), new Element(O,9)),
-	xanax					(83, "Alprazolam", new Element(C,17), new Element(C,13), new Element(Cl), new Element(N,4)),
+	xanax					(83, "Alprazolam", new Element(C,17), new Element(H,13), new Element(Cl), new Element(N,4)),
 	;
 	
 	public static EnumMolecule[] molecules = values();
