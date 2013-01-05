@@ -142,10 +142,10 @@ public class ItemMolecule extends Item {
 	    case sucrose:
 	    	entityPlayer.getFoodStats().addStats(1, .1F);
 	    	break;
-    	case psilocybin:
+    	case psilocybin: // I ate a mushroom pie
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
     		entityPlayer.attackEntityFrom(DamageSource.generic, 2);
-			entityPlayer.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+		entityPlayer.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), Constants.TICKS_PER_SECOND * 30, 5));
     		break;
     	case amphetamine:
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), Constants.TICKS_PER_SECOND * 20, 7));
@@ -182,16 +182,16 @@ public class ItemMolecule extends Item {
 	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), Constants.TICKS_PER_SECOND * 30, 2));
 	    	break;
 		case mescaline:
-			entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
-			entityPlayer.attackEntityFrom(DamageSource.generic, 2);
-			entityPlayer.addPotionEffect(new PotionEffect(Potion.blindness.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+		entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+		entityPlayer.attackEntityFrom(DamageSource.generic, 2);
+		entityPlayer.addPotionEffect(new PotionEffect(Potion.blindness.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+		break;
 		case quinine:
     		cureAllPotions(world, entityPlayer);
-    		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 2, 1));
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 1, 1));
     		break;
-		case shikimicAcid:
-			// No effect.
-			break; 
+		case shikimicAcid: 
+		break; 
 		case sulfuricAcid:
 			entityPlayer.attackEntityFrom(DamageSource.generic, 8);	 
 			break;
