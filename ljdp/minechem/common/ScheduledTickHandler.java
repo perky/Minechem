@@ -48,9 +48,9 @@ public class ScheduledTickHandler implements IScheduledTickHandler {
 	}
 	
 	private void checkForPoison(EntityPlayer entityPlayer) {
-		ItemStack itemInUse = entityPlayer.getItemInUse();
-		if(itemInUse != null && itemInUse.getTagCompound() != null) {
-			NBTTagCompound stackTag = itemInUse.getTagCompound();
+		ItemStack currentItem = entityPlayer.inventory.getCurrentItem();
+		if(entityPlayer.isEating() && currentItem != null && currentItem.getTagCompound() != null) {
+			NBTTagCompound stackTag = currentItem.getTagCompound();
 			boolean isPoisoned = stackTag.getBoolean("minechem.isPoisoned");
 			if(isPoisoned && !entityPlayer.isPotionActive(Potion.wither)) {
 				entityPlayer.addPotionEffect(new PotionEffect(Potion.wither.getId(), Constants.TICKS_PER_MINUTE, 1));
