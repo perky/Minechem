@@ -161,8 +161,8 @@ public class MinechemRecipes {
 		);
 		GameRegistry.addShapelessRecipe(new ItemStack(MinechemItems.journal), 
 				new ItemStack(Item.book), new ItemStack(MinechemItems.testTube));
-				
 		
+		GameRegistry.addRecipe(new RecipeJournalCloning());
 		
 		Element carbonStack = element(C,64);
 		
