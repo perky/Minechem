@@ -1,5 +1,6 @@
 package ljdp.minechem.common.containers;
 
+import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -72,7 +73,7 @@ public class ContainerDecomposer extends Container {
 			if(slot >= 0 && slot < kDecomposerInventoryEnd) {
 				if(!mergeItemStack(stackInSlot, kPlayerInventorySlotStart, inventorySlots.size(), true))
 					return null;
-			} else if(stackInSlot.itemID == Item.glassBottle.shiftedIndex) {
+			} else if(stackInSlot.itemID == MinechemItems.testTube.shiftedIndex) {
 				if(!mergeItemStack(stackInSlot, decomposer.kEmptyBottleSlotStart, decomposer.kEmptyBottleSlotEnd + 1, false))
 					return null;
 			} else if(slot >= kPlayerInventorySlotStart) {
