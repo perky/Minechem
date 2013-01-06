@@ -65,6 +65,15 @@ public class ItemChemistJournal extends Item {
 		}
 	}
 	
+	public void setActiveStack(ItemStack itemstack, ItemStack journalStack) {
+		NBTTagCompound journalTag = journalStack.getTagCompound();
+		if(journalTag == null)
+			journalTag = new NBTTagCompound();
+		NBTTagCompound stackTag = itemstack.writeToNBT(new NBTTagCompound());
+		journalTag.setTag(ACTIVE_ITEMSTACK_TAG, stackTag);
+		journalStack.setTagCompound(journalTag);
+	}
+	
 	public ItemStack getActiveStack(ItemStack journalStack) {
 		NBTTagCompound journalTag = journalStack.getTagCompound();
 		if(journalTag != null) {

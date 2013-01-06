@@ -15,6 +15,9 @@ import ljdp.minechem.common.MinechemItems;
 import buildcraft.api.core.Position;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import cpw.mods.fml.server.FMLServerHandler;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.item.EntityItem;
@@ -30,6 +33,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeDirection;
 
 public class MinechemHelper {
@@ -300,6 +304,16 @@ public class MinechemHelper {
 		tmp.moveForwards(1.0);
 
 		return world.getBlockTileEntity((int) tmp.x, (int) tmp.y, (int) tmp.z);
+	}
+	
+	@SideOnly(Side.SERVER)
+	public static WorldServer getDimension(int dimensionID) {
+		WorldServer[] worlds = FMLServerHandler.instance().getServer().worldServers;
+		for(WorldServer world : worlds) {
+			if(world.getWorldInfo().getDimension() == dimensionID)
+				return world;
+		}
+		return null;
 	}
 
 }

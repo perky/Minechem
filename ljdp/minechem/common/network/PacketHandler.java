@@ -29,6 +29,7 @@ public class PacketHandler implements IPacketHandler {
 	public EasyPacketHandler decomposerUpdateHandler;
 	public EasyPacketHandler ghostBlockUpdateHandler;
 	public EasyPacketHandler synthesisUpdateHandler;
+	public EasyPacketHandler activeJournalItemHandler;
 	
 	public PacketHandler() {
 		instance = this;
@@ -36,11 +37,13 @@ public class PacketHandler implements IPacketHandler {
 		decomposerUpdateHandler = EasyPacketHandler.registerEasyPacket(PacketDecomposerUpdate.class, dispatcher);
 		ghostBlockUpdateHandler = EasyPacketHandler.registerEasyPacket(PacketGhostBlock.class, dispatcher);
 		synthesisUpdateHandler  = EasyPacketHandler.registerEasyPacket(PacketSynthesisUpdate.class, dispatcher);
+		activeJournalItemHandler = EasyPacketHandler.registerEasyPacket(PacketActiveJournalItem.class, dispatcher);
 	}
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
-		dispatcher.onPacketData(manager, packet, player);
+		if(packet.data != null)
+			dispatcher.onPacketData(manager, packet, player);
 	}
 
 }

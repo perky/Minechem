@@ -16,6 +16,8 @@ import ljdp.minechem.client.gui.tabs.TabHelp;
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.containers.ContainerChemistJournal;
+import ljdp.minechem.common.network.PacketActiveJournalItem;
+import ljdp.minechem.common.network.PacketHandler;
 import ljdp.minechem.common.recipe.DecomposerRecipeHandler;
 import ljdp.minechem.common.recipe.SynthesisRecipeHandler;
 import ljdp.minechem.common.utils.MinechemHelper;
@@ -110,7 +112,9 @@ public class GuiChemistJournal extends GuiContainerTabbed implements IVerticalSc
 	
 	public void showRecipesForStack(ItemStack itemstack) {
 		currentItemStack = itemstack;
-		writeItemStackToJournal(itemstack);
+		MinechemItems.journal.setActiveStack(itemstack, journalStack);
+		PacketActiveJournalItem packet = new PacketActiveJournalItem(itemstack, player);
+		PacketHandler.getInstance().activeJournalItemHandler.sendToServer(packet);
 		
 		SynthesisRecipe synthesisRecipe = SynthesisRecipeHandler.instance.getRecipeFromOutput(itemstack);
 		DecomposerRecipe decomposerRecipe = DecomposerRecipeHandler.instance.getRecipe(itemstack);
@@ -125,19 +129,6 @@ public class GuiChemistJournal extends GuiContainerTabbed implements IVerticalSc
 		if(decomposerRecipe != null) {
 			showDecomposerRecipe(decomposerRecipe);
 			currentDecomposerRecipe = decomposerRecipe;
-		}
-	}
-	
-	private void writeItemStackToJournal(ItemStack itemstack) {
-		NBTTagCompound journalTag = journalStack.getTagCompound();
-		if(journalTag == null) {
-			journalTag = new NBTTagCompound();
-		}
-		if(itemstack != null) {
-			NBTTagCompound stackTag = itemstack.writeToNBT(new NBTTagCompound());
-			journalTag.setTag("activeItemStack", stackTag);
-		} else {
-			journalTag.setTag("activeItemStack", null);
 		}
 	}
 	
