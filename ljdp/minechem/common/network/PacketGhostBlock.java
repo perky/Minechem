@@ -22,6 +22,10 @@ public class PacketGhostBlock extends PacketTileEntityUpdate {
 		this.ghostBlockID = ghostBlock.getBlockID();
 	}
 	
+	public PacketGhostBlock() {
+		super();
+	}
+	
 	@Override
 	public void onReceive(Player player) {
 		super.onReceive(player);

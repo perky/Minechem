@@ -23,6 +23,10 @@ public class PacketDecomposerUpdate extends PacketPowerReceptorUpdate {
 		this.state = decomposer.getState().ordinal();
 		this.energyUsage = this.powerProvider.getCurrentEnergyUsage();
 	}
+	
+	public PacketDecomposerUpdate() {
+		super();
+	}
 
 	@Override
 	public boolean isChunkDataPacket() {

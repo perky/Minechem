@@ -9,4 +9,8 @@ public class PacketSynthesisUpdate extends PacketPowerReceptorUpdate {
 		super((IPowerReceptor) synthesis);
 	}
 	
+	public PacketSynthesisUpdate() {
+		super();
+	}
+	
 }

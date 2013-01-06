@@ -23,6 +23,10 @@ public class PacketPowerReceptorUpdate extends PacketTileEntityUpdate {
 		this.energyStored  = this.powerProvider.getEnergyStored(); 
 	}
 	
+	public PacketPowerReceptorUpdate() {
+		super();
+	}
+	
 	@Override
 	public boolean isChunkDataPacket() {
 		return super.isChunkDataPacket();

@@ -25,6 +25,7 @@ public class PacketTileEntityUpdate extends EasyPacket {
 	int z;
 	
 	public PacketTileEntityUpdate(TileEntity tileEntity) {
+		super();
 		this.tileEntity = tileEntity;
 		this.x = tileEntity.xCoord;
 		this.y = tileEntity.yCoord;
