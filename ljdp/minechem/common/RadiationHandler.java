@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ljdp.minechem.api.core.EnumRadioactivity;
-import ljdp.minechem.api.core.IRadiationSheild;
+import ljdp.minechem.api.core.IRadiationShield;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -49,13 +49,13 @@ public class RadiationHandler {
 	
 	private void applyRadiationDamage(EntityPlayer player, Container container, int damage) {
 		List<Float> reductions = new ArrayList();
-		if(container instanceof IRadiationSheild) {
-			float reduction = ((IRadiationSheild)container).getRadiationReductionFactor();
+		if(container instanceof IRadiationShield) {
+			float reduction = ((IRadiationShield)container).getRadiationReductionFactor();
 			reductions.add(reduction);
 		}
 		for(ItemStack armour : player.inventory.armorInventory) {
-			if(armour != null && armour.getItem() instanceof IRadiationSheild) {
-				float reduction = ((IRadiationSheild)armour.getItem()).getRadiationReductionFactor();
+			if(armour != null && armour.getItem() instanceof IRadiationShield) {
+				float reduction = ((IRadiationShield)armour.getItem()).getRadiationReductionFactor();
 				reductions.add(reduction);
 			}
 		}

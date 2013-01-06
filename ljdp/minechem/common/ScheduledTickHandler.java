@@ -4,7 +4,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import ljdp.minechem.api.core.EnumMolecule;
-import ljdp.minechem.api.core.IRadiationSheild;
+import ljdp.minechem.api.core.IRadiationShield;
 import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.common.utils.MinechemHelper;
 

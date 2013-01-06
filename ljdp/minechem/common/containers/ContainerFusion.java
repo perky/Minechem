@@ -1,6 +1,6 @@
 package ljdp.minechem.common.containers;
 
-import ljdp.minechem.api.core.IRadiationSheild;
+import ljdp.minechem.api.core.IRadiationShield;
 import ljdp.minechem.common.tileentity.TileEntityFusion;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -9,7 +9,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class ContainerFusion extends Container implements IRadiationSheild {
+public class ContainerFusion extends Container implements IRadiationShield {
 
 	TileEntityFusion fusion;
 	InventoryPlayer inventoryPlayer;

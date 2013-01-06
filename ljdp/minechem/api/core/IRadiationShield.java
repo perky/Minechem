@@ -4,7 +4,7 @@ package ljdp.minechem.api.core;
  * To be implemented by containers and armour.
  * @author lukeperkin
  */
-public interface IRadiationSheild {
+public interface IRadiationShield {
 	
 	/**
 	 * Return a number from 0 to 1 to reduce radiation damage.

@@ -1,6 +1,6 @@
 package ljdp.minechem.common.containers;
 
-import ljdp.minechem.api.core.IRadiationSheild;
+import ljdp.minechem.api.core.IRadiationShield;
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,7 +10,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class ContainerDecomposer extends Container implements IRadiationSheild {
+public class ContainerDecomposer extends Container implements IRadiationShield {
 	
 	protected TileEntityDecomposer decomposer;
 	protected final int kPlayerInventorySlotStart;
