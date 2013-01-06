@@ -753,7 +753,21 @@ public class MinechemRecipes {
 				new DecomposerRecipe(element(Ga)),
 				new DecomposerRecipe(element(Rb))
 		));
-
+                // project SkyWorld
+                ItemStack sw1 = new ItemStack(Item.fishRaw);
+                DecomposerRecipe.add(new DecomposerRecipeChance(sw1, 0.04F, new Molecule(pk5,1))); 
+              	DecomposerRecipe.add(new DecomposerRecipe(element(Na)), new DecomposerRecipe(element(Cl)));
+                //
+                ItemStack sw2 = new ItemStack(Block.flowerYellow);
+                DecomposerRecipe.add(new DecomposerRecipeChance(sw2, 0.3F, new Molecule(shikimicAcid,2)));
+                // 
+                ItemStack sw3 = new ItemStack(Item.rottenFlesh);
+                DecomposerRecipe.add(new DecomposerRecipeChance(sw3, 0.05F, new Molecule(nod,1)));
+                //
+                ItemStack sw4 = new ItemStack(Block.Grass,1,2);
+                DecomposerRecipe.add(new DecomposerRecipeChance(sw4, 0.07F, new Molecule(pk1,2)));
+                //
+                
 		addDecomposerRecipesFromMolecules();
 		addSynthesisRecipesFromMolecules();
 		addUnusedSynthesisRecipes();
