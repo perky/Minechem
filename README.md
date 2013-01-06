@@ -1,4 +1,4 @@
-# Minechem v2.0.0pr4.1
+# Minechem 
 Adds chemistry to minecraft. Minechem comes with five machines.
 * The decomposer takes an item and decomposes it into it's chemical composition.
 * The synthesis machines takes elements and molecules and synthesis them into tangible items.
@@ -13,8 +13,7 @@ Adds chemistry to minecraft. Minechem comes with five machines.
 
 ## Download links
 
-MineChem 2.0.0pr4.1:
-http://www.mediafire.com/download.php?ojkbdn3noeqhu8h
+http://www.minecraftforum.net/topic/1611745-minechem-2-pr53-the-chemistry-mod-updated-sat-5th-jan/
 
 ## Licence
 Minechem v2.x is licensed under Creative Commons Attribution-ShareAlike 3.0 Unported.
@@ -30,7 +29,7 @@ Under the following conditions:
 For more information on this license see here: http://creativecommons.org/licenses/by-sa/3.0/
 
 ## Credits
-Ljdp, Ian, Rushmead, Adelayde, Phrost, Mandrake
+Ljdp, Ian, Rushmead, Adelayde, Phrost, Mandrake 
 
 ## Donate
 Help MineChem out a little:
