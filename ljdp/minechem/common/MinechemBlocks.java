@@ -43,12 +43,17 @@ public class MinechemBlocks {
 	private static int fusionID;
 	
 	public static void loadConfig(Configuration config) {
-		microscopeID = config.get(config.CATEGORY_BLOCK, "Microscope", 4012).getInt(4012);
-	 	decomposerID = config.get(config.CATEGORY_BLOCK, "Decomposer", 4011).getInt(4011);
-	 	synthesisID  = config.get(config.CATEGORY_BLOCK, "Synthesis",  4013).getInt(4013);
-	 	blueprintProjectorID = config.get(config.CATEGORY_BLOCK, "BlueprintProjector", 4014).getInt();
-	 	ghostBlockID = config.get(config.CATEGORY_BLOCK, "GhostBlock", 4015).getInt(4015);
-	 	fusionID	 = config.get(config.CATEGORY_BLOCK, "FusionChamber", 4016).getInt(4016);
+		int baseID = 4012;
+		microscopeID = getBlockConfig(config, "Microscope", baseID++);
+	 	decomposerID = getBlockConfig(config, "Decomposer", baseID++);
+	 	synthesisID  = getBlockConfig(config, "Synthesis", baseID++);
+	 	blueprintProjectorID = getBlockConfig(config, "BlueprintProjector", baseID++);
+	 	ghostBlockID = getBlockConfig(config, "GhostBlock", baseID++);
+	 	fusionID	 = getBlockConfig(config, "FusionChamber", baseID++);
+	}
+	
+	private static int getBlockConfig(Configuration config, String key, int defaultID) {
+		return config.get(config.CATEGORY_BLOCK, key, defaultID).getInt(defaultID);
 	}
 	
 	public static void registerBlocks() {
