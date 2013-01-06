@@ -82,10 +82,14 @@ public class MinechemItems {
 		blueprint   = new ItemBlueprint(blueprintID);
 		testTube    = new ItemTestTube(testTubeID);
 		journal		= new ItemChemistJournal(journalID);
-		hazmatFeet  = new ItemArmorRadiationShield(hazmatFeetID, 0, 0.1F);
-		hazmatLegs  = new ItemArmorRadiationShield(hazmatLegsID, 1, 0.1F);
-		hazmatTorso = new ItemArmorRadiationShield(hazmatTorsoID, 2, 0.5F);
-		hazmatHead	= new ItemArmorRadiationShield(hazmatHeadID, 3, 0.2F);
+		hazmatFeet  = new ItemArmorRadiationShield(hazmatFeetID, 3, 0.1F);
+		hazmatLegs  = new ItemArmorRadiationShield(hazmatLegsID, 2, 0.1F);
+		hazmatTorso = new ItemArmorRadiationShield(hazmatTorsoID, 1, 0.5F);
+		hazmatHead	= new ItemArmorRadiationShield(hazmatHeadID, 0, 0.2F);
+		hazmatFeet.setIconCoord(0, 7);
+		hazmatLegs.setIconCoord(0, 6);
+		hazmatTorso.setIconCoord(0, 5);
+		hazmatHead.setIconCoord(0, 4);
 		
 		LanguageRegistry.addName(atomicManipulator, MinechemHelper.getLocalString("item.name.atomicmanipulator"));
 		LanguageRegistry.addName(fusionStar, MinechemHelper.getLocalString("item.name.fusionStar"));

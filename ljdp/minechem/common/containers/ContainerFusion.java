@@ -71,7 +71,7 @@ public class ContainerFusion extends Container implements IRadiationShield {
 	}
 
 	@Override
-	public float getRadiationReductionFactor(ItemStack itemstack) {
+	public float getRadiationReductionFactor(int baseDamage, ItemStack itemstack, EntityPlayer player) {
 		return 1.0F;
 	}
 

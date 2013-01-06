@@ -127,7 +127,7 @@ public class ContainerSynthesis extends ContainerWithFakeSlots implements IRadia
 	}
 
 	@Override
-	public float getRadiationReductionFactor(ItemStack itemstack) {
+	public float getRadiationReductionFactor(int baseDamage, ItemStack itemstack, EntityPlayer player) {
 		return 0.4F;
 	}
 

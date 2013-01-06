@@ -43,6 +43,7 @@ public class CommonProxy {
 	public static String SYNTHESIS_MODEL		= TEXTURE_MODEL_DIR + "SynthesiserModel.png";
 	public static String PROJECTOR_MODEL_ON 	= TEXTURE_MODEL_DIR + "ProjectorModelOn.png";
 	public static String PROJECTOR_MODEL_OFF 	= TEXTURE_MODEL_DIR + "ProjectorModelOff.png";
+	public static String HAZMAT_PNG 			= TEXTURE_MODEL_DIR + "hazmatArmor.png";
 	
 	public static String PROJECTOR_SOUND	= SOUNDS_DIR + "projector.ogg";
 	public static String LANG_GB			= LANG_DIR + "en_GB.properties";

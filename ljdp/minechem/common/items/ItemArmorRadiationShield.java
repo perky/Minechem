@@ -10,15 +10,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.EnumHelper;
+import net.minecraftforge.common.IArmorTextureProvider;
 
-public class ItemArmorRadiationShield extends ItemArmor implements IRadiationShield {
+public class ItemArmorRadiationShield extends ItemArmor implements IRadiationShield, IArmorTextureProvider {
 	
+	public static EnumArmorMaterial armorHazmat = EnumHelper.addArmorMaterial("MINECHEMHAZMAT", 10, new int[]{50,50,50,50}, 0);
 	private float radiationShieldFactor;
 	
 	public ItemArmorRadiationShield(int id, int part, float radiationShieldFactor) {
-		super(id, EnumArmorMaterial.IRON, 2, part);
+		super(id, armorHazmat, 2, part);
 		this.radiationShieldFactor = radiationShieldFactor;
 		setItemName("minechem.itemArmorRadiationShield");
+		setCreativeTab(ModMinechem.minechemTab);
 	}
 
 	public ItemArmorRadiationShield setRadiationShieldFactor(float value) {
@@ -40,8 +44,14 @@ public class ItemArmorRadiationShield extends ItemArmor implements IRadiationShi
 	}
 
 	@Override
-	public float getRadiationReductionFactor(ItemStack itemstack) {
+	public float getRadiationReductionFactor(int baseDamage, ItemStack itemstack, EntityPlayer player) {
+		itemstack.damageItem(baseDamage / 4, player);
 		return radiationShieldFactor;
+	}
+
+	@Override
+	public String getArmorTextureFile(ItemStack itemstack) {
+		return ModMinechem.proxy.HAZMAT_PNG;
 	}
 	
 	

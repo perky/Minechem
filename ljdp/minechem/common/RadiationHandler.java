@@ -29,7 +29,8 @@ public class RadiationHandler {
 		Container openContainer = player.openContainer;
 		if(openContainer != null)
 			updateContainer(player, openContainer);
-		updateContainer(player, player.inventoryContainer);
+		else
+			updateContainer(player, player.inventoryContainer);
 	}
 	
 	private void updateContainer(EntityPlayer player, Container container) {
@@ -50,12 +51,12 @@ public class RadiationHandler {
 	private void applyRadiationDamage(EntityPlayer player, Container container, int damage) {
 		List<Float> reductions = new ArrayList();
 		if(container instanceof IRadiationShield) {
-			float reduction = ((IRadiationShield)container).getRadiationReductionFactor(null);
+			float reduction = ((IRadiationShield)container).getRadiationReductionFactor(damage, null, player);
 			reductions.add(reduction);
 		}
 		for(ItemStack armour : player.inventory.armorInventory) {
 			if(armour != null && armour.getItem() instanceof IRadiationShield) {
-				float reduction = ((IRadiationShield)armour.getItem()).getRadiationReductionFactor(armour);
+				float reduction = ((IRadiationShield)armour.getItem()).getRadiationReductionFactor(damage, armour, player);
 				reductions.add(reduction);
 			}
 		}
@@ -64,7 +65,10 @@ public class RadiationHandler {
 			totalReductionFactor -= reduction;
 		if(totalReductionFactor < 0)
 			totalReductionFactor = 0;
-		damage *= totalReductionFactor;
+		System.out.println("Total reduction factor: "+totalReductionFactor);
+		System.out.println("Base Damage: " + damage);
+		damage = Math.round((float)damage * totalReductionFactor);
+		System.out.println("Final Damage: " + damage);
 		player.attackEntityFrom(DamageSource.generic, damage);
 	}
 	
