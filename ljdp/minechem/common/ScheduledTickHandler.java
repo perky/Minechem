@@ -4,15 +4,18 @@ import java.util.EnumSet;
 import java.util.List;
 
 import ljdp.minechem.api.core.EnumMolecule;
+import ljdp.minechem.api.core.IRadiationSheild;
 import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.common.utils.MinechemHelper;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.common.IScheduledTickHandler;
@@ -24,7 +27,7 @@ public class ScheduledTickHandler implements IScheduledTickHandler {
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
 		EntityPlayer entityPlayer = (EntityPlayer)tickData[0];
 		World world = entityPlayer.worldObj;
-		updateElements(entityPlayer, world);
+		RadiationHandler.getInstance().update(entityPlayer);
 	}
 
 	@Override
@@ -46,7 +49,7 @@ public class ScheduledTickHandler implements IScheduledTickHandler {
 
 	@Override
 	public int nextTickSpacing() {
-		return 20;
+		return Constants.TICKS_PER_SECOND;
 	}
 	
 	private void checkForPoison(EntityPlayer entityPlayer) {
@@ -65,21 +68,6 @@ public class ScheduledTickHandler implements IScheduledTickHandler {
 	
 	private boolean isPlayerEating(EntityPlayer player) {
 		return (player.getDataWatcher().getWatchableObjectByte(0) & 1 << 4) != 0;
-	}
-	
-	private void updateElements(EntityPlayer entityPlayer, World world) {
-		Container openContainer = entityPlayer.openContainer;
-		if(openContainer != null) {
-			List<ItemStack> itemstacks = openContainer.getInventory();
-			for(ItemStack itemstack : itemstacks) {
-				if(itemstack != null && itemstack.itemID == MinechemItems.element.shiftedIndex)
-					updateElement(itemstack, entityPlayer, world);
-			}
-		}
-	}
-
-	private void updateElement(ItemStack itemstack, EntityPlayer entityPlayer, World world) {
-		MinechemItems.element.onUpdate(itemstack, world, entityPlayer, 0, false);
 	}
 
 }

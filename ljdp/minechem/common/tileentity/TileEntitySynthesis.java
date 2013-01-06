@@ -155,8 +155,6 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
     	if(currentRecipe == null || !takeInputStacks() || !canAffordRecipe(currentRecipe))
         	return null;
         ItemStack outputStack = currentRecipe.getOutput().copy();
-        if(outputStack.itemID == MinechemItems.element.shiftedIndex)
-            MinechemItems.element.initiateRadioactivity(outputStack, worldObj);
         ItemStack[] output = new ItemStack[] { outputStack };
         if(doRemove) {
         	takeEnergy(currentRecipe);

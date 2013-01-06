@@ -2,6 +2,7 @@ package ljdp.minechem.common.containers;
 
 import java.util.List;
 
+import ljdp.minechem.api.core.IRadiationSheild;
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,7 +11,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerSynthesis extends ContainerWithFakeSlots {
+public class ContainerSynthesis extends ContainerWithFakeSlots implements IRadiationSheild {
 
 	private TileEntitySynthesis synthesis;
 	
@@ -123,6 +124,11 @@ public class ContainerSynthesis extends ContainerWithFakeSlots {
 				return false;
 		}
 		return true;
+	}
+
+	@Override
+	public float getRadiationReductionFactor() {
+		return 1.0F;
 	}
 
 }

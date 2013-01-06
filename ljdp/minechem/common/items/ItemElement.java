@@ -9,6 +9,7 @@ import ljdp.minechem.api.core.EnumRadioactivity;
 import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.ModMinechem;
+import ljdp.minechem.common.RadiationInfo;
 import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -46,16 +47,6 @@ public class ItemElement extends Item {
 		classificationIndexes.put(EnumClassification.liquid, 33);
 	}
 	
-	public void initiateRadioactivity(ItemStack itemstack, World world) {
-		EnumRadioactivity radioactivity = getRadioactivity(itemstack);
-		if(radioactivity != EnumRadioactivity.stable) {
-			NBTTagCompound tagCompound = new NBTTagCompound();
-			tagCompound.setLong("lastUpdate", world.getTotalWorldTime());
-			tagCompound.setShort("life", (short) radioactivity.getLife());
-			itemstack.setTagCompound(tagCompound);
-		}
-	}
-	
 	@Override
 	public String getTextureFile() {
 		return ModMinechem.proxy.ITEMS_PNG;
@@ -90,56 +81,8 @@ public class ItemElement extends Item {
 		return EnumElement.elements[itemstack.getItemDamage()];
 	}
 	
-	@Override
-	public void onUpdate(ItemStack itemstack, World world, Entity entity, int slot, boolean isCurrentItem) {
-		super.onUpdate(itemstack, world, entity, slot, isCurrentItem);
-		if(getRadioactivity(itemstack) != EnumRadioactivity.stable) {
-			if(itemstack.getTagCompound() == null)
-				initiateRadioactivity(itemstack, world);
-			else
-				updateRadioactivity(itemstack, world, entity, slot, isCurrentItem);
-		}
-	}
-	
-	public void updateRadioactivity(ItemStack itemstack, World world, Entity entity, int slot, boolean isCurrentItem) {
-		NBTTagCompound tagCompound = itemstack.getTagCompound();
-		if(tagCompound == null) {
-			return;
-		}
-		
-		long lastUpdate = tagCompound.getLong("lastUpdate");
-		long tickDifference = world.getTotalWorldTime() - lastUpdate;
-		int maxDamage = 0;
-		String elementFrom = elements[itemstack.getItemDamage()].descriptiveName();
-		
-		while(tickDifference > 0) {
-			EnumRadioactivity radioactivity = getRadioactivity(itemstack);
-			if(radioactivity == EnumRadioactivity.stable)
-				break;
-			long life =  itemstack.getTagCompound().getShort("life");
-			long lifeToRemove = Math.min(tickDifference, life);
-			life -= lifeToRemove;
-			tickDifference -= lifeToRemove;
-			if(life <= 0) {
-				maxDamage = Math.max(maxDamage, radioactivity.getDamage());
-				int atomicId = itemstack.getItemDamage();
-				itemstack.setItemDamage(atomicId - 1);
-				initiateRadioactivity(itemstack, world);
-				
-			} else {
-				tagCompound.setShort("life", (short)life);
-				tagCompound.setLong("lastUpdate", world.getTotalWorldTime());
-			}
-		}
-		
-		if(maxDamage > 0) {
-			entity.attackEntityFrom(DamageSource.generic, maxDamage);
-			if(entity instanceof EntityPlayer && !world.isRemote) {
-				String elementTo = elements[itemstack.getItemDamage()].descriptiveName();
-				String message = String.format("Radiation Damage! %s decayed into %s", elementFrom, elementTo);
-				((EntityPlayer)entity).addChatMessage(message);
-			}
-		}
+	public static void attackEntityWithRadiationDamage(ItemStack itemstack, int damage, Entity entity) {
+		entity.attackEntityFrom(DamageSource.generic, damage);
 	}
 	
 	@Override
@@ -198,7 +141,7 @@ public class ItemElement extends Item {
 		String timeLeft = "";
 		if(getRadioactivity(itemstack) != EnumRadioactivity.stable && itemstack.getTagCompound() != null ){
 			NBTTagCompound tagCompound = itemstack.getTagCompound();
-			int life = tagCompound.getShort("life");
+			long life = tagCompound.getLong("life");
 			if(life < Constants.TICKS_PER_MINUTE)
 				timeLeft = (life / Constants.TICKS_PER_SECOND) + "s";
 			else if(life < Constants.TICKS_PER_HOUR)
@@ -223,13 +166,52 @@ public class ItemElement extends Item {
 		}
 	}
 	
-	@Override
-	public void onCreated(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
-		initiateRadioactivity(par1ItemStack, par2World);
-	}
-
 	public static Object createStackOf(EnumElement element, int amount) {
 		return new ItemStack(MinechemItems.element, amount, element.ordinal());
+	}
+
+	public RadiationInfo getRadiationInfo(ItemStack element, World world) {
+		EnumRadioactivity radioactivity = getRadioactivity(element);
+		if(radioactivity == EnumRadioactivity.stable) {
+			return new RadiationInfo(element, radioactivity);
+		} else {
+			NBTTagCompound stackTag = element.getTagCompound();
+			if(stackTag == null) {
+				return initiateRadioactivity(element, world);
+			} else {
+				int dimensionID = stackTag.getInteger("dimensionID");
+				long lastUpdate = stackTag.getLong("lastUpdate");
+				long life       = stackTag.getLong("life");
+				RadiationInfo info = new RadiationInfo(element, life, lastUpdate, dimensionID, radioactivity);
+				return info;
+			}
+		}
+	}
+	
+	private RadiationInfo initiateRadioactivity(ItemStack element, World world) {
+		EnumRadioactivity radioactivity = getRadioactivity(element);
+		int dimensionID = world.getWorldInfo().getDimension();
+		long lastUpdate = world.getTotalWorldTime();
+		long life = radioactivity.getLife();
+		RadiationInfo info = new RadiationInfo(element, life, lastUpdate, dimensionID, radioactivity);
+		setRadiationInfo(info, element);
+		return info;
+	}
+
+	public void setRadiationInfo(RadiationInfo radiationInfo, ItemStack element) {
+		NBTTagCompound stackTag = element.getTagCompound();
+		if(stackTag == null)
+			stackTag = new NBTTagCompound();
+		stackTag.setLong("lastUpdate", radiationInfo.lastRadiationUpdate);
+		stackTag.setLong("life", radiationInfo.radiationLife);
+		stackTag.setInteger("dimensionID", radiationInfo.dimensionID);
+		element.setTagCompound(stackTag);
+	}
+
+	public RadiationInfo decay(ItemStack element, World world) {
+		int atomicMass = element.getItemDamage();
+		element.setItemDamage(atomicMass - 1);
+		return initiateRadioactivity(element, world);
 	}
 	 
 }

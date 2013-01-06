@@ -1,5 +1,6 @@
 package ljdp.minechem.common.containers;
 
+import ljdp.minechem.api.core.IRadiationSheild;
 import ljdp.minechem.common.tileentity.TileEntityFusion;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -8,7 +9,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class ContainerFusion extends Container {
+public class ContainerFusion extends Container implements IRadiationSheild {
 
 	TileEntityFusion fusion;
 	InventoryPlayer inventoryPlayer;
@@ -67,6 +68,11 @@ public class ContainerFusion extends Container {
 			return stack;
 		}*/
 		return null;
+	}
+
+	@Override
+	public float getRadiationReductionFactor() {
+		return 1.0F;
 	}
 
 

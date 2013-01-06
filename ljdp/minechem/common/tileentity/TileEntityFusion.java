@@ -75,7 +75,6 @@ public class TileEntityFusion extends TileEntityMultiBlock implements IInventory
 	private void addToOutput(ItemStack fusionResult) {
 		if(inventory[kStartOutput] == null) {
 			ItemStack output = fusionResult.copy();
-			MinechemItems.element.initiateRadioactivity(output, worldObj);
 			inventory[kStartOutput] = output;
 		} else {
 			inventory[kStartOutput].stackSize++;
