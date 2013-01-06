@@ -756,7 +756,7 @@ public class MinechemRecipes {
 		addSynthesisRecipesFromMolecules();
 		addUnusedSynthesisRecipes();
 		registerPoisonRecipes(poison);
-		registerPoisonRecipes(sucrose);
+	//      registerPoisonRecipes(sucrose);
 		registerPoisonRecipes(psilocybin);
 		registerPoisonRecipes(methamphetamine);
 		registerPoisonRecipes(amphetamine);
@@ -829,6 +829,9 @@ public class MinechemRecipes {
 		createPoisonedItemStack(Item.bread, 0, aMolecule);
 		createPoisonedItemStack(Item.potato, 0, aMolecule);
 		createPoisonedItemStack(Item.bucketMilk, 0, aMolecule);
+		createPoisonedItemStack(Item.fishCooked, 0, aMolecule);
+		createPoisonedItemStack(Item.cookie, 0, aMolecule);
+		// still need to add mushroom pie 
 	}
 
 	@ForgeSubscribe
