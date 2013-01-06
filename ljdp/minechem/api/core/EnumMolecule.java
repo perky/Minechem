@@ -109,7 +109,14 @@ public enum EnumMolecule {
 	pk2           			(85, "Minecraftolide B", new Element(C,14), new Element (H,25), new Element(O,2), new Element(N,2)),
 	pk3           			(86, "Minecraftolide A1", new Element(C,13), new Element(H,23), new Element(O,2), new Element(N,1), new Element(Cl,1)),
 	pk4           			(87, "Minecraftolide B1", new Element(C,21), new Element(H,30), new Element(O,7), new Element(N,2), new Element(P,1)) 
+	pk5                 (88, "Palytoxin", new Element(C,129), new Element(H,223), new Element(N,3), new Element(O,54)),
 	// end polyketides
+  // some random things 
+  salt (89, "Sodium Chloride", new Element(Na,1), new Element(Cl,1)), 
+  nh3  (90,"Aqueous Ammonia", new Element(N,1), new Element(H,4), new Molecule(hydroxide)),
+// end inorganics 
+// begin peptide area 
+    
   ;
 	
 	public static EnumMolecule[] molecules = values();
