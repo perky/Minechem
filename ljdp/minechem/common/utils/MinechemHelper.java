@@ -192,7 +192,7 @@ public class MinechemHelper {
     		entityPlayer.getFoodStats().addStats(1, .1F);
     		break;
 		case starch:
-			entityPlayer.getFoodStats().addStats(2, .2F);
+			entityPlayer.getFoodStats().addStats(2, .1F); // whats the second param for? 
 			break;
 	    case sucrose:
 	    	entityPlayer.getFoodStats().addStats(1, .1F);
@@ -215,7 +215,7 @@ public class MinechemHelper {
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.wither.getId(), Constants.TICKS_PER_SECOND * 60, 2));
     		break;
     	case ethanol:
-    		entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 2, 1));
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 15, 1));
     		entityPlayer.getFoodStats().addStats(3, .1F);
     		break;
     	case cyanide:
@@ -240,6 +240,7 @@ public class MinechemHelper {
 			entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
 			entityPlayer.attackEntityFrom(DamageSource.generic, 2);
 			entityPlayer.addPotionEffect(new PotionEffect(Potion.blindness.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+			break; // this was missing a break. Sorry for having to fix so many bugs 
 		case quinine:
     		cureAllPotions(world, entityPlayer);
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 1, 1));
