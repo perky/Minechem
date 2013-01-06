@@ -160,6 +160,32 @@ public class MinechemRecipes {
 				'L', MinechemItems.projectorLens,
 				'G', new ItemStack(Block.redstoneLampIdle)
 		);
+		
+		ItemStack pvcStack = new ItemStack(MinechemItems.molecule, 1, EnumMolecule.polyvinylChloride.ordinal());
+		GameRegistry.addRecipe(new ItemStack(MinechemItems.hazmatFeet),
+				"   ",
+				"P P",
+				"P P",
+				'P', pvcStack
+		);
+		GameRegistry.addRecipe(new ItemStack(MinechemItems.hazmatLegs),
+				"PPP",
+				"P P",
+				"P P",
+				'P', pvcStack
+		);
+		GameRegistry.addRecipe(new ItemStack(MinechemItems.hazmatTorso),
+				" P ",
+				"PPP",
+				"PPP",
+				'P', pvcStack
+		);
+		GameRegistry.addRecipe(new ItemStack(MinechemItems.hazmatHead),
+				"PPP",
+				"P P",
+				"   ",
+				'P', pvcStack
+		);
 
 		GameRegistry.addShapelessRecipe(new ItemStack(MinechemItems.journal), 
 				new ItemStack(Item.book), new ItemStack(MinechemItems.testTube));
