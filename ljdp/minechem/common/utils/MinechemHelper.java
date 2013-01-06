@@ -200,6 +200,7 @@ public class MinechemHelper {
 			break;
 	    case sucrose:
 	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), Constants.TICKS_PER_SECOND * 5, 0));
+	    	entityPlayer.getFoodStats().addStats(1, .1F);
 	    	break;
     	case psilocybin: // I ate a mushroom pie
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
@@ -210,7 +211,7 @@ public class MinechemHelper {
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), Constants.TICKS_PER_SECOND * 20, 7));
     		break;
 		case methamphetamine:
-    		entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), Constants.TICKS_PER_SECOND * 20, 7));
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), Constants.TICKS_PER_SECOND * 30, 7));
     		break;
     	case muscarine:
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.wither.getId(), Constants.TICKS_PER_SECOND * 60, 2));
@@ -219,7 +220,7 @@ public class MinechemHelper {
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.wither.getId(), Constants.TICKS_PER_SECOND * 60, 2));
     		break;
     	case ethanol:
-    		entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 2, 1));
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 5, 1));
     		entityPlayer.getFoodStats().addStats(3, .1F);
     		break;
     	case cyanide:
@@ -233,7 +234,7 @@ public class MinechemHelper {
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), Constants.TICKS_PER_MINUTE * 5, 2));
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(),   Constants.TICKS_PER_MINUTE * 5, 0));
     		if(random.nextFloat() < .2F)
-    			entityPlayer.attackEntityFrom(DamageSource.generic, 10);
+    		entityPlayer.attackEntityFrom(DamageSource.generic, 10);
     		break;
 	    case xanax:
 	    	cureAllPotions(world, entityPlayer); 
@@ -241,10 +242,10 @@ public class MinechemHelper {
 	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), Constants.TICKS_PER_SECOND * 30, 2));
 	    	break;
 		case mescaline:
-			entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
-			entityPlayer.attackEntityFrom(DamageSource.generic, 2);
-			entityPlayer.addPotionEffect(new PotionEffect(Potion.blindness.getId(), Constants.TICKS_PER_SECOND * 30, 5));
-			break;
+		entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+		entityPlayer.attackEntityFrom(DamageSource.generic, 2);
+		entityPlayer.addPotionEffect(new PotionEffect(Potion.blindness.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+		break;
 		case quinine:
     		cureAllPotions(world, entityPlayer);
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 1, 1));
@@ -253,8 +254,8 @@ public class MinechemHelper {
 			// No effect.
 			break; 
 		case sulfuricAcid:
-			entityPlayer.attackEntityFrom(DamageSource.generic, 8);	 
-			break;
+		entityPlayer.attackEntityFrom(DamageSource.generic, 8);	 
+		break;
 		default:
 			entityPlayer.attackEntityFrom(DamageSource.generic, 5);
 			break;
