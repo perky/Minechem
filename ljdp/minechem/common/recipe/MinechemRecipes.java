@@ -418,6 +418,7 @@ public class MinechemRecipes {
 		ItemStack appleRed	  = new ItemStack(Item.appleRed);
 		ItemStack appleGold   = new ItemStack(Item.appleGold, 1, 0);
 		ItemStack appleGoldEnchanted   = new ItemStack(Item.appleGold, 1, 1);
+		ItemStack chickenCooked = new ItemStack(Item.chickenCooked);
 		DecomposerRecipe.add(new DecomposerRecipeChance(sugar, .75F, molecule(sucrose)));
 		DecomposerRecipe.add(new DecomposerRecipeChance(reeds, .65F, molecule(sucrose), element(H,2), element(O)));
 		DecomposerRecipe.add(new DecomposerRecipe(cocoaBean, molecule(theobromine)));
@@ -447,11 +448,12 @@ public class MinechemRecipes {
 		DecomposerRecipe.add(new DecomposerRecipe(appleRed, molecule(malicAcid)));
 		DecomposerRecipe.add(new DecomposerRecipe(appleGold, molecule(malicAcid), element(Au,8)));
 		DecomposerRecipe.add(new DecomposerRecipe(appleGold, molecule(malicAcid), element(Au,64), element(Np)));
-		
+		DecomposerRecipe.add(new DecomposerRecipe(chickenCooked, element(K), element(F), element(C)));
 		SynthesisRecipe.add(new SynthesisRecipe(sugar, false, 400, molecule(sucrose)));
 		SynthesisRecipe.add(new SynthesisRecipe(appleRed, false, 400, molecule(malicAcid), molecule(water,2)));
 		SynthesisRecipe.add(new SynthesisRecipe(cocoaBean, false, 400, molecule(theobromine)));
 		SynthesisRecipe.add(new SynthesisRecipe(pumpkin, false, 400, molecule(cucurbitacin)));
+		SynthesisRecipe.add(new SynthesisRecipe(chickenCooked, true, 5000, element(K,16), element(F,16), element(C,16)));
 		
 		// EXPLOSIVES
 		ItemStack gunpowder = new ItemStack(Item.gunpowder);
@@ -756,7 +758,7 @@ public class MinechemRecipes {
 		addSynthesisRecipesFromMolecules();
 		addUnusedSynthesisRecipes();
 		registerPoisonRecipes(poison);
-	//      registerPoisonRecipes(sucrose);
+		registerPoisonRecipes(sucrose);
 		registerPoisonRecipes(psilocybin);
 		registerPoisonRecipes(methamphetamine);
 		registerPoisonRecipes(amphetamine);
@@ -831,6 +833,7 @@ public class MinechemRecipes {
 		createPoisonedItemStack(Item.bucketMilk, 0, aMolecule);
 		createPoisonedItemStack(Item.fishCooked, 0, aMolecule);
 		createPoisonedItemStack(Item.cookie, 0, aMolecule);
+		createPoisonedItemStack(Item.pumpkinPie, 0, aMolecule);
 		// still need to add mushroom pie 
 	}
 
