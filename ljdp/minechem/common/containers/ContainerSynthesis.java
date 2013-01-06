@@ -77,16 +77,22 @@ public class ContainerSynthesis extends ContainerWithFakeSlots {
 		if(slotObject != null && slotObject.getHasStack()) {
 			ItemStack stackInSlot = slotObject.getStack();
 			ItemStack stack = stackInSlot.copy();
-			if(slot != synthesis.kStartJournal && stack.itemID == MinechemItems.journal.shiftedIndex) {
-				if(!mergeItemStack(stackInSlot, synthesis.kStartJournal, synthesis.kStartJournal + 1, false))
-					return null;
+			if(slot != synthesis.kStartJournal && stack.itemID == MinechemItems.journal.shiftedIndex 
+					&& !getSlot(synthesis.kStartJournal).getHasStack())
+			{
+				ItemStack copystack = slotObject.decrStackSize(1);
+				getSlot(synthesis.kStartJournal).putStack(copystack);
+				return null;
 			} else if(slot == synthesis.kStartOutput) {
 				if(!craftMaxmimum())
 					return null;
 			} else if(slot >= synthesis.kStartBottles && slot < synthesis.kStartBottles + synthesis.kSizeBottles) {
 				if(!mergeItemStack(stackInSlot, synthesis.getSizeInventory(), inventorySlots.size(), true))
 					return null;
-			} else if(slot >= synthesis.getSizeInventory() && slot < inventorySlots.size()) {
+			} else if(slot >= synthesis.getSizeInventory() && slot < inventorySlots.size() 
+					&& (stackInSlot.itemID == MinechemItems.element.shiftedIndex 
+					|| stackInSlot.itemID == MinechemItems.molecule.shiftedIndex))
+			{
 				if(!mergeItemStack(stackInSlot, synthesis.kStartStorage, synthesis.kStartStorage + synthesis.kSizeStorage, false))
 					return null;
 			} else if(slot >= synthesis.kStartStorage && slot < synthesis.kStartStorage + synthesis.kSizeStorage) {
