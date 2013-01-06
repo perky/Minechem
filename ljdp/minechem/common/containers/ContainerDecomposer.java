@@ -94,7 +94,7 @@ public class ContainerDecomposer extends Container implements IRadiationShield {
 	}
 
 	@Override
-	public float getRadiationReductionFactor() {
+	public float getRadiationReductionFactor(ItemStack itemstack) {
 		return 0.4F;
 	}
 

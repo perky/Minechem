@@ -50,12 +50,12 @@ public class RadiationHandler {
 	private void applyRadiationDamage(EntityPlayer player, Container container, int damage) {
 		List<Float> reductions = new ArrayList();
 		if(container instanceof IRadiationShield) {
-			float reduction = ((IRadiationShield)container).getRadiationReductionFactor();
+			float reduction = ((IRadiationShield)container).getRadiationReductionFactor(null);
 			reductions.add(reduction);
 		}
 		for(ItemStack armour : player.inventory.armorInventory) {
 			if(armour != null && armour.getItem() instanceof IRadiationShield) {
-				float reduction = ((IRadiationShield)armour.getItem()).getRadiationReductionFactor();
+				float reduction = ((IRadiationShield)armour.getItem()).getRadiationReductionFactor(armour);
 				reductions.add(reduction);
 			}
 		}

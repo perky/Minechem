@@ -8,6 +8,7 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import ljdp.minechem.api.core.EnumElement;
 import ljdp.minechem.common.ModMinechem;
+import ljdp.minechem.common.items.ItemArmorRadiationShield;
 import ljdp.minechem.common.items.ItemAtomicManipulator;
 import ljdp.minechem.common.items.ItemBlockFusion;
 import ljdp.minechem.common.items.ItemBlueprint;
@@ -28,7 +29,10 @@ public class MinechemItems {
 	public static ItemBlueprint blueprint;
 	public static ItemTestTube testTube;
 	public static ItemChemistJournal journal;
-
+	public static ItemArmorRadiationShield hazmatFeet;
+	public static ItemArmorRadiationShield hazmatLegs;
+	public static ItemArmorRadiationShield hazmatTorso;
+	public static ItemArmorRadiationShield hazmatHead;
 	
 	public static ItemStack convexLens;
 	public static ItemStack concaveLens;
@@ -44,16 +48,29 @@ public class MinechemItems {
 	private static int blueprintID;
 	private static int testTubeID;
 	private static int journalID;
+	private static int hazmatFeetID;
+	private static int hazmatLegsID;
+	private static int hazmatTorsoID;
+	private static int hazmatHeadID;
 	
 	public static void loadConfig(Configuration config) {
-		elementID   = config.getItem(config.CATEGORY_ITEM, "Element", 4736).getInt(4736);
-	 	moleculeID  = config.getItem(config.CATEGORY_ITEM, "Molecule", 4737).getInt(4737);
-	 	lensID	 	= config.getItem(config.CATEGORY_ITEM, "Lens", 4738).getInt(4738);
-	 	atomicManipulatorID = config.getItem(config.CATEGORY_ITEM, "AtomicManipulator", 4739).getInt(4739);
-	 	fusionStarID = config.getItem(config.CATEGORY_ITEM, "FusionStar", 4740).getInt(4740);
-	 	blueprintID  = config.getItem(config.CATEGORY_ITEM, "Blueprint", 4741).getInt(4741);
-	 	testTubeID   = config.getItem(config.CATEGORY_ITEM, "TestTube", 4742).getInt(4742);
-	 	journalID    = config.getItem(config.CATEGORY_ITEM, "ChemistJournal", 4743).getInt(4743);
+		int baseID  = 4736;
+		elementID   = getItemConfig(config, "Element", baseID++);
+	 	moleculeID  = getItemConfig(config, "Molecule", baseID++);
+	 	lensID	 	= getItemConfig(config, "Lens", baseID++);
+	 	atomicManipulatorID =getItemConfig(config, "AtomicManipulator", baseID++);
+	 	fusionStarID = getItemConfig(config, "FusionStar", baseID++);
+	 	blueprintID  = getItemConfig(config, "Blueprint", baseID++);
+	 	testTubeID   = getItemConfig(config, "TestTube", baseID++);
+	 	journalID    = getItemConfig(config, "ChemistJournal", baseID++);
+	 	hazmatFeetID = getItemConfig(config, "HazmatFeet", baseID++);
+	 	hazmatLegsID = getItemConfig(config, "HazmatLegs", baseID++);
+	 	hazmatTorsoID = getItemConfig(config, "HazmatTorso", baseID++);
+	 	hazmatHeadID = getItemConfig(config, "HazmatHead", baseID++);
+	}
+	
+	private static int getItemConfig(Configuration config, String key, int defaultID) {
+		return config.getItem(config.CATEGORY_ITEM, key, defaultID).getInt(defaultID);
 	}
 	
 	public static void registerItems() {
@@ -65,11 +82,19 @@ public class MinechemItems {
 		blueprint   = new ItemBlueprint(blueprintID);
 		testTube    = new ItemTestTube(testTubeID);
 		journal		= new ItemChemistJournal(journalID);
+		hazmatFeet  = new ItemArmorRadiationShield(hazmatFeetID, 0, 0.1F);
+		hazmatLegs  = new ItemArmorRadiationShield(hazmatLegsID, 1, 0.1F);
+		hazmatTorso = new ItemArmorRadiationShield(hazmatTorsoID, 2, 0.5F);
+		hazmatHead	= new ItemArmorRadiationShield(hazmatHeadID, 3, 0.2F);
 		
 		LanguageRegistry.addName(atomicManipulator, MinechemHelper.getLocalString("item.name.atomicmanipulator"));
 		LanguageRegistry.addName(fusionStar, MinechemHelper.getLocalString("item.name.fusionStar"));
 		LanguageRegistry.addName(testTube, MinechemHelper.getLocalString("item.name.testtube"));
 		LanguageRegistry.addName(journal, MinechemHelper.getLocalString("item.name.chemistJournal"));
+		LanguageRegistry.addName(hazmatFeet, MinechemHelper.getLocalString("item.name.hazmatFeet"));
+		LanguageRegistry.addName(hazmatLegs, MinechemHelper.getLocalString("item.name.hazmatLegs"));
+		LanguageRegistry.addName(hazmatTorso, MinechemHelper.getLocalString("item.name.hazmatTorso"));
+		LanguageRegistry.addName(hazmatHead, MinechemHelper.getLocalString("item.name.hazmatHead"));
 		
 		concaveLens = new ItemStack(lens, 1, 0);
 		convexLens  = new ItemStack(lens, 1, 1);
