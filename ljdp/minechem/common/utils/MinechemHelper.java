@@ -195,7 +195,7 @@ public class MinechemHelper {
 			entityPlayer.getFoodStats().addStats(2, .2F);
 			break;
 	    case sucrose:
-	    	entityPlayer.getFoodStats().addStats(1, .1F);
+	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), Constants.TICKS_PER_SECOND * 5, 0));
 	    	break;
     	case psilocybin: // I ate a mushroom pie
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
@@ -240,6 +240,7 @@ public class MinechemHelper {
 			entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 30, 5));
 			entityPlayer.attackEntityFrom(DamageSource.generic, 2);
 			entityPlayer.addPotionEffect(new PotionEffect(Potion.blindness.getId(), Constants.TICKS_PER_SECOND * 30, 5));
+			break;
 		case quinine:
     		cureAllPotions(world, entityPlayer);
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 1, 1));
