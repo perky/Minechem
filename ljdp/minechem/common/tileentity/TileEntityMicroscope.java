@@ -19,7 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityMicroscope extends TileEntity implements IInventory {
+public class TileEntityMicroscope extends MinechemTileEntity implements IInventory {
 	
 	private ItemStack[] microscopeInventory;
 	public boolean isShaped = true;
@@ -64,9 +64,7 @@ public class TileEntityMicroscope extends TileEntity implements IInventory {
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
-		ItemStack itemstack = microscopeInventory[slot];
-		microscopeInventory[slot] = null;
-		return itemstack;
+		return null;
 	}
 
 	@Override
@@ -74,6 +72,8 @@ public class TileEntityMicroscope extends TileEntity implements IInventory {
 		microscopeInventory[slot] = itemStack;
 		if(slot == 0 && itemStack != null && !worldObj.isRemote)
 			onInspectItemStack(itemStack);
+		if(slot == 1 && itemStack != null && microscopeInventory[0] != null && !worldObj.isRemote)
+			onInspectItemStack(microscopeInventory[0]);
 	}
 
 	@Override
@@ -102,5 +102,36 @@ public class TileEntityMicroscope extends TileEntity implements IInventory {
 	
 	public int getFacing() {
 		return worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+	}
+
+	@Override
+	void sendUpdatePacket() {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound nbtTagCompound) {
+		super.writeToNBT(nbtTagCompound);
+		ItemStack inpectingStack = microscopeInventory[0];
+		if(inpectingStack != null) {
+			NBTTagCompound inspectingStackTag = inpectingStack.writeToNBT(new NBTTagCompound());
+			nbtTagCompound.setTag("inspectingStack", inspectingStackTag);
+		}
+		ItemStack journal = microscopeInventory[1];
+		if(journal != null) {
+			NBTTagCompound journalTag = journal.writeToNBT(new NBTTagCompound());
+			nbtTagCompound.setTag("journal", journalTag);
+		}
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound nbtTagCompound) {
+		super.readFromNBT(nbtTagCompound);
+		NBTTagCompound inspectingStackTag = nbtTagCompound.getCompoundTag("inspectingStack");
+		NBTTagCompound journalTag = nbtTagCompound.getCompoundTag("journal");
+		ItemStack inspectingStack = ItemStack.loadItemStackFromNBT(inspectingStackTag);
+		ItemStack journalStack = ItemStack.loadItemStackFromNBT(journalTag);
+		microscopeInventory[0] = inspectingStack;
+		microscopeInventory[1] = journalStack;
 	}
 }

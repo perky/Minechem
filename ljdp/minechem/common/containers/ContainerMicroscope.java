@@ -45,17 +45,6 @@ public class ContainerMicroscope extends Container {
 	}
 	
 	@Override
-	public void onCraftGuiClosed(EntityPlayer entityPlayer) {
-		super.onCraftGuiClosed(entityPlayer);
-		ItemStack itemstack = microscope.getStackInSlotOnClosing(0);
-		if(itemstack != null)
-			entityPlayer.dropPlayerItem(itemstack);
-		itemstack = microscope.getStackInSlotOnClosing(1);
-		if(itemstack != null)
-			entityPlayer.dropPlayerItem(itemstack);
-	}
-	
-	@Override
 	public boolean canInteractWith(EntityPlayer var1) {
 		return microscope.isUseableByPlayer(var1);
 	}
