@@ -314,8 +314,9 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 	}
 
 	public void sendUpdatePacket() {
-		PacketSynthesisUpdate packetSynthesisUpdate = new PacketSynthesisUpdate(this);
-		PacketHandler.sendPacket(packetSynthesisUpdate);
+		PacketSynthesisUpdate packet = new PacketSynthesisUpdate(this);
+		int dimensionID = worldObj.getWorldInfo().getDimension();
+		PacketHandler.getInstance().synthesisUpdateHandler.sendToAllPlayersInDimension(packet, dimensionID);
 	}
 
 	@Override

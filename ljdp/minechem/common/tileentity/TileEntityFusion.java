@@ -4,7 +4,6 @@ import ljdp.minechem.api.core.EnumElement;
 import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.blueprint.BlueprintFusion;
-import ljdp.minechem.common.network.PacketFusionUpdate;
 import ljdp.minechem.common.network.PacketHandler;
 import ljdp.minechem.common.utils.MinechemHelper;
 import buildcraft.api.core.SafeTimeTracker;
@@ -134,8 +133,6 @@ public class TileEntityFusion extends TileEntityMultiBlock implements IInventory
 	
 	@Override
 	public void sendUpdatePacket() {
-		PacketFusionUpdate fustionUpdate = new PacketFusionUpdate(this);
-		PacketHandler.sendPacket(fustionUpdate);
 	}
 	
 	private int takeEnergyFromStar(ItemStack fusionStar, boolean doTake) {

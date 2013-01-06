@@ -4,6 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
+import ljdp.easypacket.EasyPacketDispatcher;
+import ljdp.easypacket.EasyPacketHandler;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -17,36 +20,27 @@ import cpw.mods.fml.relauncher.FMLRelauncher;
 public class PacketHandler implements IPacketHandler {
 	
 	public static final String MINECHEM_PACKET_CHANNEL = "MineChem2";
+	private static PacketHandler instance;
+	public static final PacketHandler getInstance() {
+		return instance;
+	}
+	
+	private EasyPacketDispatcher dispatcher;
+	public EasyPacketHandler decomposerUpdateHandler;
+	public EasyPacketHandler ghostBlockUpdateHandler;
+	public EasyPacketHandler synthesisUpdateHandler;
+	
+	public PacketHandler() {
+		instance = this;
+		dispatcher = new EasyPacketDispatcher(MINECHEM_PACKET_CHANNEL);
+		decomposerUpdateHandler = EasyPacketHandler.registerEasyPacket(PacketDecomposerUpdate.class, dispatcher);
+		ghostBlockUpdateHandler = EasyPacketHandler.registerEasyPacket(PacketGhostBlock.class, dispatcher);
+		synthesisUpdateHandler  = EasyPacketHandler.registerEasyPacket(PacketSynthesisUpdate.class, dispatcher);
+	}
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
-		DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
-		try {
-			byte packetID = inputStream.readByte();
-			PacketType packetType = PacketType.packetTypes[packetID];
-			if(packetType != null) {
-				PacketMinechem packetMinechem = packetType.newPacket();
-				packetMinechem.readData(inputStream);
-				packetMinechem.onReceive(manager, player);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static void sendPacket(PacketMinechem packet) {
-		Side side = FMLCommonHandler.instance().getEffectiveSide();
-		Packet250CustomPayload customPacket = packet.writePacket();
-		if(side == Side.SERVER) {
-			PacketDispatcher.sendPacketToAllPlayers(customPacket);
-		} else if(side == Side.CLIENT) {
-			PacketDispatcher.sendPacketToServer(customPacket);
-		}
-	}
-	
-	public static void sendPacketToPlayer(PacketMinechem packet, EntityPlayer player) {
-		Packet250CustomPayload customPacket = packet.writePacket();
-		PacketDispatcher.sendPacketToPlayer(customPacket, (Player) player);
+		dispatcher.onPacketData(manager, packet, player);
 	}
 
 }

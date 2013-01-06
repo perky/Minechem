@@ -48,7 +48,8 @@ public class TileEntityGhostBlock extends MinechemTileEntity {
 	@Override
 	public void sendUpdatePacket() {
 		PacketGhostBlock packet = new PacketGhostBlock(this);
-		PacketHandler.sendPacket(packet);
+		int dimensionID = worldObj.getWorldInfo().getDimension();
+		PacketHandler.getInstance().ghostBlockUpdateHandler.sendToAllPlayersInDimension(packet, dimensionID);
 	}
 	
 	@Override

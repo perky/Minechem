@@ -1,48 +1,41 @@
 package ljdp.minechem.common.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
+import buildcraft.api.power.IPowerProvider;
+import buildcraft.api.power.IPowerReceptor;
+import cpw.mods.fml.common.network.Player;
+import ljdp.easypacket.EasyPacket;
+import ljdp.easypacket.EasyPacketData;
 import ljdp.minechem.common.MinechemPowerProvider;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;
 
-public class PacketDecomposerUpdate extends PacketTileEntityUpdate {
+public class PacketDecomposerUpdate extends PacketPowerReceptorUpdate {
 	
 	protected TileEntityDecomposer decomposer;
 	
-	public PacketDecomposerUpdate(TileEntityDecomposer decomposer) {
-		super(decomposer);
-		this.decomposer = decomposer;
-	}
+	@EasyPacketData
+	int state;
+	@EasyPacketData
+	float energyUsage;
 	
-	public PacketDecomposerUpdate() {
-		super();
+	public PacketDecomposerUpdate(TileEntityDecomposer decomposer) {
+		super((IPowerReceptor) decomposer);
+		this.decomposer = decomposer;
+		this.state = decomposer.getState().ordinal();
+		this.energyUsage = this.powerProvider.getCurrentEnergyUsage();
 	}
 
 	@Override
-	public void writeData(DataOutputStream outputStream) throws IOException {
-		super.writeData(outputStream);
-		MinechemPowerProvider provider = (MinechemPowerProvider)decomposer.getPowerProvider();
-		outputStream.writeByte(decomposer.getState().ordinal());
-		outputStream.writeFloat(provider.getEnergyStored());
-		outputStream.writeFloat(provider.getCurrentEnergyUsage());
+	public boolean isChunkDataPacket() {
+		return super.isChunkDataPacket();
 	}
-	
+
 	@Override
-	public void readData(DataInputStream inputStream) throws IOException {
-		super.readData(inputStream);
-		if(tileEntity instanceof TileEntityDecomposer) {
-			int state = inputStream.readByte();
-			float energyStored = inputStream.readFloat();
-			float energyUsage  = inputStream.readFloat();
-			decomposer = (TileEntityDecomposer) tileEntity;
-			decomposer.setState(state);
-			MinechemPowerProvider provider = (MinechemPowerProvider) decomposer.getPowerProvider(); 
-			provider.setEnergyStored(energyStored);
-			provider.setCurrentEnergyUsage(energyUsage);
-			decomposer.worldObj.markBlockForRenderUpdate2(x, y, z);
-			//decomposer.worldObj.markBlockForUpdate(x, y, z);
+	public void onReceive(Player player) {
+		super.onReceive(player);
+		if(this.tileEntity instanceof TileEntityDecomposer) {
+			this.decomposer = (TileEntityDecomposer) this.tileEntity;
+			this.decomposer.setState(this.state);
+			this.powerProvider.setCurrentEnergyUsage(this.energyUsage);
 		}
 	}
 

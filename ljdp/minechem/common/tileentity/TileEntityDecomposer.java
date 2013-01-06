@@ -123,10 +123,10 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 		
 	@Override
 	public void sendUpdatePacket() {
-		if(worldObj.isRemote)
-			return;
+		if(worldObj.isRemote) return;
 		PacketDecomposerUpdate packetDecomposerUpdate = new PacketDecomposerUpdate(this);
-		PacketHandler.sendPacket(packetDecomposerUpdate);
+		int dimensionID = worldObj.getWorldInfo().getDimension();
+		PacketHandler.getInstance().decomposerUpdateHandler.sendToAllPlayersInDimension(packetDecomposerUpdate, dimensionID);
 	}
 	
 	private ItemStack getActiveStack() {
