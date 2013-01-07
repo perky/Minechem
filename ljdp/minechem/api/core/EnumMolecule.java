@@ -103,20 +103,19 @@ public enum EnumMolecule {
 	dota					(81, "DOTA", new Element(C,16), new Element(H,28), new Element(N,4), new Element(O,8)),
 	poison					(82, "T-2 Mycotoxin", new Element(C,24), new Element(H,34), new Element(O,9)),
 	xanax					(83, "Alprazolam", new Element(C,17), new Element(H,13), new Element(Cl), new Element(N,4)),
-	// Working on polyketides that will come from the ocean some how (coral reef mod?) - Mandrake
+	// Mandrake's polyketides
 	// In nature polyketides are hard to get large amounts of
-	// the chance of getting these polyketides from ferns,raw fish, or coral reef  mod should be very low (2-5%)
 	pk1           			(84, "Minecraftolide A", new Element(C,13), new Element(H,23), new Element(O,2), new Element(N,1)),
 	pk2           			(85, "Minecraftolide B", new Element(C,14), new Element (H,25), new Element(O,2), new Element(N,2)),
 	pk3           			(86, "Minecraftolide A1", new Element(C,13), new Element(H,23), new Element(O,2), new Element(N,1), new Element(Cl,1)),
 	pk4           			(87, "Minecraftolide B1", new Element(C,21), new Element(H,30), new Element(O,7), new Element(N,2), new Element(P,1)), 
 	pk5                   (88, "Palytoxin", new Molecule(hydroxide), new Molecule(methylene,64), new Molecule(methylene,63) new Element(O,28) new Molecule(nitrate,3) new Molecule(carbonate,2)),
 	// end polyketides
-	// some random things 
 	salt 					(89, "Sodium Chloride", new Element(Na,1), new Element(Cl,1)), 
 	nh3  					(90, "Aqueous Ammonia", new Element(N,1), new Element(H,4), new Molecule(hydroxide)),
 	nod 					(91, "Nodularin", new Element(C,41), new Element(H,60), new Element(N,8), new Element(O,10)),
-	becauseImAPotato                        (92, "Digoxin", new Element(C,41) new Element(H,64) new Element(O,14)), // Will come from bad potatos
+	becauseImAPotato                        (92, "Digoxin", new Element(C,41), new Element(H,64), new Element(O,14)), // Will come from bad potatos
+	ttx                                     (93, "TTX - Tetrodotoxin", new Element(C,11), new Element(H,11), new Element(N,3),new Element(O,8)), // Could come from spider eyes
 	;
 	
 	public static EnumMolecule[] molecules = values();
