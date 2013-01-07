@@ -67,6 +67,14 @@
         	</fileset>
         </copy>
 		
+		<!-- Copy mcmod.info -->
+		<copy todir="${build-dir}">
+		  <fileset file="${minechem-src-dir}/resources/mcmod.info"/>
+		  <filterset>
+		  	<filter token="VERSION" value="${minechem-version}"/>
+		  </filterset>
+		</copy>
+		
 		<!-- delete from src dir -->
 		<delete dir="${src-dir}/ljdp"/>
 		<delete dir="${src-dir}/buildcraft"/>
