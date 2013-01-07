@@ -397,7 +397,7 @@ public class MinechemRecipes {
 		Element hydrogenStack = element(H,64);
 		Element heliumStack	  = element(He,64);
 		DecomposerRecipe.add(new DecomposerRecipe(netherStar, element(Cn,16), hydrogenStack, hydrogenStack, hydrogenStack, heliumStack, heliumStack, heliumStack, carbonStack, carbonStack));
-		DecomposerRecipe.add(new DecomposerRecipe(spiderEye, element(C,2), element(Po)));
+		DecomposerRecipe.add(new DecomposerRecipeChance(spiderEye, .2F, molecule(ttx)));
 		DecomposerRecipe.add(new DecomposerRecipe(fermentedSpiderEye, element(Po), molecule(ethanol)));
 		DecomposerRecipe.add(new DecomposerRecipeChance(netherWart, .5F, molecule(amphetamine)));
 		DecomposerRecipe.add(new DecomposerRecipe(glowstoneBlock, element(P,4)));
@@ -425,7 +425,7 @@ public class MinechemRecipes {
 				carbonStack, 	element(Cn,16), heliumStack,
 				hydrogenStack, 	hydrogenStack, 	hydrogenStack
 		));
-		SynthesisRecipe.add(new SynthesisRecipe(spiderEye, true, 2000,
+		SynthesisRecipe.add(new SynthesisRecipe(spiderEye, true, 2000, // may need to be changed
 				element(C),	null,			null,
 				null,		element(Po), 	null,
 				null, 		null, 			element(C)
@@ -481,12 +481,12 @@ public class MinechemRecipes {
 		DecomposerRecipe.add(new DecomposerRecipe(appleRed, molecule(malicAcid)));
 		DecomposerRecipe.add(new DecomposerRecipe(appleGold, molecule(malicAcid), element(Au,8)));
 		DecomposerRecipe.add(new DecomposerRecipe(appleGold, molecule(malicAcid), element(Au,64), element(Np)));
-		DecomposerRecipe.add(new DecomposerRecipe(chickenCooked, element(K), element(F), element(C)));
+		DecomposerRecipe.add(new DecomposerRecipe(chickenCooked, element(K), element(Na), element(C,2)));
 		SynthesisRecipe.add(new SynthesisRecipe(sugar, false, 400, molecule(sucrose)));
 		SynthesisRecipe.add(new SynthesisRecipe(appleRed, false, 400, molecule(malicAcid), molecule(water,2)));
 		SynthesisRecipe.add(new SynthesisRecipe(cocoaBean, false, 400, molecule(theobromine)));
 		SynthesisRecipe.add(new SynthesisRecipe(pumpkin, false, 400, molecule(cucurbitacin)));
-		SynthesisRecipe.add(new SynthesisRecipe(chickenCooked, true, 5000, element(K,16), element(F,16), element(C,16)));
+		SynthesisRecipe.add(new SynthesisRecipe(chickenCooked, true, 5000, element(K,16), element(Na,16), element(C,16)));
 		
 		// EXPLOSIVES
 		ItemStack gunpowder = new ItemStack(Item.gunpowder);
@@ -542,7 +542,7 @@ public class MinechemRecipes {
 				cellulose1,	null,		null
 		));
 		
-		// DYES
+		// DYES AND WOOL
 		ItemStack blackDye = new ItemStack(Item.dyePowder, 1, 0);
 		ItemStack redDye = new ItemStack(Item.dyePowder, 1, 1);
 		ItemStack greenDye = new ItemStack(Item.dyePowder, 1, 2);
@@ -642,6 +642,7 @@ public class MinechemRecipes {
 		
 		
 		// RECORDS
+		// not all records are registered?! 
 		Molecule pvc = molecule(polyvinylChloride);
 		ItemStack record1 = new ItemStack(Item.record13);
 		ItemStack record2 = new ItemStack(Item.recordCat);
@@ -789,9 +790,8 @@ public class MinechemRecipes {
 		
         // project SkyWorld
         ItemStack sw1 = new ItemStack(Item.fishRaw);
-        //DecomposerRecipe.add(new DecomposerRecipeChance(sw1, 0.04F, new Molecule(pk5,1))); 
-      	//DecomposerRecipe.add(new DecomposerRecipe(element(Na)), new DecomposerRecipe(element(Cl)));
-
+        DecomposerRecipe.add(new DecomposerRecipeChance(sw1, 0.04F, new Molecule(pk5,1))); 
+        
         ItemStack sw2 = new ItemStack(Block.plantYellow);
         DecomposerRecipe.add(new DecomposerRecipeChance(sw2, 0.3F, new Molecule(shikimicAcid,2)));
 
@@ -817,6 +817,9 @@ public class MinechemRecipes {
 		registerPoisonRecipes(mescaline);
 		registerPoisonRecipes(quinine);
 		registerPoisonRecipes(sulfuricAcid);
+		registerPoisonRecipes(ttx);
+		// registerPoisonRecipes(pk5);
+		// registerPoisonRecipes(potato);
 	}
 	
 	private void addDecomposerRecipesFromMolecules() {
