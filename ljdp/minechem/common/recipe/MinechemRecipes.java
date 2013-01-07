@@ -425,7 +425,7 @@ public class MinechemRecipes {
 				carbonStack, 	element(Cn,16), heliumStack,
 				hydrogenStack, 	hydrogenStack, 	hydrogenStack
 		));
-		SynthesisRecipe.add(new SynthesisRecipe(spiderEye, true, 2000,
+		SynthesisRecipe.add(new SynthesisRecipe(spiderEye, true, 2000, // may need to be changed
 				element(C),	null,			null,
 				null,		element(Po), 	null,
 				null, 		null, 			element(C)
