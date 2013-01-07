@@ -23,8 +23,13 @@ public class PutEmptyTestTube extends InteractMachine implements ICCMethod {
 		if(machine != null && selectedStack != null && Util.isStackAnEmptyTestTube(selectedStack)) {
 			ItemStack before    = selectedStack.copy();
 			ItemStack after 	= machine.putEmptyTestTube(selectedStack);
-			turtle.setSlotContents(selectedSlot, after);
-			if(after.stackSize < before.stackSize)
+			before.stackSize   -= after.stackSize;
+			if(before.stackSize <= 0)
+				turtle.setSlotContents(selectedSlot, null);
+			else
+				turtle.setSlotContents(selectedSlot, before);
+			System.out.println(after.stackSize);
+			if(after.stackSize > 0)
 				didPut = true;
 		}
 		return new Object[]{ didPut };

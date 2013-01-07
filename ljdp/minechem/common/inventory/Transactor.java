@@ -79,7 +79,7 @@ public class Transactor {
 	public int appendStackToSlot(ItemStack stack, int amount, int slot, boolean doAdd) {
 		ItemStack stackInSlot = inventory.getStackInSlot(slot);
 		if(stackInSlot.stackSize + amount > stackInSlot.getMaxStackSize()) {
-			int partialAmount = amount - (stackInSlot.getMaxStackSize() - stackInSlot.stackSize);
+			int partialAmount = (stackInSlot.getMaxStackSize() - stackInSlot.stackSize);
 			if(doAdd)
 				stackInSlot.stackSize += partialAmount;
 			return partialAmount;

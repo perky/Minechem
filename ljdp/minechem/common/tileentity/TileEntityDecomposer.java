@@ -18,6 +18,7 @@ import ljdp.minechem.common.network.PacketDecomposerUpdate;
 import ljdp.minechem.common.network.PacketHandler;
 import ljdp.minechem.common.recipe.DecomposerRecipeHandler;
 import ljdp.minechem.common.utils.MinechemHelper;
+import ljdp.minechem.computercraft.IMinechemMachinePeripheral;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -43,7 +44,7 @@ import buildcraft.api.transport.IPipe;
 import java.util.List;
 
 public class TileEntityDecomposer extends MinechemTileEntity implements IInventory, ISidedInventory, 
-IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
+IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, IMinechemMachinePeripheral
 {
 	
 	private static final int MAX_POWER_STORAGE = 100;
@@ -79,8 +80,8 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 	}
 	
 	public TileEntityDecomposer() {
-		testTubeInventory  = new BoundedInventory(this, kEmptyTestTubeSlotStart, kEmptyTestTubeSlotEnd);
-		outputInventory    = new BoundedInventory(this, kOutputSlotStart, kOutputSlotEnd);
+		testTubeInventory  = new BoundedInventory(this, kEmptyTestTubeSlotStart, kEmptyTestTubeSlotEnd + 1);
+		outputInventory    = new BoundedInventory(this, kOutputSlotStart, kOutputSlotEnd + 1);
 		inputInventory	   = new BoundedInventory(this, kInputSlot, kInputSlot + 1);
 		testTubeTransactor = new Transactor(testTubeInventory);
 		outputTransactor   = new Transactor(outputInventory);
@@ -209,11 +210,6 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 	
 	private boolean canTakeEmptyTestTube() {
 		ItemStack testTube = testTubeTransactor.removeItem(false);
-		return testTube != null;
-	}
-	
-	private boolean takeEmptyTestTube() {
-		ItemStack testTube = testTubeTransactor.removeItem(true);
 		return testTube != null;
 	}
 
@@ -457,6 +453,47 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 	@Override
 	public boolean isJammed() {
 		return this.state == State.kProcessJammed;
+	}
+
+	@Override
+	public ItemStack takeEmptyTestTube() {
+		ItemStack testTube = testTubeTransactor.removeItem(true);
+		return testTube;
+	}
+
+	@Override
+	public ItemStack putEmptyTestTube(ItemStack testTube) {
+		return testTubeTransactor.add(testTube, true);
+	}
+
+	@Override
+	public ItemStack takeOutput() {
+		return outputTransactor.removeItem(true);
+	}
+
+	@Override
+	public ItemStack putInput(ItemStack input) {
+		return inputTransactor.add(input, true);
+	}
+
+	@Override
+	public ItemStack takeFusionStar() {
+		return null;
+	}
+
+	@Override
+	public ItemStack putFusionStar(ItemStack fusionStar) {
+		return null;
+	}
+
+	@Override
+	public ItemStack takeJournal() {
+		return null;
+	}
+
+	@Override
+	public ItemStack putJournal(ItemStack journal) {
+		return null;
 	}
 
 }
