@@ -1,5 +1,6 @@
 package ljdp.minechem.common;
 
+import ljdp.minechem.client.gui.GuiChemicalStorage;
 import ljdp.minechem.client.gui.GuiChemistJournal;
 import ljdp.minechem.client.gui.GuiDecomposer;
 import ljdp.minechem.client.gui.GuiFusion;
@@ -84,7 +85,7 @@ public class GuiHandler implements IGuiHandler {
 		if(tileEntity instanceof TileEntityBlueprintProjector)
 			return new GuiProjector(player.inventory, (TileEntityBlueprintProjector)tileEntity);
 		if(tileEntity instanceof TileEntityChemicalStorage)
-			return new GuiChest(player.inventory, (TileEntityChemicalStorage)tileEntity);
+			return new GuiChemicalStorage(player.inventory, (TileEntityChemicalStorage)tileEntity);
 		return null;
 	}
 	
