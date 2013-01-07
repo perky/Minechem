@@ -31,7 +31,7 @@ public class ItemMolecule extends Item {
 		super(par1);
 		setCreativeTab(ModMinechem.minechemTab);
 		setHasSubtypes(true);
-		setItemName("itemMolecule");
+		setItemName("minechem.itemMolecule");
 		setIconIndex(16);
 	}
 	
@@ -51,7 +51,12 @@ public class ItemMolecule extends Item {
 		return MinechemHelper.convertChemicalsIntoItemStacks(molecule.components());
 	}
 	
-	private String getFormula(ItemStack itemstack) {
+	@Override
+	public String getItemNameIS(ItemStack par1ItemStack) {
+		return getItemName() + "." + getMolecule(par1ItemStack).name();
+	}
+	
+	public String getFormula(ItemStack itemstack) {
 		ArrayList<ItemStack> components = getElements(itemstack);
 		String formula = "";
 		for(ItemStack component : components) {

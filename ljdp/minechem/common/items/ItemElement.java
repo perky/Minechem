@@ -30,7 +30,7 @@ public class ItemElement extends Item {
 	public ItemElement(int par1) {
 		super(par1);
 		setCreativeTab(ModMinechem.minechemTab);
-		setItemName("itemElement");
+		setItemName("minechem.itemElement");
 		setHasSubtypes(true);
 		classificationIndexes.put(EnumClassification.nonmetal, 0);
 		classificationIndexes.put(EnumClassification.halogen, 1);
@@ -87,7 +87,7 @@ public class ItemElement extends Item {
 	
 	@Override
 	public String getItemNameIS(ItemStack par1ItemStack) {
-		return "element." + getShortName(par1ItemStack);
+		return "minechem.itemElement." + getShortName(par1ItemStack);
 	}
 	
 	@Override

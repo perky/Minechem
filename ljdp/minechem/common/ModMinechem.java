@@ -27,6 +27,7 @@ import ljdp.minechem.common.tileentity.TileEntityFusion;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
 import ljdp.minechem.common.tileentity.TileEntityProxy;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
+import ljdp.minechem.computercraft.CCMain;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -117,6 +118,7 @@ public class ModMinechem {
 	public void postInit(FMLPostInitializationEvent event) throws IOException {
 		checkForBuildcraft();
 		MinechemTriggers.registerTriggers();
+		CCMain.getInstance().init();
 	}
 	
 	private void checkForBuildcraft() throws IOException {
@@ -129,6 +131,7 @@ public class ModMinechem {
 	 	Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 	 	MinechemBlocks.loadConfig(config);
 	 	MinechemItems.loadConfig(config);
+	 	CCMain.getInstance().loadConfig(config);
 	 	config.save();
 	 }
 }

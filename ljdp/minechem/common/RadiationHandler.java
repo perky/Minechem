@@ -36,6 +36,15 @@ public class RadiationHandler {
 			updateContainer(player, player.inventoryContainer);
 	}
 	
+	public void updateRadiationOnItems(World world, List<ItemStack> itemstacks) {
+		updateRadiationOnItems(world, null, null, itemstacks);
+	}
+	
+	public int getTicksUntilDecay(ItemStack itemstack, World world) {
+		RadiationInfo info = MinechemItems.element.getRadiationInfo(itemstack, world);
+		return (int) (info.radiationLife);
+	}
+	
 	private void updateChemicalStorageContainer(EntityPlayer player, Container openContainer) {
 		ContainerChemicalStorage chemicalStorage = (ContainerChemicalStorage) openContainer;
 		List<ItemStack> itemstacks = chemicalStorage.getStorageInventory();
@@ -47,21 +56,21 @@ public class RadiationHandler {
 			}
 		}
 		List<ItemStack> playerStacks = chemicalStorage.getPlayerInventory();
-		updateRadiationOnItems(player, openContainer, playerStacks);
+		updateRadiationOnItems(player.worldObj, player, openContainer, playerStacks);
 	}
 
 	private void updateContainer(EntityPlayer player, Container container) {
 		List<ItemStack> itemstacks = container.getInventory();
-		updateRadiationOnItems(player, container, itemstacks);
+		updateRadiationOnItems(player.worldObj, player, container, itemstacks);
 	}
 	
-	private void updateRadiationOnItems(EntityPlayer player, Container container, List<ItemStack> itemstacks) {
+	private void updateRadiationOnItems(World world, EntityPlayer player, Container container, List<ItemStack> itemstacks) {
 		for(ItemStack itemstack : itemstacks) {
 			if(itemstack != null && itemstack.itemID == MinechemItems.element.shiftedIndex) {
 				ItemStack elementBeforeDecay = itemstack.copy();
-				int radiationDamage = updateRadiation(player, itemstack);
+				int radiationDamage = updateRadiation(world, itemstack);
 				ItemStack elementAfterDecay  = itemstack.copy();
-				if(radiationDamage > 0) {
+				if(radiationDamage > 0 && container != null) {
 					applyRadiationDamage(player, container, radiationDamage);
 					printRadiationDamageToChat(player, elementBeforeDecay, elementAfterDecay);
 				}
@@ -97,8 +106,7 @@ public class RadiationHandler {
 		player.addChatMessage(message);
 	}
 	
-	private int updateRadiation(EntityPlayer player, ItemStack element) {
-		World world = player.worldObj;
+	private int updateRadiation(World world, ItemStack element) {
 		RadiationInfo radiationInfo = MinechemItems.element.getRadiationInfo(element, world);
 		int dimensionID = world.getWorldInfo().getDimension();
 		if(dimensionID != radiationInfo.dimensionID && radiationInfo.isRadioactive()) {
