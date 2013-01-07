@@ -31,6 +31,7 @@ public class BlockGhostBlock extends BlockContainer {
 	public BlockGhostBlock(int id) {
 		super(id, Material.iron);
 		setBlockName("block.minechemGhostBlock");
+		setCreativeTab(ModMinechem.minechemTab);
 		setLightValue(0.5F);
 		setHardness(1000F);
 		setResistance(1000F);

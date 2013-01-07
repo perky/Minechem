@@ -11,7 +11,7 @@ public class ItemChemistryUpgrade extends Item {
 	public ItemChemistryUpgrade(int id) {
 		super(id);
 		setItemName("minechem.itemChemistryTurtleUpgrade");
-		setCreativeTab(ComputerCraftAPI.getCreativeTab());
+		setCreativeTab(ModMinechem.minechemTab);
 		setIconIndex(14);
 	}
 	
