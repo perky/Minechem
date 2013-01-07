@@ -5,6 +5,7 @@ import java.util.List;
 
 import ljdp.minechem.api.core.EnumRadioactivity;
 import ljdp.minechem.api.core.IRadiationShield;
+import ljdp.minechem.common.containers.ContainerChemicalStorage;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -27,14 +28,34 @@ public class RadiationHandler {
 	
 	public void update(EntityPlayer player) {
 		Container openContainer = player.openContainer;
-		if(openContainer != null)
+		if(openContainer != null && openContainer instanceof ContainerChemicalStorage)
+			updateChemicalStorageContainer(player, openContainer);
+		else if(openContainer != null)
 			updateContainer(player, openContainer);
 		else
 			updateContainer(player, player.inventoryContainer);
 	}
 	
+	private void updateChemicalStorageContainer(EntityPlayer player, Container openContainer) {
+		ContainerChemicalStorage chemicalStorage = (ContainerChemicalStorage) openContainer;
+		List<ItemStack> itemstacks = chemicalStorage.getStorageInventory();
+		for(ItemStack itemstack : itemstacks) {
+			if(itemstack != null && itemstack.itemID == MinechemItems.element.shiftedIndex) {
+				RadiationInfo radiationInfo = MinechemItems.element.getRadiationInfo(itemstack, player.worldObj);
+				radiationInfo.lastRadiationUpdate = player.worldObj.getTotalWorldTime();
+				MinechemItems.element.setRadiationInfo(radiationInfo, itemstack);
+			}
+		}
+		List<ItemStack> playerStacks = chemicalStorage.getPlayerInventory();
+		updateRadiationOnItems(player, openContainer, playerStacks);
+	}
+
 	private void updateContainer(EntityPlayer player, Container container) {
 		List<ItemStack> itemstacks = container.getInventory();
+		updateRadiationOnItems(player, container, itemstacks);
+	}
+	
+	private void updateRadiationOnItems(EntityPlayer player, Container container, List<ItemStack> itemstacks) {
 		for(ItemStack itemstack : itemstacks) {
 			if(itemstack != null && itemstack.itemID == MinechemItems.element.shiftedIndex) {
 				ItemStack elementBeforeDecay = itemstack.copy();

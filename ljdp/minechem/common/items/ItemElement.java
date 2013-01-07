@@ -188,7 +188,7 @@ public class ItemElement extends Item {
 		}
 	}
 	
-	private RadiationInfo initiateRadioactivity(ItemStack element, World world) {
+	public RadiationInfo initiateRadioactivity(ItemStack element, World world) {
 		EnumRadioactivity radioactivity = getRadioactivity(element);
 		int dimensionID = world.getWorldInfo().getDimension();
 		long lastUpdate = world.getTotalWorldTime();

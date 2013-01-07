@@ -6,6 +6,7 @@ import ljdp.minechem.client.gui.GuiFusion;
 import ljdp.minechem.client.gui.GuiMicroscope;
 import ljdp.minechem.client.gui.GuiProjector;
 import ljdp.minechem.client.gui.GuiSynthesis;
+import ljdp.minechem.common.containers.ContainerChemicalStorage;
 import ljdp.minechem.common.containers.ContainerChemistJournal;
 import ljdp.minechem.common.containers.ContainerDecomposer;
 import ljdp.minechem.common.containers.ContainerFusion;
@@ -13,11 +14,13 @@ import ljdp.minechem.common.containers.ContainerMicroscope;
 import ljdp.minechem.common.containers.ContainerProjector;
 import ljdp.minechem.common.containers.ContainerSynthesis;
 import ljdp.minechem.common.tileentity.TileEntityBlueprintProjector;
+import ljdp.minechem.common.tileentity.TileEntityChemicalStorage;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;
 import ljdp.minechem.common.tileentity.TileEntityFusion;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
 import ljdp.minechem.common.tileentity.TileEntityProxy;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
+import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -46,6 +49,8 @@ public class GuiHandler implements IGuiHandler {
 			return getServerGuiElementFromProxy((TileEntityProxy)tileEntity, player);
 		if(tileEntity instanceof TileEntityBlueprintProjector)
 			return new ContainerProjector(player.inventory, (TileEntityBlueprintProjector)tileEntity);
+		if(tileEntity instanceof TileEntityChemicalStorage)
+			return new ContainerChemicalStorage(player.inventory, (TileEntityChemicalStorage)tileEntity);
 		return null;
 	}
 
@@ -78,6 +83,8 @@ public class GuiHandler implements IGuiHandler {
 			return getClientGuiElementFromProxy((TileEntityProxy)tileEntity, player);
 		if(tileEntity instanceof TileEntityBlueprintProjector)
 			return new GuiProjector(player.inventory, (TileEntityBlueprintProjector)tileEntity);
+		if(tileEntity instanceof TileEntityChemicalStorage)
+			return new GuiChest(player.inventory, (TileEntityChemicalStorage)tileEntity);
 		return null;
 	}
 	
