@@ -1,0 +1,3 @@
+[submodule "apis/EasyPacket"]
+	path = apis/EasyPacket
+	url = ssh://git@github.com/perky/EasyPacket
