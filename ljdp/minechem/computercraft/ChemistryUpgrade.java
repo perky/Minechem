@@ -43,7 +43,7 @@ public class ChemistryUpgrade implements ITurtleUpgrade {
 
 	@Override
 	public int getIconIndex(ITurtleAccess turtle, TurtleSide side) {
-		return 0;
+		return 14;
 	}
 
 	@Override
