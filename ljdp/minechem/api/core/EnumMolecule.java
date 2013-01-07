@@ -115,7 +115,7 @@ public enum EnumMolecule {
 	// some random things 
 	salt 					(89, "Sodium Chloride", new Element(Na,1), new Element(Cl,1)), 
 	nh3  					(90, "Aqueous Ammonia", new Element(N,1), new Element(H,4), new Molecule(hydroxide)),
-	nod 					(91, " Nodularin", new Element(C,41), new Element(H,60), new Element(N,8), new Element(O,10)),
+	nod 					(91, "Nodularin", new Element(C,41), new Element(H,60), new Element(N,8), new Element(O,10)),
 	becauseImAPotato                        (92, "Digoxin", new Element(C,41) new Element(H,64) new Element(O,14)), // Will come from bad potatos
 	;
 	
