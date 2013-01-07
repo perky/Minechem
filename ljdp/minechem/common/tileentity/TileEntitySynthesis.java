@@ -15,6 +15,7 @@ import buildcraft.api.transport.IPipe;
 
 import java.util.List;
 import ljdp.minechem.api.recipe.SynthesisRecipe;
+import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.api.util.Util;
 import ljdp.minechem.client.ModelSynthesizer;
 import ljdp.minechem.common.MinechemItems;
@@ -85,7 +86,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 		synthesisInventory = new ItemStack[getSizeInventory()];
 		if (PowerFramework.currentFramework != null) {
 			powerProvider = new MinechemPowerProvider(minEnergyPerTick, maxEnergyPerTick, activationEnergy, energyStorage);
-			powerProvider.configurePowerPerdition(1, 10);
+			powerProvider.configurePowerPerdition(1, Constants.TICKS_PER_SECOND * 2);
 		}
 		model = new ModelSynthesizer();
 		ActionManager.registerTriggerProvider(this);

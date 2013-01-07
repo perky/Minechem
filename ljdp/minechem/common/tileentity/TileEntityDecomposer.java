@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import ljdp.minechem.api.recipe.DecomposerRecipe;
+import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.api.util.Util;
 import ljdp.minechem.client.ModelDecomposer;
 import ljdp.minechem.common.MinechemItems;
@@ -87,7 +88,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 		decomposerItemStacks = new ItemStack[getSizeInventory()];
 		outputBuffer = new ArrayList<ItemStack>();
 		powerProvider = new MinechemPowerProvider(2, 20, 0, 10000);
-		powerProvider.configurePowerPerdition(1, 10);
+		powerProvider.configurePowerPerdition(1, Constants.TICKS_PER_SECOND * 2);
 		model = new ModelDecomposer();
 		ActionManager.registerTriggerProvider(this);
 	}
