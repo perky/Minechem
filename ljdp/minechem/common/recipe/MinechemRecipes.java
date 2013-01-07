@@ -186,6 +186,13 @@ public class MinechemRecipes {
 				"   ",
 				'P', pvcStack
 		);
+		GameRegistry.addRecipe(new ItemStack(MinechemBlocks.chemicalStorage),
+				"LLL",
+				"LCL",
+				"LLL",
+				'L', new ItemStack(MinechemItems.element, 1, Pb.ordinal()),
+				'C', new ItemStack(Block.chest)
+		);
 
 		GameRegistry.addShapelessRecipe(new ItemStack(MinechemItems.journal), 
 				new ItemStack(Item.book), new ItemStack(MinechemItems.testTube));
