@@ -250,18 +250,34 @@ public class TileEntityFusion extends TileEntityMultiBlock implements IInventory
 
 	@Override
 	public int getStartInventorySide(ForgeDirection side) {
-		if(side == ForgeDirection.UP)
+		switch(side) {
+		case NORTH:
+		case SOUTH:
+		case EAST:
+		case WEST:
+		case UNKNOWN:
 			return kStartOutput;
-		else
+		case UP:
+		case DOWN:
+		default:
 			return kStartInput1;
+		}
 	}
 
 	@Override
 	public int getSizeInventorySide(ForgeDirection side) {
-		if(side == ForgeDirection.UP)
+		switch(side) {
+		case NORTH:
+		case SOUTH:
+		case EAST:
+		case WEST:
+		case UNKNOWN:
 			return 1;
-		else
+		case UP:
+		case DOWN:
+		default:
 			return 2;
+		}
 	}
 
 }

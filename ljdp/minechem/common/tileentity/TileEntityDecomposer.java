@@ -218,26 +218,36 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 
 	@Override
 	public int getStartInventorySide(ForgeDirection side) {
-		if(side == ForgeDirection.UP)
+		switch(side) {
+		case NORTH:
+		case SOUTH:
 			return kInputSlot;
-		if(side == ForgeDirection.NORTH || side == ForgeDirection.WEST 
-				|| side == ForgeDirection.EAST || side == ForgeDirection.SOUTH)
+		case EAST:
+		case WEST:
+		case UNKNOWN:
+		default:
 			return kOutputSlotStart;
-		if(side == ForgeDirection.DOWN)
+		case UP:
+		case DOWN:
 			return kEmptyTestTubeSlotStart;
-		return 0;
+		}
 	}
 
 	@Override
 	public int getSizeInventorySide(ForgeDirection side) {
-		if(side == ForgeDirection.UP) 
+		switch(side) {
+		case NORTH:
+		case SOUTH:
 			return 1;
-		if(side == ForgeDirection.DOWN) 
-			return kEmptyBottleSlotsSize;
-		if(side == ForgeDirection.NORTH || side == ForgeDirection.WEST 
-				|| side == ForgeDirection.EAST || side == ForgeDirection.SOUTH)
+		case EAST:
+		case WEST:
+		case UNKNOWN:
+		default:
 			return kOutputSlotsSize;
-		return 0;
+		case UP:
+		case DOWN:
+			return kEmptyBottleSlotsSize;
+		}
 	}
 
 	@Override
