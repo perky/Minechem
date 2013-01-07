@@ -220,7 +220,7 @@ public class MinechemHelper {
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.wither.getId(), Constants.TICKS_PER_SECOND * 60, 2));
     		break;
     	case ethanol:
-    		entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 5, 1));
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 10, 1));
     		entityPlayer.getFoodStats().addStats(3, .1F);
     		break;
     	case cyanide:
@@ -260,9 +260,6 @@ public class MinechemHelper {
 	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), Constants.TICKS_PER_SECOND * 30, 10));
 	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.wither.getId(), Constants.TICKS_PER_SECOND * 60, 1));
 	    	break;
-		case pk5:
-			entityPlayer.addPotionEffect(new PotionEffect(Potion.wither.getId(), Constants.TICKS_PER_SECOND * 120, 1));
-			break;
 		case pk1: // Polyketides have many roles in medicine 
 			entityPlayer.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), Constants.TICKS_PER_MINUTE * 4, 2));
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(),   Constants.TICKS_PER_MINUTE * 4, 0));

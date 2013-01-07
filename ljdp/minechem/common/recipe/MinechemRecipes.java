@@ -803,7 +803,7 @@ public class MinechemRecipes {
 		
         // project SkyWorld
         ItemStack sw1 = new ItemStack(Item.fishRaw);
-        DecomposerRecipe.add(new DecomposerRecipeChance(sw1, 0.04F, new Molecule(pk5,1))); 
+        DecomposerRecipe.add(new DecomposerRecipeChance(sw1, 0.05F, new Molecule(pk4))); 
         
         ItemStack sw2 = new ItemStack(Block.plantYellow);
         DecomposerRecipe.add(new DecomposerRecipeChance(sw2, 0.3F, new Molecule(shikimicAcid,2)));
