@@ -86,10 +86,7 @@ public class RadiationHandler {
 			totalReductionFactor -= reduction;
 		if(totalReductionFactor < 0)
 			totalReductionFactor = 0;
-		System.out.println("Total reduction factor: "+totalReductionFactor);
-		System.out.println("Base Damage: " + damage);
 		damage = Math.round((float)damage * totalReductionFactor);
-		System.out.println("Final Damage: " + damage);
 		player.attackEntityFrom(DamageSource.generic, damage);
 	}
 	

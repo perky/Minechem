@@ -15,11 +15,10 @@ import net.minecraftforge.common.IArmorTextureProvider;
 
 public class ItemArmorRadiationShield extends ItemArmor implements IRadiationShield, IArmorTextureProvider {
 	
-	public static EnumArmorMaterial armorHazmat = EnumHelper.addArmorMaterial("MINECHEMHAZMAT", 10, new int[]{50,50,50,50}, 0);
 	private float radiationShieldFactor;
 	
 	public ItemArmorRadiationShield(int id, int part, float radiationShieldFactor) {
-		super(id, armorHazmat, 2, part);
+		super(id, EnumArmorMaterial.CHAIN, 2, part);
 		this.radiationShieldFactor = radiationShieldFactor;
 		setItemName("minechem.itemArmorRadiationShield");
 		setCreativeTab(ModMinechem.minechemTab);
