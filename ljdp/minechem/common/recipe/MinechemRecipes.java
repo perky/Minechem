@@ -755,6 +755,19 @@ public class MinechemRecipes {
 				new DecomposerRecipe(element(Zn), element(O))
 		));
 		
+		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Block.cobblestone, 8), true, 50,
+				element(Si),	null, 			null,
+				null, 			element(O), 	null
+		));
+		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Block.stone, 7), true, 50,
+				element(Si),	null, 			null,
+				element(O), 	null, 			null
+		));
+		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Block.dirt, 16), true, 50,
+				null,	null, 			null,
+				null, 	element(O), 	element(Si)
+		));
+		
 		ItemStack lavaBucket = new ItemStack(Item.bucketLava);
 		ItemStack netherrack = new ItemStack(Block.netherrack);
 		ItemStack soulsand   = new ItemStack(Block.slowSand);
