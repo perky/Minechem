@@ -1,10 +1,13 @@
-# Minechem v2.0.0pr5.3
+# Minechem v2.0.0pr6
 Adds chemistry to minecraft. Minechem comes with five machines.
-* The decomposer takes an item and decomposes it into it's chemical composition.
-* The synthesis machines takes elements and molecules and synthesis them into tangible items.
-* The microscope can inspect items to discover chemical compositions and recipes for the synthesis machine.
-* The blueprint projector takes a blueprint and projects a 3D representation of a structure. Used for building advanced machines.
-* The fusion chamber is built via the blueprint projector and combines the mass of two elements to create a single heavier element.
+* The Decomposer takes an item and decomposes it into it's chemical composition.
+* The Synthesis machines takes elements and molecules and synthesis them into tangible items.
+* The Microscope can inspect items to discover chemical compositions and recipes for the synthesis machine.
+* The Blueprint projector takes a blueprint and projects a 3D representation of a structure. Used for building advanced machines.
+* The Fusion chamber is built via the blueprint projector and combines the mass of two elements to create a single heavier element.
+* The Hazmat suit reduces damage from radioactive elements.
+* The Chemical storage will store chemicals and prevent them from decaying.
+* The Chemistry Turtle will assist you with your chemical production line. (See wiki for more details on chemistry turtle). 
 
 ## Requirements:
 * Minecraft 1.4.6
@@ -13,8 +16,8 @@ Adds chemistry to minecraft. Minechem comes with five machines.
 
 ## Download links
 
-MineChem 2.0.0pr5.3:
-http://bit.ly/TDwrC6
+MineChem 2.0.0pr6:
+http://bit.ly/Wqktsl
 
 ## Licence
 Minechem v2.x is licensed under Creative Commons Attribution-ShareAlike 3.0 Unported.
