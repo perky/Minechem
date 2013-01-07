@@ -905,39 +905,39 @@ public class MinechemRecipes {
 		if(event.Name.contains("oreCopper")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Cu,4)));
 		}
-		else if(event.Name.contains("ingotCopper")) {
+		else if(event.Name.contains("Copper")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Cu,2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Cu,2)));
 		}
 		else if(event.Name.contains("oreSilver")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Ag,4)));
 		}
-		else if(event.Name.contains("ingotSilver")) {
+		else if(event.Name.contains("Silver")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Ag,2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Ag,2)));
 		}
 		else if(event.Name.contains("oreTin")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Sn,4)));
 		}
-		else if(event.Name.contains("ingotTin")) {
+		else if(event.Name.contains("Tin")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Sn,2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Sn,2)));
 		}
 		else if(event.Name.contains("oreLead")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Pb,4)));
 		}
-		else if(event.Name.contains("ingotLead")) {
+		else if(event.Name.contains("Lead")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Pb,2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Pb,2)));
 		}
-		else if(event.Name.contains("ingotBronze")) {
+		else if(event.Name.contains("Bronze")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Sn), element(Cu,9)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Sn), element(Cu,9)));
 		}
 		else if(event.Name.contains("oreUranium")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(U,4)));
 		}
-		else if(event.Name.contains("ingotUranium")) {
+		else if(event.Name.contains("Uranium")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(U,2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 5000, element(U,2)));
 		}
@@ -945,15 +945,15 @@ public class MinechemRecipes {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(U,2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 5000, element(U,2)));
 		}
-		else if(event.Name.contains("ingotBrass")) {
+		else if(event.Name.contains("Brass")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Cu,3), element(Zn,2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Cu,3), element(Zn,2)));
 		}
-		else if(event.Name.contains("ingotSteel")) {
+		else if(event.Name.contains("Steel")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Fe,4), element(C)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Fe,4), element(C)));
 		}
-		else if(event.Name.contains("ingotTitanium")) {
+		else if(event.Name.contains("Titanium")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Ti,2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Ti,2)));
 		}
@@ -965,23 +965,23 @@ public class MinechemRecipes {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Fe,3)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Fe,3)));
 		}
-		else if(event.Name.contains("ingotChrome")) {
+		else if(event.Name.contains("Chrome")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Cr,2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Cr,2)));
 		}
-		else if(event.Name.contains("ingotAluminium")) {
+		else if(event.Name.contains("Aluminium")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Al,2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Al,2)));
 		}
-		else if(event.Name.contains("ingotIridium")) {
+		else if(event.Name.contains("Iridium")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Ir,2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Ir,2)));
 		}
-		else if(event.Name.contains("gemRuby")) {
+		else if(event.Name.contains("Ruby")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, molecule(aluminiumOxide), element(Cr)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, molecule(aluminiumOxide), element(Cr)));
 		}
-		else if(event.Name.contains("gemSapphire")) {
+		else if(event.Name.contains("Sapphire")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, molecule(aluminiumOxide,2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, molecule(aluminiumOxide,2)));
 		}
@@ -993,7 +993,7 @@ public class MinechemRecipes {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(W, 2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(W, 2)));
 		}
-	    else if(event.Name.contains("ingotZinc")) {
+	    else if(event.Name.contains("Zinc")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zn, 2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Zn, 2)));
 		}
@@ -1008,6 +1008,9 @@ public class MinechemRecipes {
 		else if(event.Name.contains("plateSilicon")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Si, 2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Si, 2)));
+		} else if(event.Name.contains("Tungsten")) {
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(W)));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(W)));
 		}
 	}
 	

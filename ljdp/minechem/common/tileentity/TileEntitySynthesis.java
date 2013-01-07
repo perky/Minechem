@@ -123,8 +123,12 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 			clearRecipeMatrix();
 		if(this.synthesisInventory[slot] != null) {
 			ItemStack itemstack;
-			if(slot == kStartOutput)
-				onOuputPickupFromSlot();
+			if(slot == kStartOutput) {
+				if(takeInputStacks())
+					takeEnergy(currentRecipe);
+				else
+					return null;
+			}
 			if(this.synthesisInventory[slot].stackSize <= amount) {
 				itemstack = this.synthesisInventory[slot];
 				this.synthesisInventory[slot] = null;

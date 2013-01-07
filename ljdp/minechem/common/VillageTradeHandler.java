@@ -26,6 +26,11 @@ public class VillageTradeHandler implements IVillageTradeHandler {
 			recipeList.add(new MerchantRecipe(new ItemStack(Item.emerald), new ItemStack(Item.diamond), 
 					new ItemStack(MinechemItems.blueprint, 1, 0))
 			);
+			if(random.nextFloat() < .5F) {
+				recipeList.add(new MerchantRecipe(new ItemStack(Item.emerald), new ItemStack(Item.diamond), 
+						new ItemStack(MinechemItems.blueprint, 1, 3))
+				);
+			}
 			/*
 			recipeList.add(new MerchantRecipe(new ItemStack(Item.emerald), new ItemStack(Item.diamond), 
 					new ItemStack(MinechemItems.blueprint, 1, 1))
