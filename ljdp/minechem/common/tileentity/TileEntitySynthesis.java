@@ -123,6 +123,8 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 			clearRecipeMatrix();
 		if(this.synthesisInventory[slot] != null) {
 			ItemStack itemstack;
+			if(slot == kStartOutput)
+				onOuputPickupFromSlot();
 			if(this.synthesisInventory[slot].stackSize <= amount) {
 				itemstack = this.synthesisInventory[slot];
 				this.synthesisInventory[slot] = null;
@@ -312,8 +314,8 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 		getRecipeResult();
 	}
 
-	public void onOuputPickupFromSlot(EntityPlayer entityPlayer) {
-		if(takeStacksFromStorage(true))
+	public void onOuputPickupFromSlot() {
+		if(takeInputStacks())
 			takeEnergy(currentRecipe);
 	}
 
@@ -555,6 +557,17 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 			}
 		}
 		return ingredientAmountLeft == 0;
+	}
+	
+	private int takeInputStacks(int times) {
+		int count = 0;
+		while(times > 0) {
+			if(!takeInputStacks())
+				break;
+			else
+				count++;
+		}
+		return count;
 	}
 
 	private boolean takeInputStacks() {

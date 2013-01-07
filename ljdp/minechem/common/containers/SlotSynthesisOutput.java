@@ -27,7 +27,6 @@ public class SlotSynthesisOutput extends Slot {
 	@Override
 	public void onPickupFromSlot(EntityPlayer par1EntityPlayer, ItemStack par2ItemStack) {
 		super.onPickupFromSlot(par1EntityPlayer, par2ItemStack);
-		synthesis.onOuputPickupFromSlot(par1EntityPlayer);
 	}
 	
 	
