@@ -5,15 +5,19 @@ import java.util.List;
 
 import buildcraft.api.core.SafeTimeTracker;
 
+import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.common.RadiationHandler;
 import ljdp.minechem.common.RadiationHandler.DecayEvent;
+import ljdp.minechem.computercraft.method.ClearSynthesisRecipe;
 import ljdp.minechem.computercraft.method.GetAtomicMass;
 import ljdp.minechem.computercraft.method.GetChemicalName;
 import ljdp.minechem.computercraft.method.GetChemicals;
 import ljdp.minechem.computercraft.method.GetFormula;
 import ljdp.minechem.computercraft.method.GetRadioactivity;
 import ljdp.minechem.computercraft.method.GetTicksUntilDecay;
+import ljdp.minechem.computercraft.method.PlaceSynthesisRecipe;
+import ljdp.minechem.computercraft.method.StoreSynthesisRecipe;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,7 +25,7 @@ import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IHostedPeripheral;
 import dan200.turtle.api.ITurtleAccess;
 
-public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral {
+public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral, IMinechemPeripheral {
 	
 	private static String[] methodNames;
 	private static ICCMethod[] methods = {
@@ -30,12 +34,16 @@ public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral {
 			new GetChemicals(),
 			new GetAtomicMass(),
 			new GetRadioactivity(),
-			new GetTicksUntilDecay()
+			new GetTicksUntilDecay(),
+			new StoreSynthesisRecipe(),
+			new PlaceSynthesisRecipe(),
+			new ClearSynthesisRecipe()
 	};
 	
 	public ITurtleAccess turtle;
 	public IComputerAccess computer;
 	public SafeTimeTracker updateTracker = new SafeTimeTracker();
+	private SynthesisRecipe synthesisRecipe;
 	
 	public ChemistryTurtleUpgradePeripherial(ITurtleAccess turtle) {
 		this.turtle = turtle;
@@ -59,7 +67,7 @@ public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral {
 
 	@Override
 	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws Exception {
-		return methods[method].call(computer, turtle, arguments);
+		return methods[method].call(computer, turtle, null, arguments);
 	}
 
 	@Override
@@ -118,6 +126,21 @@ public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral {
 				inventory.add(stack);
 		}
 		return inventory;
+	}
+
+	@Override
+	public SynthesisRecipe getSynthesisRecipe() {
+		return this.synthesisRecipe;
+	}
+
+	@Override
+	public void setSynthesisRecipe(SynthesisRecipe synthesisRecipe) {
+		this.synthesisRecipe = synthesisRecipe;
+	}
+
+	@Override
+	public ICCMethod[] getMethods() {
+		return methods;
 	}
 
 }

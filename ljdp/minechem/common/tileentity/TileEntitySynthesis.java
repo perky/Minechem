@@ -505,13 +505,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 		ItemStack activeItem = MinechemItems.journal.getActiveStack(itemstack);
 		if(activeItem != null) {
 			SynthesisRecipe recipe = SynthesisRecipeHandler.instance.getRecipeFromOutput(activeItem);
-			if(recipe != null) {
-				ItemStack[] ingredients = MinechemHelper.convertChemicalArrayIntoItemStackArray(recipe.getShapedRecipe());
-				for(int i = 0; i < Math.min(kSizeRecipe, ingredients.length); i++) {
-					synthesisInventory[kStartRecipe + i] = ingredients[i];
-				}
-				onInventoryChanged();
-			}
+			setRecipe(recipe);
 		}
 	}
 
@@ -598,6 +592,17 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 			amount--;
 		}
 		return outputs;
+	}
+
+	public void setRecipe(SynthesisRecipe recipe) {
+		clearRecipeMatrix();
+		if(recipe != null) {
+			ItemStack[] ingredients = MinechemHelper.convertChemicalArrayIntoItemStackArray(recipe.getShapedRecipe());
+			for(int i = 0; i < Math.min(kSizeRecipe, ingredients.length); i++) {
+				synthesisInventory[kStartRecipe + i] = ingredients[i];
+			}
+			onInventoryChanged();
+		}
 	}
 
 }
