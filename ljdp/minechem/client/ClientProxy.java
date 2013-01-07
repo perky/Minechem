@@ -8,6 +8,7 @@ import ljdp.minechem.client.render.item.ItemMicroscopeRenderer;
 import ljdp.minechem.client.render.item.ItemMoleculeRenderer;
 import ljdp.minechem.client.render.item.ItemSynthesisRenderer;
 import ljdp.minechem.client.render.tileentity.TileEntityBlueprintProjectorRenderer;
+import ljdp.minechem.client.render.tileentity.TileEntityChemicalStorageRenderer;
 import ljdp.minechem.client.render.tileentity.TileEntityDecomposerRenderer;
 import ljdp.minechem.client.render.tileentity.TileEntityGhostBlockRenderer;
 import ljdp.minechem.client.render.tileentity.TileEntityMicroscopeRenderer;
@@ -18,6 +19,7 @@ import ljdp.minechem.common.MinechemBlocks;
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.tileentity.TileEntityBlueprintProjector;
+import ljdp.minechem.common.tileentity.TileEntityChemicalStorage;
 import ljdp.minechem.common.tileentity.TileEntityDecomposer;
 import ljdp.minechem.common.tileentity.TileEntityGhostBlock;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
@@ -52,6 +54,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.preloadTexture(PROJECTOR_GUI_PNG);
 		MinecraftForgeClient.preloadTexture(JOURNAL_GUI_PNG);
 		MinecraftForgeClient.preloadTexture(HAZMAT_PNG);
+		MinecraftForgeClient.preloadTexture(CHEMICAL_STORAGE_MODEL);
 		
 		CUSTOM_RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
 		
@@ -68,6 +71,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySynthesis.class, new TileEntitySynthesisRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBlueprintProjector.class, new  TileEntityBlueprintProjectorRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGhostBlock.class, new TileEntityGhostBlockRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChemicalStorage.class, new TileEntityChemicalStorageRenderer());
 	}
 	
 	@Override
