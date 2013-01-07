@@ -801,17 +801,14 @@ public class MinechemRecipes {
 				new DecomposerRecipe(element(Rb))
 		));
 		
-        // project SkyWorld
-        ItemStack sw1 = new ItemStack(Item.fishRaw);
-        DecomposerRecipe.add(new DecomposerRecipeChance(sw1, 0.04F, new Molecule(pk5,1))); 
-        
+        // project SkyWorld  
         ItemStack sw2 = new ItemStack(Block.plantYellow);
         DecomposerRecipe.add(new DecomposerRecipeChance(sw2, 0.3F, new Molecule(shikimicAcid,2)));
 
         ItemStack sw3 = new ItemStack(Item.rottenFlesh);
-        DecomposerRecipe.add(new DecomposerRecipeChance(sw3, 0.05F, new Molecule(nod,1)));
+        DecomposerRecipe.add(new DecomposerRecipeChance(sw3, 0.08F, new Molecule(nod,1)));
 
-        ItemStack sw4 = new ItemStack(Block.grass, 1, 2);
+        ItemStack sw4 = new ItemStack(Block.grass, 1, 2); // Luke I need help with the fern's metadata 
         DecomposerRecipe.add(new DecomposerRecipeChance(sw4, 0.07F, new Molecule(pk1,2)));
                 
 		addDecomposerRecipesFromMolecules();
@@ -831,8 +828,7 @@ public class MinechemRecipes {
 		registerPoisonRecipes(quinine);
 		registerPoisonRecipes(sulfuricAcid);
 		registerPoisonRecipes(ttx);
-		// registerPoisonRecipes(pk5);
-		// registerPoisonRecipes(potato);
+	      // registerPoisonRecipes(potato);
 	}
 	
 	private void addDecomposerRecipesFromMolecules() {
