@@ -505,4 +505,19 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 		return outputTransactor.removeItem(true);
 	}
 
+	@Override
+	public String getMachineState() {
+		if(this.state == State.kProcessJammed) {
+			return "outputjammed";
+		} else if(this.state == State.kProcessNoBottles) {
+			return "needtesttubes";
+		} else if(this.state == State.kProcessActive) {
+			return "decomposing";
+		} else if(this.powerProvider.getEnergyStored() > this.powerProvider.getMinEnergyReceived()) {
+			return "powered";
+		} else {
+			return "unpowered";
+		}
+	}
+
 }

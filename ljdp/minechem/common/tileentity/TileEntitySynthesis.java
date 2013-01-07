@@ -2,18 +2,8 @@ package ljdp.minechem.common.tileentity;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-
-import buildcraft.api.core.Position;
-import buildcraft.api.gates.ActionManager;
-import buildcraft.api.gates.ITrigger;
-import buildcraft.api.gates.ITriggerProvider;
-import buildcraft.api.inventory.ISpecialInventory;
-import buildcraft.api.power.IPowerProvider;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerFramework;
-import buildcraft.api.transport.IPipe;
-
 import java.util.List;
+
 import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.api.util.Util;
@@ -32,16 +22,20 @@ import ljdp.minechem.computercraft.IMinechemMachinePeripheral;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
+import buildcraft.api.core.Position;
+import buildcraft.api.gates.ActionManager;
+import buildcraft.api.gates.ITrigger;
+import buildcraft.api.gates.ITriggerProvider;
+import buildcraft.api.inventory.ISpecialInventory;
+import buildcraft.api.power.IPowerProvider;
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.transport.IPipe;
 
 public class TileEntitySynthesis extends MinechemTileEntity implements IInventory, ISidedInventory, 
 IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, IMinechemMachinePeripheral
@@ -685,6 +679,19 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 	@Override
 	public ItemStack putJournal(ItemStack journal) {
 		return journalTransactor.add(journal, true);
+	}
+
+	@Override
+	public String getMachineState() {
+		if(currentRecipe == null) {
+			return "norecipe";
+		} else {
+			int energyCost = currentRecipe.energyCost();
+			if(this.powerProvider.getEnergyStored() >= energyCost)
+				return "powered";
+			else
+				return "unpowered";
+		}
 	}
 
 }

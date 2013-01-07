@@ -192,4 +192,9 @@ public class TileEntityMicroscope extends MinechemTileEntity implements IInvento
 	public ItemStack putJournal(ItemStack journal) {
 		return journalTransactor.add(journal, true);
 	}
+
+	@Override
+	public String getMachineState() {
+		return null;
+	}
 }

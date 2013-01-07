@@ -24,4 +24,6 @@ public interface IMinechemMachinePeripheral {
 	
 	public ItemStack putJournal(ItemStack journal);
 	
+	public String getMachineState();
+	
 }

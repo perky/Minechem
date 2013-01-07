@@ -357,4 +357,15 @@ public class TileEntityFusion extends TileEntityMultiBlock implements IInventory
 		return null;
 	}
 
+	@Override
+	public String getMachineState() {
+		if(starInventory.getStackInSlot(0) == null) {
+			return "needfusionstar";
+		} else if(isRecharging) {
+			return "recharging";
+		} else {
+			return "powered";
+		}
+	}
+
 }

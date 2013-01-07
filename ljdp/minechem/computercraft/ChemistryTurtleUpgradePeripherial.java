@@ -12,6 +12,7 @@ import ljdp.minechem.computercraft.method.GetAtomicMass;
 import ljdp.minechem.computercraft.method.GetChemicalName;
 import ljdp.minechem.computercraft.method.GetChemicals;
 import ljdp.minechem.computercraft.method.GetFormula;
+import ljdp.minechem.computercraft.method.GetMachineState;
 import ljdp.minechem.computercraft.method.GetRadioactivity;
 import ljdp.minechem.computercraft.method.GetTicksUntilDecay;
 import ljdp.minechem.computercraft.method.PlaceSynthesisRecipe;
@@ -52,7 +53,8 @@ public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral, IMi
 			new TakeFusionStar(),
 			new PutFusionStar(),
 			new TakeJournal(),
-			new PutJournal()
+			new PutJournal(),
+			new GetMachineState()
 	};
 	
 	public ITurtleAccess turtle;
