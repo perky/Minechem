@@ -3,8 +3,6 @@ package ljdp.minechem.computercraft;
 import java.util.ArrayList;
 import java.util.List;
 
-import buildcraft.api.core.SafeTimeTracker;
-
 import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.common.RadiationHandler;
@@ -18,11 +16,17 @@ import ljdp.minechem.computercraft.method.GetRadioactivity;
 import ljdp.minechem.computercraft.method.GetTicksUntilDecay;
 import ljdp.minechem.computercraft.method.PlaceSynthesisRecipe;
 import ljdp.minechem.computercraft.method.PutEmptyTestTube;
+import ljdp.minechem.computercraft.method.PutFusionStar;
+import ljdp.minechem.computercraft.method.PutInput;
+import ljdp.minechem.computercraft.method.PutJournal;
 import ljdp.minechem.computercraft.method.StoreSynthesisRecipe;
 import ljdp.minechem.computercraft.method.TakeEmptyTestTube;
-
+import ljdp.minechem.computercraft.method.TakeFusionStar;
+import ljdp.minechem.computercraft.method.TakeJournal;
+import ljdp.minechem.computercraft.method.TakeOuput;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import buildcraft.api.core.SafeTimeTracker;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IHostedPeripheral;
 import dan200.turtle.api.ITurtleAccess;
@@ -42,7 +46,13 @@ public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral, IMi
 			new PlaceSynthesisRecipe(),
 			new ClearSynthesisRecipe(),
 			new PutEmptyTestTube(),
-			new TakeEmptyTestTube()
+			new TakeEmptyTestTube(),
+			new TakeOuput(),
+			new PutInput(),
+			new TakeFusionStar(),
+			new PutFusionStar(),
+			new TakeJournal(),
+			new PutJournal()
 	};
 	
 	public ITurtleAccess turtle;
