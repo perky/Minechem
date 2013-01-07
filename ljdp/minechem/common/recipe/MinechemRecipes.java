@@ -425,9 +425,9 @@ public class MinechemRecipes {
 				carbonStack, 	element(Cn,16), heliumStack,
 				hydrogenStack, 	hydrogenStack, 	hydrogenStack
 		));
-		SynthesisRecipe.add(new SynthesisRecipe(spiderEye, true, 2000, // may need to be changed
+		SynthesisRecipe.add(new SynthesisRecipe(spiderEye, true, 2000, 
 				element(C),	null,			null,
-				null,		element(Po), 	null,
+				null,		molecule(ttx), 	null,
 				null, 		null, 			element(C)
 		));
 		SynthesisRecipe.add(new SynthesisRecipe(glowstoneBlock, true, 500,
@@ -897,7 +897,6 @@ public class MinechemRecipes {
 		createPoisonedItemStack(Item.fishCooked, 0, aMolecule);
 		createPoisonedItemStack(Item.cookie, 0, aMolecule);
 		createPoisonedItemStack(Item.pumpkinPie, 0, aMolecule);
-		// still need to add mushroom pie 
 	}
 
 	@ForgeSubscribe
