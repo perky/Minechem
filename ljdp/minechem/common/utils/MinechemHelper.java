@@ -251,12 +251,12 @@ public class MinechemHelper {
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 1, 1));
     		break;
 		case shikimicAcid:
-			// No effect.
-			break; 
+		// No effect.
+		break; 
 		case sulfuricAcid:
 		entityPlayer.attackEntityFrom(DamageSource.generic, 8);	 
 		break;
-		case ttx:
+		case ttx: 
 	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), Constants.TICKS_PER_SECOND * 30, 10));
 	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.wither.getId(), Constants.TICKS_PER_SECOND * 60, 1));
 		break;
@@ -268,6 +268,11 @@ public class MinechemHelper {
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(),   Constants.TICKS_PER_MINUTE * 4, 0));
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 4, 1));
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.getId(), Constants.TICKS_PER_SECOND * 5, 1));
+		break;
+		// this will increase difficulty as only one polyketide has medical potential 
+		case pk3:
+		break;
+		case pk4:
 		break;
 		default:
 			entityPlayer.attackEntityFrom(DamageSource.generic, 5);
