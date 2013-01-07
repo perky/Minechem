@@ -3,7 +3,7 @@
   "modid": "minechem",
   "name": "MineChem",
   "description": "Add chemistry to Minecraft.",
-  "version": "@VERSION@",
+  "version": "",
   "credits": "Created by Ljdp (Luke Perkin)",
   "logoFile": "/textures/minechem/logo.png",
   "mcversion": "",

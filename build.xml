@@ -2,7 +2,7 @@
 <project name="Minechem 2" basedir="" default="main">
 	
 	<!-- CHANGE THE PATHS HERE TO MATCH YOUR SYSTEM -->
-	<property name="minechem-version"  value="2.0.0pr5.3"/>
+	<property name="minechem-version"  value="2.0.0pr6"/>
 	<property name="build-dir"         location="../minechem-build"/>
 	<property name="forge-dir"         location="T:/Modding/Minecraft Src/forge"/>
 	
@@ -31,6 +31,11 @@
         <copy todir="${src-dir}/buildcraft">
             <fileset dir="${apis-dir}/BuildCraft"/>
         </copy>
+		
+		<!-- Copy ComputerCraft API -->
+		<copy todir="${src-dir}/dan200">
+			  <fileset dir="${apis-dir}/dan200/dan200"/>
+		</copy>
 	</target>
     
 	<target name="compile">
@@ -67,18 +72,11 @@
         	</fileset>
         </copy>
 		
-		<!-- Copy mcmod.info -->
-		<copy todir="${build-dir}">
-		  <fileset file="${minechem-src-dir}/resources/mcmod.info"/>
-		  <filterset>
-		  	<filter token="VERSION" value="${minechem-version}"/>
-		  </filterset>
-		</copy>
-		
 		<!-- delete from src dir -->
 		<delete dir="${src-dir}/ljdp"/>
 		<delete dir="${src-dir}/buildcraft"/>
 		<delete dir="${src-dir}/codechicken"/>
+		<delete dir="${src-dir}/dan200"/>
 	</target>
 	
 	<target name="package">
