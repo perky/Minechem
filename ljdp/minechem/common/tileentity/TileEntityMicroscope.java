@@ -6,11 +6,14 @@ import ljdp.minechem.api.core.EnumMolecule;
 import ljdp.minechem.api.recipe.DecomposerRecipe;
 import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.common.MinechemItems;
+import ljdp.minechem.common.inventory.BoundedInventory;
+import ljdp.minechem.common.inventory.Transactor;
 import ljdp.minechem.common.items.ItemMolecule;
 import ljdp.minechem.common.recipe.DecomposerRecipeHandler;
 import ljdp.minechem.common.recipe.MinechemRecipes;
 import ljdp.minechem.common.recipe.SynthesisRecipeHandler;
 import ljdp.minechem.common.utils.MinechemHelper;
+import ljdp.minechem.computercraft.IMinechemMachinePeripheral;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -19,10 +22,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityMicroscope extends MinechemTileEntity implements IInventory {
+public class TileEntityMicroscope extends MinechemTileEntity implements IInventory, IMinechemMachinePeripheral {
 	
 	private ItemStack[] microscopeInventory;
 	public boolean isShaped = true;
+	
+	private final BoundedInventory inputInvetory = new BoundedInventory(this, 0, 1);
+	private final BoundedInventory journalInventory = new BoundedInventory(this, 1, 2);
+	private Transactor inputTransactor = new Transactor(inputInvetory, 1);
+	private Transactor journalTransactor = new Transactor(journalInventory, 1);
 	
 	public TileEntityMicroscope() {
 		microscopeInventory = new ItemStack[getSizeInventory()];
@@ -106,7 +114,7 @@ public class TileEntityMicroscope extends MinechemTileEntity implements IInvento
 
 	@Override
 	void sendUpdatePacket() {
-		// TODO Auto-generated method stub
+
 	}
 	
 	@Override
@@ -133,5 +141,55 @@ public class TileEntityMicroscope extends MinechemTileEntity implements IInvento
 		ItemStack journalStack = ItemStack.loadItemStackFromNBT(journalTag);
 		microscopeInventory[0] = inspectingStack;
 		microscopeInventory[1] = journalStack;
+	}
+
+	@Override
+	public ItemStack takeEmptyTestTube() {
+		return null;
+	}
+
+	@Override
+	public ItemStack putEmptyTestTube(ItemStack testTube) {
+		return null;
+	}
+
+	@Override
+	public ItemStack takeOutput() {
+		return null;
+	}
+
+	@Override
+	public ItemStack putOutput(ItemStack output) {
+		return null;
+	}
+
+	@Override
+	public ItemStack takeInput() {
+		return inputTransactor.removeItem(true);
+	}
+
+	@Override
+	public ItemStack putInput(ItemStack input) {
+		return inputTransactor.add(input, true);
+	}
+
+	@Override
+	public ItemStack takeFusionStar() {
+		return null;
+	}
+
+	@Override
+	public ItemStack putFusionStar(ItemStack fusionStar) {
+		return null;
+	}
+
+	@Override
+	public ItemStack takeJournal() {
+		return journalTransactor.removeItem(true);
+	}
+
+	@Override
+	public ItemStack putJournal(ItemStack journal) {
+		return journalTransactor.add(journal, true);
 	}
 }

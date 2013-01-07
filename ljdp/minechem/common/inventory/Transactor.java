@@ -10,9 +10,15 @@ import net.minecraftforge.common.ForgeDirection;
 public class Transactor {
 	
 	BoundedInventory inventory;
+	int maxStackSize = 64;
 	
 	public Transactor(BoundedInventory inventory) {
 		this.inventory = inventory;
+	}
+	
+	public Transactor(BoundedInventory inventory, int maxStackSize) {
+		this(inventory);
+		this.maxStackSize = maxStackSize;
 	}
 
 	public ItemStack add(ItemStack stack, boolean doAdd) {
@@ -72,9 +78,11 @@ public class Transactor {
 	public int putStackInSlot(ItemStack stack, int amount, int slot, boolean doAdd) {
 		ItemStack stackInSlot = inventory.getStackInSlot(slot);
 		if(stackInSlot == null) {
+			if(stack.stackSize > getMaxStackSize(stack))
+				stack.stackSize = getMaxStackSize(stack);
 			if(doAdd)
 				inventory.setInventorySlotContents(slot, stack);
-			return amount;
+			return stack.stackSize;
 		}
 		if(Util.stacksAreSameKind(stack, stackInSlot)) {
 			return appendStackToSlot(stack, amount, slot, doAdd);
@@ -85,8 +93,8 @@ public class Transactor {
 	
 	public int appendStackToSlot(ItemStack stack, int amount, int slot, boolean doAdd) {
 		ItemStack stackInSlot = inventory.getStackInSlot(slot);
-		if(stackInSlot.stackSize + amount > stackInSlot.getMaxStackSize()) {
-			int partialAmount = (stackInSlot.getMaxStackSize() - stackInSlot.stackSize);
+		if(stackInSlot.stackSize + amount > getMaxStackSize(stackInSlot)) {
+			int partialAmount = (getMaxStackSize(stackInSlot) - stackInSlot.stackSize);
 			if(doAdd)
 				stackInSlot.stackSize += partialAmount;
 			return partialAmount;
@@ -95,6 +103,10 @@ public class Transactor {
 				stackInSlot.stackSize += amount;
 			return amount;
 		}
+	}
+	
+	public int getMaxStackSize(ItemStack itemstack) {
+		return Math.min(itemstack.getMaxStackSize(), this.maxStackSize);
 	}
 	
 	

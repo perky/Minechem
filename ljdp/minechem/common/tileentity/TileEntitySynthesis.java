@@ -76,9 +76,9 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 	private final BoundedInventory tubeInventory = 
 			new BoundedInventory(this, kStartBottles, kStartBottles + kSizeBottles);
 	private final BoundedInventory outputInventory =
-			new BoundedInventory(this, kStartOutput, kSizeOutput);
+			new BoundedInventory(this, kStartOutput, kStartOutput + kSizeOutput);
 	private final BoundedInventory journalInventory =
-			new BoundedInventory(this, kStartJournal, kSizeJournal);
+			new BoundedInventory(this, kStartJournal, kStartJournal + kSizeJournal);
 	private Transactor testTubeTransactor;
 	private Transactor storageTransactor;
 	private Transactor outputTransactor;
@@ -97,7 +97,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 		testTubeTransactor 	= new Transactor(tubeInventory);
 		storageTransactor  	= new Transactor(storageInventory);
 		outputTransactor	= new Transactor(outputInventory);
-		journalTransactor	= new Transactor(journalInventory);
+		journalTransactor	= new Transactor(journalInventory, 1);
 		recipeMatrixTransactor = new Transactor(recipeMatrix);
 		powerProvider = new MinechemPowerProvider(minEnergyPerTick, maxEnergyPerTick, activationEnergy, energyStorage);
 		powerProvider.configurePowerPerdition(1, Constants.TICKS_PER_SECOND * 2);
