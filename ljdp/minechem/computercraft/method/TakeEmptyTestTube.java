@@ -21,14 +21,15 @@ public class TakeEmptyTestTube extends InteractMachine implements ICCMethod {
 
 	private Object[] take(ITurtleAccess turtle) {
 		IMinechemMachinePeripheral machine = getMachineInFront(turtle);
-		int selectedSlot = turtle.getSelectedSlot();
-		ItemStack takenStack = machine.takeEmptyTestTube();
 		boolean didTake = false;
-		if(takenStack != null) {
-			if(!turtle.storeItemStack(takenStack)) {
-				machine.putEmptyTestTube(takenStack);
-			} else {
-				didTake = true;
+		if(machine != null) {
+			ItemStack takenStack = machine.takeEmptyTestTube();
+			if(takenStack != null) {
+				if(!turtle.storeItemStack(takenStack)) {
+					machine.putEmptyTestTube(takenStack);
+				} else {
+					didTake = true;
+				}
 			}
 		}
 		return new Object[]{ didTake };

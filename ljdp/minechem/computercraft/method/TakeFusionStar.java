@@ -20,10 +20,12 @@ public class TakeFusionStar extends InteractMachine implements ICCMethod {
 		boolean didTake = false;
 		if(machine != null) {
 			ItemStack takenStack = machine.takeFusionStar();
-			if(turtle.storeItemStack(takenStack)) {
-				didTake = true;
-			} else {
-				machine.putFusionStar(takenStack);
+			if(takenStack != null) {
+				if(turtle.storeItemStack(takenStack)) {
+					didTake = true;
+				} else {
+					machine.putFusionStar(takenStack);
+				}
 			}
 		}
 		return new Object[]{ didTake };

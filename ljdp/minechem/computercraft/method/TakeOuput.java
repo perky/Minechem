@@ -21,10 +21,12 @@ public class TakeOuput extends InteractMachine implements ICCMethod {
 		boolean didTake = false;
 		if(machine != null) {
 			ItemStack takenStack = machine.takeOutput();
-			if(turtle.storeItemStack(takenStack)) {
-				didTake = true;
-			} else {
-				machine.putOutput(takenStack);
+			if(takenStack != null) {
+				if(turtle.storeItemStack(takenStack)) {
+					didTake = true;
+				} else {
+					machine.putOutput(takenStack);
+				}
 			}
 		}
 		return new Object[]{ didTake };

@@ -2,6 +2,7 @@ package ljdp.minechem.computercraft.method;
 
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
 import ljdp.minechem.computercraft.IMinechemMachinePeripheral;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -22,6 +23,19 @@ public class InteractMachine {
 			return (IMinechemMachinePeripheral) tileEntity;
 		else
 			return null;
+	}
+	
+	public boolean tryPut(ItemStack beforeStack, ItemStack afterStack, ITurtleAccess turtle) {
+		int selectedSlot = turtle.getSelectedSlot();
+		beforeStack.stackSize  -= afterStack.stackSize;
+		if(beforeStack.stackSize <= 0)
+			turtle.setSlotContents(selectedSlot, null);
+		else
+			turtle.setSlotContents(selectedSlot, beforeStack);
+		if(afterStack.stackSize > 0)
+			return true;
+		else
+			return false;
 	}
 	
 }
