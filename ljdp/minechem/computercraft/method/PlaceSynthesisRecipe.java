@@ -6,9 +6,13 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import dan200.computer.api.IComputerAccess;
+import dan200.computer.api.IHostedPeripheral;
 import dan200.turtle.api.ITurtleAccess;
+import dan200.turtle.api.TurtleSide;
 import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
+import ljdp.minechem.computercraft.CCMain;
+import ljdp.minechem.computercraft.ChemistryTurtleUpgradePeripherial;
 import ljdp.minechem.computercraft.ICCMethod;
 import ljdp.minechem.computercraft.IMinechemPeripheral;
 
@@ -20,14 +24,14 @@ public class PlaceSynthesisRecipe implements ICCMethod {
 	}
 
 	@Override
-	public Object[] call(IComputerAccess computer, ITurtleAccess turtle,
-			IMinechemPeripheral minechemPeripheral, Object[] arguments)
+	public Object[] call(IComputerAccess computer, ITurtleAccess turtle, Object[] arguments)
 			throws Exception 
 	{
 		boolean didPlace = false;
 		TileEntitySynthesis synthesis = getSynthesisMachineInFrontOfTurtle(turtle);
 		if(synthesis != null) {
-			SynthesisRecipe recipe = minechemPeripheral.getSynthesisRecipe();
+			IMinechemPeripheral periperal = ChemistryTurtleUpgradePeripherial.getMinechemPeripheral(turtle);
+			SynthesisRecipe recipe = periperal.getSynthesisRecipe();
 			synthesis.setRecipe(recipe);
 			didPlace = true;
 		}

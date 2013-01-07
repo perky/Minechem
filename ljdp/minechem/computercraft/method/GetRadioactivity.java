@@ -6,7 +6,6 @@ import ljdp.minechem.api.util.Util;
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.utils.MinechemHelper;
 import ljdp.minechem.computercraft.ICCMethod;
-import ljdp.minechem.computercraft.IMinechemPeripheral;
 import net.minecraft.item.ItemStack;
 import dan200.computer.api.IComputerAccess;
 import dan200.turtle.api.ITurtleAccess;
@@ -19,7 +18,7 @@ public class GetRadioactivity implements ICCMethod {
 	}
 
 	@Override
-	public Object[] call(IComputerAccess computer, ITurtleAccess turtle, IMinechemPeripheral minechemPeripheral, Object[] arguments) throws Exception {
+	public Object[] call(IComputerAccess computer, ITurtleAccess turtle, Object[] arguments) throws Exception {
 		if(arguments.length == 1) {
 			return getRadioactivityFromString(arguments[0]);
 		} else {

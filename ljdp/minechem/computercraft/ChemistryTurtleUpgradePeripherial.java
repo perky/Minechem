@@ -24,6 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IHostedPeripheral;
 import dan200.turtle.api.ITurtleAccess;
+import dan200.turtle.api.TurtleSide;
 
 public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral, IMinechemPeripheral {
 	
@@ -44,6 +45,17 @@ public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral, IMi
 	public IComputerAccess computer;
 	public SafeTimeTracker updateTracker = new SafeTimeTracker();
 	private SynthesisRecipe synthesisRecipe;
+	
+	public static IMinechemPeripheral getMinechemPeripheral(ITurtleAccess turtle) {
+		IHostedPeripheral leftPeripheral = turtle.getPeripheral(TurtleSide.Left);
+		IHostedPeripheral rightPeripheral = turtle.getPeripheral(TurtleSide.Right);
+		if(leftPeripheral != null && leftPeripheral instanceof IMinechemPeripheral)
+			return (IMinechemPeripheral) leftPeripheral;
+		else if(rightPeripheral != null && rightPeripheral instanceof IMinechemPeripheral)
+			return (IMinechemPeripheral) rightPeripheral;
+		else
+			return null;
+	}
 	
 	public ChemistryTurtleUpgradePeripherial(ITurtleAccess turtle) {
 		this.turtle = turtle;
@@ -67,7 +79,7 @@ public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral, IMi
 
 	@Override
 	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws Exception {
-		return methods[method].call(computer, turtle, null, arguments);
+		return methods[method].call(computer, turtle, arguments);
 	}
 
 	@Override

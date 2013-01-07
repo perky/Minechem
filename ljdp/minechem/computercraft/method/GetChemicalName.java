@@ -3,7 +3,6 @@ package ljdp.minechem.computercraft.method;
 import ljdp.minechem.api.util.Util;
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.computercraft.ICCMethod;
-import ljdp.minechem.computercraft.IMinechemPeripheral;
 import net.minecraft.item.ItemStack;
 import dan200.computer.api.IComputerAccess;
 import dan200.turtle.api.ITurtleAccess;
@@ -16,7 +15,7 @@ public class GetChemicalName implements ICCMethod {
 	}
 
 	@Override
-	public Object[] call(IComputerAccess computer, ITurtleAccess turtle, IMinechemPeripheral minechemPeripheral, Object[] arguments) throws Exception {
+	public Object[] call(IComputerAccess computer, ITurtleAccess turtle, Object[] arguments) throws Exception {
 		if(arguments.length != 0)
 			throw new Exception("Invalid number of arguments");
 		Object result = null;

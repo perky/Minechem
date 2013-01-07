@@ -11,7 +11,6 @@ import ljdp.minechem.api.core.EnumMolecule;
 import ljdp.minechem.api.core.Molecule;
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.computercraft.ICCMethod;
-import ljdp.minechem.computercraft.IMinechemPeripheral;
 import net.minecraft.item.ItemStack;
 import dan200.computer.api.IComputerAccess;
 import dan200.turtle.api.ITurtleAccess;
@@ -24,7 +23,7 @@ public class GetChemicals implements ICCMethod {
 	}
 
 	@Override
-	public Object[] call(IComputerAccess computer, ITurtleAccess turtle, IMinechemPeripheral minechemPeripheral, Object[] arguments) throws Exception {
+	public Object[] call(IComputerAccess computer, ITurtleAccess turtle, Object[] arguments) throws Exception {
 		Map<Integer, Map> result = new HashMap();
 		int pos = 1;
 		EnumMolecule molecule = null;
