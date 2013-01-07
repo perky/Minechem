@@ -218,10 +218,36 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 
 	@Override
 	public int getSizeInventorySide(ForgeDirection side) {
-		if(side == side.WEST || side == side.NORTH || side == side.EAST || side == side.SOUTH)
-			return kSizeOutput;
-		else
+		switch(side) {
+		case NORTH:
+		case SOUTH:
+		case UNKNOWN:
+			return kSizeStorage;
+		case EAST:
+		case WEST:
+			return 1;
+		case UP:
+		case DOWN:
+		default:
 			return kSizeBottles;
+		}
+	}
+	
+	@Override
+	public int getStartInventorySide(ForgeDirection side) {
+		switch(side) {
+		case NORTH:
+		case SOUTH:
+		case UNKNOWN:
+			return kStartStorage;
+		case EAST:
+		case WEST:
+			return kStartOutput;
+		case UP:
+		case DOWN:
+		default:
+			return kStartBottles;
+		}
 	}
 
 	@Override
@@ -232,14 +258,6 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 	@Override
 	public ItemStack getStackInSlotOnClosing(int var1) {
 		return null;
-	}
-
-	@Override
-	public int getStartInventorySide(ForgeDirection side) {
-		if(side == side.WEST || side == side.NORTH || side == side.EAST || side == side.SOUTH)
-			return kStartOutput;
-		else
-			return kStartBottles;
 	}
 
 	public boolean hasEnoughPowerForCurrentRecipe() {
