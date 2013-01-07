@@ -3,8 +3,6 @@ package ljdp.minechem.computercraft;
 import java.util.ArrayList;
 import java.util.List;
 
-import buildcraft.api.core.SafeTimeTracker;
-
 import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.common.RadiationHandler;
@@ -14,19 +12,28 @@ import ljdp.minechem.computercraft.method.GetAtomicMass;
 import ljdp.minechem.computercraft.method.GetChemicalName;
 import ljdp.minechem.computercraft.method.GetChemicals;
 import ljdp.minechem.computercraft.method.GetFormula;
+import ljdp.minechem.computercraft.method.GetMachineState;
 import ljdp.minechem.computercraft.method.GetRadioactivity;
 import ljdp.minechem.computercraft.method.GetTicksUntilDecay;
 import ljdp.minechem.computercraft.method.PlaceSynthesisRecipe;
+import ljdp.minechem.computercraft.method.PutEmptyTestTube;
+import ljdp.minechem.computercraft.method.PutFusionStar;
+import ljdp.minechem.computercraft.method.PutInput;
+import ljdp.minechem.computercraft.method.PutJournal;
 import ljdp.minechem.computercraft.method.StoreSynthesisRecipe;
-
+import ljdp.minechem.computercraft.method.TakeEmptyTestTube;
+import ljdp.minechem.computercraft.method.TakeFusionStar;
+import ljdp.minechem.computercraft.method.TakeJournal;
+import ljdp.minechem.computercraft.method.TakeOuput;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import buildcraft.api.core.SafeTimeTracker;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IHostedPeripheral;
 import dan200.turtle.api.ITurtleAccess;
 import dan200.turtle.api.TurtleSide;
 
-public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral, IMinechemPeripheral {
+public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral, IMinechemTurtlePeripheral {
 	
 	private static String[] methodNames;
 	private static ICCMethod[] methods = {
@@ -38,7 +45,16 @@ public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral, IMi
 			new GetTicksUntilDecay(),
 			new StoreSynthesisRecipe(),
 			new PlaceSynthesisRecipe(),
-			new ClearSynthesisRecipe()
+			new ClearSynthesisRecipe(),
+			new PutEmptyTestTube(),
+			new TakeEmptyTestTube(),
+			new TakeOuput(),
+			new PutInput(),
+			new TakeFusionStar(),
+			new PutFusionStar(),
+			new TakeJournal(),
+			new PutJournal(),
+			new GetMachineState()
 	};
 	
 	public ITurtleAccess turtle;
@@ -46,13 +62,13 @@ public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral, IMi
 	public SafeTimeTracker updateTracker = new SafeTimeTracker();
 	private SynthesisRecipe synthesisRecipe;
 	
-	public static IMinechemPeripheral getMinechemPeripheral(ITurtleAccess turtle) {
+	public static IMinechemTurtlePeripheral getMinechemPeripheral(ITurtleAccess turtle) {
 		IHostedPeripheral leftPeripheral = turtle.getPeripheral(TurtleSide.Left);
 		IHostedPeripheral rightPeripheral = turtle.getPeripheral(TurtleSide.Right);
-		if(leftPeripheral != null && leftPeripheral instanceof IMinechemPeripheral)
-			return (IMinechemPeripheral) leftPeripheral;
-		else if(rightPeripheral != null && rightPeripheral instanceof IMinechemPeripheral)
-			return (IMinechemPeripheral) rightPeripheral;
+		if(leftPeripheral != null && leftPeripheral instanceof IMinechemTurtlePeripheral)
+			return (IMinechemTurtlePeripheral) leftPeripheral;
+		else if(rightPeripheral != null && rightPeripheral instanceof IMinechemTurtlePeripheral)
+			return (IMinechemTurtlePeripheral) rightPeripheral;
 		else
 			return null;
 	}

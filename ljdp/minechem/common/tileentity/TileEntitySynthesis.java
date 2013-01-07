@@ -2,19 +2,10 @@ package ljdp.minechem.common.tileentity;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-
-import buildcraft.api.core.Position;
-import buildcraft.api.gates.ActionManager;
-import buildcraft.api.gates.ITrigger;
-import buildcraft.api.gates.ITriggerProvider;
-import buildcraft.api.inventory.ISpecialInventory;
-import buildcraft.api.power.IPowerProvider;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerFramework;
-import buildcraft.api.transport.IPipe;
-
 import java.util.List;
+
 import ljdp.minechem.api.recipe.SynthesisRecipe;
+import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.api.util.Util;
 import ljdp.minechem.client.ModelSynthesizer;
 import ljdp.minechem.common.MinechemItems;
@@ -27,22 +18,27 @@ import ljdp.minechem.common.network.PacketHandler;
 import ljdp.minechem.common.network.PacketSynthesisUpdate;
 import ljdp.minechem.common.recipe.SynthesisRecipeHandler;
 import ljdp.minechem.common.utils.MinechemHelper;
+import ljdp.minechem.computercraft.IMinechemMachinePeripheral;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
+import buildcraft.api.core.Position;
+import buildcraft.api.gates.ActionManager;
+import buildcraft.api.gates.ITrigger;
+import buildcraft.api.gates.ITriggerProvider;
+import buildcraft.api.inventory.ISpecialInventory;
+import buildcraft.api.power.IPowerProvider;
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.transport.IPipe;
 
 public class TileEntitySynthesis extends MinechemTileEntity implements IInventory, ISidedInventory, 
-IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
+IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, IMinechemMachinePeripheral
 {
 	
 	private class ItemStackPointer {
@@ -73,6 +69,15 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 			new BoundedInventory(this, kStartStorage, kStartStorage + kSizeStorage);
 	private final BoundedInventory tubeInventory = 
 			new BoundedInventory(this, kStartBottles, kStartBottles + kSizeBottles);
+	private final BoundedInventory outputInventory =
+			new BoundedInventory(this, kStartOutput, kStartOutput + kSizeOutput);
+	private final BoundedInventory journalInventory =
+			new BoundedInventory(this, kStartJournal, kStartJournal + kSizeJournal);
+	private Transactor testTubeTransactor;
+	private Transactor storageTransactor;
+	private Transactor outputTransactor;
+	private Transactor recipeMatrixTransactor;
+	private Transactor journalTransactor;
 	
 	int minEnergyPerTick = 30;
 	int maxEnergyPerTick = 200;
@@ -82,11 +87,14 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 	private boolean hasFullEnergy;
 	
 	public TileEntitySynthesis() {
-		synthesisInventory = new ItemStack[getSizeInventory()];
-		if (PowerFramework.currentFramework != null) {
-			powerProvider = new MinechemPowerProvider(minEnergyPerTick, maxEnergyPerTick, activationEnergy, energyStorage);
-			powerProvider.configurePowerPerdition(1, 10);
-		}
+		synthesisInventory 	= new ItemStack[getSizeInventory()];
+		testTubeTransactor 	= new Transactor(tubeInventory);
+		storageTransactor  	= new Transactor(storageInventory);
+		outputTransactor	= new Transactor(outputInventory);
+		journalTransactor	= new Transactor(journalInventory, 1);
+		recipeMatrixTransactor = new Transactor(recipeMatrix);
+		powerProvider = new MinechemPowerProvider(minEnergyPerTick, maxEnergyPerTick, activationEnergy, energyStorage);
+		powerProvider.configurePowerPerdition(1, Constants.TICKS_PER_SECOND * 2);
 		model = new ModelSynthesizer();
 		ActionManager.registerTriggerProvider(this);
 	}
@@ -164,7 +172,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 	}
 	
 	public ItemStack[] extractTestTubes(boolean doRemove, int maxItemCount) {
-		return new Transactor(tubeInventory).remove(maxItemCount, doRemove);
+		return testTubeTransactor.remove(maxItemCount, doRemove);
 	}
 	
 	public SynthesisRecipe getCurrentRecipe() {
@@ -218,10 +226,36 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 
 	@Override
 	public int getSizeInventorySide(ForgeDirection side) {
-		if(side == side.WEST || side == side.NORTH || side == side.EAST || side == side.SOUTH)
-			return kSizeOutput;
-		else
+		switch(side) {
+		case NORTH:
+		case SOUTH:
+		case UNKNOWN:
+			return kSizeStorage;
+		case EAST:
+		case WEST:
+			return 1;
+		case UP:
+		case DOWN:
+		default:
 			return kSizeBottles;
+		}
+	}
+	
+	@Override
+	public int getStartInventorySide(ForgeDirection side) {
+		switch(side) {
+		case NORTH:
+		case SOUTH:
+		case UNKNOWN:
+			return kStartStorage;
+		case EAST:
+		case WEST:
+			return kStartOutput;
+		case UP:
+		case DOWN:
+		default:
+			return kStartBottles;
+		}
 	}
 
 	@Override
@@ -232,14 +266,6 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 	@Override
 	public ItemStack getStackInSlotOnClosing(int var1) {
 		return null;
-	}
-
-	@Override
-	public int getStartInventorySide(ForgeDirection side) {
-		if(side == side.WEST || side == side.NORTH || side == side.EAST || side == side.SOUTH)
-			return kStartOutput;
-		else
-			return kStartBottles;
 	}
 
 	public boolean hasEnoughPowerForCurrentRecipe() {
@@ -602,6 +628,69 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 				synthesisInventory[kStartRecipe + i] = ingredients[i];
 			}
 			onInventoryChanged();
+		}
+	}
+
+	@Override
+	public ItemStack takeEmptyTestTube() {
+		return testTubeTransactor.removeItem(true);
+	}
+
+	@Override
+	public ItemStack putEmptyTestTube(ItemStack testTube) {
+		return testTubeTransactor.add(testTube, true);
+	}
+
+	@Override
+	public ItemStack takeOutput() {
+		return outputTransactor.removeItem(true);
+	}
+
+	@Override
+	public ItemStack putOutput(ItemStack output) {
+		return outputTransactor.add(output, true);
+	}
+
+	@Override
+	public ItemStack takeInput() {
+		return storageTransactor.removeItem(true);
+	}
+
+	@Override
+	public ItemStack putInput(ItemStack input) {
+		return storageTransactor.add(input, true);
+	}
+
+	@Override
+	public ItemStack takeFusionStar() {
+		return null;
+	}
+
+	@Override
+	public ItemStack putFusionStar(ItemStack fusionStar) {
+		return null;
+	}
+
+	@Override
+	public ItemStack takeJournal() {
+		return journalTransactor.removeItem(true);
+	}
+
+	@Override
+	public ItemStack putJournal(ItemStack journal) {
+		return journalTransactor.add(journal, true);
+	}
+
+	@Override
+	public String getMachineState() {
+		if(currentRecipe == null) {
+			return "norecipe";
+		} else {
+			int energyCost = currentRecipe.energyCost();
+			if(this.powerProvider.getEnergyStored() >= energyCost)
+				return "powered";
+			else
+				return "unpowered";
 		}
 	}
 

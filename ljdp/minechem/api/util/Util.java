@@ -24,4 +24,8 @@ public class Util {
 		return itemstack.getItemName().contains("minechem.itemMolecule");
 	}
 
+	public static boolean isStackAnEmptyTestTube(ItemStack itemstack) {
+		return itemstack.getItemName().contains("minechem.itemTestTube");
+	}
+
 }

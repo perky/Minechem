@@ -5,7 +5,7 @@ import dan200.turtle.api.ITurtleAccess;
 import ljdp.minechem.computercraft.CCMain;
 import ljdp.minechem.computercraft.ChemistryTurtleUpgradePeripherial;
 import ljdp.minechem.computercraft.ICCMethod;
-import ljdp.minechem.computercraft.IMinechemPeripheral;
+import ljdp.minechem.computercraft.IMinechemTurtlePeripheral;
 
 public class ClearSynthesisRecipe implements ICCMethod {
 
@@ -18,7 +18,7 @@ public class ClearSynthesisRecipe implements ICCMethod {
 	public Object[] call(IComputerAccess computer, ITurtleAccess turtle, Object[] arguments)
 			throws Exception 
 	{
-		IMinechemPeripheral peripheral = ChemistryTurtleUpgradePeripherial.getMinechemPeripheral(turtle);
+		IMinechemTurtlePeripheral peripheral = ChemistryTurtleUpgradePeripherial.getMinechemPeripheral(turtle);
 		peripheral.setSynthesisRecipe(null);
 		return null;
 	}

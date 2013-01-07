@@ -14,7 +14,8 @@ import ljdp.minechem.common.tileentity.TileEntitySynthesis;
 import ljdp.minechem.computercraft.CCMain;
 import ljdp.minechem.computercraft.ChemistryTurtleUpgradePeripherial;
 import ljdp.minechem.computercraft.ICCMethod;
-import ljdp.minechem.computercraft.IMinechemPeripheral;
+import ljdp.minechem.computercraft.IMinechemMachinePeripheral;
+import ljdp.minechem.computercraft.IMinechemTurtlePeripheral;
 
 public class PlaceSynthesisRecipe implements ICCMethod {
 
@@ -28,9 +29,9 @@ public class PlaceSynthesisRecipe implements ICCMethod {
 			throws Exception 
 	{
 		boolean didPlace = false;
-		TileEntitySynthesis synthesis = getSynthesisMachineInFrontOfTurtle(turtle);
+		TileEntitySynthesis synthesis = getSynthesisMachineInFront(turtle);
 		if(synthesis != null) {
-			IMinechemPeripheral periperal = ChemistryTurtleUpgradePeripherial.getMinechemPeripheral(turtle);
+			IMinechemTurtlePeripheral periperal = ChemistryTurtleUpgradePeripherial.getMinechemPeripheral(turtle);
 			SynthesisRecipe recipe = periperal.getSynthesisRecipe();
 			synthesis.setRecipe(recipe);
 			didPlace = true;
@@ -38,7 +39,7 @@ public class PlaceSynthesisRecipe implements ICCMethod {
 		return new Object[]{ didPlace };
 	}
 	
-	private TileEntitySynthesis getSynthesisMachineInFrontOfTurtle(ITurtleAccess turtle) {
+	public TileEntitySynthesis getSynthesisMachineInFront(ITurtleAccess turtle) {
 		Vec3 vector = turtle.getPosition();
 		ForgeDirection direction = ForgeDirection.getOrientation(turtle.getFacingDir());
 		Position position = new Position(vector.xCoord, vector.yCoord, vector.zCoord, direction);

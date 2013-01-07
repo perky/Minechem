@@ -4,8 +4,11 @@ import ljdp.minechem.api.core.EnumElement;
 import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.blueprint.BlueprintFusion;
+import ljdp.minechem.common.inventory.BoundedInventory;
+import ljdp.minechem.common.inventory.Transactor;
 import ljdp.minechem.common.network.PacketHandler;
 import ljdp.minechem.common.utils.MinechemHelper;
+import ljdp.minechem.computercraft.IMinechemMachinePeripheral;
 import buildcraft.api.core.SafeTimeTracker;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -19,12 +22,22 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 
-public class TileEntityFusion extends TileEntityMultiBlock implements IInventory, ISidedInventory {
+public class TileEntityFusion extends TileEntityMultiBlock implements IInventory, ISidedInventory, IMinechemMachinePeripheral {
 	
 	public static int kStartFusionStar = 0;
 	public static int kStartInput1 = 1;
 	public static int kStartInput2 = 2;
 	public static int kStartOutput = 3;
+	public static int kSizeInput = 2;
+	public static int kSizeOutput = 1;
+	public static int kSizeFusionStar = 1;
+	
+	private final BoundedInventory inputInventory;
+	private final BoundedInventory outputInventory;
+	private final BoundedInventory starInventory;
+	private Transactor inputTransactor;
+	private Transactor outputTransactor;
+	private Transactor starTransactor;
 	
 	ItemStack[] inventory;
 	int energyStored = 0;
@@ -35,6 +48,12 @@ public class TileEntityFusion extends TileEntityMultiBlock implements IInventory
 	boolean shouldSendUpdatePacket;
 	
 	public TileEntityFusion() {
+		inputInventory = new BoundedInventory(this, kStartInput1, kStartInput1 + kSizeInput);
+		outputInventory = new BoundedInventory(this, kStartOutput, kStartOutput + kSizeOutput);
+		starInventory = new BoundedInventory(this, kStartFusionStar, kSizeFusionStar + kSizeFusionStar);
+		inputTransactor = new Transactor(inputInventory);
+		outputTransactor = new Transactor(outputInventory);
+		starTransactor = new Transactor(starInventory, 1);
 		this.inventory = new ItemStack[this.getSizeInventory()];
 		setBlueprint(new BlueprintFusion());
 	}
@@ -162,10 +181,12 @@ public class TileEntityFusion extends TileEntityMultiBlock implements IInventory
 	public int getSizeInventory() {
 		return 4;
 	}
+	
 	@Override
 	public ItemStack getStackInSlot(int slot) {
 		return this.inventory[slot];
 	}
+	
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
 		if(this.inventory[slot] != null) {
@@ -184,11 +205,12 @@ public class TileEntityFusion extends TileEntityMultiBlock implements IInventory
 			return null;
 		}
 	}
+	
 	@Override
 	public ItemStack getStackInSlotOnClosing(int var1) {
-		// TODO Auto-generated method stub
 		return null;
 	}
+	
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
 		if(itemstack != null && itemstack.itemID == Item.netherStar.shiftedIndex) {
@@ -197,22 +219,27 @@ public class TileEntityFusion extends TileEntityMultiBlock implements IInventory
 			this.inventory[slot] = itemstack;
 		}
 	}
+	
 	@Override
 	public String getInvName() {
 		return "container.minechemFusion";
 	}
+	
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
 	}
+	
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityPlayer) {
 		if(!completeStructure)
 			return false;
 		return true;
 	}
+	
 	@Override
 	public void openChest() {}
+	
 	@Override
 	public void closeChest() {}
 	
@@ -250,18 +277,95 @@ public class TileEntityFusion extends TileEntityMultiBlock implements IInventory
 
 	@Override
 	public int getStartInventorySide(ForgeDirection side) {
-		if(side == ForgeDirection.UP)
+		switch(side) {
+		case NORTH:
+		case SOUTH:
+		case EAST:
+		case WEST:
+		case UNKNOWN:
 			return kStartOutput;
-		else
+		case UP:
+		case DOWN:
+		default:
 			return kStartInput1;
+		}
 	}
 
 	@Override
 	public int getSizeInventorySide(ForgeDirection side) {
-		if(side == ForgeDirection.UP)
+		switch(side) {
+		case NORTH:
+		case SOUTH:
+		case EAST:
+		case WEST:
+		case UNKNOWN:
 			return 1;
-		else
+		case UP:
+		case DOWN:
+		default:
 			return 2;
+		}
+	}
+
+	@Override
+	public ItemStack takeEmptyTestTube() {
+		return null;
+	}
+
+	@Override
+	public ItemStack putEmptyTestTube(ItemStack testTube) {
+		return null;
+	}
+
+	@Override
+	public ItemStack takeOutput() {
+		return outputTransactor.removeItem(true);
+	}
+
+	@Override
+	public ItemStack putOutput(ItemStack output) {
+		return outputTransactor.add(output, true);
+	}
+
+	@Override
+	public ItemStack takeInput() {
+		return inputTransactor.removeItem(true);
+	}
+
+	@Override
+	public ItemStack putInput(ItemStack input) {
+		return inputTransactor.add(input, true);
+	}
+
+	@Override
+	public ItemStack takeFusionStar() {
+		return starTransactor.removeItem(true);
+	}
+
+	@Override
+	public ItemStack putFusionStar(ItemStack fusionStar) {
+		return starTransactor.removeItem(true);
+	}
+
+	@Override
+	public ItemStack takeJournal() {
+		return null;
+	}
+
+	@Override
+	public ItemStack putJournal(ItemStack journal) {
+		return null;
+	}
+
+	@Override
+	public String getMachineState() {
+		if(starInventory.getStackInSlot(0) == null) {
+			return "needfusionstar";
+		} else if(isRecharging) {
+			return "recharging";
+		} else {
+			return "powered";
+		}
 	}
 
 }

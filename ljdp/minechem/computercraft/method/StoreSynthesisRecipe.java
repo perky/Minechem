@@ -9,7 +9,7 @@ import ljdp.minechem.common.recipe.SynthesisRecipeHandler;
 import ljdp.minechem.computercraft.CCMain;
 import ljdp.minechem.computercraft.ChemistryTurtleUpgradePeripherial;
 import ljdp.minechem.computercraft.ICCMethod;
-import ljdp.minechem.computercraft.IMinechemPeripheral;
+import ljdp.minechem.computercraft.IMinechemTurtlePeripheral;
 
 public class StoreSynthesisRecipe implements ICCMethod {
 
@@ -25,7 +25,7 @@ public class StoreSynthesisRecipe implements ICCMethod {
 		int selectedSlot = turtle.getSelectedSlot();
 		ItemStack selectedStack = turtle.getSlotContents(selectedSlot);
 		SynthesisRecipe recipe = null;
-		IMinechemPeripheral peripheral = ChemistryTurtleUpgradePeripherial.getMinechemPeripheral(turtle);
+		IMinechemTurtlePeripheral peripheral = ChemistryTurtleUpgradePeripherial.getMinechemPeripheral(turtle);
 		if(selectedStack != null) {
 			recipe = SynthesisRecipeHandler.instance.getRecipeFromOutput(selectedStack);
 			peripheral.setSynthesisRecipe(recipe);

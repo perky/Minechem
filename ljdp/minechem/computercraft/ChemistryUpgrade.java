@@ -13,7 +13,7 @@ public class ChemistryUpgrade implements ITurtleUpgrade {
 
 	@Override
 	public int getUpgradeID() {
-		return 200;
+		return 241;
 	}
 
 	@Override
