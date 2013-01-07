@@ -427,7 +427,7 @@ public class MinechemRecipes {
 		));
 		SynthesisRecipe.add(new SynthesisRecipe(spiderEye, true, 2000, // may need to be changed
 				element(C),	null,			null,
-				null,		element(Po), 	null,
+				null,		molecule(ttx), 	null,
 				null, 		null, 			element(C)
 		));
 		SynthesisRecipe.add(new SynthesisRecipe(glowstoneBlock, true, 500,
