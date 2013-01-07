@@ -27,7 +27,7 @@ import ljdp.minechem.common.tileentity.TileEntityFusion;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
 import ljdp.minechem.common.tileentity.TileEntityProxy;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
-import ljdp.minechem.computercraft.CCMain;
+import ljdp.minechem.computercraft.ICCMain;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -80,6 +80,7 @@ public class ModMinechem {
 	public static int synthesisID;
 	public static Logger blLog = Logger.getLogger("MineChem");
 	public static CreativeTabs minechemTab = new CreativeTabMinechem("MineChem");
+	private Configuration config;
 	
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) {
@@ -118,7 +119,7 @@ public class ModMinechem {
 	public void postInit(FMLPostInitializationEvent event) throws IOException {
 		checkForBuildcraft();
 		MinechemTriggers.registerTriggers();
-		CCMain.getInstance().init();
+		initComputerCraftAddon(event);
 	}
 	
 	private void checkForBuildcraft() throws IOException {
@@ -127,11 +128,20 @@ public class ModMinechem {
 		}
 	}
 	
+	private void initComputerCraftAddon(FMLPostInitializationEvent event) {
+		Object ccMain = event.buildSoftDependProxy("CCTurtle", "ljdp.minechem.computercraft.CCMain");
+		if(ccMain != null) {
+			ICCMain iCCMain = (ICCMain) ccMain;
+			iCCMain.loadConfig(config);
+			iCCMain.init();
+		}
+	}
+	
 	private void loadConfig(FMLPreInitializationEvent event){
 	 	Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 	 	MinechemBlocks.loadConfig(config);
 	 	MinechemItems.loadConfig(config);
-	 	CCMain.getInstance().loadConfig(config);
 	 	config.save();
+	 	this.config = config;
 	 }
 }
