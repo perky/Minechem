@@ -7,8 +7,8 @@ public enum EnumRadioactivity {
 	hardlyRadioactive		(Constants.TICKS_PER_DAY,	1),
 	slightlyRadioactive		(Constants.TICKS_PER_HOUR,	2),
 	radioactive				(Constants.TICKS_PER_MINUTE * 10,	4),
-	highlyRadioactive		(Constants.TICKS_PER_SECOND * 30,	8),
-	extremelyRadioactive	(Constants.TICKS_PER_SECOND * 10,	16);
+	highlyRadioactive		(Constants.TICKS_PER_MINUTE * 2,	8),
+	extremelyRadioactive	(Constants.TICKS_PER_SECOND * 20,	16);
 	
 	private String descriptiveName;
 	private int life;
