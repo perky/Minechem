@@ -28,6 +28,7 @@ import ljdp.minechem.common.network.PacketHandler;
 import ljdp.minechem.common.network.PacketSynthesisUpdate;
 import ljdp.minechem.common.recipe.SynthesisRecipeHandler;
 import ljdp.minechem.common.utils.MinechemHelper;
+import ljdp.minechem.computercraft.IMinechemMachinePeripheral;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -43,7 +44,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 
 public class TileEntitySynthesis extends MinechemTileEntity implements IInventory, ISidedInventory, 
-IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
+IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, IMinechemMachinePeripheral
 {
 	
 	private class ItemStackPointer {
@@ -74,6 +75,15 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 			new BoundedInventory(this, kStartStorage, kStartStorage + kSizeStorage);
 	private final BoundedInventory tubeInventory = 
 			new BoundedInventory(this, kStartBottles, kStartBottles + kSizeBottles);
+	private final BoundedInventory outputInventory =
+			new BoundedInventory(this, kStartOutput, kSizeOutput);
+	private final BoundedInventory journalInventory =
+			new BoundedInventory(this, kStartJournal, kSizeJournal);
+	private Transactor testTubeTransactor;
+	private Transactor storageTransactor;
+	private Transactor outputTransactor;
+	private Transactor recipeMatrixTransactor;
+	private Transactor journalTransactor;
 	
 	int minEnergyPerTick = 30;
 	int maxEnergyPerTick = 200;
@@ -83,11 +93,14 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 	private boolean hasFullEnergy;
 	
 	public TileEntitySynthesis() {
-		synthesisInventory = new ItemStack[getSizeInventory()];
-		if (PowerFramework.currentFramework != null) {
-			powerProvider = new MinechemPowerProvider(minEnergyPerTick, maxEnergyPerTick, activationEnergy, energyStorage);
-			powerProvider.configurePowerPerdition(1, Constants.TICKS_PER_SECOND * 2);
-		}
+		synthesisInventory 	= new ItemStack[getSizeInventory()];
+		testTubeTransactor 	= new Transactor(tubeInventory);
+		storageTransactor  	= new Transactor(storageInventory);
+		outputTransactor	= new Transactor(outputInventory);
+		journalTransactor	= new Transactor(journalInventory);
+		recipeMatrixTransactor = new Transactor(recipeMatrix);
+		powerProvider = new MinechemPowerProvider(minEnergyPerTick, maxEnergyPerTick, activationEnergy, energyStorage);
+		powerProvider.configurePowerPerdition(1, Constants.TICKS_PER_SECOND * 2);
 		model = new ModelSynthesizer();
 		ActionManager.registerTriggerProvider(this);
 	}
@@ -165,7 +178,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 	}
 	
 	public ItemStack[] extractTestTubes(boolean doRemove, int maxItemCount) {
-		return new Transactor(tubeInventory).remove(maxItemCount, doRemove);
+		return testTubeTransactor.remove(maxItemCount, doRemove);
 	}
 	
 	public SynthesisRecipe getCurrentRecipe() {
@@ -622,6 +635,56 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory
 			}
 			onInventoryChanged();
 		}
+	}
+
+	@Override
+	public ItemStack takeEmptyTestTube() {
+		return testTubeTransactor.removeItem(true);
+	}
+
+	@Override
+	public ItemStack putEmptyTestTube(ItemStack testTube) {
+		return testTubeTransactor.add(testTube, true);
+	}
+
+	@Override
+	public ItemStack takeOutput() {
+		return outputTransactor.removeItem(true);
+	}
+
+	@Override
+	public ItemStack putOutput(ItemStack output) {
+		return outputTransactor.add(output, true);
+	}
+
+	@Override
+	public ItemStack takeInput() {
+		return storageTransactor.removeItem(true);
+	}
+
+	@Override
+	public ItemStack putInput(ItemStack input) {
+		return storageTransactor.add(input, true);
+	}
+
+	@Override
+	public ItemStack takeFusionStar() {
+		return null;
+	}
+
+	@Override
+	public ItemStack putFusionStar(ItemStack fusionStar) {
+		return null;
+	}
+
+	@Override
+	public ItemStack takeJournal() {
+		return journalTransactor.removeItem(true);
+	}
+
+	@Override
+	public ItemStack putJournal(ItemStack journal) {
+		return journalTransactor.add(journal, true);
 	}
 
 }
