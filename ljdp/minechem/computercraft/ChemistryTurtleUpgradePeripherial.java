@@ -19,6 +19,7 @@ import ljdp.minechem.computercraft.method.GetTicksUntilDecay;
 import ljdp.minechem.computercraft.method.PlaceSynthesisRecipe;
 import ljdp.minechem.computercraft.method.PutEmptyTestTube;
 import ljdp.minechem.computercraft.method.StoreSynthesisRecipe;
+import ljdp.minechem.computercraft.method.TakeEmptyTestTube;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -40,7 +41,8 @@ public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral, IMi
 			new StoreSynthesisRecipe(),
 			new PlaceSynthesisRecipe(),
 			new ClearSynthesisRecipe(),
-			new PutEmptyTestTube()
+			new PutEmptyTestTube(),
+			new TakeEmptyTestTube()
 	};
 	
 	public ITurtleAccess turtle;

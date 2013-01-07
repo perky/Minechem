@@ -36,7 +36,14 @@ public class Transactor {
 		List<ItemStack> removed = new ArrayList();
 		int slot = 0;
 		while(totalAmountToRemove > 0 && slot < inventory.getSizeInventory()) {
-			ItemStack stackRemoved = inventory.decrStackSize(slot, totalAmountToRemove);
+			ItemStack stackRemoved;
+			if(doRemove)
+				stackRemoved = inventory.decrStackSize(slot, totalAmountToRemove);
+			else {
+				stackRemoved = inventory.getStackInSlot(slot).copy();
+				if(stackRemoved != null)
+					stackRemoved.stackSize = Math.min(amount, stackRemoved.stackSize);
+			}
 			if(stackRemoved != null) {
 				totalAmountRemoved  += stackRemoved.stackSize;
 				totalAmountToRemove -= stackRemoved.stackSize;

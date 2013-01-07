@@ -10,6 +10,10 @@ public interface IMinechemMachinePeripheral {
 	
 	public ItemStack takeOutput();
 	
+	public ItemStack putOutput(ItemStack output);
+	
+	public ItemStack takeInput();
+	
 	public ItemStack putInput(ItemStack input);
 	
 	public ItemStack takeFusionStar();

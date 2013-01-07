@@ -457,8 +457,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 
 	@Override
 	public ItemStack takeEmptyTestTube() {
-		ItemStack testTube = testTubeTransactor.removeItem(true);
-		return testTube;
+		return testTubeTransactor.removeItem(true);
 	}
 
 	@Override
@@ -494,6 +493,16 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 	@Override
 	public ItemStack putJournal(ItemStack journal) {
 		return null;
+	}
+
+	@Override
+	public ItemStack putOutput(ItemStack output) {
+		return outputTransactor.add(output, true);
+	}
+
+	@Override
+	public ItemStack takeInput() {
+		return outputTransactor.removeItem(true);
 	}
 
 }
