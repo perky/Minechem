@@ -26,7 +26,7 @@ import dan200.computer.api.IHostedPeripheral;
 import dan200.turtle.api.ITurtleAccess;
 import dan200.turtle.api.TurtleSide;
 
-public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral, IMinechemPeripheral {
+public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral, IMinechemTurtlePeripheral {
 	
 	private static String[] methodNames;
 	private static ICCMethod[] methods = {
@@ -46,13 +46,13 @@ public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral, IMi
 	public SafeTimeTracker updateTracker = new SafeTimeTracker();
 	private SynthesisRecipe synthesisRecipe;
 	
-	public static IMinechemPeripheral getMinechemPeripheral(ITurtleAccess turtle) {
+	public static IMinechemTurtlePeripheral getMinechemPeripheral(ITurtleAccess turtle) {
 		IHostedPeripheral leftPeripheral = turtle.getPeripheral(TurtleSide.Left);
 		IHostedPeripheral rightPeripheral = turtle.getPeripheral(TurtleSide.Right);
-		if(leftPeripheral != null && leftPeripheral instanceof IMinechemPeripheral)
-			return (IMinechemPeripheral) leftPeripheral;
-		else if(rightPeripheral != null && rightPeripheral instanceof IMinechemPeripheral)
-			return (IMinechemPeripheral) rightPeripheral;
+		if(leftPeripheral != null && leftPeripheral instanceof IMinechemTurtlePeripheral)
+			return (IMinechemTurtlePeripheral) leftPeripheral;
+		else if(rightPeripheral != null && rightPeripheral instanceof IMinechemTurtlePeripheral)
+			return (IMinechemTurtlePeripheral) rightPeripheral;
 		else
 			return null;
 	}

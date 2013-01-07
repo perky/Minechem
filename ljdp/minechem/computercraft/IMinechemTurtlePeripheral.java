@@ -2,7 +2,7 @@ package ljdp.minechem.computercraft;
 
 import ljdp.minechem.api.recipe.SynthesisRecipe;
 
-public interface IMinechemPeripheral {
+public interface IMinechemTurtlePeripheral {
 	
 	/**
 	 * Get the stored synthesis recipe.
