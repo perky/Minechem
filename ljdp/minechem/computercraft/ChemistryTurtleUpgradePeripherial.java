@@ -7,6 +7,7 @@ import buildcraft.api.core.SafeTimeTracker;
 
 import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.common.RadiationHandler;
+import ljdp.minechem.common.RadiationHandler.DecayEvent;
 import ljdp.minechem.computercraft.method.GetAtomicMass;
 import ljdp.minechem.computercraft.method.GetChemicalName;
 import ljdp.minechem.computercraft.method.GetChemicals;
@@ -33,6 +34,7 @@ public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral {
 	};
 	
 	public ITurtleAccess turtle;
+	public IComputerAccess computer;
 	public SafeTimeTracker updateTracker = new SafeTimeTracker();
 	
 	public ChemistryTurtleUpgradePeripherial(ITurtleAccess turtle) {
@@ -67,21 +69,21 @@ public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral {
 
 	@Override
 	public void attach(IComputerAccess computer) {
-		// TODO Auto-generated method stub
-		
+		this.computer = computer;
 	}
 
 	@Override
 	public void detach(IComputerAccess computer) {
-		// TODO Auto-generated method stub
-
+		this.computer = null;
 	}
 
 	@Override
 	public void update() {
 		if(updateTracker.markTimeIfDelay(turtle.getWorld(), Constants.TICKS_PER_SECOND)) {
 			List<ItemStack> inventory = getTurtleInventory();
-			RadiationHandler.getInstance().updateRadiationOnItems(turtle.getWorld(), inventory);
+			List<DecayEvent> decayEvents = RadiationHandler.getInstance().updateRadiationOnItems(turtle.getWorld(), inventory);
+			if(this.computer != null)
+				postDecayEvents(decayEvents);
 		}
 	}
 
@@ -95,6 +97,17 @@ public class ChemistryTurtleUpgradePeripherial implements IHostedPeripheral {
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	private void postDecayEvents(List<DecayEvent> decayEvents) {
+		for(DecayEvent event : decayEvents) {
+			Object[] data = {
+					event.before.getDisplayName().replaceAll(Constants.TEXT_MODIFIER_REGEX, ""),
+					event.after.getDisplayName().replaceAll(Constants.TEXT_MODIFIER_REGEX, ""),
+					event.damage
+			};
+			this.computer.queueEvent("onDecay", data);
+		}
 	}
 	
 	public List<ItemStack> getTurtleInventory() {

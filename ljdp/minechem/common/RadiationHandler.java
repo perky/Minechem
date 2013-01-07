@@ -22,6 +22,12 @@ public class RadiationHandler {
 		return instance;
 	}
 	
+	public class DecayEvent {
+		public ItemStack before;
+		public ItemStack after;
+		public int damage;
+	}
+	
 	private RadiationHandler() {
 		
 	}
@@ -36,8 +42,8 @@ public class RadiationHandler {
 			updateContainer(player, player.inventoryContainer);
 	}
 	
-	public void updateRadiationOnItems(World world, List<ItemStack> itemstacks) {
-		updateRadiationOnItems(world, null, null, itemstacks);
+	public List<DecayEvent> updateRadiationOnItems(World world, List<ItemStack> itemstacks) {
+		return updateRadiationOnItems(world, null, null, itemstacks);
 	}
 	
 	public int getTicksUntilDecay(ItemStack itemstack, World world) {
@@ -64,18 +70,23 @@ public class RadiationHandler {
 		updateRadiationOnItems(player.worldObj, player, container, itemstacks);
 	}
 	
-	private void updateRadiationOnItems(World world, EntityPlayer player, Container container, List<ItemStack> itemstacks) {
+	private List<DecayEvent> updateRadiationOnItems(World world, EntityPlayer player, Container container, List<ItemStack> itemstacks) {
+		List<DecayEvent> events = new ArrayList();
 		for(ItemStack itemstack : itemstacks) {
 			if(itemstack != null && itemstack.itemID == MinechemItems.element.shiftedIndex) {
-				ItemStack elementBeforeDecay = itemstack.copy();
-				int radiationDamage = updateRadiation(world, itemstack);
-				ItemStack elementAfterDecay  = itemstack.copy();
-				if(radiationDamage > 0 && container != null) {
-					applyRadiationDamage(player, container, radiationDamage);
-					printRadiationDamageToChat(player, elementBeforeDecay, elementAfterDecay);
+				DecayEvent decayEvent = new DecayEvent();
+				decayEvent.before = itemstack.copy();
+				decayEvent.damage = updateRadiation(world, itemstack);
+				decayEvent.after  = itemstack.copy();
+				if(decayEvent.damage > 0)
+					events.add(decayEvent);
+				if(decayEvent.damage > 0 && container != null) {
+					applyRadiationDamage(player, container, decayEvent.damage);
+					printRadiationDamageToChat(player, decayEvent);
 				}
 			}
 		}
+		return events;
 	}
 	
 	private void applyRadiationDamage(EntityPlayer player, Container container, int damage) {
@@ -99,9 +110,9 @@ public class RadiationHandler {
 		player.attackEntityFrom(DamageSource.generic, damage);
 	}
 	
-	private void printRadiationDamageToChat(EntityPlayer player, ItemStack elementBeforeDecay, ItemStack elementAfterDecay) {
-		String nameBeforeDecay = MinechemItems.element.getLongName(elementBeforeDecay);
-		String nameAfterDecay  = MinechemItems.element.getLongName(elementAfterDecay);
+	private void printRadiationDamageToChat(EntityPlayer player, DecayEvent decayEvent) {
+		String nameBeforeDecay = MinechemItems.element.getLongName(decayEvent.before);
+		String nameAfterDecay  = MinechemItems.element.getLongName(decayEvent.after);
 		String message = String.format("Radiation Warning: Element %s decayed into %s.", nameBeforeDecay, nameAfterDecay);
 		player.addChatMessage(message);
 	}

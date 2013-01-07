@@ -94,6 +94,7 @@ public class ItemElement extends Item {
 	public String getItemDisplayName(ItemStack par1ItemStack) {
 		return Constants.TEXT_MODIFIER + "l" + getLongName(par1ItemStack);
 	}
+
 	
 	@Override
 	@SideOnly(Side.CLIENT)

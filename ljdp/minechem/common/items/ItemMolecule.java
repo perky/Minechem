@@ -72,6 +72,11 @@ public class ItemMolecule extends Item {
 					formula += ")" + component.stackSize;
 			}
 		}
+		return formula;
+	}
+	
+	public String getFormulaWithSubscript(ItemStack itemstack) {
+		String formula = getFormula(itemstack);
 		return subscriptNumbers(formula);
 	}
 	
@@ -95,7 +100,7 @@ public class ItemMolecule extends Item {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack par1ItemStack,
 			EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-		par3List.add("\u00A79" + getFormula(par1ItemStack));
+		par3List.add("\u00A79" + getFormulaWithSubscript(par1ItemStack));
 	}
 	
 	@Override
