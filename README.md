@@ -1,4 +1,4 @@
-# Minechem v2.0.0pr6
+# Minechem v2.0.0pr6.1
 Adds chemistry to minecraft. Minechem comes with five machines.
 * The Decomposer takes an item and decomposes it into it's chemical composition.
 * The Synthesis machines takes elements and molecules and synthesis them into tangible items.
@@ -16,8 +16,8 @@ Adds chemistry to minecraft. Minechem comes with five machines.
 
 ## Download links
 
-MineChem 2.0.0pr6:
-http://bit.ly/Wqktsl
+MineChem 2.0.0pr6.1:
+http://bit.ly/RE2eTy
 
 ## Licence
 Minechem v2.x is licensed under Creative Commons Attribution-ShareAlike 3.0 Unported.
