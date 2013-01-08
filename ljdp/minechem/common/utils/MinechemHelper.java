@@ -260,16 +260,16 @@ public class MinechemHelper {
 	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), Constants.TICKS_PER_SECOND * 30, 10));
 	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.wither.getId(), Constants.TICKS_PER_SECOND * 60, 1));
 	    	break;
-		case pk1: // Polyketides have many roles in medicine 
+		case pkone: // Polyketides have many roles in medicine 
 			entityPlayer.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), Constants.TICKS_PER_MINUTE * 4, 2));
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(),   Constants.TICKS_PER_MINUTE * 4, 0));
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 4, 1));
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.getId(), Constants.TICKS_PER_SECOND * 5, 1));
 		break;
 			// this will increase difficulty as only one polyketide has medical potential 
-		case pk3:
+		case pkthree:
 			break;
-		case pk4:
+		case pkfour:
 			break;
 		default:
 			entityPlayer.attackEntityFrom(DamageSource.generic, 5);
