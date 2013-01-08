@@ -110,7 +110,7 @@ public enum EnumMolecule {
 	pktwo           		(85, "Minecraftolide B", new Element(C,14), new Element (H,25), new Element(O,2), new Element(N,2)),
 	pkthree           		(86, "Minecraftolide A1", new Element(C,13), new Element(H,23), new Element(O,2), new Element(N,1), new Element(Cl,1)),
 	pkfour           		(87, "Minecraftolide B1", new Element(C,21), new Element(H,30), new Element(O,7), new Element(N,2), new Element(P,1)), 
-	pkfive                  (88, "Palytoxin", new Molecule(hydroxide), new Molecule(methylene,64), new Molecule(methylene,63), new Element(O,28), new Molecule(nitrate,3), new Molecule(carbonate,2)),
+	// pkfive                  (88, "Palytoxin", new Molecule(hydroxide), new Molecule(methylene,64), new Molecule(methylene,63), new Element(O,28), new Molecule(nitrate,3), new Molecule(carbonate,2)),
 	// end polyketides
 	salt 					(89, "Sodium Chloride", new Element(Na,1), new Element(Cl,1)), 
 	nhthree  				(90, "Aqueous Ammonia", new Element(N,1), new Element(H,4), new Molecule(hydroxide)),
