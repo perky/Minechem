@@ -873,12 +873,12 @@ public class MinechemRecipes {
 	
 
 	private ItemStack createPoisonedItemStack(Item item, int damageValue, EnumMolecule aMolecule) {
-		ItemStack poison = new ItemStack(MinechemItems.molecule, 1, aMolecule.ordinal());
+		ItemStack poison = new ItemStack(MinechemItems.molecule, 1, aMolecule.id());
 		ItemStack normalStack   = new ItemStack(item, 1, damageValue);
 		ItemStack poisonedStack = new ItemStack(item, 1, damageValue);
 		NBTTagCompound stackTag = new NBTTagCompound();
 		stackTag.setBoolean("minechem.isPoisoned", true);
-		stackTag.setInteger("minechem.effectType", aMolecule.ordinal());
+		stackTag.setInteger("minechem.effectType", aMolecule.id());
 		poisonedStack.setTagCompound(stackTag);
 		
 		GameRegistry.addShapelessRecipe(poisonedStack, poison, normalStack);

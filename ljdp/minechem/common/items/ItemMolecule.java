@@ -47,7 +47,7 @@ public class ItemMolecule extends Item {
 	}
 	
 	public ArrayList<ItemStack> getElements(ItemStack itemstack) {
-		EnumMolecule molecule = EnumMolecule.molecules[itemstack.getItemDamage()];
+		EnumMolecule molecule = EnumMolecule.getById(itemstack.getItemDamage());
 		return MinechemHelper.convertChemicalsIntoItemStacks(molecule.components());
 	}
 	
