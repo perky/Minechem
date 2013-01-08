@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 // version of EnumMolecule it would conflict.
 // If you want to add molecules either send a pull request to
 // github.com/perky/minechem or suggest it on the github issue tracker.
+// MOLECULE IDS MUST BE CONTINIOUS OTHERWISE THE ARRAY WILL BE MISALIGNED.
 public enum EnumMolecule {
 	cellulose 				(0, "Cellulose", new Element(C, 6), new Element(H, 10), new Element(O, 5)),
 	water					(1, "Water", new Element(H,2), new Element(O)),
@@ -109,7 +110,7 @@ public enum EnumMolecule {
 	pk2           			(85, "Minecraftolide B", new Element(C,14), new Element (H,25), new Element(O,2), new Element(N,2)),
 	pk3           			(86, "Minecraftolide A1", new Element(C,13), new Element(H,23), new Element(O,2), new Element(N,1), new Element(Cl,1)),
 	pk4           			(87, "Minecraftolide B1", new Element(C,21), new Element(H,30), new Element(O,7), new Element(N,2), new Element(P,1)), 
-	//pk5                   	(88, "Palytoxin", new Molecule(hydroxide), new Molecule(methylene,64), new Molecule(methylene,63), new Element(O,28), new Molecule(nitrate,3), new Molecule(carbonate,2)),
+	pk5                   	(88, "Palytoxin", new Molecule(hydroxide), new Molecule(methylene,64), new Molecule(methylene,63), new Element(O,28), new Molecule(nitrate,3), new Molecule(carbonate,2)),
 	// end polyketides
 	salt 					(89, "Sodium Chloride", new Element(Na,1), new Element(Cl,1)), 
 	nh3  					(90, "Aqueous Ammonia", new Element(N,1), new Element(H,4), new Molecule(hydroxide)),
