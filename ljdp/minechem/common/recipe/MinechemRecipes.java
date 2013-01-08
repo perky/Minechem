@@ -811,7 +811,7 @@ public class MinechemRecipes {
         ItemStack sw3 = new ItemStack(Item.rottenFlesh);
         DecomposerRecipe.add(new DecomposerRecipeChance(sw3, 0.05F, new Molecule(nod,1)));
 
-        ItemStack sw4 = new ItemStack(Block.grass, 1, 2);
+        ItemStack sw4 = new ItemStack(block.tallGrass, 1, 2);
         DecomposerRecipe.add(new DecomposerRecipeChance(sw4, 0.07F, new Molecule(pk1,2)));
                 
 		addDecomposerRecipesFromMolecules();
