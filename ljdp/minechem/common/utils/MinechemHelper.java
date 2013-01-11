@@ -266,7 +266,7 @@ public class MinechemHelper {
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 4, 1));
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.getId(), Constants.TICKS_PER_SECOND * 15, 1));
 		break;
-		// this will increase difficulty as only one polyketide has medical potential 
+		// this will increase difficulty as only two polyketides has medical potential 
 		case pkthree:
 			break;
 		case pkfour:
