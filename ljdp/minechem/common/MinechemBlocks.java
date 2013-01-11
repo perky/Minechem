@@ -7,6 +7,7 @@ import ljdp.minechem.common.blocks.BlockFusion;
 import ljdp.minechem.common.blocks.BlockGhostBlock;
 import ljdp.minechem.common.blocks.BlockMicroscope;
 import ljdp.minechem.common.blocks.BlockSynthesis;
+import ljdp.minechem.common.blocks.BlockVat;
 import ljdp.minechem.common.blocks.MaterialGas;
 import ljdp.minechem.common.items.ItemBlockFusion;
 import ljdp.minechem.common.items.ItemGhostBlock;
@@ -18,6 +19,7 @@ import ljdp.minechem.common.tileentity.TileEntityGhostBlock;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
 import ljdp.minechem.common.tileentity.TileEntityProxy;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
+import ljdp.minechem.common.tileentity.TileEntityVat;
 import ljdp.minechem.common.utils.MinechemHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
@@ -36,6 +38,7 @@ public class MinechemBlocks {
 	public static Block blueprintProjector;
 	public static Block fusion;
 	public static Block chemicalStorage;
+	public static Block chemicalVat;
 	public static Material materialGas = new MaterialGas();
 	public static Material materialGhost = new MaterialTransparent(MapColor.airColor);
 	private static int microscopeID;
@@ -45,6 +48,7 @@ public class MinechemBlocks {
 	private static int blueprintProjectorID;
 	private static int fusionID;
 	private static int chemicalStorageID;
+	private static int chemicalVatID;
 	
 	public static void loadConfig(Configuration config) {
 		int baseID = 4012;
@@ -55,6 +59,7 @@ public class MinechemBlocks {
 	 	ghostBlockID = getBlockConfig(config, "GhostBlock", baseID++);
 	 	fusionID	 = getBlockConfig(config, "FusionChamber", baseID++);
 	 	chemicalStorageID = getBlockConfig(config, "ChemicalStorage", baseID++);
+	 	chemicalVatID = getBlockConfig(config, "ChemicalVat", baseID++);
 	}
 	
 	private static int getBlockConfig(Configuration config, String key, int defaultID) {
@@ -69,13 +74,11 @@ public class MinechemBlocks {
 		ghostBlock = new BlockGhostBlock(ghostBlockID);
 		blueprintProjector = new BlockBlueprintProjector(blueprintProjectorID);
 		chemicalStorage = new BlockChemicalStorage(chemicalStorageID);
+		chemicalVat = new BlockVat(chemicalVatID);
 		
 		GameRegistry.registerBlock(decomposer, "minechem.blockDecomposer");
-		LanguageRegistry.addName(decomposer, "Chemical Decomposer");
-		
 		GameRegistry.registerBlock(microscope, "minechem.blockMicroscope");
-		LanguageRegistry.addName(microscope, MinechemHelper.getLocalString("block.name.microscope"));
-		
+				
 		GameRegistry.registerBlock(synthesis, "minechem.blockSynthesis");
 		LanguageRegistry.addName(synthesis, MinechemHelper.getLocalString("block.name.synthesis"));
 		
@@ -91,6 +94,9 @@ public class MinechemBlocks {
 		GameRegistry.registerBlock(chemicalStorage, "minechem.blockChemicalStorage");
 		LanguageRegistry.addName(chemicalStorage, MinechemHelper.getLocalString("block.name.chemicalStorage"));
 		
+		GameRegistry.registerBlock(chemicalVat, "minechem.blockChemicalVat");
+		LanguageRegistry.addName(chemicalVat, MinechemHelper.getLocalString("block.name.chemicalVat"));
+		
 		GameRegistry.registerTileEntity(TileEntityMicroscope.class, "minechem.tileEntityMicroscope");
 		GameRegistry.registerTileEntity(TileEntitySynthesis.class,  "minechem.tileEntitySynthesis");
 		GameRegistry.registerTileEntity(TileEntityDecomposer.class, "minechem.tileEntityDecomposer");
@@ -99,6 +105,7 @@ public class MinechemBlocks {
 		GameRegistry.registerTileEntity(TileEntityProxy.class, "minchem.tileEntityProxy");
 		GameRegistry.registerTileEntity(TileEntityGhostBlock.class, "minechem.tileEntityGhostBock");
 		GameRegistry.registerTileEntity(TileEntityChemicalStorage.class, "minechem.tileEntityChemicalStorage");
+		GameRegistry.registerTileEntity(TileEntityVat.class, "minechem.tileEntityVat");
 	}
 
 }

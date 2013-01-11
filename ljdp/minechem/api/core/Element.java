@@ -15,4 +15,9 @@ public class Element extends Chemical {
 		this.element = element;
 	}
 	
+	@Override
+	public boolean sameAs(Chemical chemical) {
+		return chemical instanceof Element && ((Element) chemical).element == element;
+	}
+	
 }

@@ -31,9 +31,11 @@ public class Transactor {
 			totalAmountToAdd -= amountAdded;
 			slot++;
 		}
-		ItemStack stackAdded = stack.copy();
-		stackAdded.stackSize = totalAmountAdded;
-		return stackAdded;
+		ItemStack remainingStack = stack.copy();
+		remainingStack.stackSize -= totalAmountAdded;
+		if(remainingStack.stackSize <= 0)
+			remainingStack = null;
+		return remainingStack;
 	}
 	
 	public ItemStack[] remove(int amount, boolean doRemove) {

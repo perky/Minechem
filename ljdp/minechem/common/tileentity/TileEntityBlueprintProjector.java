@@ -31,7 +31,7 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 
-public class TileEntityBlueprintProjector extends TileEntity implements IInventory {
+public class TileEntityBlueprintProjector extends MinechemTileEntity {
 	
 	private static int air;
 	MinechemBlueprint blueprint;
@@ -43,7 +43,6 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 	boolean isComplete = false;
 	Integer[][][] structure;
 	LoopingSound projectorSound;
-	private ItemStack[] inventory;
 	
 	public TileEntityBlueprintProjector() {
 		this.projectorSound = new LoopingSound("ljdp.minechem.projector", 20);
@@ -258,26 +257,14 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int var1) {
-		return this.inventory[0];
-	}
-
-	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
-		ItemStack blueprintItem = this.inventory[0];
-		this.inventory[0] = null;
 		setBlueprint(null);
-		return blueprintItem;
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int var1) {
-		return null;
+		return super.decrStackSize(slot, amount);
 	}
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
-		this.inventory[0] = itemstack;
+		super.setInventorySlotContents(slot, itemstack);
 		if(itemstack != null) {
 			MinechemBlueprint blueprint = MinechemItems.blueprint.getBlueprint(itemstack);
 			setBlueprint(blueprint);
@@ -292,19 +279,6 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 	@Override
 	public int getInventoryStackLimit() {
 		return 1;
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer var1) {
-		return true;
-	}
-
-	@Override
-	public void openChest() {
-	}
-
-	@Override
-	public void closeChest() {
 	}
 	
 	@Override
@@ -331,20 +305,12 @@ public class TileEntityBlueprintProjector extends TileEntity implements IInvento
 			this.inventory[0] = blueprintStack;
 		}
 	}
-	
-	@Override
-	public Packet getDescriptionPacket() {
-		NBTTagCompound tagCompound = new NBTTagCompound();
-        this.writeToNBT(tagCompound);
-        return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 0, tagCompound);
-	}
-	
-	@Override
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		this.readFromNBT(pkt.customParam1);
-	}
 
 	public MinechemBlueprint getBlueprint() {
 		return this.blueprint;
+	}
+
+	@Override
+	void sendUpdatePacket() {
 	}
 }

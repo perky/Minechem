@@ -15,4 +15,9 @@ public class Molecule extends Chemical {
 		this.molecule = molecule;
 	}
 	
+	@Override
+	public boolean sameAs(Chemical chemical) {
+		return chemical instanceof Molecule && ((Molecule)chemical).molecule == molecule;
+	}
+	
 }

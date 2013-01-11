@@ -3,9 +3,20 @@ package ljdp.minechem.common.recipe;
 import static ljdp.minechem.api.core.EnumElement.*;
 import static ljdp.minechem.api.core.EnumMolecule.*;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+
+import argo.jdom.JdomParser;
+import argo.jdom.JsonNode;
+import argo.jdom.JsonRootNode;
+import argo.saj.InvalidSyntaxException;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -21,6 +32,7 @@ import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.api.util.Util;
 import ljdp.minechem.common.MinechemBlocks;
 import ljdp.minechem.common.MinechemItems;
+import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.UnbondingRecipe;
 import ljdp.minechem.common.items.ItemElement;
 import ljdp.minechem.common.utils.MinechemHelper;
@@ -38,7 +50,7 @@ public class MinechemRecipes {
 	
 	/*	The static instance of this class */
 	private static final MinechemRecipes instance = new MinechemRecipes();
-	
+	private static final JdomParser JDOM_PARSER = new JdomParser();
 	/* The list of decomposer recipes */
 	public ArrayList<UnbondingRecipe> unbondingRecipes;
 	public ArrayList<SynthesisRecipe> synthesisRecipes;
@@ -52,7 +64,45 @@ public class MinechemRecipes {
 		synthesisRecipes = new ArrayList<SynthesisRecipe>();
 	}
 	
+	private JsonRootNode getRootNode(InputStream jsonFile) {
+		JsonRootNode rootNode = null;
+		try {
+			InputStreamReader jsonFileReader = new InputStreamReader(jsonFile, "UTF-8");
+			rootNode = JDOM_PARSER.parse(jsonFileReader);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InvalidSyntaxException e) {
+			e.printStackTrace();
+		}
+		return rootNode;
+	}
+	
+	public void readDecomposerRecipesFromJsonFile(InputStream jsonFile) {
+		JsonRootNode rootNode = getRootNode(jsonFile);
+		if(rootNode != null) {
+			List<JsonNode> recipeNodes = rootNode.getElements();
+			for(JsonNode recipeNode : recipeNodes) {
+				String input = recipeNode.getStringValue("input");
+				float chance = Float.valueOf(recipeNode.getNumberValue("chance"));
+				String output = "";
+				if(recipeNode.isArrayNode("output")) {
+					List<JsonNode> outputNodes = recipeNode.getArrayNode("output");
+					for(JsonNode outputNode : outputNodes) {
+						output += outputNode.getStringValue() + ", ";
+					}
+				} else {
+					output = recipeNode.getStringValue("output");
+				}
+				String printer = String.format("%s decomposes into %s with %f%% chance.", input, output, chance);
+			}
+		}
+	}
+	
 	public void RegisterRecipes() {
+		InputStream jsonFile = ModMinechem.instance.getClass().getResourceAsStream("/decomposer.json");
+		if(jsonFile != null)
+			readDecomposerRecipesFromJsonFile(jsonFile);
+		
 		ItemStack stone = new ItemStack(Block.stone);
 		ItemStack cobble = new ItemStack(Block.cobblestone);
 		ItemStack dirt = new ItemStack(Block.dirt);
@@ -873,12 +923,12 @@ public class MinechemRecipes {
 	
 
 	private ItemStack createPoisonedItemStack(Item item, int damageValue, EnumMolecule aMolecule) {
-		ItemStack poison = new ItemStack(MinechemItems.molecule, 1, aMolecule.id());
+		ItemStack poison = new ItemStack(MinechemItems.molecule, 1, aMolecule.ordinal());
 		ItemStack normalStack   = new ItemStack(item, 1, damageValue);
 		ItemStack poisonedStack = new ItemStack(item, 1, damageValue);
 		NBTTagCompound stackTag = new NBTTagCompound();
 		stackTag.setBoolean("minechem.isPoisoned", true);
-		stackTag.setInteger("minechem.effectType", aMolecule.id());
+		stackTag.setInteger("minechem.effectType", aMolecule.ordinal());
 		poisonedStack.setTagCompound(stackTag);
 		
 		GameRegistry.addShapelessRecipe(poisonedStack, poison, normalStack);

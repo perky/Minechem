@@ -43,7 +43,7 @@ import buildcraft.api.power.PowerFramework;
 import buildcraft.api.transport.IPipe;
 import java.util.List;
 
-public class TileEntityDecomposer extends MinechemTileEntity implements IInventory, ISidedInventory, 
+public class TileEntityDecomposer extends MinechemTileEntity implements ISidedInventory, 
 IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, IMinechemMachinePeripheral
 {
 	
@@ -51,7 +51,6 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 	private static final float MIN_WORK_PER_SECOND = 1.0F;
 	private static final float MAX_WORK_PER_SECOND = 10.0F;
 	
-	private ItemStack[] decomposerItemStacks;
 	private ArrayList<ItemStack> outputBuffer;
 	public final int kInputSlot = 0;
 	public final int kOutputSlotStart    = 1;
@@ -86,7 +85,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 		testTubeTransactor = new Transactor(testTubeInventory);
 		outputTransactor   = new Transactor(outputInventory);
 		inputTransactor	   = new Transactor(inputInventory);
-		decomposerItemStacks = new ItemStack[getSizeInventory()];
+		inventory = new ItemStack[getSizeInventory()];
 		outputBuffer = new ArrayList<ItemStack>();
 		powerProvider = new MinechemPowerProvider(2, 20, 0, 10000);
 		powerProvider.configurePowerPerdition(1, Constants.TICKS_PER_SECOND * 2);
@@ -267,79 +266,16 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int var1) {
-		return this.decomposerItemStacks[var1];
-	}
-
-	@Override
-	public ItemStack decrStackSize(int slot, int amount) {
-		if(this.decomposerItemStacks[slot] != null) {
-			ItemStack itemstack;
-			if(this.decomposerItemStacks[slot].stackSize <= amount) {
-				itemstack = this.decomposerItemStacks[slot];
-				this.decomposerItemStacks[slot] = null;
-				return itemstack;
-			} else {
-				itemstack = this.decomposerItemStacks[slot].splitStack(amount);
-				if(this.decomposerItemStacks[slot].stackSize == 0)
-					this.decomposerItemStacks[slot] = null;
-				return itemstack;
-			}
-		} else {
-			return null;
-		}
-	}
-	
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		if (this.decomposerItemStacks[slot] != null)
-        {
-            ItemStack itemstack = this.decomposerItemStacks[slot];
-            this.decomposerItemStacks[slot] = null;
-            return itemstack;
-        }
-        else
-        {
-            return null;
-        }
-	}
-
-	@Override
-	public void setInventorySlotContents(int slot, ItemStack itemstack) {
-		this.decomposerItemStacks[slot] = itemstack;
-		if (itemstack != null && itemstack.stackSize > this.getInventoryStackLimit())
-			itemstack.stackSize = this.getInventoryStackLimit();
-	}
-
-	@Override
 	public String getInvName() {
 		return "container.decomposer";
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 64;
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityPlayer) {
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : entityPlayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
-	}
-
-	@Override
-	public void openChest() {
-	}
-
-	@Override
-	public void closeChest() {
 	}
 	
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeToNBT(nbtTagCompound);
-		NBTTagList inventory = MinechemHelper.writeItemStackArrayToTagList(decomposerItemStacks);
+		NBTTagList inventoryTagList = MinechemHelper.writeItemStackArrayToTagList(inventory);
 		NBTTagList buffer	 = MinechemHelper.writeItemStackListToTagList(outputBuffer);
-		nbtTagCompound.setTag("inventory", inventory);
+		nbtTagCompound.setTag("inventory", inventoryTagList);
 		nbtTagCompound.setTag("buffer", buffer);
 		if(activeStack != null) {
 			NBTTagCompound activeStackCompound = new NBTTagCompound();
@@ -353,11 +289,10 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 	@Override
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 		super.readFromNBT(nbtTagCompound);
-		NBTTagList inventory = nbtTagCompound.getTagList("inventory");
+		NBTTagList inventoryTagList = nbtTagCompound.getTagList("inventory");
 		NBTTagList buffer	 = nbtTagCompound.getTagList("buffer");
-		decomposerItemStacks = new ItemStack[getSizeInventory()];
 		outputBuffer		 = MinechemHelper.readTagListToItemStackList(buffer);
-		MinechemHelper.readTagListToItemStackArray(inventory, decomposerItemStacks);
+		inventory = MinechemHelper.readTagListToItemStackArray(inventoryTagList, new ItemStack[getSizeInventory()]);
 		
 		if(nbtTagCompound.getTag("activeStack") != null) {
 			NBTTagCompound activeStackCompound = (NBTTagCompound)nbtTagCompound.getTag("activeStack");

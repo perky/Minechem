@@ -22,7 +22,7 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 
-public class TileEntityFusion extends TileEntityMultiBlock implements IInventory, ISidedInventory, IMinechemMachinePeripheral {
+public class TileEntityFusion extends TileEntityMultiBlock implements ISidedInventory, IMinechemMachinePeripheral {
 	
 	public static int kStartFusionStar = 0;
 	public static int kStartInput1 = 1;
@@ -39,7 +39,6 @@ public class TileEntityFusion extends TileEntityMultiBlock implements IInventory
 	private Transactor outputTransactor;
 	private Transactor starTransactor;
 	
-	ItemStack[] inventory;
 	int energyStored = 0;
 	int maxEnergy = 9;
 	int targetEnergy = 0;
@@ -183,35 +182,6 @@ public class TileEntityFusion extends TileEntityMultiBlock implements IInventory
 	}
 	
 	@Override
-	public ItemStack getStackInSlot(int slot) {
-		return this.inventory[slot];
-	}
-	
-	@Override
-	public ItemStack decrStackSize(int slot, int amount) {
-		if(this.inventory[slot] != null) {
-			ItemStack itemstack;
-			if(this.inventory[slot].stackSize <= amount) {
-				itemstack = this.inventory[slot];
-				this.inventory[slot] = null;
-				return itemstack;
-			} else {
-				itemstack = this.inventory[slot].splitStack(amount);
-				if(this.inventory[slot].stackSize == 0)
-					this.inventory[slot] = null;
-				return itemstack;
-			}
-		} else {
-			return null;
-		}
-	}
-	
-	@Override
-	public ItemStack getStackInSlotOnClosing(int var1) {
-		return null;
-	}
-	
-	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
 		if(itemstack != null && itemstack.itemID == Item.netherStar.shiftedIndex) {
 			this.inventory[slot] = new ItemStack(MinechemItems.fusionStar);
@@ -226,22 +196,11 @@ public class TileEntityFusion extends TileEntityMultiBlock implements IInventory
 	}
 	
 	@Override
-	public int getInventoryStackLimit() {
-		return 64;
-	}
-	
-	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityPlayer) {
 		if(!completeStructure)
 			return false;
 		return true;
 	}
-	
-	@Override
-	public void openChest() {}
-	
-	@Override
-	public void closeChest() {}
 	
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {

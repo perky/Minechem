@@ -34,6 +34,7 @@ public class CommonProxy {
 	public static String FUSION_GUI_PNG		= TEXTURE_GUI_DIR + "FusionChamberGUI.png";
 	public static String PROJECTOR_GUI_PNG  = TEXTURE_GUI_DIR + "ProjectorGUI.png";
 	public static String JOURNAL_GUI_PNG	= TEXTURE_GUI_DIR + "ChemistsJournalGUI.png";
+	public static String VAT_GUI_PNG 		= TEXTURE_GUI_DIR + "ChemicalVatGUI.png";
 	public static String ITEMS_PNG			= TEXTURE_ATLAS_DIR + "items.png";
 	public static String BLOCKS_PNG			= TEXTURE_ATLAS_DIR + "blocktextures.png";
 	public static String ICONS_PNG			= TEXTURE_ATLAS_DIR + "icons.png";

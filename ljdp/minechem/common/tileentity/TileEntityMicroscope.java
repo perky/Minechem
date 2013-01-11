@@ -24,7 +24,6 @@ import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityMicroscope extends MinechemTileEntity implements IInventory, IMinechemMachinePeripheral {
 	
-	private ItemStack[] microscopeInventory;
 	public boolean isShaped = true;
 	
 	private final BoundedInventory inputInvetory = new BoundedInventory(this, 0, 1);
@@ -33,15 +32,15 @@ public class TileEntityMicroscope extends MinechemTileEntity implements IInvento
 	private Transactor journalTransactor = new Transactor(journalInventory, 1);
 	
 	public TileEntityMicroscope() {
-		microscopeInventory = new ItemStack[getSizeInventory()];
+		inventory = new ItemStack[getSizeInventory()];
 	}
 	
 	public void onInspectItemStack(ItemStack itemstack) {
 		SynthesisRecipe synthesisRecipe = SynthesisRecipeHandler.instance.getRecipeFromOutput(itemstack);
 		DecomposerRecipe decomposerRecipe = DecomposerRecipeHandler.instance.getRecipe(itemstack);
-		if(microscopeInventory[1] != null && (synthesisRecipe != null || decomposerRecipe != null))
+		if(inventory[1] != null && (synthesisRecipe != null || decomposerRecipe != null))
 		{
-			MinechemItems.journal.addItemStackToJournal(itemstack, microscopeInventory[1], worldObj);
+			MinechemItems.journal.addItemStackToJournal(itemstack, inventory[1], worldObj);
 		}
 	}
 
@@ -52,16 +51,16 @@ public class TileEntityMicroscope extends MinechemTileEntity implements IInvento
 
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		ItemStack itemstack = microscopeInventory[slot];
+		ItemStack itemstack = inventory[slot];
 		return itemstack;
 	}
 
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
-		if (slot >= 0 && slot < microscopeInventory.length)
+		if (slot >= 0 && slot < inventory.length)
         {
-            ItemStack itemstack = microscopeInventory[slot];
-            microscopeInventory[slot] = null;
+            ItemStack itemstack = inventory[slot];
+            inventory[slot] = null;
             return itemstack;
         }
         else
@@ -77,11 +76,11 @@ public class TileEntityMicroscope extends MinechemTileEntity implements IInvento
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemStack) {
-		microscopeInventory[slot] = itemStack;
+		inventory[slot] = itemStack;
 		if(slot == 0 && itemStack != null && !worldObj.isRemote)
 			onInspectItemStack(itemStack);
-		if(slot == 1 && itemStack != null && microscopeInventory[0] != null && !worldObj.isRemote)
-			onInspectItemStack(microscopeInventory[0]);
+		if(slot == 1 && itemStack != null && inventory[0] != null && !worldObj.isRemote)
+			onInspectItemStack(inventory[0]);
 	}
 
 	@Override
@@ -120,12 +119,12 @@ public class TileEntityMicroscope extends MinechemTileEntity implements IInvento
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeToNBT(nbtTagCompound);
-		ItemStack inpectingStack = microscopeInventory[0];
+		ItemStack inpectingStack = inventory[0];
 		if(inpectingStack != null) {
 			NBTTagCompound inspectingStackTag = inpectingStack.writeToNBT(new NBTTagCompound());
 			nbtTagCompound.setTag("inspectingStack", inspectingStackTag);
 		}
-		ItemStack journal = microscopeInventory[1];
+		ItemStack journal = inventory[1];
 		if(journal != null) {
 			NBTTagCompound journalTag = journal.writeToNBT(new NBTTagCompound());
 			nbtTagCompound.setTag("journal", journalTag);
@@ -139,8 +138,8 @@ public class TileEntityMicroscope extends MinechemTileEntity implements IInvento
 		NBTTagCompound journalTag = nbtTagCompound.getCompoundTag("journal");
 		ItemStack inspectingStack = ItemStack.loadItemStackFromNBT(inspectingStackTag);
 		ItemStack journalStack = ItemStack.loadItemStackFromNBT(journalTag);
-		microscopeInventory[0] = inspectingStack;
-		microscopeInventory[1] = journalStack;
+		inventory[0] = inspectingStack;
+		inventory[1] = journalStack;
 	}
 
 	@Override

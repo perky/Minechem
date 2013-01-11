@@ -8,4 +8,8 @@ public class Chemical {
 		this.amount = amount;
 	}
 	
+	public boolean sameAs(Chemical chemical) {
+		return false;
+	}
+	
 }

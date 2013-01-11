@@ -10,6 +10,7 @@ import ljdp.minechem.api.core.EnumElement;
 import ljdp.minechem.api.core.EnumMolecule;
 import ljdp.minechem.api.core.Molecule;
 import ljdp.minechem.api.util.Constants;
+import ljdp.minechem.api.util.Util;
 import ljdp.minechem.common.MinechemItems;
 
 import buildcraft.api.core.Position;
@@ -330,6 +331,30 @@ public class MinechemHelper {
 				return world;
 		}
 		return null;
+	}
+
+	public static ItemStack chemicalToItemStack(Chemical chemical, int amount) {
+		if(chemical instanceof Element)
+			return new ItemStack(MinechemItems.element, amount, ((Element)chemical).element.ordinal());
+		else if(chemical instanceof Molecule)
+			return new ItemStack(MinechemItems.molecule, amount, ((Molecule)chemical).molecule.id());
+		return null;
+	}
+
+	public static Chemical itemStackToChemical(ItemStack itemstack) {
+		if(Util.isStackAnElement(itemstack)) {
+			return new Element(MinechemItems.element.getElement(itemstack), itemstack.stackSize);
+		} else if(Util.isStackAMolecule(itemstack)) {
+			return new Molecule(MinechemItems.molecule.getMolecule(itemstack), itemstack.stackSize);
+		}
+		return null;
+	}
+	
+	public static String getChemicalName(Chemical chemical) {
+		if(chemical instanceof Element)
+			return ((Element)chemical).element.descriptiveName();
+		else
+			return((Molecule)chemical).molecule.descriptiveName();
 	}
 
 }

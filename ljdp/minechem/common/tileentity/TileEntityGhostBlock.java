@@ -67,4 +67,14 @@ public class TileEntityGhostBlock extends MinechemTileEntity {
 		this.blueprint  = MinechemBlueprint.blueprints.get(blueprintID);
 	}
 
+	@Override
+	public int getSizeInventory() {
+		return 0;
+	}
+
+	@Override
+	public String getInvName() {
+		return null;
+	}
+
 }

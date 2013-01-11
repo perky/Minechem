@@ -36,6 +36,8 @@ public abstract class BlockMinechemContainer extends BlockContainer {
 		if(tileEntity != null) {
 			ArrayList<ItemStack> droppedStacks = new ArrayList();
 			droppedStacks = addStacksDroppedOnBlockBreak(tileEntity, droppedStacks);
+			if(droppedStacks == null)
+				return;
 			for(ItemStack itemstack : droppedStacks) {
 				float randomX = this.random.nextFloat() * 0.8F + 0.1F;
                 float randomY = this.random.nextFloat() * 0.8F + 0.1F;
