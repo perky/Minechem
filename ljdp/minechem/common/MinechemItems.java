@@ -67,6 +67,7 @@ public class MinechemItems {
 	 	hazmatLegsID = getItemConfig(config, "HazmatLegs", baseID++);
 	 	hazmatTorsoID = getItemConfig(config, "HazmatTorso", baseID++);
 	 	hazmatHeadID = getItemConfig(config, "HazmatHead", baseID++);
+		ItemFusionStar.MAX_USES = config.get(config.CATAGORY_GENERAL, "FusionStarMaxUses", 2000).getInt()
 	}
 	
 	private static int getItemConfig(Configuration config, String key, int defaultID) {
