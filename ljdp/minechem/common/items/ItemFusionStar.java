@@ -11,10 +11,12 @@ import net.minecraft.item.ItemStack;
 
 public class ItemFusionStar extends Item {
 
+        public static int MAX_USES = 2000;
+
 	public ItemFusionStar(int id) {
 		super(id);
 		this.maxStackSize = 1;
-		this.setMaxDamage(2000);
+		this.setMaxDamage(MAX_USES);
 		this.setNoRepair();
 	}
 	
