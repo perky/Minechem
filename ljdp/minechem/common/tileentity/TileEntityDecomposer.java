@@ -50,7 +50,12 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 	private static final int MAX_POWER_STORAGE = 100;
 	private static final float MIN_WORK_PER_SECOND = 1.0F;
 	private static final float MAX_WORK_PER_SECOND = 10.0F;
-	
+	public static int ENERGY_MAX_STORAGE = 10000;
+	public static int ENERGY_MIN_INPUT = 2;
+	public static int ENERGY_MAX_INPUT = 20;
+	public static int ENERGY_LOSS = 1;
+	public static int ENERGY_LOSS_RATE = Constants.TICKS_PER_SECOND * 2;
+
 	private ItemStack[] decomposerItemStacks;
 	private ArrayList<ItemStack> outputBuffer;
 	public final int kInputSlot = 0;
@@ -88,8 +93,8 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 		inputTransactor	   = new Transactor(inputInventory);
 		decomposerItemStacks = new ItemStack[getSizeInventory()];
 		outputBuffer = new ArrayList<ItemStack>();
-		powerProvider = new MinechemPowerProvider(2, 20, 0, 10000);
-		powerProvider.configurePowerPerdition(1, Constants.TICKS_PER_SECOND * 2);
+		powerProvider = new MinechemPowerProvider(ENERGY_MIN_INPUT, ENERGY_MAX_INPUT, 0, ENERGY_MAX_STORAGE);
+		powerProvider.configurePowerPerdition(ENERGY_LOSS, ENERGY_LOSS_RATE);
 		model = new ModelDecomposer();
 		ActionManager.registerTriggerProvider(this);
 	}

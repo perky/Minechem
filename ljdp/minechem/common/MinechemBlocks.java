@@ -55,6 +55,12 @@ public class MinechemBlocks {
 	 	ghostBlockID = getBlockConfig(config, "GhostBlock", baseID++);
 	 	fusionID	 = getBlockConfig(config, "FusionChamber", baseID++);
 	 	chemicalStorageID = getBlockConfig(config, "ChemicalStorage", baseID++);
+		TileEntityDecomposer.ENERGY_MIN_INPUT = 
+			config.get(config.CATEGORY_GENERAL, "DecomposerMinEnergy", 2).getInt();
+		TileEntityDecomposer.ENERGY_MAX_INPUT =
+			config.get(config.CATEGORY_GENERAL, "DecomposerMaxEnergy", 20).getInt();
+		TileEntityDecomposer.ENERGY_MAX_STORAGE = 
+			config.get(config.CATEGORY_GENERAL, "DecomposerEnergyStorage", 10000).getInt();
 	}
 	
 	private static int getBlockConfig(Configuration config, String key, int defaultID) {
