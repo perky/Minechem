@@ -277,6 +277,11 @@ public class MinechemHelper {
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 5, 2));
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.getId(), Constants.TICKS_PER_SECOND * 80, 1));
 			break; 
+		case afroman: // Roll Roll Roll Mah joint. Pick out the seeds and stems 
+		cureAllPotions(world, entityPlayer); 
+	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 20, 5));
+	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), Constants.TICKS_PER_SECOND * 20, 1));
+	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.getId(), Constants.TICKS_PER_SECOND * 30, 1));
 		default:
 			entityPlayer.attackEntityFrom(DamageSource.generic, 5);
 			break;
