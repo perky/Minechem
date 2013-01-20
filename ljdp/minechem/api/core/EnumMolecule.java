@@ -109,10 +109,7 @@ public enum EnumMolecule {
 	nod 					(91, "Nodularin", new Element(C,41), new Element(H,60), new Element(N,8), new Element(O,10)),
 	potato                  (92, "Digoxin", new Element(C,41), new Element(H,64), new Element(O,14)),
 	ttx                     (93, "TTX (Tetrodotoxin)", new Element(C,11), new Element(H,11), new Element(N,3),new Element(O,8)),
-        // http://bit.ly/XoHqyV
-        nk1 (94, "Nanokid", new Element(C,39), new Element(H,42), new Element(O,2)),
-        nk2 (95, "Nanokid - Athlete", new Element(C,42), new Element(H,48), new Element(O,2)),
-        nk3 (96, "Nanokid - Green-Beret" new Element(C,40), new Element(H,44) new Element(O,2)),
+        afroman                 (94, "THC (Weed)", new Element(C,21) , new Element(H,30) , new Element(O,2)), // Colt 45 and 2 Zig-Zags. Baby thats all we need 
 	// And were done 
 	;
 	
