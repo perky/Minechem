@@ -1035,6 +1035,12 @@ public class MinechemRecipes {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zr,2), element(Ti,1));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(Zr,2), element(Ti,1));
 		}
+			
+		else if(event.Name.contains("rc.dust.sulfur")) { 
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(S,4));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(S,4));
+		}
+	
 	 
 	}
 	
