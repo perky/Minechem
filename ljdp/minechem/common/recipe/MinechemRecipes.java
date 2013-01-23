@@ -897,7 +897,6 @@ public class MinechemRecipes {
 		createPoisonedItemStack(Item.fishCooked, 0, aMolecule);
 		createPoisonedItemStack(Item.cookie, 0, aMolecule);
 		createPoisonedItemStack(Item.pumpkinPie, 0, aMolecule);
-		// still need to add mushroom pie 
 	}
 
 	@ForgeSubscribe
@@ -1012,6 +1011,12 @@ public class MinechemRecipes {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(W)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(W)));
 		}
+		
+		else if(event.Name.contains("xychoriumBlue")) { // test of xycraft layer
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zr,2), element(Cu,1));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(Zr,2), element(Cu,1));
+		}
+	
 	}
 	
 	private Element element(EnumElement element, int amount) {
