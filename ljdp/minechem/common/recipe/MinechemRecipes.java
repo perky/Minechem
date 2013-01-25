@@ -1012,26 +1012,26 @@ public class MinechemRecipes {
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(W)));
 		}
 		
-		else if(event.Name.contains("xychoriumBlue")) { // test of xycraft layer
+		else if(event.Name.contains("xychoriumBlue")) { 
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zr,2), element(Cu,1));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(Zr,2), element(Cu,1));
 		}
-		else if(event.Name.contains("xychoriumRed")) { // test of xycraft layer
+		else if(event.Name.contains("xychoriumRed")) { 
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zr,2), element(Fe,1));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(Zr,2), element(Fe,1));
 		}
 		
-		else if(event.Name.contains("xychoriumGreen")) { // test of xycraft layer
+		else if(event.Name.contains("xychoriumGreen")) { 
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zr,2), element(V,1));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(Zr,2), element(V,1));
 		}
 		
-		else if(event.Name.contains("xychoriumDark")) { // test of xycraft layer
+		else if(event.Name.contains("xychoriumDark")) { 
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zr,2), element(Si,1));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(Zr,2), element(Si,1));
 		}
 		
-		else if(event.Name.contains("xychoriumLight")) { // test of xycraft layer
+		else if(event.Name.contains("xychoriumLight")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zr,2), element(Ti,1));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(Zr,2), element(Ti,1));
 		}
