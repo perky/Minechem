@@ -3,8 +3,10 @@ package ljdp.minechem.common.blocks;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.tileentity.TileEntityChemicalStorage;
 import net.minecraft.block.BlockChest;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class BlockChemicalStorage extends BlockChest {
@@ -13,6 +15,9 @@ public class BlockChemicalStorage extends BlockChest {
 		super(id);
 		setBlockName("minechem.blockChemicalStorage");
 		setCreativeTab(ModMinechem.minechemTab);
+		setHardness(2.5F);
+		setStepSound(soundWoodFootstep);
+		setRequiresSelfNotify();
 	}
 	
 	@Override
@@ -35,6 +40,36 @@ public class BlockChemicalStorage extends BlockChest {
 		par1World.setBlockTileEntity(par2, par3, par4, 
 				this.createTileEntity(par1World, par1World.getBlockMetadata(par2, par3, par4))
 		);
+	}
+	
+	@Override
+	public void onBlockPlacedBy(World world, int x, int y, int z,
+			EntityLiving par5EntityLiving)
+	{
+		//super.onBlockPlacedBy(par1World, par2, par3, par4, par5EntityLiving);
+		byte facing = 0;
+        int facingI = MathHelper.floor_double((double)(par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+
+        if (facingI == 0)
+        {
+        	facing = 2;
+        }
+
+        if (facingI == 1)
+        {
+        	facing = 5;
+        }
+
+        if (facingI == 2)
+        {
+        	facing = 3;
+        }
+
+        if (facingI == 3)
+        {
+        	facing = 4;
+        }
+        world.setBlockMetadataWithNotify(x, y, z, facing);
 	}
 	
 	@Override
