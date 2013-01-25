@@ -811,7 +811,7 @@ public class MinechemRecipes {
         ItemStack sw3 = new ItemStack(Item.rottenFlesh);
         DecomposerRecipe.add(new DecomposerRecipeChance(sw3, 0.05F, new Molecule(nod,1)));
 
-        ItemStack sw4 = new ItemStack(Block.grass, 1, 2);
+        ItemStack sw4 = new ItemStack(Block.tallGrass, 1, 2);
         DecomposerRecipe.add(new DecomposerRecipeChance(sw4, 0.07F, new Molecule(pkone,2)));
                 
 		addDecomposerRecipesFromMolecules();
@@ -897,7 +897,6 @@ public class MinechemRecipes {
 		createPoisonedItemStack(Item.fishCooked, 0, aMolecule);
 		createPoisonedItemStack(Item.cookie, 0, aMolecule);
 		createPoisonedItemStack(Item.pumpkinPie, 0, aMolecule);
-		// still need to add mushroom pie 
 	}
 
 	@ForgeSubscribe
@@ -1012,6 +1011,37 @@ public class MinechemRecipes {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(W)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(W)));
 		}
+		
+		else if(event.Name.contains("xychoriumBlue")) { 
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zr,2), element(Cu,1));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(Zr,2), element(Cu,1));
+		}
+		else if(event.Name.contains("xychoriumRed")) { 
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zr,2), element(Fe,1));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(Zr,2), element(Fe,1));
+		}
+		
+		else if(event.Name.contains("xychoriumGreen")) { 
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zr,2), element(V,1));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(Zr,2), element(V,1));
+		}
+		
+		else if(event.Name.contains("xychoriumDark")) { 
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zr,2), element(Si,1));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(Zr,2), element(Si,1));
+		}
+		
+		else if(event.Name.contains("xychoriumLight")) {
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zr,2), element(Ti,1));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(Zr,2), element(Ti,1));
+		}
+			
+		else if(event.Name.contains("rc.dust.sulfur")) { 
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(S,4));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(S,4));
+		}
+	
+	 
 	}
 	
 	private Element element(EnumElement element, int amount) {
