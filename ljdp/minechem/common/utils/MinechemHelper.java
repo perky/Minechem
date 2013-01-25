@@ -256,6 +256,9 @@ public class MinechemHelper {
 		case sulfuricAcid:
 			entityPlayer.attackEntityFrom(DamageSource.generic, 8);	 
 			break;
+		case buli:
+			entityPlayer.attackEntityFrom(DamageSource.generic, 8);	 
+			break;
 		case ttx: 
 	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), Constants.TICKS_PER_SECOND * 60, 10));
 	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.wither.getId(), Constants.TICKS_PER_SECOND * 60, 1));
