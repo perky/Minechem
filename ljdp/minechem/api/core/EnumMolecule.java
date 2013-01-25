@@ -111,7 +111,8 @@ public enum EnumMolecule {
 	ttx                     (93, "TTX (Tetrodotoxin)", new Element(C,11), new Element(H,11), new Element(N,3),new Element(O,8)),
         afroman                 (94, "THC (Weed)", new Element(C,21), new Element(H,30), new Element(O,2)), // Colt 45 and 2 Zig-Zags. Baby thats all we need 
 	// chemicals for upcoming reaction system
-	buli (95, "Tert-Butyl-Lithium", new Element(Li,1), new Element(C,4), new Element(H,9)), 
+	mt    (97, "Methylcyclopentadienyl manganese tricarbonyl", new Element(C,9)),
+	buli (98, "Tert-Butyl-Lithium", new Element(Li,1), new Element(C,9), new Element(H,7) new Element(Mn,1) new Element(O,3)), 
 	// And were done 
 	;
 	
