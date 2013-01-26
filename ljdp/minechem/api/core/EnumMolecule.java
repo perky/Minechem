@@ -108,12 +108,13 @@ public enum EnumMolecule {
 	nhthree  				(90, "Aqueous Ammonia", new Element(N,1), new Element(H,4), new Molecule(hydroxide)),
 	nod 					(91, "Nodularin", new Element(C,41), new Element(H,60), new Element(N,8), new Element(O,10)),
 	potato                  (92, "Digoxin", new Element(C,41), new Element(H,64), new Element(O,14)),
-	ttx                     (93, "TTX (Tetrodotoxin)", new Element(C,11), new Element(H,11), new Element(N,3),new Element(O,8)),
+	ttx                     (93, "TTX (Tetrodotoxin)", new Element(C,11), new Element(H,11), new Element(N,3), new Element(O,8)),
         afroman                 (94, "THC (Weed)", new Element(C,21), new Element(H,30), new Element(O,2)), // Colt 45 and 2 Zig-Zags. Baby thats all we need 
 	// chemicals for upcoming reaction system
-	mt    (97, "Methylcyclopentadienyl manganese tricarbonyl", new Element(C,9)),
-	buli (98, "Tert-Butyl-Lithium", new Element(Li,1), new Element(C,9), new Element(H,7) new Element(Mn,1) new Element(O,3)), 
+	mt (97, "Methylcyclopentadienyl Manganese Tricarbonyl", new Element(C,9), new Element(H,7), new Element(Mn,1), new Element(O,3)), 
+	buli (98, "Tert-Butyllithium", new Element(Li,1), new Element(C,4), new Element (H,9)),
 	// And were done 
+	plat (99, "Chloroplatinic acid", new Element(H,2) new Element(Pt,1), new Element(Cl,6)),
 	;
 	
 	public static EnumMolecule[] molecules = values();
