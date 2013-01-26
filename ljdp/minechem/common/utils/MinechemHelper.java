@@ -253,6 +253,9 @@ public class MinechemHelper {
 		case shikimicAcid:
 			// No effect.
 			break; 
+		case salt:
+		       // No effect.
+		      break;
 		case sulfuricAcid:
 			entityPlayer.attackEntityFrom(DamageSource.generic, 8);	 
 			break;
