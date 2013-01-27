@@ -110,9 +110,9 @@ public enum EnumMolecule {
 	potato                  (92, "Digoxin", new Element(C,41), new Element(H,64), new Element(O,14)),
 	ttx                     (93, "TTX (Tetrodotoxin)", new Element(C,11), new Element(H,11), new Element(N,3), new Element(O,8)),
         afroman                 (94, "THC (Weed)", new Element(C,21), new Element(H,30), new Element(O,2)), // Colt 45 and 2 Zig-Zags. Baby thats all we need 
-	mt (97, "Methylcyclopentadienyl Manganese Tricarbonyl", new Element(C,9), new Element(H,7), new Element(Mn,1), new Element(O,3)), 
-	buli (98, "Tert-Butyllithium", new Element(Li,1), new Element(C,4), new Element (H,9)),
-	plat (99, "Chloroplatinic acid", new Element(H,2) new Element(Pt,1), new Element(Cl,6)), 
+	mt (95, "Methylcyclopentadienyl Manganese Tricarbonyl", new Element(C,9), new Element(H,7), new Element(Mn,1), new Element(O,3)), // Level 1
+	buli (96, "Tert-Butyllithium", new Element(Li,1), new Element(C,4), new Element (H,9)), // Level 2
+	plat (97, "Chloroplatinic acid", new Element(H,2) new Element(Pt,1), new Element(Cl,6)), // Level 3
 	;
 	
 	public static EnumMolecule[] molecules = values();
