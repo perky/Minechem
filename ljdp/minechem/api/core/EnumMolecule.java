@@ -95,7 +95,7 @@ public enum EnumMolecule {
 	sulfuricAcid			(77, "Sulfuric Acid", new Element(H,2), new Element(S), new Element(O,4)),
 	glyphosate				(78, "Glyphosate", new Element(C,3), new Element(H,8), new Element(N), new Element(O,5), new Element(P)),
 	quinine					(79, "Quinine", new Element(C,20), new Element(H,24), new Element(N,2), new Element(O,2)),
-	ddt			 			(80, "DDT", new Element(C,14), new Element(H,9), new Element(Cl,5)),
+	ddt			 	        (80, "DDT", new Element(C,14), new Element(H,9), new Element(Cl,5)),
 	dota					(81, "DOTA", new Element(C,16), new Element(H,28), new Element(N,4), new Element(O,8)),
 	poison					(82, "T-2 Mycotoxin", new Element(C,24), new Element(H,34), new Element(O,9)),
 	xanax					(83, "Alprazolam", new Element(C,17), new Element(H,13), new Element(Cl), new Element(N,4)),
@@ -113,6 +113,7 @@ public enum EnumMolecule {
 	mt (95, "Methylcyclopentadienyl Manganese Tricarbonyl", new Element(C,9), new Element(H,7), new Element(Mn,1), new Element(O,3)), // Level 1
 	buli (96, "Tert-Butyllithium", new Element(Li,1), new Element(C,4), new Element (H,9)), // Level 2
 	plat (97, "Chloroplatinic acid", new Element(H,2) new Element(Pt,1), new Element(Cl,6)), // Level 3
+	phosgene (98, "Phosgene", new Element(C,1), new Element(O,1), new Element(Cl,2)),
 	;
 	
 	public static EnumMolecule[] molecules = values();
