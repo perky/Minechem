@@ -90,6 +90,7 @@ public class ModMinechem {
 		blLog.setParent(FMLLog.getLogger());
 		blLog.info("Loading localization");
 		LanguageRegistry.instance().loadLocalization("/lang/minechem/en_GB.properties", "en_GB", false);
+		LanguageRegistry.instance().loadLocalization("/lang/minechem/zh_CN.properties", "zh_CN", false);
 	 	blLog.info("Loading Config");
 	 	loadConfig(event);
 	 	blLog.info("Adding Items");
