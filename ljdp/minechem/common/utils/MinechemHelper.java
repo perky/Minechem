@@ -10,7 +10,6 @@ import ljdp.minechem.api.core.EnumElement;
 import ljdp.minechem.api.core.EnumMolecule;
 import ljdp.minechem.api.core.Molecule;
 import ljdp.minechem.api.util.Constants;
-import ljdp.minechem.api.util.Util;
 import ljdp.minechem.common.MinechemItems;
 
 import buildcraft.api.core.Position;
@@ -254,24 +253,50 @@ public class MinechemHelper {
 		case shikimicAcid:
 			// No effect.
 			break; 
+		case salt:
+		       // No effect.
+		      break;
 		case sulfuricAcid:
 			entityPlayer.attackEntityFrom(DamageSource.generic, 8);	 
 			break;
+		case buli:
+			entityPlayer.attackEntityFrom(DamageSource.generic, 8);	 
+			break;
+		case phosgene:
+		entityPlayer.setFire(100)
+		break; 
+		case aalc:
+		entityPlayer.setFire(50)
+		break; 
 		case ttx: 
-	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), Constants.TICKS_PER_SECOND * 30, 10));
+	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), Constants.TICKS_PER_SECOND * 60, 10));
 	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.wither.getId(), Constants.TICKS_PER_SECOND * 60, 1));
 	    	break;
 		case pkone: // Polyketides have many roles in medicine 
-			entityPlayer.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), Constants.TICKS_PER_MINUTE * 4, 2));
+		entityPlayer.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), Constants.TICKS_PER_MINUTE * 4, 2));
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(),   Constants.TICKS_PER_MINUTE * 4, 0));
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 4, 1));
-    		entityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.getId(), Constants.TICKS_PER_SECOND * 5, 1));
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.getId(), Constants.TICKS_PER_SECOND * 30, 1));
 		break;
-			// this will increase difficulty as only one polyketide has medical potential 
+		// this will increase difficulty as only two polyketides has medical potential 
 		case pkthree:
 			break;
 		case pkfour:
 			break;
+		case dderm: 
+		entityPlayer.addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), Constants.TICKS_PER_MINUTE * 5, 2));
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(),   Constants.TICKS_PER_MINUTE * 5, 2));
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 5, 2));
+    		entityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.getId(), Constants.TICKS_PER_SECOND * 80, 1));
+			break; 
+		case afroman: // Roll Roll Roll Mah joint. Pick out the seeds and stems 
+		cureAllPotions(world, entityPlayer); 
+	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 20, 5));
+	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), Constants.TICKS_PER_SECOND * 20, 1));
+	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.getId(), Constants.TICKS_PER_SECOND * 30, 1));
+		break; 
+		case nod: 
+	        entityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.getId(), Constants.TICKS_PER_MINUTE * 8, 1));
 		default:
 			entityPlayer.attackEntityFrom(DamageSource.generic, 5);
 			break;
@@ -331,30 +356,6 @@ public class MinechemHelper {
 				return world;
 		}
 		return null;
-	}
-
-	public static ItemStack chemicalToItemStack(Chemical chemical, int amount) {
-		if(chemical instanceof Element)
-			return new ItemStack(MinechemItems.element, amount, ((Element)chemical).element.ordinal());
-		else if(chemical instanceof Molecule)
-			return new ItemStack(MinechemItems.molecule, amount, ((Molecule)chemical).molecule.id());
-		return null;
-	}
-
-	public static Chemical itemStackToChemical(ItemStack itemstack) {
-		if(Util.isStackAnElement(itemstack)) {
-			return new Element(MinechemItems.element.getElement(itemstack), itemstack.stackSize);
-		} else if(Util.isStackAMolecule(itemstack)) {
-			return new Molecule(MinechemItems.molecule.getMolecule(itemstack), itemstack.stackSize);
-		}
-		return null;
-	}
-	
-	public static String getChemicalName(Chemical chemical) {
-		if(chemical instanceof Element)
-			return ((Element)chemical).element.descriptiveName();
-		else
-			return((Molecule)chemical).molecule.descriptiveName();
 	}
 
 }
