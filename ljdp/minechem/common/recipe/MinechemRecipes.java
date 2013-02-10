@@ -3,20 +3,9 @@ package ljdp.minechem.common.recipe;
 import static ljdp.minechem.api.core.EnumElement.*;
 import static ljdp.minechem.api.core.EnumMolecule.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
-
-import argo.jdom.JdomParser;
-import argo.jdom.JsonNode;
-import argo.jdom.JsonRootNode;
-import argo.saj.InvalidSyntaxException;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -32,7 +21,6 @@ import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.api.util.Util;
 import ljdp.minechem.common.MinechemBlocks;
 import ljdp.minechem.common.MinechemItems;
-import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.UnbondingRecipe;
 import ljdp.minechem.common.items.ItemElement;
 import ljdp.minechem.common.utils.MinechemHelper;
@@ -50,7 +38,7 @@ public class MinechemRecipes {
 	
 	/*	The static instance of this class */
 	private static final MinechemRecipes instance = new MinechemRecipes();
-	private static final JdomParser JDOM_PARSER = new JdomParser();
+	
 	/* The list of decomposer recipes */
 	public ArrayList<UnbondingRecipe> unbondingRecipes;
 	public ArrayList<SynthesisRecipe> synthesisRecipes;
@@ -64,45 +52,7 @@ public class MinechemRecipes {
 		synthesisRecipes = new ArrayList<SynthesisRecipe>();
 	}
 	
-	private JsonRootNode getRootNode(InputStream jsonFile) {
-		JsonRootNode rootNode = null;
-		try {
-			InputStreamReader jsonFileReader = new InputStreamReader(jsonFile, "UTF-8");
-			rootNode = JDOM_PARSER.parse(jsonFileReader);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidSyntaxException e) {
-			e.printStackTrace();
-		}
-		return rootNode;
-	}
-	
-	public void readDecomposerRecipesFromJsonFile(InputStream jsonFile) {
-		JsonRootNode rootNode = getRootNode(jsonFile);
-		if(rootNode != null) {
-			List<JsonNode> recipeNodes = rootNode.getElements();
-			for(JsonNode recipeNode : recipeNodes) {
-				String input = recipeNode.getStringValue("input");
-				float chance = Float.valueOf(recipeNode.getNumberValue("chance"));
-				String output = "";
-				if(recipeNode.isArrayNode("output")) {
-					List<JsonNode> outputNodes = recipeNode.getArrayNode("output");
-					for(JsonNode outputNode : outputNodes) {
-						output += outputNode.getStringValue() + ", ";
-					}
-				} else {
-					output = recipeNode.getStringValue("output");
-				}
-				String printer = String.format("%s decomposes into %s with %f%% chance.", input, output, chance);
-			}
-		}
-	}
-	
 	public void RegisterRecipes() {
-		InputStream jsonFile = ModMinechem.instance.getClass().getResourceAsStream("/decomposer.json");
-		if(jsonFile != null)
-			readDecomposerRecipesFromJsonFile(jsonFile);
-		
 		ItemStack stone = new ItemStack(Block.stone);
 		ItemStack cobble = new ItemStack(Block.cobblestone);
 		ItemStack dirt = new ItemStack(Block.dirt);
@@ -853,7 +803,7 @@ public class MinechemRecipes {
 		
         // project SkyWorld
         ItemStack sw1 = new ItemStack(Item.fishRaw);
-        DecomposerRecipe.add(new DecomposerRecipeChance(sw1, 0.05F, new Molecule(pkfour))); 
+        DecomposerRecipe.add(new DecomposerRecipeChance(sw1, 0.05F, new Molecule(dderm))); 
         
         ItemStack sw2 = new ItemStack(Block.plantYellow);
         DecomposerRecipe.add(new DecomposerRecipeChance(sw2, 0.3F, new Molecule(shikimicAcid,2)));
@@ -861,8 +811,11 @@ public class MinechemRecipes {
         ItemStack sw3 = new ItemStack(Item.rottenFlesh);
         DecomposerRecipe.add(new DecomposerRecipeChance(sw3, 0.05F, new Molecule(nod,1)));
 
-        ItemStack sw4 = new ItemStack(Block.grass, 1, 2);
+        ItemStack sw4 = new ItemStack(Block.tallGrass, 1, 2);
         DecomposerRecipe.add(new DecomposerRecipeChance(sw4, 0.07F, new Molecule(pkone,2)));
+        
+        ItemStack sw5 = new ItemStack(Block.tallGrass); // LOL 
+        DecomposerRecipe.add(new DecomposerRecipeChance(sw5, 0.10F, new Molecule(afroman,2)));
                 
 		addDecomposerRecipesFromMolecules();
 		addSynthesisRecipesFromMolecules();
@@ -923,12 +876,12 @@ public class MinechemRecipes {
 	
 
 	private ItemStack createPoisonedItemStack(Item item, int damageValue, EnumMolecule aMolecule) {
-		ItemStack poison = new ItemStack(MinechemItems.molecule, 1, aMolecule.ordinal());
+		ItemStack poison = new ItemStack(MinechemItems.molecule, 1, aMolecule.id());
 		ItemStack normalStack   = new ItemStack(item, 1, damageValue);
 		ItemStack poisonedStack = new ItemStack(item, 1, damageValue);
 		NBTTagCompound stackTag = new NBTTagCompound();
 		stackTag.setBoolean("minechem.isPoisoned", true);
-		stackTag.setInteger("minechem.effectType", aMolecule.ordinal());
+		stackTag.setInteger("minechem.effectType", aMolecule.id());
 		poisonedStack.setTagCompound(stackTag);
 		
 		GameRegistry.addShapelessRecipe(poisonedStack, poison, normalStack);
@@ -947,7 +900,6 @@ public class MinechemRecipes {
 		createPoisonedItemStack(Item.fishCooked, 0, aMolecule);
 		createPoisonedItemStack(Item.cookie, 0, aMolecule);
 		createPoisonedItemStack(Item.pumpkinPie, 0, aMolecule);
-		// still need to add mushroom pie 
 	}
 
 	@ForgeSubscribe
@@ -1043,7 +995,7 @@ public class MinechemRecipes {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(W, 2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(W, 2)));
 		}
-	    else if(event.Name.contains("Zinc")) {
+	        else if(event.Name.contains("Zinc")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zn, 2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Zn, 2)));
 		}
@@ -1058,10 +1010,323 @@ public class MinechemRecipes {
 		else if(event.Name.contains("plateSilicon")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Si, 2)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 1000, element(Si, 2)));
+			
 		} else if(event.Name.contains("Tungsten")) {
 			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(W)));
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(W)));
 		}
+		
+		else if(event.Name.contains("xychoriumBlue")) { 
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zr,2), element(Cu,1));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(Zr,2), element(Cu,1));
+		}
+		else if(event.Name.contains("xychoriumRed")) { 
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zr,2), element(Fe,1));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(Zr,2), element(Fe,1));
+		}
+		
+		else if(event.Name.contains("xychoriumGreen")) { 
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zr,2), element(V,1));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(Zr,2), element(V,1));
+		}
+		
+		else if(event.Name.contains("xychoriumDark")) { 
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zr,2), element(Si,1));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(Zr,2), element(Si,1));
+		}
+		
+		else if(event.Name.contains("xychoriumLight")) {
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(Zr,2), element(Ti,1));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(Zr,2), element(Ti,1));
+		}
+			
+		else if(event.Name.contains("rc.dust.sulfur")) { 
+			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(S,4));
+			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(S,4));
+		}
+		// Mandrake  : Trying to merge vitzli's METAL2 addon support into main mod 
+		// Spaceing is way off but the code should be ok
+		// recipe dictionary is ['Cn-Co(BrO3)2', 'water', '6']
+		else if (event.Name.contentEquals("ingotAdamantine")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Molecule(water, 6), new Element(Cn, 1), new Element(Co, 1), new Element(Br, 2), new Element(O, 6) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 780, new Molecule(water, 6), new Element(Cn, 1), new Element(Co, 1), new Element(Br, 2), new Element(O, 6) ));
+
+			}
+
+			// name=ingotAdluorite, energy=720MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['ZrO2']
+			else if(event.Name.contentEquals("ingotAdluorite")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Zr, 1), new Element(O, 2) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 720, new Element(Zr, 1), new Element(O, 2) ));
+
+			}
+
+			// name=ingotAmordrine, energy=400MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['Pt-BN']
+			else if(event.Name.contentEquals("ingotAmordrine")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Pt, 1), new Element(B, 1), new Element(N, 1) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 400, new Element(Pt, 1), new Element(B, 1), new Element(N, 1) ));
+
+			}
+
+			// name=ingotAngmallen, energy=400MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['(FeAu)2']
+			else if(event.Name.contentEquals("ingotAngmallen")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Fe, 2), new Element(Au, 2) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 400, new Element(Fe, 2), new Element(Au, 2) ));
+
+			}
+
+			// name=ingotAredrite, energy=720MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['CCeRu']
+			else if(event.Name.contentEquals("ingotAredrite")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(C, 1), new Element(Ce, 1), new Element(Ru, 1) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 720, new Element(C, 1), new Element(Ce, 1), new Element(Ru, 1) ));
+
+			}
+
+			// name=ingotAstral Silver, energy=740MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['Ag-Ni-PdTe']
+			else if(event.Name.contentEquals("ingotAstral Silver")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Ag, 1), new Element(Ni, 1), new Element(Pd, 1), new Element(Te, 1) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 740, new Element(Ag, 1), new Element(Ni, 1), new Element(Pd, 1), new Element(Te, 1) ));
+
+			}
+
+			// name=ingotAtlarus, energy=780MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['W3C']
+			else if(event.Name.contentEquals("ingotAtlarus")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(W, 3), new Element(C, 1) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 780, new Element(W, 3), new Element(C, 1) ));
+
+			}
+
+			// name=ingotBlack Steel, energy=400MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['Fe4C-MnZnThO3']
+			else if(event.Name.contentEquals("ingotBlack Steel")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Fe, 4), new Element(C, 1), new Element(Mn, 1), new Element(Zn, 1), new Element(Th, 1), new Element(O, 3) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 400, new Element(Fe, 4), new Element(C, 1), new Element(Mn, 1), new Element(Zn, 1), new Element(Th, 1), new Element(O, 3) ));
+
+			}
+
+			// name=ingotCarmot, energy=740MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['Ni-ReCl3']
+			else if(event.Name.contentEquals("ingotCarmot")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Ni, 1), new Element(Re, 1), new Element(Cl, 3) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 740, new Element(Ni, 1), new Element(Re, 1), new Element(Cl, 3) ));
+
+			}
+
+			// name=ingotCelenegil, energy=400MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['PtReB2']
+			else if(event.Name.contentEquals("ingotCelenegil")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Pt, 1), new Element(Re, 1), new Element(B, 2) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 400, new Element(Pt, 1), new Element(Re, 1), new Element(B, 2) ));
+
+			}
+
+			// name=ingotCeruclase, energy=690MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['Os3(CO)12']
+			else if(event.Name.contentEquals("ingotCeruclase")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Os, 3), new Element(C, 12), new Element(O, 12) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 690, new Element(Os, 3), new Element(C, 12), new Element(O, 12) ));
+
+			}
+
+			// name=ingotDamascus Steel, energy=400MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['Cu3Fe2Sn']
+			else if(event.Name.contentEquals("ingotDamascus Steel")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Cu, 3), new Element(Fe, 2), new Element(Sn, 1) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 400, new Element(Cu, 3), new Element(Fe, 2), new Element(Sn, 1) ));
+
+			}
+
+			// name=ingotDeep Iron, energy=660MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['MnFeZnCO3']
+			else if(event.Name.contentEquals("ingotDeep Iron")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Mn, 1), new Element(Fe, 1), new Element(Zn, 1), new Element(C, 1), new Element(O, 3) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 660, new Element(Mn, 1), new Element(Fe, 1), new Element(Zn, 1), new Element(C, 1), new Element(O, 3) ));
+
+			}
+
+			// name=ingotDesichalkos, energy=400MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['Pd3TiUO2(NO3)2']
+			else if(event.Name.contentEquals("ingotDesichalkos")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Pd, 3), new Element(Ti, 1), new Element(U, 1), new Element(O, 8), new Element(N, 2) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 400, new Element(Pd, 3), new Element(Ti, 1), new Element(U, 1), new Element(O, 8), new Element(N, 2) ));
+
+			}
+
+			// name=ingotEximite, energy=640MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['Pd3Ti']
+			else if(event.Name.contentEquals("ingotEximite")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Pd, 3), new Element(Ti, 1) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 640, new Element(Pd, 3), new Element(Ti, 1) ));
+
+			}
+
+			// name=ingotHaderoth, energy=400MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['Pd-NbC=RuTe2']
+			else if(event.Name.contentEquals("ingotHaderoth")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Pd, 1), new Element(Nb, 1), new Element(C, 1), new Element(Ru, 1), new Element(Te, 2) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 400, new Element(Pd, 1), new Element(Nb, 1), new Element(C, 1), new Element(Ru, 1), new Element(Te, 2) ));
+
+			}
+
+			// name=ingotHepatizon, energy=400MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['Au2Cu3Sn']
+			else if(event.Name.contentEquals("ingotHepatizon")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Au, 2), new Element(Cu, 3), new Element(Sn, 1) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 400, new Element(Au, 2), new Element(Cu, 3), new Element(Sn, 1) ));
+
+			}
+
+			// name=ingotIgnatius, energy=470MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['O3PdSi']
+			else if(event.Name.contentEquals("ingotIgnatius")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(O, 3), new Element(Pd, 1), new Element(Si, 1) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 470, new Element(O, 3), new Element(Pd, 1), new Element(Si, 1) ));
+
+			}
+
+			// name=ingotInfuscolium, energy=700MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['Fe3Th']
+			else if(event.Name.contentEquals("ingotInfuscolium")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Fe, 3), new Element(Th, 1) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 700, new Element(Fe, 3), new Element(Th, 1) ));
+
+			}
+
+			// name=ingotInolashite, energy=400MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['Os3(CO)12-ZrO2']
+			else if(event.Name.contentEquals("ingotInolashite")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Os, 3), new Element(C, 12), new Element(O, 14), new Element(Zr, 1) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 400, new Element(Os, 3), new Element(C, 12), new Element(O, 14), new Element(Zr, 1) ));
+
+			}
+
+			// name=ingotKalendrite, energy=720MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['BN']
+			else if(event.Name.contentEquals("ingotKalendrite")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(B, 1), new Element(N, 1) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 720, new Element(B, 1), new Element(N, 1) ));
+
+			}
+
+			// name=ingotLemurite, energy=570MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['LiC2H5O']
+			else if(event.Name.contentEquals("ingotLemurite")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Li, 1), new Element(C, 2), new Element(H, 5), new Element(O, 1) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 570, new Element(Li, 1), new Element(C, 2), new Element(H, 5), new Element(O, 1) ));
+
+			}
+
+			// name=ingotMeutoite, energy=740MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['Es(NO3)3']
+			else if(event.Name.contentEquals("ingotMeutoite")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Es, 1), new Element(N, 3), new Element(O, 9) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 740, new Element(Es, 1), new Element(N, 3), new Element(O, 9) ));
+
+			}
+
+			// name=ingotMidasium, energy=600MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['Au3Cn']
+			else if(event.Name.contentEquals("ingotMidasium")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Au, 3), new Element(Cn, 1) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 600, new Element(Au, 3), new Element(Cn, 1) ));
+
+			}
+
+			// name=ingotMithril, energy=740MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['Pd-NbC']
+			else if(event.Name.contentEquals("ingotMithril")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Pd, 1), new Element(Nb, 1), new Element(C, 1) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 740, new Element(Pd, 1), new Element(Nb, 1), new Element(C, 1) ));
+
+			}
+
+			// name=ingotOrichalcum, energy=750MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['ReB2']
+			else if(event.Name.contentEquals("ingotOrichalcum")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Re, 1), new Element(B, 2) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 750, new Element(Re, 1), new Element(B, 2) ));
+
+			}
+
+			// name=ingotOureclase, energy=720MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['HgTeO3']
+			else if(event.Name.contentEquals("ingotOureclase")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Hg, 1), new Element(Te, 1), new Element(O, 3) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 720, new Element(Hg, 1), new Element(Te, 1), new Element(O, 3) ));
+
+			}
+
+			// name=ingotPrometheum, energy=600MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['CeFeZn']
+			else if(event.Name.contentEquals("ingotPrometheum")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Ce, 1), new Element(Fe, 1), new Element(Zn, 1) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 600, new Element(Ce, 1), new Element(Fe, 1), new Element(Zn, 1) ));
+
+			}
+
+			// name=ingotRubracium, energy=760MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['RuTe2']
+			else if(event.Name.contentEquals("ingotRubracium")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Ru, 1), new Element(Te, 2) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 760, new Element(Ru, 1), new Element(Te, 2) ));
+
+			}
+
+			// name=ingotSanguinite, energy=760MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['TiVFeC-Co(NO3)2']
+			else if(event.Name.contentEquals("ingotSanguinite")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Ti, 1), new Element(V, 1), new Element(Fe, 1), new Element(C, 1), new Element(Co, 1), new Element(N, 2), new Element(O, 6) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 760, new Element(Ti, 1), new Element(V, 1), new Element(Fe, 1), new Element(C, 1), new Element(Co, 1), new Element(N, 2), new Element(O, 6) ));
+
+			}
+
+			// name=ingotShadow Iron, energy=530MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['Fe4NiS4']
+			else if(event.Name.contentEquals("ingotShadow Iron")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Fe, 4), new Element(Ni, 1), new Element(S, 4) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 530, new Element(Fe, 4), new Element(Ni, 1), new Element(S, 4) ));
+
+			}
+
+			// name=ingotShadow Steel, energy=400MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['LiC2H5O-Fe4NiS4']
+			else if(event.Name.contentEquals("ingotShadow Steel")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Li, 1), new Element(C, 2), new Element(H, 5), new Element(O, 1), new Element(Fe, 4), new Element(Ni, 1), new Element(S, 4) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 400, new Element(Li, 1), new Element(C, 2), new Element(H, 5), new Element(O, 1), new Element(Fe, 4), new Element(Ni, 1), new Element(S, 4) ));
+
+			}
+
+			// name=ingotTartarite, energy=400MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['W3C-Cn-Co(BrO3)2', 'water', '6']
+			else if(event.Name.contentEquals("ingotTartarite")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Molecule(water, 6), new Element(W, 3), new Element(C, 1), new Element(Cn, 1), new Element(Co, 1), new Element(Br, 2), new Element(O, 6) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 400, new Molecule(water, 6), new Element(W, 3), new Element(C, 1), new Element(Cn, 1), new Element(Co, 1), new Element(Br, 2), new Element(O, 6) ));
+
+			}
+
+			// name=ingotVulcanite, energy=760MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['Al-Cr2O3']
+			else if(event.Name.contentEquals("ingotVulcanite")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Al, 1), new Element(Cr, 2), new Element(O, 3) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 760, new Element(Al, 1), new Element(Cr, 2), new Element(O, 3) ));
+
+			}
+
+			// name=ingotVyroxeres, energy=610MJ, probability=1.00F, multiply all by 1
+			// recipe dictionary is ['ZnWO4']
+			else if(event.Name.contentEquals("ingotVyroxeres")) {
+				DecomposerRecipe.add(new DecomposerRecipe(event.Ore, new Element(Zn, 1), new Element(W, 1), new Element(O, 4) ));
+				SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 610, new Element(Zn, 1), new Element(W, 1), new Element(O, 4) ));
+
+			}
+
+	
+	 
 	}
 	
 	private Element element(EnumElement element, int amount) {
