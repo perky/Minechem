@@ -263,10 +263,10 @@ public class MinechemHelper {
 			entityPlayer.attackEntityFrom(DamageSource.generic, 8);	 
 			break;
 		case phosgene:
-		entityPlayer.setFire(100)
+		entityPlayer.setFire(100);
 		break; 
 		case aalc:
-		entityPlayer.setFire(50)
+		entityPlayer.setFire(50);
 		break; 
 		case ttx: 
 	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), Constants.TICKS_PER_SECOND * 60, 10));
@@ -297,7 +297,7 @@ public class MinechemHelper {
 		break; 
 		case nod: 
 	        entityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.getId(), Constants.TICKS_PER_MINUTE * 8, 1));
-		default:
+	        default:
 			entityPlayer.attackEntityFrom(DamageSource.generic, 5);
 			break;
     	}
