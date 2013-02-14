@@ -263,10 +263,10 @@ public class MinechemHelper {
 			entityPlayer.attackEntityFrom(DamageSource.generic, 8);	 
 			break;
 		case phosgene:
-		entityPlayer.setFire(100)
+		entityPlayer.setFire(100);
 		break; 
 		case aalc:
-		entityPlayer.setFire(50)
+		entityPlayer.setFire(50);
 		break; 
 		case ttx: 
 	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), Constants.TICKS_PER_SECOND * 60, 10));
@@ -288,7 +288,7 @@ public class MinechemHelper {
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(),   Constants.TICKS_PER_MINUTE * 5, 2));
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.regeneration.getId(), Constants.TICKS_PER_MINUTE * 5, 2));
     		entityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.getId(), Constants.TICKS_PER_SECOND * 80, 1));
-			break; 
+		break; 
 		case afroman: // Roll Roll Roll Mah joint. Pick out the seeds and stems 
 		cureAllPotions(world, entityPlayer); 
 	    	entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 20, 5));
@@ -297,7 +297,12 @@ public class MinechemHelper {
 		break; 
 		case nod: 
 	        entityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.getId(), Constants.TICKS_PER_MINUTE * 8, 1));
-		default:
+                case ahist:
+		cureAllPotions(world, entityPlayer); 
+	        entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 20, 5));
+		entityPlayer.getFoodStats().addStats(3, .1F);
+		break; 
+	        default:
 			entityPlayer.attackEntityFrom(DamageSource.generic, 5);
 			break;
     	}
