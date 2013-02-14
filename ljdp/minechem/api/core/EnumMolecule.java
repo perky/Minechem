@@ -115,6 +115,7 @@ public enum EnumMolecule {
 	plat                    (97, "Chloroplatinic acid", new Element(H,2) new Element(Pt,1), new Element(Cl,6)), // Level 3
 	phosgene                (98, "Phosgene", new Element(C,1), new Element(O,1), new Element(Cl,2)),
 	aalc                    (99, "Allyl alcohol", new Element(C,3), new Element(H,6), new Element(O,1)),
+	hist                    (100, "Diphenhydramine", new Element(C,17), new Element(H,21), new Element(N), new Element(O)),
 	;
 	
 	public static EnumMolecule[] molecules = values();
