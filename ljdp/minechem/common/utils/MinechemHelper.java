@@ -297,7 +297,7 @@ public class MinechemHelper {
 		break; 
 		case nod: 
 	        entityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.getId(), Constants.TICKS_PER_MINUTE * 8, 1));
-                case ahist:
+                case hist:
 		cureAllPotions(world, entityPlayer); 
 	        entityPlayer.addPotionEffect(new PotionEffect(Potion.confusion.getId(), Constants.TICKS_PER_SECOND * 20, 5));
 		entityPlayer.getFoodStats().addStats(3, .1F);
