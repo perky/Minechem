@@ -183,7 +183,7 @@ public class TileEntityFusion extends TileEntityMultiBlock implements ISidedInve
 	
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
-		if(itemstack != null && itemstack.itemID == Item.netherStar.shiftedIndex) {
+		if(itemstack != null && itemstack.itemID == Item.netherStar.itemID) {
 			this.inventory[slot] = new ItemStack(MinechemItems.fusionStar);
 		} else {
 			this.inventory[slot] = itemstack;

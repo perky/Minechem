@@ -13,6 +13,6 @@ public class SlotElement extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack itemStack) {
-		return itemStack.itemID == MinechemItems.element.shiftedIndex;
+		return itemStack.itemID == MinechemItems.element.itemID;
 	}
 }

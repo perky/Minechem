@@ -393,7 +393,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 				int stackSize = Math.min(amount, getInventoryStackLimit());
 				setInventorySlotContents(slot, new ItemStack(MinechemItems.testTube, stackSize));
 				amount -= stackSize;
-			} else if(inventory[slot].itemID == MinechemItems.testTube.shiftedIndex) {
+			} else if(inventory[slot].itemID == MinechemItems.testTube.itemID) {
 				int stackAddition = getInventoryStackLimit() - inventory[slot].stackSize;
 				stackAddition = Math.min(amount, stackAddition);
 				inventory[slot].stackSize += stackAddition;

@@ -10,6 +10,7 @@ import ljdp.minechem.api.core.EnumElement;
 import ljdp.minechem.api.core.EnumMolecule;
 import ljdp.minechem.api.core.Molecule;
 import ljdp.minechem.api.util.Constants;
+import ljdp.minechem.api.util.Util;
 import ljdp.minechem.common.MinechemItems;
 
 import buildcraft.api.core.Position;
@@ -136,11 +137,11 @@ public class MinechemHelper {
 	}
 	
 	public static boolean itemStackMatchesChemical(ItemStack itemstack, Chemical chemical, int factor) {
-		if(chemical instanceof Element && itemstack.itemID == MinechemItems.element.shiftedIndex) {
+		if(chemical instanceof Element && itemstack.itemID == MinechemItems.element.itemID) {
 			Element element = (Element)chemical;
 			return (itemstack.getItemDamage() == element.element.ordinal()) && (itemstack.stackSize >= element.amount * factor);
 		}
-		if (chemical instanceof Molecule && itemstack.itemID == MinechemItems.molecule.shiftedIndex) {
+		if (chemical instanceof Molecule && itemstack.itemID == MinechemItems.molecule.itemID) {
 			Molecule molecule = (Molecule)chemical;
 			return (itemstack.getItemDamage() == molecule.molecule.ordinal()) && (itemstack.stackSize >= molecule.amount * factor);
 		}
@@ -177,16 +178,8 @@ public class MinechemHelper {
         			(double)((float)z + randomZ), 
         			new ItemStack(itemstack.itemID, randomN, itemstack.getItemDamage())
         	);
-        	if(itemstack.hasTagCompound())
-        		droppedEntity.func_92014_d().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
-        	float amplitude = 0.05F;
-        	float yAmplitude = amplitude + 0.2F;
-        	droppedEntity.motionX = (double)((float)random.nextGaussian() * amplitude);
-        	droppedEntity.motionY = (double)((float)random.nextGaussian() * yAmplitude);
-        	droppedEntity.motionZ = (double)((float)random.nextGaussian() * amplitude);
-            world.spawnEntityInWorld(droppedEntity);
-        }
-	}
+        	
+	}}
 	
 	public static void triggerPlayerEffect(EnumMolecule molecule, EntityPlayer entityPlayer) {
     	World world = entityPlayer.worldObj;
@@ -362,5 +355,25 @@ public class MinechemHelper {
 		}
 		return null;
 	}
-
+	public static String getChemicalName(Chemical chemical) {
+		if(chemical instanceof Element)
+			return ((Element)chemical).element.descriptiveName();
+		else
+			return((Molecule)chemical).molecule.descriptiveName();
+	}
+	public static ItemStack chemicalToItemStack(Chemical chemical, int amount) {
+		if(chemical instanceof Element)
+			return new ItemStack(MinechemItems.element, amount, ((Element)chemical).element.ordinal());
+		else if(chemical instanceof Molecule)
+			return new ItemStack(MinechemItems.molecule, amount, ((Molecule)chemical).molecule.id());
+		return null;
+	}
+	public static Chemical itemStackToChemical(ItemStack itemstack) {
+		if(Util.isStackAnElement(itemstack)) {
+			return new Element(MinechemItems.element.getElement(itemstack), itemstack.stackSize);
+		} else if(Util.isStackAMolecule(itemstack)) {
+			return new Molecule(MinechemItems.molecule.getMolecule(itemstack), itemstack.stackSize);
+		}
+		return null;
+	}
 }

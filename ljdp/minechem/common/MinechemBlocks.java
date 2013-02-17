@@ -49,7 +49,6 @@ public class MinechemBlocks {
 	private static int fusionID;
 	private static int chemicalStorageID;
 	private static int chemicalVatID;
-	
 	public static void loadConfig(Configuration config) {
 		int baseID = 4012;
 		microscopeID = getBlockConfig(config, "Microscope", baseID++);
@@ -75,10 +74,10 @@ public class MinechemBlocks {
 		blueprintProjector = new BlockBlueprintProjector(blueprintProjectorID);
 		chemicalStorage = new BlockChemicalStorage(chemicalStorageID);
 		chemicalVat = new BlockVat(chemicalVatID);
-		
 		GameRegistry.registerBlock(decomposer, "minechem.blockDecomposer");
+		LanguageRegistry.addName(decomposer, MinechemHelper.getLocalString("block.name.decomposer"));
 		GameRegistry.registerBlock(microscope, "minechem.blockMicroscope");
-				
+		LanguageRegistry.addName(microscope, MinechemHelper.getLocalString("block.name.microscope"));
 		GameRegistry.registerBlock(synthesis, "minechem.blockSynthesis");
 		LanguageRegistry.addName(synthesis, MinechemHelper.getLocalString("block.name.synthesis"));
 		

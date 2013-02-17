@@ -13,6 +13,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.server.FMLServerHandler;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -73,5 +74,16 @@ public class CommonProxy {
 		}
 		return player;
 	}
+	public String getCurrentLanguage() {
+		return null;
+	}
+	public void addName(Object obj, String s) {
+	}
 
+	public void addLocalization(String s1, String string) {
+	}
+
+	public String getItemDisplayName(ItemStack newStack) {
+		return "";
+	}
 }

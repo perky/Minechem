@@ -74,7 +74,7 @@ public class ContainerDecomposer extends Container implements IRadiationShield {
 			if(slot >= 0 && slot < kDecomposerInventoryEnd) {
 				if(!mergeItemStack(stackInSlot, kPlayerInventorySlotStart, inventorySlots.size(), true))
 					return null;
-			} else if(stackInSlot.itemID == MinechemItems.testTube.shiftedIndex) {
+			} else if(stackInSlot.itemID == MinechemItems.testTube.itemID) {
 				if(!mergeItemStack(stackInSlot, decomposer.kEmptyTestTubeSlotStart, decomposer.kEmptyTestTubeSlotEnd + 1, false))
 					return null;
 			} else if(slot >= kPlayerInventorySlotStart) {

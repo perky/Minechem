@@ -99,7 +99,7 @@ public class TileEntityWasteBarrel extends TileEntity implements ISpecialInvento
 	@Override
 	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
 		if(from == from.UP 
-				&& (stack.itemID == MinechemItems.element.shiftedIndex || stack.itemID == MinechemItems.molecule.shiftedIndex)) 
+				&& (stack.itemID == MinechemItems.element.itemID || stack.itemID == MinechemItems.molecule.itemID)) 
 		{
 			if(doAdd)
 				addToCapacity(stack.stackSize);

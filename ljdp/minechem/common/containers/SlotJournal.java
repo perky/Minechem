@@ -13,7 +13,7 @@ public class SlotJournal extends Slot {
 	
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
-		return itemstack.itemID == MinechemItems.journal.shiftedIndex;
+		return itemstack.itemID == MinechemItems.journal.itemID;
 	}
 	
 	@Override

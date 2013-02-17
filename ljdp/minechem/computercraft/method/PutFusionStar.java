@@ -22,8 +22,8 @@ public class PutFusionStar extends InteractMachine implements ICCMethod {
 		ItemStack selectedStack = turtle.getSlotContents(turtle.getSelectedSlot());
 		boolean didPut = false;
 		if(machine != null && selectedStack != null 
-				&& (selectedStack.itemID == Item.netherStar.shiftedIndex 
-				|| selectedStack.itemID == MinechemItems.fusionStar.shiftedIndex))
+				&& (selectedStack.itemID == Item.netherStar.itemID 
+				|| selectedStack.itemID == MinechemItems.fusionStar.itemID))
 		{
 			ItemStack before = selectedStack.copy();
 			ItemStack after  = machine.putFusionStar(selectedStack);

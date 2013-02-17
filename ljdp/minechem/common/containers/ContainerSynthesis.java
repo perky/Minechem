@@ -78,7 +78,7 @@ public class ContainerSynthesis extends ContainerWithFakeSlots implements IRadia
 		if(slotObject != null && slotObject.getHasStack()) {
 			ItemStack stackInSlot = slotObject.getStack();
 			ItemStack stack = stackInSlot.copy();
-			if(slot != synthesis.kStartJournal && stack.itemID == MinechemItems.journal.shiftedIndex 
+			if(slot != synthesis.kStartJournal && stack.itemID == MinechemItems.journal.itemID 
 					&& !getSlot(synthesis.kStartJournal).getHasStack())
 			{
 				ItemStack copystack = slotObject.decrStackSize(1);
@@ -91,8 +91,8 @@ public class ContainerSynthesis extends ContainerWithFakeSlots implements IRadia
 				if(!mergeItemStack(stackInSlot, synthesis.getSizeInventory(), inventorySlots.size(), true))
 					return null;
 			} else if(slot >= synthesis.getSizeInventory() && slot < inventorySlots.size() 
-					&& (stackInSlot.itemID == MinechemItems.element.shiftedIndex 
-					|| stackInSlot.itemID == MinechemItems.molecule.shiftedIndex))
+					&& (stackInSlot.itemID == MinechemItems.element.itemID 
+					|| stackInSlot.itemID == MinechemItems.molecule.itemID))
 			{
 				if(!mergeItemStack(stackInSlot, synthesis.kStartStorage, synthesis.kStartStorage + synthesis.kSizeStorage, false))
 					return null;

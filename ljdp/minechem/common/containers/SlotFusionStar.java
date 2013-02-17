@@ -15,7 +15,7 @@ public class SlotFusionStar extends Slot {
 	
 	@Override
 	public boolean isItemValid(ItemStack itemStack) {
-		return itemStack.itemID == Item.netherStar.shiftedIndex || itemStack.itemID == MinechemItems.fusionStar.shiftedIndex;
+		return itemStack.itemID == Item.netherStar.itemID || itemStack.itemID == MinechemItems.fusionStar.itemID;
 	}
 	
 	@Override

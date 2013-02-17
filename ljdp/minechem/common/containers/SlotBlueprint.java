@@ -13,7 +13,7 @@ public class SlotBlueprint extends Slot {
 	
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
-		return itemstack.itemID == MinechemItems.blueprint.shiftedIndex;
+		return itemstack.itemID == MinechemItems.blueprint.itemID;
 	}
 
 }

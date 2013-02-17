@@ -21,7 +21,7 @@ public class PutJournal extends InteractMachine implements ICCMethod {
 		IMinechemMachinePeripheral machine = getMachineInFront(turtle);
 		ItemStack selectedStack = turtle.getSlotContents(turtle.getSelectedSlot());
 		boolean didPut = false;
-		if(machine != null && selectedStack != null && selectedStack.itemID == MinechemItems.journal.shiftedIndex) {
+		if(machine != null && selectedStack != null && selectedStack.itemID == MinechemItems.journal.itemID) {
 			ItemStack before = selectedStack.copy();
 			ItemStack after	 = machine.putJournal(selectedStack);
 			didPut	= tryPut(before, after, turtle);

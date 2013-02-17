@@ -27,6 +27,8 @@ import ljdp.minechem.common.tileentity.TileEntityFusion;
 import ljdp.minechem.common.tileentity.TileEntityMicroscope;
 import ljdp.minechem.common.tileentity.TileEntityProxy;
 import ljdp.minechem.common.tileentity.TileEntitySynthesis;
+import ljdp.minechem.common.utils.Localization;
+import ljdp.minechem.common.utils.MinechemHelper;
 import ljdp.minechem.computercraft.ICCMain;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.creativetab.CreativeTabs;
@@ -82,16 +84,16 @@ public class ModMinechem {
 	public static int microscopeID;
 	public static int synthesisID;
 	public static Logger blLog = Logger.getLogger("MineChem");
-	public static CreativeTabs minechemTab = new CreativeTabMinechem("MineChem");
+	public static CreativeTabs minechemTab = new CreativeTabMinechem(MinechemHelper.getLocalString("creativetab.name.minechem"));
 	private Configuration config;
-	
+	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_GB", "zh_CN", "de_DE" };
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) {
 		blLog.setParent(FMLLog.getLogger());
 		blLog.info("Loading localization");
-		LanguageRegistry.instance().loadLocalization("/lang/minechem/en_GB.properties", "en_GB", false);
-		LanguageRegistry.instance().loadLocalization("/lang/minechem/zh_CN.properties", "zh_CN", false);
-	 	blLog.info("Loading Config");
+		Localization.loadLanguages(CommonProxy.LANG_DIR, LANGUAGES_SUPPORTED);
+		
+		blLog.info("Loading Config");
 	 	loadConfig(event);
 	 	blLog.info("Adding Items");
 		MinechemItems.registerItems();

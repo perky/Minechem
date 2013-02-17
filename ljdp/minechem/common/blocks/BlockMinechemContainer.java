@@ -53,18 +53,10 @@ public abstract class BlockMinechemContainer extends BlockContainer {
                 			(double)((float)z + randomZ), 
                 			new ItemStack(itemstack.itemID, randomN, itemstack.getItemDamage())
                 	);
-                	if(itemstack.hasTagCompound())
-                		droppedEntity.func_92014_d().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
-                	float amplitude = 0.05F;
-                	float yAmplitude = amplitude + 0.2F;
-                	droppedEntity.motionX = (double)((float)this.random.nextGaussian() * amplitude);
-                	droppedEntity.motionY = (double)((float)this.random.nextGaussian() * yAmplitude);
-                	droppedEntity.motionZ = (double)((float)this.random.nextGaussian() * amplitude);
-                    world.spawnEntityInWorld(droppedEntity);
-                }
+                	
 			}
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
 
-}
+}}

@@ -14,7 +14,7 @@ public class SlotChemical extends Slot {
 	
 	@Override
 	public boolean isItemValid(ItemStack itemStack) {
-		return itemStack.itemID == MinechemItems.element.shiftedIndex || itemStack.itemID == MinechemItems.molecule.shiftedIndex;
+		return itemStack.itemID == MinechemItems.element.itemID || itemStack.itemID == MinechemItems.molecule.itemID;
 	}
 
 }

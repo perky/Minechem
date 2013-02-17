@@ -58,11 +58,11 @@ public class ContainerMicroscope extends Container {
 			if(slot <= 1) {
 				if(!mergeItemStack(stackInSlot, 2, inventorySlots.size(), true))
 					return null;
-			} else if(slot != 1 && stack.itemID == MinechemItems.journal.shiftedIndex && !getSlot(1).getHasStack()) {
+			} else if(slot != 1 && stack.itemID == MinechemItems.journal.itemID && !getSlot(1).getHasStack()) {
 				ItemStack copy = slotObject.decrStackSize(1);
 				getSlot(1).putStack(copy);
 				return null;
-			} else if(slot > 1 && stack.itemID != MinechemItems.journal.shiftedIndex && !getSlot(0).getHasStack()) {
+			} else if(slot > 1 && stack.itemID != MinechemItems.journal.itemID && !getSlot(0).getHasStack()) {
 				ItemStack copy = slotObject.decrStackSize(1);
 				getSlot(0).putStack(copy);
 				return null;

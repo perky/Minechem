@@ -39,7 +39,7 @@ public class PacketActiveJournalItem extends EasyPacket {
 	public void onReceive(Player player) {
 		EntityPlayer entityPlayer = (EntityPlayer) player;
 		ItemStack journal = entityPlayer.inventory.mainInventory[this.slot];
-		if(journal != null && journal.itemID == MinechemItems.journal.shiftedIndex) {
+		if(journal != null && journal.itemID == MinechemItems.journal.itemID) {
 			ItemStack activeStack = new ItemStack(this.itemID, 1, this.itemDMG);
 			MinechemItems.journal.setActiveStack(activeStack, journal);
 		}

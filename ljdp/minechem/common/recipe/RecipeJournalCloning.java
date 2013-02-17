@@ -13,8 +13,8 @@ public class RecipeJournalCloning implements IRecipe {
 	public boolean matches(InventoryCrafting crafting, World world) {
 		ItemStack itemstack1 = crafting.getStackInSlot(0);
 		ItemStack itemstack2 = crafting.getStackInSlot(1);
-		return (itemstack1 != null && itemstack1.itemID == MinechemItems.journal.shiftedIndex) &&
-				(itemstack2 != null && itemstack2.itemID == Item.book.shiftedIndex);
+		return (itemstack1 != null && itemstack1.itemID == MinechemItems.journal.itemID) &&
+				(itemstack2 != null && itemstack2.itemID == Item.book.itemID);
 	}
 
 	@Override

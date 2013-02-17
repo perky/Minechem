@@ -2,9 +2,11 @@ package ljdp.minechem.common.blocks;
 
 import java.util.ArrayList;
 
+import ljdp.minechem.common.CommonProxy;
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.ModMinechem;
 import ljdp.minechem.common.blueprint.MinechemBlueprint;
+import ljdp.minechem.common.items.ItemBlueprint;
 import ljdp.minechem.common.tileentity.TileEntityBlueprintProjector;
 import ljdp.minechem.common.utils.MinechemHelper;
 
@@ -29,7 +31,7 @@ public class BlockBlueprintProjector extends BlockMinechemContainer {
 	public void onBlockPlacedBy(World world, int x, int y, int z,
 			EntityLiving entityLiving) {
 		super.onBlockPlacedBy(world, x, y, z, entityLiving);
-		int facing = MathHelper.floor_double((double)(entityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int facing = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 		world.setBlockMetadata(x, y, z, facing);
 	}
 	
@@ -48,7 +50,7 @@ public class BlockBlueprintProjector extends BlockMinechemContainer {
 
 	private ItemStack takeBlueprintFromProjector(TileEntityBlueprintProjector projector) {
 		MinechemBlueprint blueprint = projector.takeBlueprint();
-		ItemStack blueprintItem = MinechemItems.blueprint.createItemStackFromBlueprint(blueprint);
+		ItemStack blueprintItem = ItemBlueprint.createItemStackFromBlueprint(blueprint);
 		return blueprintItem;
 	}
 
@@ -68,7 +70,7 @@ public class BlockBlueprintProjector extends BlockMinechemContainer {
 
 	private boolean playerIsHoldingBlueprint(EntityPlayer entityPlayer) {
 		ItemStack currentItem = entityPlayer.inventory.getCurrentItem();
-		return currentItem != null && currentItem.itemID == MinechemItems.blueprint.shiftedIndex; 
+		return currentItem != null && currentItem.itemID == MinechemItems.blueprint.itemID; 
 	}
 
 	@Override
@@ -93,7 +95,7 @@ public class BlockBlueprintProjector extends BlockMinechemContainer {
 	
 	@Override
 	public int getRenderType() {
-		return ModMinechem.proxy.CUSTOM_RENDER_ID;
+		return CommonProxy.CUSTOM_RENDER_ID;
 	}
 	
 	@Override

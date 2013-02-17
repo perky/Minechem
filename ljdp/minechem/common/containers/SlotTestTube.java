@@ -14,7 +14,7 @@ public class SlotTestTube extends Slot {
 	
 	@Override
 	public boolean isItemValid(ItemStack itemStack) {
-		return itemStack.itemID == MinechemItems.testTube.shiftedIndex;
+		return itemStack.itemID == MinechemItems.testTube.itemID;
 	}
 
 }
