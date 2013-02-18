@@ -1040,10 +1040,13 @@ public class MinechemRecipes {
 			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(Zr,2), element(Ti,1)));
 		}
 			
-		else if(event.Name.contains("rc.dust.sulfur")) { 
-			DecomposerRecipe.add(new DecomposerRecipe(event.Ore, element(S,4)));
-			SynthesisRecipe.add(new SynthesisRecipe(event.Ore, false, 300, element(S,4)));
+		else if(event.Name.contains("TropicraftCoral2")) { 
+	    DecomposerRecipe.add(new DecomposerRecipeChance(event.Ore, 0.10F, new Molecule(dderm))); 
 		}
+		
+		// else if(event.Name.contains("TropicraftCoral3")) { 
+	    // DecomposerRecipe.add(new DecomposerRecipeChance(event.Ore, 0.10F, new Molecule(pal2))); 
+		// }
 		
 
 	
