@@ -425,7 +425,7 @@ public class MinechemRecipes {
 				carbonStack, 	element(Cn,16), heliumStack,
 				hydrogenStack, 	hydrogenStack, 	hydrogenStack
 		));
-		SynthesisRecipe.add(new SynthesisRecipe(spiderEye, true, 2000, // may need to be changed
+		SynthesisRecipe.add(new SynthesisRecipe(spiderEye, true, 2000, 
 				element(C),	null,			null,
 				null,		molecule(ttx), 	null,
 				null, 		null, 			element(C)
@@ -803,7 +803,7 @@ public class MinechemRecipes {
 		
         // project SkyWorld
         ItemStack sw1 = new ItemStack(Item.fishRaw);
-        DecomposerRecipe.add(new DecomposerRecipeChance(sw1, 0.05F, new Molecule(dderm))); 
+        DecomposerRecipe.add(new DecomposerRecipeChance(sw1, 0.05F, new Molecule(pk2))); 
         
         ItemStack sw2 = new ItemStack(Block.plantYellow);
         DecomposerRecipe.add(new DecomposerRecipeChance(sw2, 0.3F, new Molecule(shikimicAcid,2)));
@@ -834,7 +834,6 @@ public class MinechemRecipes {
 		registerPoisonRecipes(quinine);
 		registerPoisonRecipes(sulfuricAcid);
 		registerPoisonRecipes(ttx);
-		// registerPoisonRecipes(pk5);
 		// registerPoisonRecipes(potato);
 	}
 	
@@ -1044,9 +1043,9 @@ public class MinechemRecipes {
 	    DecomposerRecipe.add(new DecomposerRecipeChance(event.Ore, 0.10F, new Molecule(dderm))); 
 		}
 		
-		// else if(event.Name.contains("TropicraftCoral3")) { 
-	    // DecomposerRecipe.add(new DecomposerRecipeChance(event.Ore, 0.10F, new Molecule(pal2))); 
-		// }
+         	else if(event.Name.contains("TropicraftCoral3")) { 
+	   DecomposerRecipe.add(new DecomposerRecipeChance(event.Ore, 0.10F, new Molecule(pal2))); 
+	}
 		
 
 	
