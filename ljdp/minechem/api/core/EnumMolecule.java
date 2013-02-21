@@ -123,7 +123,8 @@ dderm                   (88, "(+)-Discodermolide", new Element(C,33), new Elemen
         phosgene                (98, "Phosgene", new Element(C,1), new Element(O,1), new Element(Cl,2)),
         aalc                    (99, "Allyl alcohol", new Element(C,3), new Element(H,6), new Element(O,1)),
         hist                    (100, "Diphenhydramine", new Element(C,17), new Element(H,21), new Element(N), new Element(O)),
-        ;
+        pal2 (101, "Batrachotoxin (Palytoxin analogue)", new Element(C,31), new Element(H,42), new Element(N,2), new Element(O,6))
+       ;
        
         public static EnumMolecule[] molecules = values();
         private final String descriptiveName;
