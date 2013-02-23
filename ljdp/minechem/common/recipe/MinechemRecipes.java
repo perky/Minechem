@@ -325,7 +325,7 @@ public class MinechemRecipes {
 		DecomposerRecipe.add(new DecomposerRecipeChance(mycelium, .05F, molecule(myriocin)));
 		DecomposerRecipe.add(new DecomposerRecipeChance(leather, .5F, molecule(arginine), molecule(glycine), molecule(keratin)));
 		DecomposerRecipe.add(new DecomposerRecipeChance(anySapling, .25F, molecule(cellulose)));
-		DecomposerRecipe.add(new DecomposerRecipeChance(paper, .12F, molecule(cellulose)));
+		DecomposerRecipe.add(new DecomposerRecipeChance(paper, .25F, molecule(cellulose)));
 		
 		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Item.clay, 12), false, 100, molecule(kaolinite)));
 		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Item.brick, 8), true,  400,
@@ -340,7 +340,7 @@ public class MinechemRecipes {
 		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Block.mycelium, 16), false, 300, molecule(myriocin)));
 		SynthesisRecipe.add(new SynthesisRecipe(new ItemStack(Item.leather, 5), true,  700,
 				molecule(arginine), null, 			null,
-				null,				element(Cr), 	null,
+				null,				molecule(keratin), 	null,
 				null, 				null, 			molecule(glycine)
 		));
 		
@@ -387,7 +387,7 @@ public class MinechemRecipes {
 		
 		DecomposerRecipe.add(new DecomposerRecipeSelect(slimeBall, 0.9F,
 				new DecomposerRecipe(molecule(polycyanoacrylate)),
-				new DecomposerRecipe(element(Nd), element(Hg)),
+				new DecomposerRecipe(element(Hg)),
 				new DecomposerRecipe(molecule(water,10))
 		));
 		DecomposerRecipe.add(new DecomposerRecipe(blazeRod, element(Pu,3)));
@@ -802,8 +802,6 @@ public class MinechemRecipes {
 		));
 		
         // project SkyWorld
-        ItemStack sw1 = new ItemStack(Item.fishRaw);
-        DecomposerRecipe.add(new DecomposerRecipeChance(sw1, 0.05F, new Molecule(pk2))); 
         
         ItemStack sw2 = new ItemStack(Block.plantYellow);
         DecomposerRecipe.add(new DecomposerRecipeChance(sw2, 0.3F, new Molecule(shikimicAcid,2)));
@@ -814,7 +812,7 @@ public class MinechemRecipes {
         ItemStack sw4 = new ItemStack(Block.tallGrass, 1, 2);
         DecomposerRecipe.add(new DecomposerRecipeChance(sw4, 0.07F, new Molecule(pkone,2)));
         
-        ItemStack sw5 = new ItemStack(Block.tallGrass); // LOL 
+        ItemStack sw5 = new ItemStack(Block.tallGrass, 1, 1); // LOL 
         DecomposerRecipe.add(new DecomposerRecipeChance(sw5, 0.10F, new Molecule(afroman,2)));
                 
 		addDecomposerRecipesFromMolecules();
@@ -834,7 +832,9 @@ public class MinechemRecipes {
 		registerPoisonRecipes(quinine);
 		registerPoisonRecipes(sulfuricAcid);
 		registerPoisonRecipes(ttx);
-		// registerPoisonRecipes(potato);
+		registerPoisonRecipes(pal2);
+		registerPoisonRecipes(nod);
+		registerPoisonRecipes(afroman);
 	}
 	
 	private void addDecomposerRecipesFromMolecules() {
@@ -1043,9 +1043,9 @@ public class MinechemRecipes {
 	    DecomposerRecipe.add(new DecomposerRecipeChance(event.Ore, 0.10F, new Molecule(dderm))); 
 		}
 		
-         	else if(event.Name.contains("TropicraftCoral3")) { 
-	   DecomposerRecipe.add(new DecomposerRecipeChance(event.Ore, 0.10F, new Molecule(pal2))); 
-	}
+        else if(event.Name.contains("TropicraftCoral3")) { 
+	    DecomposerRecipe.add(new DecomposerRecipeChance(event.Ore, 0.10F, new Molecule(pal2))); 
+	   }
 		
 
 	

@@ -85,8 +85,8 @@ public class BlueprintDirewolf extends MinechemBlueprint {
 	@Override
 	public HashMap<Integer, BlueprintBlock> getBlockLookup() {
 		HashMap<Integer, BlueprintBlock> lookup = new HashMap();
-		lookup.put(1, new BlueprintBlock(Block.stoneBrick, 0, Type.NORMAL));
-		lookup.put(2, new BlueprintBlock(Block.glass,      0, Type.NORMAL));
+		lookup.put(1, new BlueprintBlock(Block.stone, 0, Type.NORMAL));
+		lookup.put(2, new BlueprintBlock(Block.glass, 0, Type.NORMAL));
 		return lookup;
 	}
 
