@@ -264,7 +264,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 
 	@Override
 	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-		return new Transactor(outputInventory).remove(maxItemCount, doRemove);
+		return outputTransactor.remove(maxItemCount, doRemove);
 	}
 
 	@Override
