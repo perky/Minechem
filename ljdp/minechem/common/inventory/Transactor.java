@@ -57,6 +57,7 @@ public class Transactor {
 				totalAmountToRemove -= stackRemoved.stackSize;
 				removed.add(stackRemoved);
 			}
+			slot++;
 		}
 		return removed.toArray(new ItemStack[removed.size()]);
 	}
