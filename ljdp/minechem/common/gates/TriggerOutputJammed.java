@@ -28,6 +28,7 @@ public class TriggerOutputJammed extends Trigger {
 	
 	@Override
 	public boolean isTriggerActive(TileEntity tile, ITriggerParameter parameter) {
+		if(!(tile instanceof IMinechemTriggerProvider)) return false;
 		IMinechemTriggerProvider triggerProvider = (IMinechemTriggerProvider)tile;
 		return triggerProvider.isJammed();
 	}
