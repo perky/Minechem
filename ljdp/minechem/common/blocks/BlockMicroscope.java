@@ -49,8 +49,11 @@ public class BlockMicroscope extends BlockMinechemContainer {
 	@Override
 	public ArrayList<ItemStack> addStacksDroppedOnBlockBreak(TileEntity tileEntity, ArrayList itemStacks) {
 		ItemStack inputStack = ((TileEntityMicroscope)tileEntity).getStackInSlot(0);
+		ItemStack journal = ((TileEntityMicroscope)tileEntity).getStackInSlot(0);
 		if(inputStack != null)
 			itemStacks.add(inputStack);
+		if(journal != null)
+			itemStacks.add(journal);
 		return itemStacks;
 	}
 	

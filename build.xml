@@ -66,10 +66,7 @@
             <fileset dir="${reobf-dir}/codechicken"/>
         </copy>
         
-        <!-- Copy BUILDCRAFT API -->
-        <copy todir="${build-dir}/buildcraft/api">
-            <fileset dir="${reobf-dir}/buildcraft/api"/>
-        </copy>
+        <!-- BUILDCRAFT API IS NOT NEEDED because buildcraft is required by minechem -->
         
         <!-- Copy Minechem Resources -->
         <copy todir="${build-dir}">
