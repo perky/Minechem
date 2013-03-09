@@ -16,20 +16,20 @@ public class PutFusionStar extends InteractMachine implements ICCMethod {
 	}
 
 	@Override
-	public Object[] call(IComputerAccess computer, ITurtleAccess turtle, Object[] arguments) throws Exception 
-	{
+	public Object[] call(IComputerAccess computer, ITurtleAccess turtle,
+			Object[] arguments) throws Exception {
 		IMinechemMachinePeripheral machine = getMachineInFront(turtle);
-		ItemStack selectedStack = turtle.getSlotContents(turtle.getSelectedSlot());
+		ItemStack selectedStack = turtle.getSlotContents(turtle
+				.getSelectedSlot());
 		boolean didPut = false;
-		if(machine != null && selectedStack != null 
-				&& (selectedStack.itemID == Item.netherStar.itemID 
-				|| selectedStack.itemID == MinechemItems.fusionStar.itemID))
-		{
+		if (machine != null
+				&& selectedStack != null
+				&& (selectedStack.itemID == Item.netherStar.itemID || selectedStack.itemID == MinechemItems.fusionStar.itemID)) {
 			ItemStack before = selectedStack.copy();
-			ItemStack after  = machine.putFusionStar(selectedStack);
-			didPut	= tryPut(before, after, turtle);
+			int used = machine.putFusionStar(selectedStack);
+			didPut = tryPut(before, used, turtle);
 		}
-		return new Object[]{ didPut };
+		return new Object[] { didPut };
 	}
 
 }

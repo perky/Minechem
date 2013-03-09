@@ -14,21 +14,21 @@ public class TakeFusionStar extends InteractMachine implements ICCMethod {
 	}
 
 	@Override
-	public Object[] call(IComputerAccess computer, ITurtleAccess turtle, Object[] arguments) throws Exception
-	{
+	public Object[] call(IComputerAccess computer, ITurtleAccess turtle,
+			Object[] arguments) throws Exception {
 		IMinechemMachinePeripheral machine = getMachineInFront(turtle);
 		boolean didTake = false;
-		if(machine != null) {
+		if (machine != null) {
 			ItemStack takenStack = machine.takeFusionStar();
-			if(takenStack != null) {
-				if(turtle.storeItemStack(takenStack)) {
+			if (takenStack != null) {
+				if (turtle.storeItemStack(takenStack)) {
 					didTake = true;
 				} else {
 					machine.putFusionStar(takenStack);
 				}
 			}
 		}
-		return new Object[]{ didTake };
+		return new Object[] { didTake };
 	}
 
 }

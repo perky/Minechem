@@ -37,7 +37,7 @@ public class BoundedInventory implements IInventory {
     }
     
     public List<ItemStack> copyInventoryToList() {
-    	List<ItemStack> itemstacks = new ArrayList();
+    	List<ItemStack> itemstacks = new ArrayList<ItemStack>();
     	for(int slot = 0; slot < getSizeInventory(); slot++) {
     		if(getStackInSlot(slot) != null)
     			itemstacks.add(getStackInSlot(slot).copy());

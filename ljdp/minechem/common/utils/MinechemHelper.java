@@ -6,12 +6,12 @@ import java.util.Random;
 
 import ljdp.minechem.api.core.Chemical;
 import ljdp.minechem.api.core.Element;
-import ljdp.minechem.api.core.EnumElement;
 import ljdp.minechem.api.core.EnumMolecule;
 import ljdp.minechem.api.core.Molecule;
 import ljdp.minechem.api.util.Constants;
 import ljdp.minechem.api.util.Util;
 import ljdp.minechem.common.MinechemItems;
+import ljdp.minechem.common.items.ItemElement;
 
 import buildcraft.api.core.Position;
 
@@ -106,7 +106,7 @@ public class MinechemHelper {
 	}
 	
 	public static ArrayList<ItemStack> convertChemicalsIntoItemStacks(ArrayList<Chemical> chemicals) {
-		ArrayList<ItemStack> stacks = new ArrayList();
+		ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();
 		if(chemicals == null)
 			return stacks;
 		for(Chemical chemical : chemicals) {
@@ -172,7 +172,7 @@ public class MinechemHelper {
         	if(randomN > itemstack.stackSize)
         		randomN = itemstack.stackSize;
         	itemstack.stackSize -= randomN;
-        	EntityItem droppedEntity = new EntityItem(world, 
+        	new EntityItem(world, 
         			(double)((float)x + randomX), 
         			(double)((float)y + randomY), 
         			(double)((float)z + randomZ), 
@@ -311,7 +311,7 @@ public class MinechemHelper {
     }
     
     public static void cureAllPotions(World world, EntityPlayer entityPlayer) {
-    	List<PotionEffect> activePotions = new ArrayList(entityPlayer.getActivePotionEffects());
+    	List<PotionEffect> activePotions = new ArrayList<PotionEffect>(entityPlayer.getActivePotionEffects());
     	for(PotionEffect potionEffect : activePotions) {
     		entityPlayer.removePotionEffect(potionEffect.getPotionID());
     	}
@@ -379,7 +379,7 @@ public class MinechemHelper {
 	}
 	public static Chemical itemStackToChemical(ItemStack itemstack) {
 		if(Util.isStackAnElement(itemstack)) {
-			return new Element(MinechemItems.element.getElement(itemstack), itemstack.stackSize);
+			return new Element(ItemElement.getElement(itemstack), itemstack.stackSize);
 		} else if(Util.isStackAMolecule(itemstack)) {
 			return new Molecule(MinechemItems.molecule.getMolecule(itemstack), itemstack.stackSize);
 		}

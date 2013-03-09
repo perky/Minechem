@@ -15,19 +15,20 @@ public class TakeJournal extends InteractMachine implements ICCMethod {
 
 	@Override
 	public Object[] call(IComputerAccess computer, ITurtleAccess turtle,
-			Object[] arguments) throws Exception 
-	{
+			Object[] arguments) throws Exception {
 		IMinechemMachinePeripheral machine = getMachineInFront(turtle);
-		ItemStack takenStack = machine.takeJournal();
 		boolean didTake = false;
-		if(takenStack != null){
-			if(turtle.storeItemStack(takenStack)) {
-				didTake = true;
-			} else {
-				machine.putJournal(takenStack);
+		if (machine != null) {
+			ItemStack takenStack = machine.takeJournal();
+			if (takenStack != null) {
+				if (turtle.storeItemStack(takenStack)) {
+					didTake = true;
+				} else {
+					machine.putJournal(takenStack);
+				}
 			}
 		}
-		return new Object[]{ didTake };
+		return new Object[] { didTake };
 	}
 
 }

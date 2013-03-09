@@ -21,14 +21,12 @@ import ljdp.minechem.common.utils.MinechemHelper;
 import ljdp.minechem.computercraft.IMinechemMachinePeripheral;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import buildcraft.api.core.Position;
 import buildcraft.api.gates.ActionManager;
 import buildcraft.api.gates.ITrigger;
 import buildcraft.api.gates.ITriggerProvider;
@@ -37,18 +35,11 @@ import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.transport.IPipe;
 
-public class TileEntitySynthesis extends MinechemTileEntity implements ISidedInventory, 
-IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, IMinechemMachinePeripheral
-{
-	
-	private class ItemStackPointer {
-		IInventory inventory;
-		ItemStack itemstack;
-		int slot;
-		public int stackSize;
-	}
+public class TileEntitySynthesis extends MinechemTileEntity implements
+		ISidedInventory, IPowerReceptor, ITriggerProvider,
+		IMinechemTriggerProvider, ISpecialInventory, IMinechemMachinePeripheral {
 	public static final int kSizeOutput = 1;
-	public static final int kSizeRecipe  = 9;
+	public static final int kSizeRecipe = 9;
 	public static final int kSizeBottles = 4;
 	public static final int kSizeStorage = 9;
 	public static final int kSizeJournal = 1;
@@ -57,84 +48,88 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 	public static final int kStartBottles = 10;
 	public static final int kStartStorage = 14;
 	public static final int kStartJournal = 23;
-	
-	//public static final int
+
 	private SynthesisRecipe currentRecipe;
 	MinechemPowerProvider powerProvider;
-    public ModelSynthesizer model;
-    private final BoundedInventory recipeMatrix = 
-    		new BoundedInventory(this, kStartRecipe, kStartRecipe + kSizeRecipe);
-	private final BoundedInventory storageInventory = 
-			new BoundedInventory(this, kStartStorage, kStartStorage + kSizeStorage);
-	private final BoundedInventory tubeInventory = 
-			new BoundedInventory(this, kStartBottles, kStartBottles + kSizeBottles);
-	private final BoundedInventory outputInventory =
-			new BoundedInventory(this, kStartOutput, kStartOutput + kSizeOutput);
-	private final BoundedInventory journalInventory =
-			new BoundedInventory(this, kStartJournal, kStartJournal + kSizeJournal);
+	public ModelSynthesizer model;
+	private final BoundedInventory recipeMatrix = new BoundedInventory(this,
+			kStartRecipe, kStartRecipe + kSizeRecipe);
+	private final BoundedInventory storageInventory = new BoundedInventory(
+			this, kStartStorage, kStartStorage + kSizeStorage);
+	private final BoundedInventory tubeInventory = new BoundedInventory(this,
+			kStartBottles, kStartBottles + kSizeBottles);
+	private final BoundedInventory outputInventory = new BoundedInventory(this,
+			kStartOutput, kStartOutput + kSizeOutput);
+	private final BoundedInventory journalInventory = new BoundedInventory(
+			this, kStartJournal, kStartJournal + kSizeJournal);
 	private Transactor testTubeTransactor;
 	private Transactor storageTransactor;
 	private Transactor outputTransactor;
 	private Transactor recipeMatrixTransactor;
 	private Transactor journalTransactor;
-	
+
 	int minEnergyPerTick = 30;
 	int maxEnergyPerTick = 200;
 	int activationEnergy = 100;
 	int energyStorage = 900000;
-	
+
 	private boolean hasFullEnergy;
-	
+
 	public TileEntitySynthesis() {
-		inventory 	= new ItemStack[getSizeInventory()];
-		testTubeTransactor 	= new Transactor(tubeInventory);
-		storageTransactor  	= new Transactor(storageInventory);
-		outputTransactor	= new Transactor(outputInventory);
-		journalTransactor	= new Transactor(journalInventory, 1);
+		inventory = new ItemStack[getSizeInventory()];
+		testTubeTransactor = new Transactor(tubeInventory);
+		storageTransactor = new Transactor(storageInventory);
+		outputTransactor = new Transactor(outputInventory);
+		journalTransactor = new Transactor(journalInventory, 1);
 		recipeMatrixTransactor = new Transactor(recipeMatrix);
-		powerProvider = new MinechemPowerProvider(minEnergyPerTick, maxEnergyPerTick, activationEnergy, energyStorage);
-		powerProvider.configurePowerPerdition(1, Constants.TICKS_PER_SECOND * 2);
+		powerProvider = new MinechemPowerProvider(minEnergyPerTick,
+				maxEnergyPerTick, activationEnergy, energyStorage);
+		powerProvider
+				.configurePowerPerdition(1, Constants.TICKS_PER_SECOND * 2);
 		model = new ModelSynthesizer();
 		ActionManager.registerTriggerProvider(this);
 	}
 
-    @Override
+	@Override
 	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection direction) {
-        return new Transactor(storageInventory).add(stack, doAdd).stackSize;
+		return storageTransactor.add(stack, doAdd);
 	}
-	
+
 	public boolean canTakeOutputStack() {
-		return inventory[kStartOutput] != null && hasEnoughPowerForCurrentRecipe() && takeStacksFromStorage(false);
+		return inventory[kStartOutput] != null
+				&& hasEnoughPowerForCurrentRecipe()
+				&& takeStacksFromStorage(false);
 	}
-	
+
 	public void clearRecipeMatrix() {
-		for(int slot = kStartRecipe; slot < kStartRecipe + kSizeRecipe; slot++) {
+		for (int slot = kStartRecipe; slot < kStartRecipe + kSizeRecipe; slot++) {
 			inventory[slot] = null;
 		}
 	}
-	
+
 	@Override
-	public void closeChest() {}
-	
+	public void closeChest() {
+	}
+
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
-		if(slot == kStartJournal)
+		if (slot == kStartJournal)
 			clearRecipeMatrix();
-		if(this.inventory[slot] != null) {
+		if (this.inventory[slot] != null) {
 			ItemStack itemstack;
-			if(slot == kStartOutput) {
-				if(takeInputStacks())
+			if (slot == kStartOutput) {
+				if (takeInputStacks())
 					takeEnergy(currentRecipe);
 				else
 					return null;
 			}
-			if(this.inventory[slot].stackSize <= amount) {
+			if (this.inventory[slot].stackSize <= amount) {
 				itemstack = this.inventory[slot];
 				this.inventory[slot] = null;
 				return itemstack;
 			} else {
 				itemstack = this.inventory[slot].splitStack(amount);
-				if(this.inventory[slot].stackSize == 0)
+				if (this.inventory[slot].stackSize == 0)
 					this.inventory[slot] = null;
 				return itemstack;
 			}
@@ -142,52 +137,54 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 			return null;
 		}
 	}
-	
+
 	@Override
 	public void doWork() {
 	}
-	
+
 	@Override
-	public ItemStack[] extractItem(boolean doRemove, ForgeDirection direction, int maxItemCount) {
+	public ItemStack[] extractItem(boolean doRemove, ForgeDirection direction,
+			int maxItemCount) {
 		switch (direction) {
-            case NORTH:
-            case SOUTH:
-            case EAST:
-            case WEST:
-            case UNKNOWN:
-                return extractOutput(doRemove, maxItemCount);
-            case UP:
-            case DOWN:
-                return extractTestTubes(doRemove, maxItemCount);
-            	
-        }
-        return new ItemStack[0];
+		case NORTH:
+		case SOUTH:
+		case EAST:
+		case WEST:
+		case UNKNOWN:
+			return extractOutput(doRemove, maxItemCount);
+		case UP:
+		case DOWN:
+			return extractTestTubes(doRemove, maxItemCount);
+
+		}
+		return new ItemStack[0];
 	}
-	
+
 	public ItemStack[] extractOutput(boolean doRemove, int maxItemCount) {
-    	if(currentRecipe == null || !takeInputStacks() || !canAffordRecipe(currentRecipe))
-        	return null;
-        ItemStack outputStack = currentRecipe.getOutput().copy();
-        ItemStack[] output = new ItemStack[] { outputStack };
-        if(doRemove) {
-        	takeEnergy(currentRecipe);
-        	addEmptyBottles(currentRecipe.getIngredientCount());
-        }
-        return output;
+		if (currentRecipe == null || !takeStacksFromStorage(false)
+				|| !canAffordRecipe(currentRecipe))
+			return null;
+		ItemStack outputStack = currentRecipe.getOutput().copy();
+		ItemStack[] output = new ItemStack[] { outputStack };
+		if (doRemove) {
+			takeEnergy(currentRecipe);
+			takeStacksFromStorage(true);
+		}
+		return output;
 	}
-	
+
 	public ItemStack[] extractTestTubes(boolean doRemove, int maxItemCount) {
 		return testTubeTransactor.remove(maxItemCount, doRemove);
 	}
-	
+
 	public SynthesisRecipe getCurrentRecipe() {
 		return currentRecipe;
 	}
-	
+
 	public int getFacing() {
 		return worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 	}
-	
+
 	@Override
 	public String getInvName() {
 		return "container.synthesis";
@@ -195,8 +192,8 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 
 	@Override
 	public LinkedList<ITrigger> getNeighborTriggers(Block block, TileEntity tile) {
-		if(tile instanceof TileEntitySynthesis) {
-			LinkedList<ITrigger> triggers = new LinkedList();
+		if (tile instanceof TileEntitySynthesis) {
+			LinkedList<ITrigger> triggers = new LinkedList<ITrigger>();
 			triggers.add(MinechemTriggers.fullEnergy);
 			triggers.add(MinechemTriggers.noTestTubes);
 			triggers.add(MinechemTriggers.outputJammed);
@@ -221,12 +218,13 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 
 	@Override
 	public int getSizeInventory() {
-		return kSizeOutput + kSizeRecipe + kSizeStorage + kSizeBottles + kSizeJournal;
+		return kSizeOutput + kSizeRecipe + kSizeStorage + kSizeBottles
+				+ kSizeJournal;
 	}
 
 	@Override
 	public int getSizeInventorySide(ForgeDirection side) {
-		switch(side) {
+		switch (side) {
 		case NORTH:
 		case SOUTH:
 		case UNKNOWN:
@@ -240,10 +238,10 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 			return kSizeBottles;
 		}
 	}
-	
+
 	@Override
 	public int getStartInventorySide(ForgeDirection side) {
-		switch(side) {
+		switch (side) {
 		case NORTH:
 		case SOUTH:
 		case UNKNOWN:
@@ -259,19 +257,21 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 	}
 
 	public boolean hasEnoughPowerForCurrentRecipe() {
-		return currentRecipe != null && powerProvider.getEnergyStored() >= currentRecipe.energyCost();
+		return currentRecipe != null
+				&& powerProvider.getEnergyStored() >= currentRecipe
+						.energyCost();
 	}
-	
+
 	@Override
 	public boolean hasFullEnergy() {
 		return hasFullEnergy;
 	}
-	
+
 	@Override
 	public boolean hasNoTestTubes() {
 		boolean hasNoTestTubes = true;
-		for(int slot = kStartBottles; slot < kStartBottles + kSizeBottles; slot++) {
-			if(this.inventory[slot] != null) {
+		for (int slot = kStartBottles; slot < kStartBottles + kSizeBottles; slot++) {
+			if (this.inventory[slot] != null) {
 				hasNoTestTubes = false;
 				break;
 			}
@@ -282,18 +282,20 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 	@Override
 	public boolean isJammed() {
 		int count = 0;
-		for(int slot = kStartBottles; slot < kStartBottles + kSizeBottles; slot++) {
-			if(inventory[slot] != null) {
+		for (int slot = kStartBottles; slot < kStartBottles + kSizeBottles; slot++) {
+			if (inventory[slot] != null) {
 				count += inventory[slot].stackSize;
 			}
 		}
-		return count == (64*4);
+		return count == (64 * 4);
 	}
-	
+
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityPlayer) {
-		double dist = entityPlayer.getDistanceSq((double)xCoord + 0.5D, (double)yCoord + 0.5D, (double)zCoord + 0.5D);
-		return worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this ? false :  dist <= 64.0D;
+		double dist = entityPlayer.getDistanceSq((double) xCoord + 0.5D,
+				(double) yCoord + 0.5D, (double) zCoord + 0.5D);
+		return worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this ? false
+				: dist <= 64.0D;
 	}
 
 	@Override
@@ -303,13 +305,14 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 	}
 
 	public void onOuputPickupFromSlot() {
-		if(takeInputStacks())
+		if (takeInputStacks())
 			takeEnergy(currentRecipe);
 	}
 
 	@Override
 	public int powerRequest() {
-		if(powerProvider.getEnergyStored() < powerProvider.getMaxEnergyStored())
+		if (powerProvider.getEnergyStored() < powerProvider
+				.getMaxEnergyStored())
 			return powerProvider.getMaxEnergyReceived();
 		else
 			return 0;
@@ -319,20 +322,22 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 		super.readFromNBT(nbtTagCompound);
 		NBTTagList inventoryTagList = nbtTagCompound.getTagList("inventory");
-		inventory = MinechemHelper.readTagListToItemStackArray(inventoryTagList, new ItemStack[getSizeInventory()]);
+		inventory = MinechemHelper.readTagListToItemStackArray(
+				inventoryTagList, new ItemStack[getSizeInventory()]);
 		powerProvider.readFromNBT(nbtTagCompound);
 	}
 
 	public void sendUpdatePacket() {
 		PacketSynthesisUpdate packet = new PacketSynthesisUpdate(this);
 		int dimensionID = worldObj.getWorldInfo().getDimension();
-		PacketHandler.getInstance().synthesisUpdateHandler.sendToAllPlayersInDimension(packet, dimensionID);
+		PacketHandler.getInstance().synthesisUpdateHandler
+				.sendToAllPlayersInDimension(packet, dimensionID);
 	}
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
 		super.setInventorySlotContents(slot, itemstack);
-		if(slot == kStartJournal && itemstack != null)
+		if (slot == kStartJournal && itemstack != null)
 			onPutJournal(itemstack);
 	}
 
@@ -341,74 +346,81 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 		this.powerProvider = (MinechemPowerProvider) provider;
 	}
 
-    public boolean takeStacksFromStorage(boolean doTake) {
-		List<ItemStack> ingredients = MinechemHelper.convertChemicalsIntoItemStacks(currentRecipe.getShapelessRecipe());
+	public boolean takeStacksFromStorage(boolean doTake) {
+		List<ItemStack> ingredients = MinechemHelper
+				.convertChemicalsIntoItemStacks(currentRecipe
+						.getShapelessRecipe());
 		ItemStack[] storage = storageInventory.copyInventoryToArray();
-		for(ItemStack ingredient : ingredients) {
-			if(!takeStackFromStorage(ingredient, storage))
+		for (ItemStack ingredient : ingredients) {
+			if (!takeStackFromStorage(ingredient, storage))
 				return false;
 		}
-		if(doTake) {
+		if (doTake) {
 			addEmptyBottles(currentRecipe.getIngredientCount());
 			storageInventory.setInventoryStacks(storage);
 		}
 		return true;
 	}
-	
+
 	@Override
 	public void updateEntity() {
 		powerProvider.update(this);
-		if(!worldObj.isRemote && powerProvider.didEnergyStoredChange()) {
+		if (!worldObj.isRemote && powerProvider.didEnergyStoredChange()) {
 			sendUpdatePacket();
 		}
-		if(powerProvider.getEnergyStored() >= powerProvider.getMaxEnergyStored())
+		if (powerProvider.getEnergyStored() >= powerProvider
+				.getMaxEnergyStored())
 			hasFullEnergy = true;
-		if(hasFullEnergy && powerProvider.getEnergyStored() < powerProvider.getMaxEnergyStored()/2)
+		if (hasFullEnergy
+				&& powerProvider.getEnergyStored() < powerProvider
+						.getMaxEnergyStored() / 2)
 			hasFullEnergy = false;
-		
-		if(currentRecipe != null && inventory[kStartOutput] == null)
-		{
+
+		if (currentRecipe != null && inventory[kStartOutput] == null) {
 			inventory[kStartOutput] = currentRecipe.getOutput().copy();
 		}
 	}
-	
+
 	@Override
-    public void validate() {
-        super.validate();
-        getRecipeResult();
-    }
-	
+	public void validate() {
+		super.validate();
+		getRecipeResult();
+	}
+
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeToNBT(nbtTagCompound);
-		NBTTagList inventoryTagList = MinechemHelper.writeItemStackArrayToTagList(inventory);
+		NBTTagList inventoryTagList = MinechemHelper
+				.writeItemStackArrayToTagList(inventory);
 		nbtTagCompound.setTag("inventory", inventoryTagList);
 		powerProvider.writeToNBT(nbtTagCompound);
 	}
-	
-	
+
 	private void addEmptyBottles(int amount) {
-		for(int slot = kStartBottles; slot < kStartBottles + kSizeBottles; slot++) {
-			if(inventory[slot] == null) {
+		for (int slot = kStartBottles; slot < kStartBottles + kSizeBottles; slot++) {
+			if (inventory[slot] == null) {
 				int stackSize = Math.min(amount, getInventoryStackLimit());
-				setInventorySlotContents(slot, new ItemStack(MinechemItems.testTube, stackSize));
+				setInventorySlotContents(slot, new ItemStack(
+						MinechemItems.testTube, stackSize));
 				amount -= stackSize;
-			} else if(inventory[slot].itemID == MinechemItems.testTube.itemID) {
-				int stackAddition = getInventoryStackLimit() - inventory[slot].stackSize;
+			} else if (inventory[slot].itemID == MinechemItems.testTube.itemID) {
+				int stackAddition = getInventoryStackLimit()
+						- inventory[slot].stackSize;
 				stackAddition = Math.min(amount, stackAddition);
 				inventory[slot].stackSize += stackAddition;
 				amount -= stackAddition;
 			}
-			if(amount <= 0)
+			if (amount <= 0)
 				break;
 		}
 		// Drop the test tubes.
-		if(amount > 0) {
+		if (amount > 0) {
 			ItemStack tubes = new ItemStack(MinechemItems.testTube, amount);
-			MinechemHelper.ejectItemStackIntoWorld(tubes, worldObj, xCoord, yCoord, zCoord);
+			MinechemHelper.ejectItemStackIntoWorld(tubes, worldObj, xCoord,
+					yCoord, zCoord);
 		}
 	}
-	
+
 	private boolean canAffordRecipe(SynthesisRecipe recipe) {
 		int energyCost = recipe.energyCost();
 		return powerProvider.getEnergyStored() >= energyCost;
@@ -416,8 +428,9 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 
 	private boolean getRecipeResult() {
 		ItemStack[] recipeMatrixItems = getRecipeMatrixItems();
-		SynthesisRecipe recipe = SynthesisRecipeHandler.instance.getRecipeFromInput(recipeMatrixItems);
-		if(recipe != null) {
+		SynthesisRecipe recipe = SynthesisRecipeHandler.instance
+				.getRecipeFromInput(recipeMatrixItems);
+		if (recipe != null) {
 			inventory[kStartOutput] = recipe.getOutput().copy();
 			currentRecipe = recipe;
 			return true;
@@ -428,95 +441,11 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 		}
 	}
 
-	private ArrayList<ItemStackPointer> getStackFromAdjacentChest(int itemId, int itemDamage, int stackSize, ForgeDirection direction,
-			ArrayList<ItemStackPointer>allPointers)
-	{
-		Position position = new Position(xCoord, yCoord, zCoord, direction);
-		position.moveForwards(1.0);
-		TileEntity tileEntity = worldObj.getBlockTileEntity((int)position.x, (int)position.y, (int)position.z);
-		ArrayList<ItemStackPointer> itemStackPointers = new ArrayList();
-		
-		if(tileEntity instanceof IInventory) {
-			IInventory inventory = MinechemHelper.getInventory((IInventory)tileEntity);
-			for(int slot = 0; slot < inventory.getSizeInventory(); slot++) {
-				ItemStack itemstack = inventory.getStackInSlot(slot);
-				if(itemstack != null && itemstack.itemID == itemId && itemstack.getItemDamage() == itemDamage
-						&& !itemStackPointersHasSlot(allPointers, slot, inventory))
-				{
-					int amount = Math.min(stackSize, itemstack.stackSize);
-					stackSize -= amount;
-					
-					ItemStackPointer itemStackPointer = new ItemStackPointer();
-					itemStackPointer.inventory = inventory;
-					itemStackPointer.itemstack = itemstack;
-					itemStackPointer.slot 	   = slot;
-					itemStackPointer.stackSize = amount;
-					itemStackPointers.add(itemStackPointer);
-					
-					if(stackSize <= 0) {
-						return itemStackPointers;
-					}
-				}
-			}
-		}
-		return null;
-	}
-
-	private ArrayList<ItemStackPointer> getStackFromAdjacentChests(int itemId, int itemDamage, int stackSize,
-			ArrayList<ItemStackPointer>allPointers)
-	{
-		ArrayList<ItemStackPointer> itemStackPointers = null;
-		itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.NORTH, allPointers);
-		if(itemStackPointers == null)
-			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.EAST, allPointers);
-		if(itemStackPointers == null)
-			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.SOUTH, allPointers);
-		if(itemStackPointers == null)
-			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.WEST, allPointers);
-		if(itemStackPointers == null)
-			itemStackPointers = getStackFromAdjacentChest(itemId, itemDamage, stackSize, ForgeDirection.UP, allPointers);
-		return itemStackPointers;
-	}
-
-	private ArrayList<ItemStackPointer> getStacksFromAdjacentChests(ArrayList<ItemStack> stacks) {
-		ArrayList<ItemStackPointer> allPointers = new ArrayList();
-		for(ItemStack itemstack : stacks) {
-			ArrayList<ItemStackPointer> itemStackPointers = getStackFromAdjacentChests(
-					itemstack.itemID, 
-					itemstack.getItemDamage(), 
-					itemstack.stackSize,
-					allPointers
-			);
-			if(itemStackPointers != null) {
-				allPointers.addAll(itemStackPointers);
-			} else {
-				return null;
-			}
-		}
-		return allPointers;
-	}
-
-	private boolean hasItemsInRecipeMatrix() {
-		ItemStack[] recipeMatrixItems = getRecipeMatrixItems();
-		for(ItemStack itemstack : recipeMatrixItems) {
-			if(itemstack != null)
-				return true;
-		}
-		return false;
-	}
-
-	private boolean itemStackPointersHasSlot(ArrayList<ItemStackPointer> allPointers, int slot, IInventory inventory) {
-		for(ItemStackPointer itemstackPointer : allPointers) {
-			if(itemstackPointer.inventory == inventory && itemstackPointer.slot == slot)
-				return true;
-		}
-		return false;
-	}
-
 	private void onPutJournal(ItemStack itemstack) {
 		ItemStack activeItem = MinechemItems.journal.getActiveStack(itemstack);
-		if(activeItem != null) {
-			SynthesisRecipe recipe = SynthesisRecipeHandler.instance.getRecipeFromOutput(activeItem);
+		if (activeItem != null) {
+			SynthesisRecipe recipe = SynthesisRecipeHandler.instance
+					.getRecipeFromOutput(activeItem);
 			setRecipe(recipe);
 		}
 	}
@@ -526,49 +455,29 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 		powerProvider.useEnergy(energyCost, energyCost, true);
 	}
 
-	private boolean takeStackFromStorage(ItemStack ingredient, ItemStack[] storage) {
+	private boolean takeStackFromStorage(ItemStack ingredient,
+			ItemStack[] storage) {
 		int ingredientAmountLeft = ingredient.stackSize;
-		for(int slot = 0; slot < storage.length; slot++) {
+		for (int slot = 0; slot < storage.length; slot++) {
 			ItemStack storageItem = storage[slot];
-			if(storageItem != null && Util.stacksAreSameKind(storageItem, ingredient)) {
-				int amountToTake = Math.min(storageItem.stackSize, ingredientAmountLeft);
-				ingredientAmountLeft  -= amountToTake;
+			if (storageItem != null
+					&& Util.stacksAreSameKind(storageItem, ingredient)) {
+				int amountToTake = Math.min(storageItem.stackSize,
+						ingredientAmountLeft);
+				ingredientAmountLeft -= amountToTake;
 				storageItem.stackSize -= amountToTake;
-				if(storageItem.stackSize <= 0)
+				if (storageItem.stackSize <= 0)
 					storage[slot] = null;
-				if(ingredientAmountLeft <= 0)
+				if (ingredientAmountLeft <= 0)
 					break;
 			}
 		}
 		return ingredientAmountLeft == 0;
 	}
-	
-	private int takeInputStacks(int times) {
-		int count = 0;
-		while(times > 0) {
-			if(!takeInputStacks())
-				break;
-			else
-				count++;
-		}
-		return count;
-	}
 
 	private boolean takeInputStacks() {
-    	if(takeStacksFromStorage(false)) {
-    		takeStacksFromStorage(true);
-    		return true;
-    	}
-        return false;
-    }
-
-	private boolean takeStacksFromAdjacentChests(SynthesisRecipe recipe, boolean doTake) {
-		ArrayList<ItemStack> ingredients = MinechemHelper.convertChemicalsIntoItemStacks(recipe.getShapelessRecipe());
-		ArrayList<ItemStackPointer> itemStackPointers = getStacksFromAdjacentChests(ingredients);
-		if(itemStackPointers != null) {
-			for(ItemStackPointer pointer : itemStackPointers) {
-				pointer.inventory.decrStackSize(pointer.slot, pointer.stackSize);
-			}
+		if (takeStacksFromStorage(false)) {
+			takeStacksFromStorage(true);
 			return true;
 		}
 		return false;
@@ -577,33 +486,35 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 	public List<ItemStack> getMaximumOutput() {
 		return getOutput(0, true);
 	}
-	
+
 	public ItemStack getOutputTemplate() {
 		ItemStack template = null;
 		ItemStack outputStack = inventory[kStartOutput];
-		if(outputStack != null) {
+		if (outputStack != null) {
 			template = outputStack.copy();
-			if(template.stackSize == 0)
+			if (template.stackSize == 0)
 				template.stackSize = 1;
 		}
 		return template;
 	}
-	
+
 	public List<ItemStack> getOutput(int amount, boolean all) {
-		if(currentRecipe == null)
+		if (currentRecipe == null)
 			return null;
 		ItemStack template = getOutputTemplate();
-		List<ItemStack> outputs = new ArrayList();
+		List<ItemStack> outputs = new ArrayList<ItemStack>();
 		ItemStack initialStack = template.copy();
 		initialStack.stackSize = 0;
 		outputs.add(initialStack);
-		while(canTakeOutputStack() && (amount > 0 || all) && takeInputStacks()) {
+		while (canTakeOutputStack() && (amount > 0 || all) && takeInputStacks()) {
 			takeEnergy(currentRecipe);
-			ItemStack output  = outputs.get(outputs.size()-1);
-			if(output.stackSize + template.stackSize > output.getMaxStackSize()) {
-				int leftOverStackSize = template.stackSize - (output.getMaxStackSize() - output.stackSize);
+			ItemStack output = outputs.get(outputs.size() - 1);
+			if (output.stackSize + template.stackSize > output
+					.getMaxStackSize()) {
+				int leftOverStackSize = template.stackSize
+						- (output.getMaxStackSize() - output.stackSize);
 				output.stackSize = output.getMaxStackSize();
-				if(leftOverStackSize > 0) {
+				if (leftOverStackSize > 0) {
 					ItemStack newOutput = template.copy();
 					newOutput.stackSize = leftOverStackSize;
 					outputs.add(newOutput);
@@ -619,9 +530,11 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 
 	public void setRecipe(SynthesisRecipe recipe) {
 		clearRecipeMatrix();
-		if(recipe != null) {
-			ItemStack[] ingredients = MinechemHelper.convertChemicalArrayIntoItemStackArray(recipe.getShapedRecipe());
-			for(int i = 0; i < Math.min(kSizeRecipe, ingredients.length); i++) {
+		if (recipe != null) {
+			ItemStack[] ingredients = MinechemHelper
+					.convertChemicalArrayIntoItemStackArray(recipe
+							.getShapedRecipe());
+			for (int i = 0; i < Math.min(kSizeRecipe, ingredients.length); i++) {
 				inventory[kStartRecipe + i] = ingredients[i];
 			}
 			onInventoryChanged();
@@ -634,7 +547,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 	}
 
 	@Override
-	public ItemStack putEmptyTestTube(ItemStack testTube) {
+	public int putEmptyTestTube(ItemStack testTube) {
 		return testTubeTransactor.add(testTube, true);
 	}
 
@@ -644,7 +557,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 	}
 
 	@Override
-	public ItemStack putOutput(ItemStack output) {
+	public int putOutput(ItemStack output) {
 		return outputTransactor.add(output, true);
 	}
 
@@ -654,7 +567,7 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 	}
 
 	@Override
-	public ItemStack putInput(ItemStack input) {
+	public int putInput(ItemStack input) {
 		return storageTransactor.add(input, true);
 	}
 
@@ -664,8 +577,8 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 	}
 
 	@Override
-	public ItemStack putFusionStar(ItemStack fusionStar) {
-		return null;
+	public int putFusionStar(ItemStack fusionStar) {
+		return 0;
 	}
 
 	@Override
@@ -674,17 +587,17 @@ IPowerReceptor, ITriggerProvider, IMinechemTriggerProvider, ISpecialInventory, I
 	}
 
 	@Override
-	public ItemStack putJournal(ItemStack journal) {
+	public int putJournal(ItemStack journal) {
 		return journalTransactor.add(journal, true);
 	}
 
 	@Override
 	public String getMachineState() {
-		if(currentRecipe == null) {
+		if (currentRecipe == null) {
 			return "norecipe";
 		} else {
 			int energyCost = currentRecipe.energyCost();
-			if(this.powerProvider.getEnergyStored() >= energyCost)
+			if (this.powerProvider.getEnergyStored() >= energyCost)
 				return "powered";
 			else
 				return "unpowered";

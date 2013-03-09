@@ -15,17 +15,19 @@ public class PutEmptyTestTube extends InteractMachine implements ICCMethod {
 	}
 
 	@Override
-	public Object[] call(IComputerAccess computer, ITurtleAccess turtle, Object[] arguments) throws Exception {
+	public Object[] call(IComputerAccess computer, ITurtleAccess turtle,
+			Object[] arguments) throws Exception {
 		boolean didPut = false;
 		IMinechemMachinePeripheral machine = getMachineInFront(turtle);
 		int selectedSlot = turtle.getSelectedSlot();
 		ItemStack selectedStack = turtle.getSlotContents(selectedSlot);
-		if(machine != null && selectedStack != null && Util.isStackAnEmptyTestTube(selectedStack)) {
-			ItemStack before    = selectedStack.copy();
-			ItemStack after 	= machine.putEmptyTestTube(selectedStack);
-			didPut 				= tryPut(before, after, turtle);
+		if (machine != null && selectedStack != null
+				&& Util.isStackAnEmptyTestTube(selectedStack)) {
+			ItemStack before = selectedStack.copy();
+			int used = machine.putEmptyTestTube(selectedStack);
+			didPut = tryPut(before, used, turtle);
 		}
-		return new Object[]{ didPut };
+		return new Object[] { didPut };
 	}
 
 }
