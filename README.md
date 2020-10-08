@@ -1,9 +1,9 @@
 # Retrospective
 Minechem was one of the best mods I made for Minecraft back in the day, which was originally inspired after playing a bunch of Spacehem by Zachtronics.
-I stopped working on this back in January 2013. Since then the project has passed through many hands:
-https://github.com/AdlyTempleton/MineChem (last updated December 2013)
-https://github.com/jakimfett/MineChem (last updated 2016)
-https://github.com/iopleke/Minechem (Minechem v6)
+I stopped working on this back in January 2013. Since then the project has passed through many hands:  
+https://github.com/AdlyTempleton/MineChem (last updated December 2013)  
+https://github.com/jakimfett/MineChem (last updated 2016)  
+https://github.com/iopleke/Minechem (Minechem v6)  
 
 # Minechem v2.0.0pr6.1
 Adds chemistry to minecraft. Minechem comes with five machines.
