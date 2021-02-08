@@ -1,6 +1,5 @@
 package ljdp.minechem.computercraft.method;
 
-import ljdp.minechem.common.tileentity.TileEntitySynthesis;
 import ljdp.minechem.computercraft.IMinechemMachinePeripheral;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -25,14 +24,14 @@ public class InteractMachine {
 			return null;
 	}
 	
-	public boolean tryPut(ItemStack beforeStack, ItemStack afterStack, ITurtleAccess turtle) {
+	public boolean tryPut(ItemStack beforeStack, int used, ITurtleAccess turtle) {
 		int selectedSlot = turtle.getSelectedSlot();
-		beforeStack.stackSize  -= afterStack.stackSize;
+		beforeStack.stackSize  -= used;
 		if(beforeStack.stackSize <= 0)
 			turtle.setSlotContents(selectedSlot, null);
 		else
 			turtle.setSlotContents(selectedSlot, beforeStack);
-		if(afterStack.stackSize > 0)
+		if(used > 0)
 			return true;
 		else
 			return false;

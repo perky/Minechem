@@ -10,8 +10,6 @@ import ljdp.minechem.common.inventory.BoundedInventory;
 import ljdp.minechem.common.inventory.Transactor;
 import ljdp.minechem.common.utils.MinechemHelper;
 import ljdp.minechem.computercraft.IMinechemMachinePeripheral;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -21,44 +19,49 @@ import buildcraft.api.inventory.ISpecialInventory;
 
 public class TileEntityVat extends MinechemTileEntity implements
 		ISpecialInventory, ISidedInventory, IMinechemMachinePeripheral {
-	
+
 	public static final int MAX_CHEMICAL_AMOUNT = 64 * 256;
-	public static final int kStartInput 		= 0;
-	public static final int kStartTestTubeIn	= 1;
-	public static final int kStartTestTubeOut	= 2;
-	public static final int kStartOutput 		= 3;
-	
+	public static final int kStartInput = 0;
+	public static final int kStartTestTubeIn = 1;
+	public static final int kStartTestTubeOut = 2;
+	public static final int kStartOutput = 3;
+
 	public Chemical chemical;
 	public int amountOfChemical = 0;
 	public int amountOfTestTube = 0;
 	private int maxChemicalAmount = MAX_CHEMICAL_AMOUNT;
 	public boolean isSpoiled = false;
-	
-	private final BoundedInventory inputInventory = new BoundedInventory(this, kStartInput, kStartInput + 1);
-	private final BoundedInventory tubeInInventory  = new BoundedInventory(this, kStartTestTubeIn, kStartTestTubeIn + 1);
-	private final BoundedInventory tubeOutInventory = new BoundedInventory(this, kStartTestTubeOut, kStartTestTubeOut + 1);
-	private final BoundedInventory outputInventory = new BoundedInventory(this, kStartOutput, kStartOutput + 1);
+
+	private final BoundedInventory inputInventory = new BoundedInventory(this,
+			kStartInput, kStartInput + 1);
+	private final BoundedInventory tubeInInventory = new BoundedInventory(this,
+			kStartTestTubeIn, kStartTestTubeIn + 1);
+	private final BoundedInventory tubeOutInventory = new BoundedInventory(
+			this, kStartTestTubeOut, kStartTestTubeOut + 1);
+	private final BoundedInventory outputInventory = new BoundedInventory(this,
+			kStartOutput, kStartOutput + 1);
 	private Transactor outputTransactor = new Transactor(outputInventory);
-	private Transactor inputTransactor  = new Transactor(inputInventory);
+	private Transactor inputTransactor = new Transactor(inputInventory);
+	private Transactor tubeInTransactor = new Transactor(tubeInInventory);
 	private Transactor tubeOutTransactor = new Transactor(tubeOutInventory);
 	private boolean workNeeded = false;
-	
+
 	public TileEntityVat() {
 		this.inventory = new ItemStack[getSizeInventory()];
 	}
-	
+
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		//if(workNeeded) {
-			boolean did1 = moveInputToStorage();
-			boolean did2 = moveStorageToTestTubeIn();
-			boolean did3 = moveStorageToOutput();
-			if(!did1 && !did2 && !did3)
-				workNeeded = false;
-		//}
+		// if(workNeeded) {
+		boolean did1 = moveInputToStorage();
+		boolean did2 = moveStorageToTestTubeIn();
+		boolean did3 = moveStorageToOutput();
+		if (!did1 && !did2 && !did3)
+			workNeeded = false;
+		// }
 	}
-	
+
 	@Override
 	public void onInventoryChanged() {
 		super.onInventoryChanged();
@@ -77,7 +80,7 @@ public class TileEntityVat extends MinechemTileEntity implements
 
 	@Override
 	public int getStartInventorySide(ForgeDirection side) {
-		if(side == side.UP) {
+		if (side == ForgeDirection.UP) {
 			return kStartInput;
 		} else {
 			return kStartOutput;
@@ -91,19 +94,17 @@ public class TileEntityVat extends MinechemTileEntity implements
 
 	@Override
 	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
-		int stackSize = stack.stackSize;
-		ItemStack remainingStack = inputTransactor.add(stack, doAdd);
-		int remainingStackSize = remainingStack == null ? 0 : remainingStack.stackSize;
-		return stackSize - remainingStackSize;
+		return inputTransactor.add(stack, doAdd);
 	}
 
 	@Override
-	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-		if(doRemove) {
-			List<ItemStack> outputs = new ArrayList();
-			for(int i = 0; i < maxItemCount; i++) {
+	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from,
+			int maxItemCount) {
+		if (doRemove) {
+			List<ItemStack> outputs = new ArrayList<ItemStack>();
+			for (int i = 0; i < maxItemCount; i++) {
 				ItemStack output = takeOutput();
-				if(output != null)
+				if (output != null)
 					outputs.add(output);
 				else
 					break;
@@ -112,7 +113,7 @@ public class TileEntityVat extends MinechemTileEntity implements
 		} else {
 			return outputTransactor.remove(maxItemCount, false);
 		}
-		
+
 	}
 
 	@Override
@@ -122,7 +123,7 @@ public class TileEntityVat extends MinechemTileEntity implements
 
 	@Override
 	public ItemStack takeEmptyTestTube() {
-		if(amountOfTestTube > 0) {
+		if (amountOfTestTube > 0) {
 			amountOfTestTube--;
 			return new ItemStack(MinechemItems.testTube, 1);
 		}
@@ -130,28 +131,27 @@ public class TileEntityVat extends MinechemTileEntity implements
 	}
 
 	@Override
-	public ItemStack putEmptyTestTube(ItemStack testTube) {
-		if(amountOfTestTube < maxChemicalAmount) {
-			int amountToAdd = Math.min(maxChemicalAmount - amountOfTestTube, testTube.stackSize);
+	public int putEmptyTestTube(ItemStack testTube) {
+		if (amountOfTestTube < maxChemicalAmount) {
+			int amountToAdd = Math.min(maxChemicalAmount - amountOfTestTube,
+					testTube.stackSize);
 			amountOfTestTube++;
 			testTube.stackSize -= amountToAdd;
-			if(testTube.stackSize == 0)
-				return null;
-			else
-				return testTube;
 		}
-		return testTube;
+		return testTube.stackSize;
 	}
-	
+
 	private boolean moveInputToStorage() {
 		ItemStack inputStack = decrStackSize(kStartInput, 1);
-		if(inputStack == null || !Util.isStackAChemical(inputStack))
+		if (inputStack == null || !Util.isStackAChemical(inputStack))
 			return false;
-		if(amountOfChemical < maxChemicalAmount && amountOfTestTube < maxChemicalAmount) {
-			Chemical inputChemical = MinechemHelper.itemStackToChemical(inputStack);
-			if(chemical == null)
+		if (amountOfChemical < maxChemicalAmount
+				&& amountOfTestTube < maxChemicalAmount) {
+			Chemical inputChemical = MinechemHelper
+					.itemStackToChemical(inputStack);
+			if (chemical == null)
 				chemical = inputChemical;
-			else if(!chemical.sameAs(inputChemical))
+			else if (!chemical.sameAs(inputChemical))
 				isSpoiled = true;
 			amountOfChemical++;
 			amountOfTestTube++;
@@ -159,29 +159,32 @@ public class TileEntityVat extends MinechemTileEntity implements
 		}
 		return false;
 	}
-	
+
 	private boolean moveStorageToTestTubeIn() {
-		if(amountOfTestTube == 0)
+		if (amountOfTestTube == 0)
 			return false;
 		ItemStack testTube = getStackInSlot(kStartTestTubeIn);
-		if(testTube == null) {
-			setInventorySlotContents(kStartTestTubeIn, new ItemStack(MinechemItems.testTube));
+		if (testTube == null) {
+			setInventorySlotContents(kStartTestTubeIn, new ItemStack(
+					MinechemItems.testTube));
 			amountOfTestTube--;
 			return true;
-		} else if(testTube.stackSize < 64) {
+		} else if (testTube.stackSize < 64) {
 			testTube.stackSize++;
 			amountOfTestTube--;
 			return true;
 		}
 		return false;
 	}
-	
+
 	private boolean moveStorageToOutput() {
 		ItemStack testTube = tubeOutTransactor.removeItem(true);
-		if(testTube != null && chemical != null && amountOfChemical > 0 && amountOfTestTube > 0 && !isSpoiled) {
-			ItemStack outputStack = MinechemHelper.chemicalToItemStack(chemical, 1);
-			ItemStack remainingStack = putOutput(outputStack);
-			if(remainingStack == null) {
+		if (testTube != null && chemical != null && amountOfChemical > 0
+				&& amountOfTestTube > 0 && !isSpoiled) {
+			ItemStack outputStack = MinechemHelper.chemicalToItemStack(
+					chemical, 1);
+			int added = putOutput(outputStack);
+			if (added == outputStack.stackSize) {
 				amountOfChemical--;
 				return true;
 			} else {
@@ -194,14 +197,15 @@ public class TileEntityVat extends MinechemTileEntity implements
 	@Override
 	public ItemStack takeOutput() {
 		ItemStack outputStack = getStackInSlot(kStartOutput);
-		if(outputStack != null || (outputStack == null && moveStorageToOutput())) {
+		if (outputStack != null
+				|| (outputStack == null && moveStorageToOutput())) {
 			return decrStackSize(kStartOutput, 1);
 		}
 		return null;
 	}
 
 	@Override
-	public ItemStack putOutput(ItemStack output) {
+	public int putOutput(ItemStack output) {
 		return outputTransactor.add(output, true);
 	}
 
@@ -211,16 +215,8 @@ public class TileEntityVat extends MinechemTileEntity implements
 	}
 
 	@Override
-	public ItemStack putInput(ItemStack input) {
+	public int putInput(ItemStack input) {
 		return inputTransactor.add(input, true);
-	}
-
-	private int getChemicalSpaceAvailable() {
-		return this.maxChemicalAmount - this.amountOfChemical;
-	}
-	
-	private int getTestTubeSpaceAvailable() {
-		return this.maxChemicalAmount - this.amountOfTestTube;
 	}
 
 	@Override
@@ -229,8 +225,8 @@ public class TileEntityVat extends MinechemTileEntity implements
 	}
 
 	@Override
-	public ItemStack putFusionStar(ItemStack fusionStar) {
-		return null;
+	public int putFusionStar(ItemStack fusionStar) {
+		return 0;
 	}
 
 	@Override
@@ -239,32 +235,33 @@ public class TileEntityVat extends MinechemTileEntity implements
 	}
 
 	@Override
-	public ItemStack putJournal(ItemStack journal) {
-		return null;
+	public int putJournal(ItemStack journal) {
+		return 0;
 	}
 
 	@Override
 	public String getMachineState() {
 		return null;
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setInteger("amountOfChemical", amountOfChemical);
 		nbt.setInteger("amountOfTestTube", amountOfTestTube);
-		NBTTagList inventoryTagList = MinechemHelper.writeItemStackArrayToTagList(inventory);
+		NBTTagList inventoryTagList = MinechemHelper
+				.writeItemStackArrayToTagList(inventory);
 		nbt.setTag("inventory", inventoryTagList);
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		this.amountOfChemical = nbt.getInteger("amountOfChemical");
 		this.amountOfTestTube = nbt.getInteger("amountOfTestTube");
 		NBTTagList inventoryTagList = nbt.getTagList("inventory");
-		this.inventory = MinechemHelper.readTagListToItemStackArray(inventoryTagList, 
-				new ItemStack[getSizeInventory()]);
+		this.inventory = MinechemHelper.readTagListToItemStackArray(
+				inventoryTagList, new ItemStack[getSizeInventory()]);
 	}
 
 }

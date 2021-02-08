@@ -5,7 +5,6 @@ import java.util.List;
 
 import ljdp.minechem.api.util.Util;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.ForgeDirection;
 
 public class Transactor {
 	
@@ -21,7 +20,7 @@ public class Transactor {
 		this.maxStackSize = maxStackSize;
 	}
 
-	public ItemStack add(ItemStack stack, boolean doAdd) {
+	public int add(ItemStack stack, boolean doAdd) {
 		int totalAmountAdded = 0;
 		int totalAmountToAdd = stack.stackSize;
 		int slot = 0;
@@ -31,17 +30,12 @@ public class Transactor {
 			totalAmountToAdd -= amountAdded;
 			slot++;
 		}
-		ItemStack remainingStack = stack.copy();
-		remainingStack.stackSize -= totalAmountAdded;
-		if(remainingStack.stackSize <= 0)
-			remainingStack = null;
-		return remainingStack;
+		return totalAmountAdded;
 	}
 	
 	public ItemStack[] remove(int amount, boolean doRemove) {
-		int totalAmountRemoved = 0;
 		int totalAmountToRemove = amount;
-		List<ItemStack> removed = new ArrayList();
+		List<ItemStack> removed = new ArrayList<ItemStack>();
 		int slot = 0;
 		while(totalAmountToRemove > 0 && slot < inventory.getSizeInventory()) {
 			ItemStack stackRemoved;
@@ -53,7 +47,6 @@ public class Transactor {
 					stackRemoved.stackSize = Math.min(amount, stackRemoved.stackSize);
 			}
 			if(stackRemoved != null) {
-				totalAmountRemoved  += stackRemoved.stackSize;
 				totalAmountToRemove -= stackRemoved.stackSize;
 				removed.add(stackRemoved);
 			}
@@ -81,11 +74,11 @@ public class Transactor {
 	public int putStackInSlot(ItemStack stack, int amount, int slot, boolean doAdd) {
 		ItemStack stackInSlot = inventory.getStackInSlot(slot);
 		if(stackInSlot == null) {
-			if(stack.stackSize > getMaxStackSize(stack))
-				stack.stackSize = getMaxStackSize(stack);
+			ItemStack stackToAdd = stack.copy();
+			stackToAdd.stackSize = Math.min(amount,getMaxStackSize(stack));
 			if(doAdd)
-				inventory.setInventorySlotContents(slot, stack);
-			return stack.stackSize;
+				inventory.setInventorySlotContents(slot, stackToAdd);
+			return stackToAdd.stackSize;
 		}
 		if(Util.stacksAreSameKind(stack, stackInSlot)) {
 			return appendStackToSlot(stack, amount, slot, doAdd);

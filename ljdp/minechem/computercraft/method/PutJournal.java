@@ -23,8 +23,8 @@ public class PutJournal extends InteractMachine implements ICCMethod {
 		boolean didPut = false;
 		if(machine != null && selectedStack != null && selectedStack.itemID == MinechemItems.journal.itemID) {
 			ItemStack before = selectedStack.copy();
-			ItemStack after	 = machine.putJournal(selectedStack);
-			didPut	= tryPut(before, after, turtle);
+			int used	 = machine.putJournal(selectedStack);
+			didPut	= tryPut(before, used, turtle);
 		}
 		return new Object[]{ didPut };
 	}

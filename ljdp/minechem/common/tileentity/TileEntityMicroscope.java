@@ -1,26 +1,18 @@
 package ljdp.minechem.common.tileentity;
 
-import java.util.ArrayList;
-
-import ljdp.minechem.api.core.EnumMolecule;
 import ljdp.minechem.api.recipe.DecomposerRecipe;
 import ljdp.minechem.api.recipe.SynthesisRecipe;
 import ljdp.minechem.common.MinechemItems;
 import ljdp.minechem.common.inventory.BoundedInventory;
 import ljdp.minechem.common.inventory.Transactor;
-import ljdp.minechem.common.items.ItemMolecule;
 import ljdp.minechem.common.recipe.DecomposerRecipeHandler;
-import ljdp.minechem.common.recipe.MinechemRecipes;
 import ljdp.minechem.common.recipe.SynthesisRecipeHandler;
-import ljdp.minechem.common.utils.MinechemHelper;
 import ljdp.minechem.computercraft.IMinechemMachinePeripheral;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityMicroscope extends MinechemTileEntity implements IInventory, IMinechemMachinePeripheral {
 	
@@ -148,8 +140,8 @@ public class TileEntityMicroscope extends MinechemTileEntity implements IInvento
 	}
 
 	@Override
-	public ItemStack putEmptyTestTube(ItemStack testTube) {
-		return null;
+	public int putEmptyTestTube(ItemStack testTube) {
+		return 0;
 	}
 
 	@Override
@@ -158,8 +150,8 @@ public class TileEntityMicroscope extends MinechemTileEntity implements IInvento
 	}
 
 	@Override
-	public ItemStack putOutput(ItemStack output) {
-		return null;
+	public int putOutput(ItemStack output) {
+		return 0;
 	}
 
 	@Override
@@ -168,7 +160,7 @@ public class TileEntityMicroscope extends MinechemTileEntity implements IInvento
 	}
 
 	@Override
-	public ItemStack putInput(ItemStack input) {
+	public int putInput(ItemStack input) {
 		return inputTransactor.add(input, true);
 	}
 
@@ -178,8 +170,8 @@ public class TileEntityMicroscope extends MinechemTileEntity implements IInvento
 	}
 
 	@Override
-	public ItemStack putFusionStar(ItemStack fusionStar) {
-		return null;
+	public int putFusionStar(ItemStack fusionStar) {
+		return 0;
 	}
 
 	@Override
@@ -188,7 +180,7 @@ public class TileEntityMicroscope extends MinechemTileEntity implements IInvento
 	}
 
 	@Override
-	public ItemStack putJournal(ItemStack journal) {
+	public int putJournal(ItemStack journal) {
 		return journalTransactor.add(journal, true);
 	}
 

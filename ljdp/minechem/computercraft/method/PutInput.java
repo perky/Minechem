@@ -21,8 +21,8 @@ public class PutInput extends InteractMachine implements ICCMethod {
 		boolean didPut = false;
 		if(machine != null && selectedStack != null) {
 			ItemStack before = selectedStack.copy();
-			ItemStack after  = machine.putInput(selectedStack);
-			didPut = tryPut(before, after, turtle);
+			int used  = machine.putInput(selectedStack);
+			didPut = tryPut(before, used, turtle);
 		}
 		return new Object[]{ didPut };
 	}
